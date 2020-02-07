@@ -97,6 +97,7 @@ public class ModCoreInstaller {
             Object modCoreObject = instanceMethod.invoke(null);
             initialize.invoke(modCoreObject, gameDir);
             System.out.println("Loaded ModCore Successfully");
+            return;
         } catch (ClassNotFoundException | NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
         }
