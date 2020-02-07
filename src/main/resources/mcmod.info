@@ -1,0 +1,16 @@
+[
+{
+  "modid": "modcore_example_mod",
+  "name": "ModCore Container Mod",
+  "description": "This exists only to show how to properly implement ModCore and for us to test it .",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["Sk1er LLC"],
+  "credits": "Sk1er LLC team for making all this happen",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
