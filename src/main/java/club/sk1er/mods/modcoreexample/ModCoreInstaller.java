@@ -121,9 +121,8 @@ public class ModCoreInstaller {
 
         if (!modcoreFile.exists() || !localMetadata.optString(minecraftVersion).equalsIgnoreCase(latestRemote)) {
             //File does not exist, or is out of date, download it
-            if (modcoreFile.exists())
-                modcoreFile.delete();
-
+            File old = new File(dataDir, "Sk1er Modcore-" + localMetadata.optString(minecraftVersion) + " (" + minecraftVersion + ").jar");
+            if (old.exists()) old.delete();
 
             if (!download("https://static.sk1er.club/repo/mods/modcore/" + latestRemote + "/" + minecraftVersion + "/ModCore-" + latestRemote + " (" + minecraftVersion + ").jar", latestRemote, modcoreFile, minecraftVersion, localMetadata)) {
                 bail("Unable to download");
