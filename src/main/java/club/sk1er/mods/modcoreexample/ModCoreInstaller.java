@@ -115,12 +115,14 @@ public class ModCoreInstaller {
         }
         JsonHolder jsonHolder = fetchJSON(VERSION_URL);
         String latestRemote = jsonHolder.optString(minecraftVersion);
+        boolean failed = jsonHolder.getKeys().size() == 0;
 
-        File modcoreFile = new File(dataDir, "Sk1er Modcore-" + latestRemote + " (" + minecraftVersion + ").jar");
         File metadataFile = new File(dataDir, "metadata.json");
         JsonHolder localMetadata = readFile(metadataFile);
+        if(failed) latestRemote = localMetadata.optString(minecraftVersion);
+        File modcoreFile = new File(dataDir, "Sk1er Modcore-" + latestRemote + " (" + minecraftVersion + ").jar");
 
-        if (!modcoreFile.exists() || !localMetadata.optString(minecraftVersion).equalsIgnoreCase(latestRemote)) {
+        if (!modcoreFile.exists() || !localMetadata.optString(minecraftVersion).equalsIgnoreCase(latestRemote) && !failed) {
             //File does not exist, or is out of date, download it
             File old = new File(dataDir, "Sk1er Modcore-" + localMetadata.optString(minecraftVersion) + " (" + minecraftVersion + ").jar");
             if (old.exists()) old.delete();
