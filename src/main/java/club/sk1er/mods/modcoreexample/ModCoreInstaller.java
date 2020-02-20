@@ -31,11 +31,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-/*
-    Created by Sk1er for use in all mods. Install under exact package name each time.
- */
 public class ModCoreInstaller {
-
 
     private static final String VERSION_URL = "https://api.sk1er.club/modcore_versions";
     private static final String className = "club.sk1er.mods.core.ModCore";
@@ -115,11 +111,11 @@ public class ModCoreInstaller {
         }
         JsonHolder jsonHolder = fetchJSON(VERSION_URL);
         String latestRemote = jsonHolder.optString(minecraftVersion);
-        boolean failed = jsonHolder.getKeys().size() == 0;
+        boolean failed = jsonHolder.getKeys().size() == 0 || (jsonHolder.has("success") && !jsonHolder.optBoolean("success"));
 
         File metadataFile = new File(dataDir, "metadata.json");
         JsonHolder localMetadata = readFile(metadataFile);
-        if(failed) latestRemote = localMetadata.optString(minecraftVersion);
+        if (failed) latestRemote = localMetadata.optString(minecraftVersion);
         File modcoreFile = new File(dataDir, "Sk1er Modcore-" + latestRemote + " (" + minecraftVersion + ").jar");
 
         if (!modcoreFile.exists() || !localMetadata.optString(minecraftVersion).equalsIgnoreCase(latestRemote) && !failed) {
