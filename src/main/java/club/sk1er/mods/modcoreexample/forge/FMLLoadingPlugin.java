@@ -12,7 +12,6 @@ public class FMLLoadingPlugin implements IFMLLoadingPlugin {
         int initialize = ModCoreInstaller.initialize(Launch.minecraftHome, "1.8.9");
 
         if (ModCoreInstaller.isErrored() || initialize != 0 && initialize != -1) {
-            // Technically wouldn't happen in simulated installed but is important for actual impl
             System.out.println("Failed to load Sk1er Modcore - " + initialize + " - " + ModCoreInstaller.getError());
         }
 
