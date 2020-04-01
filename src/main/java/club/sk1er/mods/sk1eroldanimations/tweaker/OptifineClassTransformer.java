@@ -22,8 +22,8 @@ public class OptifineClassTransformer implements IClassTransformer {
     private final Multimap<String, ITransformer> transformerMap = ArrayListMultimap.create();
 
     public OptifineClassTransformer() {
-        registerTransformer(new RenderFishTransformer());
-        registerTransformer(new ItemRendererTransformer());
+//        registerTransformer(new RenderFishTransformer());
+//        registerTransformer(new ItemRendererTransformer());
     }
 
     private void registerTransformer(ITransformer transformer) {

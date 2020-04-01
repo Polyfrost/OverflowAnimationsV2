@@ -22,6 +22,8 @@ public class ClassTransformer implements IClassTransformer {
     private final Multimap<String, ITransformer> transformerMap = ArrayListMultimap.create();
 
     public ClassTransformer() {
+        registerTransformer(new RenderFishTransformer());
+        registerTransformer(new ItemRendererTransformer());
     }
 
     private void registerTransformer(ITransformer transformer) {

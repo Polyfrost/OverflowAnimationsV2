@@ -52,7 +52,15 @@ public class ItemRendererTransformer implements ITransformer {
                             }
                             methodNode.instructions.insertBefore(start, moveIfOldBow(veryEnd, fIndex, f1Index, abstractclientplayerIndex));
                             methodNode.instructions.insert(node, veryEnd);
-                            break;
+                        }
+                        else if (nodeName.equals("performDrinking") || nodeName.equals("func_178104_a")) {
+                            LabelNode veryEnd = new LabelNode();
+                            AbstractInsnNode endNode = node;
+                            for (int i = 0; i < 6; i++) {
+                                endNode = endNode.getNext();
+                            }
+                            methodNode.instructions.insert(node, moveIfOldEat(veryEnd, fIndex, f1Index));
+                            methodNode.instructions.insert(endNode, veryEnd);
                         }
                     }
                 }
@@ -121,6 +129,20 @@ public class ItemRendererTransformer implements ITransformer {
         list.add(new LdcInsnNode(0.1f));
         list.add(new LdcInsnNode(-0.15f));
         list.add(new MethodInsnNode(Opcodes.INVOKESTATIC, "net/minecraft/client/renderer/GlStateManager", "func_179109_b", "(FFF)V", false));
+        list.add(new JumpInsnNode(Opcodes.GOTO, veryEnd));
+        list.add(after);
+        return list;
+    }
+
+    public InsnList moveIfOldEat(LabelNode veryEnd, int fIndex, int f1Index) {
+        InsnList list = new InsnList();
+        LabelNode after = new LabelNode();
+        list.add(new FieldInsnNode(Opcodes.GETSTATIC, Sk1erOldAnimations.getConfigClass(), "oldEating", "Z"));
+        list.add(new JumpInsnNode(Opcodes.IFEQ, after));
+        list.add(new VarInsnNode(Opcodes.ALOAD, 0));
+        list.add(new VarInsnNode(Opcodes.FLOAD, fIndex));
+        list.add(new VarInsnNode(Opcodes.FLOAD, f1Index));
+        list.add(new MethodInsnNode(Opcodes.INVOKESPECIAL, "net/minecraft/client/renderer/ItemRenderer", "func_178096_b", "(FF)V", false));
         list.add(new JumpInsnNode(Opcodes.GOTO, veryEnd));
         list.add(after);
         return list;
