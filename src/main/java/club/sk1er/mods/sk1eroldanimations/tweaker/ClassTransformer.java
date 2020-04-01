@@ -7,6 +7,7 @@ import club.sk1er.mods.sk1eroldanimations.tweaker.transformer.ITransformer;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.launchwrapper.IClassTransformer;
+import net.minecraft.launchwrapper.Launch;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.tree.ClassNode;
@@ -20,10 +21,14 @@ import java.util.Collection;
 public class ClassTransformer implements IClassTransformer {
 
     private final Multimap<String, ITransformer> transformerMap = ArrayListMultimap.create();
-
+    public static boolean developmentEnvironment;
+    public static final boolean outputBytecode = Boolean.parseBoolean(System.getProperty("debugBytecode", "false"));
     public ClassTransformer() {
-        registerTransformer(new RenderFishTransformer());
-        registerTransformer(new ItemRendererTransformer());
+        developmentEnvironment = (boolean) Launch.blackboard.get("fml.deobfuscatedEnvironment");
+        if (developmentEnvironment) {
+            registerTransformer(new RenderFishTransformer());
+            registerTransformer(new ItemRendererTransformer());
+        }
     }
 
     private void registerTransformer(ITransformer transformer) {
@@ -58,33 +63,20 @@ public class ClassTransformer implements IClassTransformer {
             Sk1erOldAnimations.LOGGER.error("Exception when transforming " + transformedName + " : " + t.getClass().getSimpleName());
             t.printStackTrace();
         }
-        File bytecodeDirectory = new File("bytecode");
-        File bytecodeOutput = new File(bytecodeDirectory, transformedName.replace('$', '.') + ".class"); // inner classes suckkkk
-
-        if (!bytecodeDirectory.exists()) bytecodeDirectory.mkdirs();
-        if (!bytecodeOutput.exists()) {
+        if (outputBytecode) {
             try {
-                bytecodeOutput.createNewFile();
+                File bytecodeDirectory = new File("bytecode");
+                File bytecodeOutput = new File(bytecodeDirectory, transformedName + ".class"); // inner classes suckkkk
+
+                if (!bytecodeDirectory.exists()) bytecodeDirectory.mkdirs();
+                if (!bytecodeOutput.exists()) bytecodeOutput.createNewFile();
+
+                FileOutputStream os = new FileOutputStream(bytecodeOutput);
+                os.write(writer.toByteArray());
+                os.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        }
-
-        FileOutputStream os = null;
-        try {
-            os = new FileOutputStream(bytecodeOutput);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        try {
-            os.write(writer.toByteArray());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        try {
-            os.close();
-        } catch (IOException e) {
-            e.printStackTrace();
         }
         return writer.toByteArray();
     }

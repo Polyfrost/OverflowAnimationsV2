@@ -22,8 +22,10 @@ public class OptifineClassTransformer implements IClassTransformer {
     private final Multimap<String, ITransformer> transformerMap = ArrayListMultimap.create();
 
     public OptifineClassTransformer() {
-//        registerTransformer(new RenderFishTransformer());
-//        registerTransformer(new ItemRendererTransformer());
+        if (!ClassTransformer.developmentEnvironment) {
+            registerTransformer(new RenderFishTransformer());
+            registerTransformer(new ItemRendererTransformer());
+        }
     }
 
     private void registerTransformer(ITransformer transformer) {
@@ -58,33 +60,20 @@ public class OptifineClassTransformer implements IClassTransformer {
             Sk1erOldAnimations.LOGGER.error("Exception when transforming " + transformedName + " : " + t.getClass().getSimpleName());
             t.printStackTrace();
         }
-        File bytecodeDirectory = new File("bytecode");
-        File bytecodeOutput = new File(bytecodeDirectory, transformedName.replace('$', '.') + ".class"); // inner classes suckkkk
-
-        if (!bytecodeDirectory.exists()) bytecodeDirectory.mkdirs();
-        if (!bytecodeOutput.exists()) {
+        if (ClassTransformer.outputBytecode) {
             try {
-                bytecodeOutput.createNewFile();
+                File bytecodeDirectory = new File("bytecode");
+                File bytecodeOutput = new File(bytecodeDirectory, transformedName + ".class"); // inner classes suckkkk
+
+                if (!bytecodeDirectory.exists()) bytecodeDirectory.mkdirs();
+                if (!bytecodeOutput.exists()) bytecodeOutput.createNewFile();
+
+                FileOutputStream os = new FileOutputStream(bytecodeOutput);
+                os.write(writer.toByteArray());
+                os.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        }
-
-        FileOutputStream os = null;
-        try {
-            os = new FileOutputStream(bytecodeOutput);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        try {
-            os.write(writer.toByteArray());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        try {
-            os.close();
-        } catch (IOException e) {
-            e.printStackTrace();
         }
         return writer.toByteArray();
     }

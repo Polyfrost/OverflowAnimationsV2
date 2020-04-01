@@ -2,6 +2,7 @@ package club.sk1er.mods.sk1eroldanimations.asm;
 
 import club.sk1er.mods.sk1eroldanimations.Sk1erOldAnimations;
 import club.sk1er.mods.sk1eroldanimations.tweaker.transformer.ITransformer;
+import net.minecraft.entity.player.EntityPlayer;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.*;
 
@@ -24,6 +25,7 @@ public class ItemRendererTransformer implements ITransformer {
                 methodNode.instructions.insertBefore(methodNode.instructions.getFirst(), veryEnd);
                 methodNode.instructions.insertBefore(methodNode.instructions.getFirst(), moveIfHoldingRod(veryEnd));
                 methodNode.instructions.insertBefore(methodNode.instructions.getFirst(), moveIfHoldingBow(veryEnd));
+                methodNode.instructions.insertBefore(methodNode.instructions.getFirst(), moveIfOldBlockhitting(veryEnd));
             } else if (methodName.equals("renderItemInFirstPerson") || methodName.equals("func_78440_a")) {
                 int f1Index = -1;
                 int fIndex = -1;
@@ -61,6 +63,15 @@ public class ItemRendererTransformer implements ITransformer {
                             }
                             methodNode.instructions.insert(node, moveIfOldEat(veryEnd, fIndex, f1Index));
                             methodNode.instructions.insert(endNode, veryEnd);
+                        }
+                        else if (nodeName.equals("doBlockTransformations") || nodeName.equals("func_178103_d")) {
+                            LabelNode veryEnd = new LabelNode();
+                            AbstractInsnNode start = node;
+                            for (int i = 0; i < 7; i++) {
+                                start = start.getPrevious();
+                            }
+                            methodNode.instructions.insertBefore(start, moveIfBlocking(veryEnd, fIndex, f1Index));
+                            methodNode.instructions.insert(node, veryEnd);
                         }
                     }
                 }
@@ -143,6 +154,68 @@ public class ItemRendererTransformer implements ITransformer {
         list.add(new VarInsnNode(Opcodes.FLOAD, fIndex));
         list.add(new VarInsnNode(Opcodes.FLOAD, f1Index));
         list.add(new MethodInsnNode(Opcodes.INVOKESPECIAL, "net/minecraft/client/renderer/ItemRenderer", "func_178096_b", "(FF)V", false));
+        list.add(new JumpInsnNode(Opcodes.GOTO, veryEnd));
+        list.add(after);
+        return list;
+    }
+
+    public InsnList moveIfOldBlockhitting(LabelNode veryEnd) {
+        LabelNode after = new LabelNode();
+        InsnList list = new InsnList();
+        list.add(new FieldInsnNode(Opcodes.GETSTATIC, Sk1erOldAnimations.getConfigClass(), "oldBlockhitting", "Z"));
+        list.add(new JumpInsnNode(Opcodes.IFEQ, after));
+        list.add(new VarInsnNode(Opcodes.ALOAD, 0));
+        list.add(new FieldInsnNode(Opcodes.GETFIELD, "net/minecraft/client/renderer/ItemRenderer", "field_78455_a", "Lnet/minecraft/client/Minecraft;"));
+        list.add(new FieldInsnNode(Opcodes.GETFIELD, "net/minecraft/client/Minecraft", "field_71439_g", "Lnet/minecraft/client/entity/EntityPlayerSP;"));
+        list.add(new FieldInsnNode(Opcodes.GETFIELD, "net/minecraft/entity/EntityLivingBase", "field_82175_bq", "Z"));
+        list.add(new JumpInsnNode(Opcodes.IFEQ, after));
+        list.add(new VarInsnNode(Opcodes.ALOAD, 0));
+        list.add(new FieldInsnNode(Opcodes.GETFIELD, "net/minecraft/client/renderer/ItemRenderer", "field_78455_a", "Lnet/minecraft/client/Minecraft;"));
+        list.add(new FieldInsnNode(Opcodes.GETFIELD, "net/minecraft/client/Minecraft", "field_71439_g", "Lnet/minecraft/client/entity/EntityPlayerSP;"));
+        list.add(new MethodInsnNode(Opcodes.INVOKEVIRTUAL, "net/minecraft/entity/player/EntityPlayer", "func_71045_bC", "()Lnet/minecraft/item/ItemStack;", false));
+        list.add(new JumpInsnNode(Opcodes.IFNULL, after));
+        list.add(new VarInsnNode(Opcodes.ALOAD, 0));
+        list.add(new FieldInsnNode(Opcodes.GETFIELD, "net/minecraft/client/renderer/ItemRenderer", "field_78455_a", "Lnet/minecraft/client/Minecraft;"));
+        list.add(new FieldInsnNode(Opcodes.GETFIELD, "net/minecraft/client/Minecraft", "field_71439_g", "Lnet/minecraft/client/entity/EntityPlayerSP;"));
+        list.add(new MethodInsnNode(Opcodes.INVOKEVIRTUAL, "net/minecraft/entity/player/EntityPlayer", "func_70632_aY", "()Z", false));
+        list.add(new JumpInsnNode(Opcodes.IFNE, after));
+        list.add(new VarInsnNode(Opcodes.ALOAD, 0));
+        list.add(new FieldInsnNode(Opcodes.GETFIELD, "net/minecraft/client/renderer/ItemRenderer", "field_78455_a", "Lnet/minecraft/client/Minecraft;"));
+        list.add(new FieldInsnNode(Opcodes.GETFIELD, "net/minecraft/client/Minecraft", "field_71439_g", "Lnet/minecraft/client/entity/EntityPlayerSP;"));
+        list.add(new MethodInsnNode(Opcodes.INVOKEVIRTUAL, "net/minecraft/entity/Entity", "func_70113_ah", "()Z", false));
+        list.add(new JumpInsnNode(Opcodes.IFNE, after));
+        list.add(new LdcInsnNode(-0.078f));
+        list.add(new LdcInsnNode(0.003f));
+        list.add(new LdcInsnNode(0.05f));
+        list.add(new MethodInsnNode(Opcodes.INVOKESTATIC, "net/minecraft/client/renderer/GlStateManager", "func_179109_b", "(FFF)V", false));
+        list.add(new LdcInsnNode(0.85f));
+        list.add(new LdcInsnNode(0.85f));
+        list.add(new LdcInsnNode(0.85f));
+        list.add(new MethodInsnNode(Opcodes.INVOKESTATIC, "net/minecraft/client/renderer/GlStateManager", "func_179152_a", "(FFF)V", false));
+        list.add(new JumpInsnNode(Opcodes.GOTO, veryEnd));
+        list.add(after);
+        return list;
+    }
+
+    public InsnList moveIfBlocking(LabelNode veryEnd, int fIndex, int f1Index) {
+        InsnList list = new InsnList();
+        LabelNode after = new LabelNode();
+        list.add(new FieldInsnNode(Opcodes.GETSTATIC, Sk1erOldAnimations.getConfigClass(), "oldBlockhitting", "Z"));
+        list.add(new JumpInsnNode(Opcodes.IFEQ, after));
+        list.add(new VarInsnNode(Opcodes.ALOAD, 0));
+        list.add(new VarInsnNode(Opcodes.FLOAD, fIndex));
+        list.add(new VarInsnNode(Opcodes.FLOAD, f1Index));
+        list.add(new MethodInsnNode(Opcodes.INVOKESPECIAL, "net/minecraft/client/renderer/ItemRenderer", "func_178096_b", "(FF)V", false));
+        list.add(new VarInsnNode(Opcodes.ALOAD, 0));
+        list.add(new MethodInsnNode(Opcodes.INVOKESPECIAL, "net/minecraft/client/renderer/ItemRenderer", "func_178103_d", "()V", false));
+        list.add(new LdcInsnNode(-0.3f));
+        list.add(new LdcInsnNode(0.1f));
+        list.add(new LdcInsnNode(0f));
+        list.add(new MethodInsnNode(Opcodes.INVOKESTATIC, "net/minecraft/client/renderer/GlStateManager", "func_179109_b", "(FFF)V", false));
+        list.add(new LdcInsnNode(0.83f));
+        list.add(new LdcInsnNode(0.88f));
+        list.add(new LdcInsnNode(0.85f));
+        list.add(new MethodInsnNode(Opcodes.INVOKESTATIC, "net/minecraft/client/renderer/GlStateManager", "func_179152_a", "(FFF)V", false));
         list.add(new JumpInsnNode(Opcodes.GOTO, veryEnd));
         list.add(after);
         return list;

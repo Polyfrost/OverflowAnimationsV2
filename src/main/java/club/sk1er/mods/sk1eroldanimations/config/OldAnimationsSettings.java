@@ -12,6 +12,8 @@ public class OldAnimationsSettings extends Vigilant {
     public static boolean oldBowPosition = true;
     @Property(type = PropertyType.SWITCH, category = "bruh", subcategory = "bruh", description = "does a thing", name = "1.7 Eating")
     public static boolean oldEating = true;
+    @Property(type = PropertyType.SWITCH, category = "bruh", subcategory = "bruh", description = "does a thing", name = "1.7 Blockhitting")
+    public static boolean oldBlockhitting = true;
     public OldAnimationsSettings() {
         super(new File("./config/sk1eroldanimations.toml"));
         initialize();
