@@ -5,6 +5,8 @@ import club.sk1er.mods.sk1eroldanimations.tweaker.transformer.ITransformer;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.*;
 
+import java.util.logging.Logger;
+
 public class EntityPlayerTransformer implements ITransformer {
     @Override
     public String[] getClassName() {
@@ -23,10 +25,9 @@ public class EntityPlayerTransformer implements ITransformer {
             if (methodNode.name.equals("<init>")) {
                 methodNode.instructions.insertBefore(methodNode.instructions.getLast().getPrevious(), createHeightAndMillis());
             }
-
             String methodName = mapMethodName(classNode, methodNode);
 
-            if (methodName.equals("getEyeHeight")) {
+            if (methodName.equals("getEyeHeight") || methodName.equals("func_70047_e")) {
                 methodNode.instructions.insertBefore(methodNode.instructions.getFirst(), changeEyeHeightInstructions());
             }
         }
