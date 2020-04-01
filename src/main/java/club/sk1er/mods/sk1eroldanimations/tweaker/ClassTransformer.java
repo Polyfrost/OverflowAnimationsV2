@@ -63,7 +63,7 @@ public class ClassTransformer implements IClassTransformer {
         }
 
         ClassWriter classWriter =
-            new ClassWriter(ClassWriter.COMPUTE_FRAMES | ClassWriter.COMPUTE_MAXS);
+                new ClassWriter(ClassWriter.COMPUTE_FRAMES | ClassWriter.COMPUTE_MAXS);
 
         try {
             classNode.accept(classWriter);

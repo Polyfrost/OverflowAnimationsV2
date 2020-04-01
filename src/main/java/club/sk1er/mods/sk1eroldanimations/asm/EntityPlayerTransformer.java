@@ -2,20 +2,8 @@ package club.sk1er.mods.sk1eroldanimations.asm;
 
 import club.sk1er.mods.sk1eroldanimations.Sk1erOldAnimations;
 import club.sk1er.mods.sk1eroldanimations.tweaker.transformer.ITransformer;
-import net.minecraft.entity.player.EntityPlayer;
 import org.objectweb.asm.Opcodes;
-import org.objectweb.asm.tree.ClassNode;
-import org.objectweb.asm.tree.FieldInsnNode;
-import org.objectweb.asm.tree.FieldNode;
-import org.objectweb.asm.tree.InsnList;
-import org.objectweb.asm.tree.InsnNode;
-import org.objectweb.asm.tree.IntInsnNode;
-import org.objectweb.asm.tree.JumpInsnNode;
-import org.objectweb.asm.tree.LabelNode;
-import org.objectweb.asm.tree.LdcInsnNode;
-import org.objectweb.asm.tree.MethodInsnNode;
-import org.objectweb.asm.tree.MethodNode;
-import org.objectweb.asm.tree.VarInsnNode;
+import org.objectweb.asm.tree.*;
 
 public class EntityPlayerTransformer implements ITransformer {
     @Override
@@ -40,7 +28,6 @@ public class EntityPlayerTransformer implements ITransformer {
 
             if (methodName.equals("getEyeHeight")) {
                 methodNode.instructions.insertBefore(methodNode.instructions.getFirst(), changeEyeHeightInstructions());
-//                methodNode.instructions.insertBefore(methodNode.instructions.getFirst(), changeEyeHeightHook());
             }
         }
     }
@@ -159,17 +146,6 @@ public class EntityPlayerTransformer implements ITransformer {
         list.add(new FieldInsnNode(Opcodes.GETFIELD, "net/minecraft/entity/player/EntityPlayer", "currentHeight", "F"));
         list.add(new InsnNode(Opcodes.FRETURN));
         list.add(ifeq);
-        return list;
-    }
-
-    private InsnList changeEyeHeightHook() {
-        InsnList list = new InsnList();
-        list.add(new FieldInsnNode(Opcodes.GETSTATIC, Sk1erOldAnimations.getConfigClass(), "oldSneaking", "Z"));
-        LabelNode labelNode = new LabelNode();
-        list.add(new JumpInsnNode(Opcodes.IFEQ, labelNode));
-        list.add(new MethodInsnNode(Opcodes.INVOKESTATIC, "club/sk1er/mods/sk1eroldanimations/production/EntityHook", "getEyeHeight", "()F", false));
-        list.add(new InsnNode(Opcodes.FRETURN));
-        list.add(labelNode);
         return list;
     }
 }

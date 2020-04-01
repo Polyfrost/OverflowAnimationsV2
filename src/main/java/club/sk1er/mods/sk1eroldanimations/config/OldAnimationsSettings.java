@@ -9,47 +9,47 @@ import java.io.File;
 public class OldAnimationsSettings extends Vigilant {
 
     @Property(
-        type = PropertyType.SWITCH,
-        category = "bruh",
-        subcategory = "bruh",
-        description = "Brings back the more zoomed-out look of the fishing rod so that rod pvp is easier",
-        name = "1.7 Rod Position"
+            type = PropertyType.SWITCH,
+            category = "bruh",
+            subcategory = "bruh",
+            description = "Brings back the more zoomed-out look of the fishing rod so that rod pvp is easier",
+            name = "1.7 Rod Position"
     )
     public static boolean oldRodPosition = true;
 
     @Property(
-        type = PropertyType.SWITCH,
-        category = "bruh",
-        subcategory = "bruh",
-        description = "does a thing",
-        name = "1.7 Bow Position"
+            type = PropertyType.SWITCH,
+            category = "bruh",
+            subcategory = "bruh",
+            description = "does a thing",
+            name = "1.7 Bow Position"
     )
     public static boolean oldBowPosition = true;
 
     @Property(
-        type = PropertyType.SWITCH,
-        category = "bruh",
-        subcategory = "bruh",
-        description = "does a thing",
-        name = "1.7 Eating"
+            type = PropertyType.SWITCH,
+            category = "bruh",
+            subcategory = "bruh",
+            description = "does a thing",
+            name = "1.7 Eating"
     )
     public static boolean oldEating = true;
 
     @Property(
-        type = PropertyType.SWITCH,
-        category = "bruh",
-        subcategory = "bruh",
-        description = "does a thing",
-        name = "1.7 Blockhitting"
+            type = PropertyType.SWITCH,
+            category = "bruh",
+            subcategory = "bruh",
+            description = "does a thing",
+            name = "1.7 Blockhitting"
     )
     public static boolean oldBlockhitting = true;
 
     @Property(
-        type = PropertyType.SWITCH,
-        category = "bruh",
-        subcategory = "bruh",
-        description = "does a thing",
-        name = "1.7 Sneaking"
+            type = PropertyType.SWITCH,
+            category = "bruh",
+            subcategory = "bruh",
+            description = "does a thing",
+            name = "1.7 Sneaking"
     )
     public static boolean oldSneaking = true;
 

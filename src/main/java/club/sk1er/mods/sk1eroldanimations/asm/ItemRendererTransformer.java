@@ -2,7 +2,6 @@ package club.sk1er.mods.sk1eroldanimations.asm;
 
 import club.sk1er.mods.sk1eroldanimations.Sk1erOldAnimations;
 import club.sk1er.mods.sk1eroldanimations.tweaker.transformer.ITransformer;
-import net.minecraft.entity.player.EntityPlayer;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.*;
 
@@ -33,11 +32,9 @@ public class ItemRendererTransformer implements ITransformer {
                 for (LocalVariableNode variableNode : methodNode.localVariables) {
                     if (variableNode.name.equals("f1")) {
                         f1Index = variableNode.index;
-                    }
-                    else if (variableNode.name.equals("f")) {
+                    } else if (variableNode.name.equals("f")) {
                         fIndex = variableNode.index;
-                    }
-                    else if (variableNode.name.equals("abstractclientplayer")) {
+                    } else if (variableNode.name.equals("abstractclientplayer")) {
                         abstractclientplayerIndex = variableNode.index;
                     }
                 }
@@ -54,8 +51,7 @@ public class ItemRendererTransformer implements ITransformer {
                             }
                             methodNode.instructions.insertBefore(start, moveIfOldBow(veryEnd, fIndex, f1Index, abstractclientplayerIndex));
                             methodNode.instructions.insert(node, veryEnd);
-                        }
-                        else if (nodeName.equals("performDrinking") || nodeName.equals("func_178104_a")) {
+                        } else if (nodeName.equals("performDrinking") || nodeName.equals("func_178104_a")) {
                             LabelNode veryEnd = new LabelNode();
                             AbstractInsnNode endNode = node;
                             for (int i = 0; i < 6; i++) {
@@ -63,8 +59,7 @@ public class ItemRendererTransformer implements ITransformer {
                             }
                             methodNode.instructions.insert(node, moveIfOldEat(veryEnd, fIndex, f1Index));
                             methodNode.instructions.insert(endNode, veryEnd);
-                        }
-                        else if (nodeName.equals("doBlockTransformations") || nodeName.equals("func_178103_d")) {
+                        } else if (nodeName.equals("doBlockTransformations") || nodeName.equals("func_178103_d")) {
                             LabelNode veryEnd = new LabelNode();
                             AbstractInsnNode start = node;
                             for (int i = 0; i < 7; i++) {
