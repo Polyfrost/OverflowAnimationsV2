@@ -1,2 +1,2 @@
-# ModCore Example Mod
-This is an implementaion example for ModCore. 
+# Sk1er Old Animations
+It's a mod
