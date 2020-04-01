@@ -1,2 +1,5 @@
 # Sk1er Old Animations
-It's a mod
+Working:
+* Old Eating
+* Old Rod Position
+* Old Bow Position
