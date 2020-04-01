@@ -1,4 +1,4 @@
-package club.sk1er.mods.modcoreexample;
+package club.sk1er.mods.sk1eroldanimations;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;

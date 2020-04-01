@@ -24,7 +24,7 @@ plugins {
 */
 version = "1.0"
 group= "club.sk1er" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = "ModCore Container"
+archivesBaseName = "Sk1er Old Animations"
 sourceCompatibility = targetCompatibility = 1.8
 
 minecraft {
@@ -59,8 +59,9 @@ processResources {
 
 jar {
     manifest {
-        attributes "FMLCorePlugin": "club.sk1er.mods.modcoreexample.forge.FMLLoadingPlugin",
+        attributes "FMLCorePlugin": "club.sk1er.mods.sk1eroldanimations.forge.FMLLoadingPlugin",
                 "ModSide": "CLIENT",
-                "FMLCorePluginContainsFMLMod": "Yes, yes it does"
+                "FMLCorePluginContainsFMLMod": "Yes, yes it does",
+                "ForceLoadAsMod": true
     }
 }
