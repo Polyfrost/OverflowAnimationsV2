@@ -3,3 +3,5 @@ Working:
 * Old Eating
 * Old Rod Position
 * Old Bow Position
+* Old Blockhitting
+* Old Sneak Animation

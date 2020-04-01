@@ -1,6 +1,7 @@
 package club.sk1er.mods.sk1eroldanimations.tweaker;
 
 import club.sk1er.mods.sk1eroldanimations.Sk1erOldAnimations;
+import club.sk1er.mods.sk1eroldanimations.asm.EntityPlayerTransformer;
 import club.sk1er.mods.sk1eroldanimations.asm.ItemRendererTransformer;
 import club.sk1er.mods.sk1eroldanimations.asm.RenderFishTransformer;
 import club.sk1er.mods.sk1eroldanimations.tweaker.transformer.ITransformer;
@@ -13,7 +14,6 @@ import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.tree.ClassNode;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Collection;
@@ -23,11 +23,13 @@ public class ClassTransformer implements IClassTransformer {
     private final Multimap<String, ITransformer> transformerMap = ArrayListMultimap.create();
     public static boolean developmentEnvironment;
     public static final boolean outputBytecode = Boolean.parseBoolean(System.getProperty("debugBytecode", "false"));
+
     public ClassTransformer() {
         developmentEnvironment = (boolean) Launch.blackboard.get("fml.deobfuscatedEnvironment");
         if (developmentEnvironment) {
             registerTransformer(new RenderFishTransformer());
             registerTransformer(new ItemRendererTransformer());
+            registerTransformer(new EntityPlayerTransformer());
         }
     }
 
@@ -39,6 +41,11 @@ public class ClassTransformer implements IClassTransformer {
 
     @Override
     public byte[] transform(String name, String transformedName, byte[] bytes) {
+        return createTransformer(transformedName, bytes, transformerMap, outputBytecode);
+    }
+
+    @SuppressWarnings("ResultOfMethodCallIgnored")
+    public static byte[] createTransformer(String transformedName, byte[] bytes, Multimap<String, ITransformer> transformerMap, boolean outputBytecode) {
         if (bytes == null) return null;
 
         Collection<ITransformer> transformers = transformerMap.get(transformedName);
@@ -46,23 +53,25 @@ public class ClassTransformer implements IClassTransformer {
 
         Sk1erOldAnimations.LOGGER.info("Found {} transformers for {}", transformers.size(), transformedName);
 
-        ClassReader reader = new ClassReader(bytes);
-        ClassNode node = new ClassNode();
-        reader.accept(node, ClassReader.EXPAND_FRAMES);
+        ClassReader classReader = new ClassReader(bytes);
+        ClassNode classNode = new ClassNode();
+        classReader.accept(classNode, ClassReader.EXPAND_FRAMES);
 
-        transformers.forEach(transformer -> {
+        for (ITransformer transformer : transformers) {
             Sk1erOldAnimations.LOGGER.info("Applying transformer {} on {}...", transformer.getClass().getName(), transformedName);
-            transformer.transform(node, transformedName);
-        });
+            transformer.transform(classNode, transformedName);
+        }
 
-        ClassWriter writer = new ClassWriter(ClassWriter.COMPUTE_FRAMES | ClassWriter.COMPUTE_MAXS);
+        ClassWriter classWriter =
+            new ClassWriter(ClassWriter.COMPUTE_FRAMES | ClassWriter.COMPUTE_MAXS);
 
         try {
-            node.accept(writer);
-        } catch (Throwable t) {
-            Sk1erOldAnimations.LOGGER.error("Exception when transforming " + transformedName + " : " + t.getClass().getSimpleName());
-            t.printStackTrace();
+            classNode.accept(classWriter);
+        } catch (Throwable e) {
+            Sk1erOldAnimations.LOGGER.error("Exception when transforming " + transformedName + " : " + e.getClass().getSimpleName());
+            e.printStackTrace();
         }
+
         if (outputBytecode) {
             try {
                 File bytecodeDirectory = new File("bytecode");
@@ -72,12 +81,13 @@ public class ClassTransformer implements IClassTransformer {
                 if (!bytecodeOutput.exists()) bytecodeOutput.createNewFile();
 
                 FileOutputStream os = new FileOutputStream(bytecodeOutput);
-                os.write(writer.toByteArray());
+                os.write(classWriter.toByteArray());
                 os.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-        return writer.toByteArray();
+
+        return classWriter.toByteArray();
     }
 }
