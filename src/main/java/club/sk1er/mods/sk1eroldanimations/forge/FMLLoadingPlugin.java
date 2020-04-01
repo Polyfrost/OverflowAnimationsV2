@@ -29,6 +29,7 @@ public class FMLLoadingPlugin implements IFMLLoadingPlugin {
         File mod = new File(path.toURI().getSchemeSpecificPart().split("!")[0]);
         loadCoreMod.invoke(null, classLoader, OptifinePatcherTweaker.class.getName(), mod);
     }
+
     @Override
     public String[] getASMTransformerClass() {
         int initialize = ModCoreInstaller.initialize(Launch.minecraftHome, "1.8.9");
