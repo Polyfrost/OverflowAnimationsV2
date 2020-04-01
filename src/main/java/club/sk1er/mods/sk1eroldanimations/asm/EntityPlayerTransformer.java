@@ -45,8 +45,10 @@ public class EntityPlayerTransformer implements ITransformer {
 
     private InsnList changeEyeHeightInstructions() {
         InsnList list = new InsnList();
-        list.add(new MethodInsnNode(Opcodes.INVOKESTATIC, "net/minecraft/client/Minecraft", "getMinecraft", "()Lnet/minecraft/client/Minecraft;", false));
-        list.add(new FieldInsnNode(Opcodes.GETFIELD, "net/minecraft/client/Minecraft", "thePlayer", "Lnet/minecraft/client/entity/EntityPlayerSP;"));
+        list.add(new MethodInsnNode(Opcodes.INVOKESTATIC, "net/minecraft/client/Minecraft", "func_71410_x", // getMinecraft
+            "()Lnet/minecraft/client/Minecraft;", false));
+        list.add(new FieldInsnNode(Opcodes.GETFIELD, "net/minecraft/client/Minecraft", "field_71439_g", // thePlayer
+            "Lnet/minecraft/client/entity/EntityPlayerSP;"));
         list.add(new VarInsnNode(Opcodes.ASTORE, 1));
         list.add(new FieldInsnNode(Opcodes.GETSTATIC, Sk1erOldAnimations.getConfigClass(), "oldSneaking", "Z"));
         LabelNode ifeq = new LabelNode(); // L1
@@ -54,7 +56,8 @@ public class EntityPlayerTransformer implements ITransformer {
         list.add(new IntInsnNode(Opcodes.BIPUSH, 10));
         list.add(new VarInsnNode(Opcodes.ISTORE, 2));
         list.add(new VarInsnNode(Opcodes.ALOAD, 1));
-        list.add(new MethodInsnNode(Opcodes.INVOKEVIRTUAL, "net/minecraft/entity/player/EntityPlayer", "isSneaking", "()Z", false));
+        list.add(new MethodInsnNode(Opcodes.INVOKEVIRTUAL, "net/minecraft/entity/player/EntityPlayer", "func_70093_af", // isSneaking
+            "()Z", false));
         LabelNode ifeq2 = new LabelNode(); // L3
         list.add(new JumpInsnNode(Opcodes.IFEQ, ifeq2));
         list.add(new LdcInsnNode(1.54f));
@@ -135,7 +138,8 @@ public class EntityPlayerTransformer implements ITransformer {
         list.add(new FieldInsnNode(Opcodes.PUTFIELD, "net/minecraft/entity/player/EntityPlayer", "currentHeight", "F"));
         list.add(gotoInsn);
         list.add(new VarInsnNode(Opcodes.ALOAD, 1));
-        list.add(new MethodInsnNode(Opcodes.INVOKEVIRTUAL, "net/minecraft/entity/player/EntityPlayer", "isPlayerSleeping", "()Z", false));
+        list.add(new MethodInsnNode(Opcodes.INVOKEVIRTUAL, "net/minecraft/entity/player/EntityPlayer", "func_70608_bn", // isPlayerSleeping
+            "()Z", false));
         LabelNode ifeq3 = new LabelNode(); // L21
         list.add(new JumpInsnNode(Opcodes.IFEQ, ifeq3));
         list.add(new VarInsnNode(Opcodes.ALOAD, 0));
