@@ -5,6 +5,9 @@ import club.sk1er.mods.sk1eroldanimations.Sk1erOldAnimations;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 
+import java.util.Collections;
+import java.util.List;
+
 public class OldAnimationsCommand extends CommandBase {
     @Override
     public String getCommandName() {
@@ -19,6 +22,11 @@ public class OldAnimationsCommand extends CommandBase {
     @Override
     public void processCommand(ICommandSender sender, String[] args) {
         ModCore.getInstance().getGuiHandler().open(Sk1erOldAnimations.oldAnimationsSettings.gui());
+    }
+
+    @Override
+    public List<String> getCommandAliases() {
+        return Collections.singletonList("animations");
     }
 
     @Override
