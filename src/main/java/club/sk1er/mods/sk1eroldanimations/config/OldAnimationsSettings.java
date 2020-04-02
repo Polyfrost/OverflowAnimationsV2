@@ -62,6 +62,15 @@ public class OldAnimationsSettings extends Vigilant {
     )
     public static boolean redArmor = true;
 
+    @Property(
+            type = PropertyType.SWITCH,
+            category = "HUD",
+            subcategory = "idk",
+            description = "Stops your health bar flashing",
+            name = "Old Health"
+    )
+    public static boolean oldHealth = true;
+
     public OldAnimationsSettings() {
         super(new File("./config/sk1eroldanimations.toml"));
         initialize();

@@ -16,6 +16,7 @@ public class OptifineClassTransformer implements IClassTransformer {
             registerTransformer(new ItemRendererTransformer());
             registerTransformer(new EntityPlayerTransformer());
             registerTransformer(new LayerArmorBaseTransformer());
+            registerTransformer(new GuiIngameForgeTransformer());
         }
     }
 
