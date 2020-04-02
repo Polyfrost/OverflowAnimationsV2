@@ -30,7 +30,7 @@ public class OldAnimationsSettings extends Vigilant {
             type = PropertyType.SWITCH,
             category = "Animations",
             subcategory = "Position",
-            description = "Makes blocking in third-person look like it did in 1.7",
+            description = "Brings the sword more parallel to the player when they are blocking",
             name = "1.7 Blocking"
     )
     public static boolean oldBlocking = true;
@@ -39,7 +39,7 @@ public class OldAnimationsSettings extends Vigilant {
             type = PropertyType.SWITCH,
             category = "Animations",
             subcategory = "Position",
-            description = "Makes holding an item look like it did in 1.7",
+            description = "Brings the item a little bit closer to the player in first person, like in 1.7",
             name = "1.7 Item Held"
     )
     public static boolean oldItemHeld = true;
