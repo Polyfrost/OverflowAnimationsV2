@@ -53,6 +53,15 @@ public class OldAnimationsSettings extends Vigilant {
     )
     public static boolean oldSneaking = true;
 
+    @Property(
+            type = PropertyType.SWITCH,
+            category = "Animations",
+            subcategory = "idk",
+            description = "Makes an entity's armor turn red when it's hit",
+            name = "Red Armor"
+    )
+    public static boolean redArmor = true;
+
     public OldAnimationsSettings() {
         super(new File("./config/sk1eroldanimations.toml"));
         initialize();

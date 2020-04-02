@@ -5,3 +5,4 @@ Working:
 * Old Bow Position
 * Old Blockhitting
 * Old Sneak Animation
+* Armor turning red when hit

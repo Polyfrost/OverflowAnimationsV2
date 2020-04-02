@@ -3,6 +3,7 @@ package club.sk1er.mods.sk1eroldanimations.tweaker;
 import club.sk1er.mods.sk1eroldanimations.asm.EntityPlayerTransformer;
 import club.sk1er.mods.sk1eroldanimations.asm.ItemRendererTransformer;
 import club.sk1er.mods.sk1eroldanimations.asm.RenderFishTransformer;
+import club.sk1er.mods.sk1eroldanimations.asm.RendererLivingEntityTransformer;
 import club.sk1er.mods.sk1eroldanimations.tweaker.transformer.ITransformer;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
@@ -17,6 +18,7 @@ public class OptifineClassTransformer implements IClassTransformer {
             registerTransformer(new RenderFishTransformer());
             registerTransformer(new ItemRendererTransformer());
             registerTransformer(new EntityPlayerTransformer());
+            registerTransformer(new RendererLivingEntityTransformer());
         }
     }
 
