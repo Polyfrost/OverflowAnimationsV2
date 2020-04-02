@@ -12,7 +12,7 @@ public class OldAnimationsSettings extends Vigilant {
         type = PropertyType.SWITCH,
         category = "Animations",
         subcategory = "Position",
-        description = "Zooms out Fishing Rod's in order to make them more visible.",
+        description = "Brings back the zoomed-out look of the 1.7 fishing rod",
         name = "1.7 Rod Position"
     )
     public static boolean oldRodPosition = true;
@@ -21,16 +21,34 @@ public class OldAnimationsSettings extends Vigilant {
         type = PropertyType.SWITCH,
         category = "Animations",
         subcategory = "Position",
-        description = "Zooms out Bow's in order to make them more visible.",
+        description = "Brings back the 1.7 look of the bow for improved visibility",
         name = "1.7 Bow Position"
     )
     public static boolean oldBowPosition = true;
 
     @Property(
+            type = PropertyType.SWITCH,
+            category = "Animations",
+            subcategory = "Position",
+            description = "Makes blocking in third-person look like it did in 1.7",
+            name = "1.7 Blocking"
+    )
+    public static boolean oldBlocking = true;
+
+    @Property(
+            type = PropertyType.SWITCH,
+            category = "Animations",
+            subcategory = "Position",
+            description = "Makes holding an item look like it did in 1.7",
+            name = "1.7 Item Held"
+    )
+    public static boolean oldItemHeld = true;
+
+    @Property(
         type = PropertyType.SWITCH,
         category = "Animations",
         subcategory = "Interaction",
-        description = "what this do",
+        description = "Smoothly transitions between punching and eating, like in 1.7",
         name = "1.7 Eating"
     )
     public static boolean oldEating = true;
@@ -39,7 +57,7 @@ public class OldAnimationsSettings extends Vigilant {
         type = PropertyType.SWITCH,
         category = "Animations",
         subcategory = "Interaction",
-        description = "what this do",
+        description = "Makes blockhitting look much smoother, like it did in 1.7",
         name = "1.7 Blockhitting"
     )
     public static boolean oldBlockhitting = true;
@@ -48,7 +66,7 @@ public class OldAnimationsSettings extends Vigilant {
         type = PropertyType.SWITCH,
         category = "Animations",
         subcategory = "Interaction",
-        description = "Apply smoothing to the sneak animation.",
+        description = "Applies smoothing to the sneak animation",
         name = "1.7 Sneaking"
     )
     public static boolean oldSneaking = true;
@@ -56,18 +74,18 @@ public class OldAnimationsSettings extends Vigilant {
     @Property(
             type = PropertyType.SWITCH,
             category = "Animations",
-            subcategory = "idk",
-            description = "Makes an entity's armor turn red when it's hit",
+            subcategory = "Interaction",
+            description = "Makes an entity's armor turn red when it's hit, like in 1.7",
             name = "Red Armor"
     )
     public static boolean redArmor = true;
 
     @Property(
             type = PropertyType.SWITCH,
-            category = "HUD",
-            subcategory = "idk",
-            description = "Stops your health bar flashing",
-            name = "Old Health"
+            category = "Animations",
+            subcategory = "HUD",
+            description = "Stops your health bar flashing when you take damage",
+            name = "1.7 Health Bar"
     )
     public static boolean oldHealth = true;
 
