@@ -5,8 +5,6 @@ import club.sk1er.mods.sk1eroldanimations.tweaker.transformer.ITransformer;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.*;
 
-import java.util.ListIterator;
-
 public class LayerArmorBaseTransformer implements ITransformer {
     @Override
     public String[] getClassName() {
