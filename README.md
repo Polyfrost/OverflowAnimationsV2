@@ -14,4 +14,5 @@
 * Move Blocking up a bit
 * Make item holding in 3rd person more like 1.7
 * 1.7 Debug
+* Fix fishing rod being 1.8 size for a short while
 
