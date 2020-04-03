@@ -17,4 +17,5 @@
 * 1.7 Debug
 * Fix fishing rod being 1.8 size for a short while
 * Punching while doing stuff
+* Old Eating Animation
 
