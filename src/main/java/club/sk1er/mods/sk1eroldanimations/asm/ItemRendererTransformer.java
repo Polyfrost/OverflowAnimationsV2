@@ -212,7 +212,6 @@ public class ItemRendererTransformer implements ITransformer {
         list.add(new LdcInsnNode(0.85f));
         list.add(new LdcInsnNode(0.85f));
         list.add(new MethodInsnNode(Opcodes.INVOKESTATIC, "net/minecraft/client/renderer/GlStateManager", "func_179152_a", "(FFF)V", false)); // scale
-        list.add(new JumpInsnNode(Opcodes.GOTO, veryEnd));
         list.add(after);
         return list;
     }
