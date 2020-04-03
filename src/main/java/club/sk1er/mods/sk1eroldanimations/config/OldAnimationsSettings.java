@@ -39,7 +39,7 @@ public class OldAnimationsSettings extends Vigilant {
             type = PropertyType.SWITCH,
             category = "Animations",
             subcategory = "Position",
-            description = "Brings the item a little bit closer to the player in first person, like in 1.7",
+            description = "Brings the item a little bit closer to the player in third person, like in 1.7",
             name = "1.7 Item Held"
     )
     public static boolean oldItemHeld = true;

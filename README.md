@@ -7,8 +7,9 @@
 * Old Sneak Animation
 * Armor turning red when hit
 * Old health
-
-**To-do:**
 * Old blocking
 * Old item held
+
+**To-do:**
+
 

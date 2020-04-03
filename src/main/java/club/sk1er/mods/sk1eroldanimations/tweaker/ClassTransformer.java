@@ -30,6 +30,7 @@ public class ClassTransformer implements IClassTransformer {
             registerTransformer(new EntityPlayerTransformer());
             registerTransformer(new LayerArmorBaseTransformer());
             registerTransformer(new GuiIngameForgeTransformer());
+            registerTransformer(new LayerHeldItemTransformer());
         }
     }
 
