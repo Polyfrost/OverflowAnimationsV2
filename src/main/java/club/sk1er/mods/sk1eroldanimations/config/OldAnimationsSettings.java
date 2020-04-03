@@ -54,13 +54,22 @@ public class OldAnimationsSettings extends Vigilant {
     public static boolean oldEating = true;
 
     @Property(
-        type = PropertyType.SWITCH,
-        category = "Animations",
-        subcategory = "Interaction",
-        description = "Makes blockhitting look much smoother, like it did in 1.7",
-        name = "1.7 Blockhitting"
+            type = PropertyType.SWITCH,
+            category = "Animations",
+            subcategory = "Interaction",
+            description = "Makes blockhitting look much smoother, like it did in 1.7",
+            name = "1.7 Blockhitting"
     )
     public static boolean oldBlockhitting = true;
+
+    @Property(
+            type = PropertyType.SWITCH,
+            category = "Animations",
+            subcategory = "Interaction",
+            description = "Makes swinging an item look like it did in 1.7",
+            name = "1.7 Swing Animation"
+    )
+    public static boolean oldSwing = true;
 
     @Property(
         type = PropertyType.SWITCH,

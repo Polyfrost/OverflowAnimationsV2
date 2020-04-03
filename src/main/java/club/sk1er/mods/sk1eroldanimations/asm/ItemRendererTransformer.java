@@ -35,7 +35,7 @@ public class ItemRendererTransformer implements ITransformer {
                 methodNode.instructions.insertBefore(methodNode.instructions.getFirst(), veryEnd);
                 methodNode.instructions.insertBefore(methodNode.instructions.getFirst(), moveIfHoldingRod(veryEnd));
                 methodNode.instructions.insertBefore(methodNode.instructions.getFirst(), moveIfHoldingBow(veryEnd));
-                methodNode.instructions.insertBefore(methodNode.instructions.getFirst(), moveIfOldBlockhitting(veryEnd));
+                methodNode.instructions.insertBefore(methodNode.instructions.getFirst(), moveIfOldSwing(veryEnd));
             } else if (methodName.equals("renderItemInFirstPerson") || methodName.equals("func_78440_a")) {
                 int f1Index = -1;
                 int fIndex = -1;
@@ -179,10 +179,10 @@ public class ItemRendererTransformer implements ITransformer {
         return list;
     }
 
-    public InsnList moveIfOldBlockhitting(LabelNode veryEnd) {
+    public InsnList moveIfOldSwing(LabelNode veryEnd) {
         LabelNode after = new LabelNode();
         InsnList list = new InsnList();
-        list.add(new FieldInsnNode(Opcodes.GETSTATIC, Sk1erOldAnimations.getConfigClass(), "oldBlockhitting", "Z"));
+        list.add(new FieldInsnNode(Opcodes.GETSTATIC, Sk1erOldAnimations.getConfigClass(), "oldSwing", "Z"));
         list.add(new JumpInsnNode(Opcodes.IFEQ, after));
         list.add(new VarInsnNode(Opcodes.ALOAD, 0));
         list.add(new FieldInsnNode(Opcodes.GETFIELD, "net/minecraft/client/renderer/ItemRenderer", "field_78455_a", "Lnet/minecraft/client/Minecraft;")); // mc
