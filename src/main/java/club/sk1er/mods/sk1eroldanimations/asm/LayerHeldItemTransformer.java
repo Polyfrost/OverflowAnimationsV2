@@ -2,10 +2,8 @@ package club.sk1er.mods.sk1eroldanimations.asm;
 
 import club.sk1er.mods.sk1eroldanimations.config.OldAnimationsSettings;
 import club.sk1er.mods.sk1eroldanimations.tweaker.transformer.ITransformer;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.entity.RendererLivingEntity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -65,13 +63,13 @@ public class LayerHeldItemTransformer implements ITransformer {
                         GlStateManager.scale(1.05f, 1.05f, 1.05f);
                         GlStateManager.translate(-0.63f, 0.32f, -0.07f);
                         GlStateManager
-                                .rotate(-24405.0f, 137290.0f-250000, -2009900.0f, -2654900.0f);
+                                .rotate(-24405.0f, -112710, -2009900.0f, -2654900.0f);
                     } else {
                         ((ModelBiped) livingEntityRenderer.getMainModel()).postRenderArm(0.0325f);
                         GlStateManager.scale(1.05f, 1.05f, 1.05f);
                         GlStateManager.translate(-0.50f, 0.25f, -0.07f);
                         GlStateManager
-                                .rotate(-24405.0f, 137290.0f-250000, -2009900.0f, -2654900.0f);
+                                .rotate(-24405.0f, -112710, -2009900.0f, -2654900.0f);
                     }
                 } else {
                     ((ModelBiped) livingEntityRenderer.getMainModel())
