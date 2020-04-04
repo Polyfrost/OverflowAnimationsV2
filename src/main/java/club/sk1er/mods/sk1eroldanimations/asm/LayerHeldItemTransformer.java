@@ -41,8 +41,7 @@ public class LayerHeldItemTransformer implements ITransformer {
                                 if (pos.getNext().getOpcode() == Opcodes.INVOKESTATIC) {
                                     methodNode.instructions.remove(pos.getNext());
                                     break;
-                                }
-                                else {
+                                } else {
                                     methodNode.instructions.remove(pos.getNext());
                                 }
                             }
@@ -54,6 +53,7 @@ public class LayerHeldItemTransformer implements ITransformer {
             }
         }
     }
+
     public static void doOldTransformations(EntityLivingBase entityLivingBase, RendererLivingEntity<?> livingEntityRenderer) {
         if (entityLivingBase instanceof EntityPlayer) {
             if (OldAnimationsSettings.oldBlocking) {
@@ -61,13 +61,13 @@ public class LayerHeldItemTransformer implements ITransformer {
                     if (entityLivingBase.isSneaking()) {
                         ((ModelBiped) livingEntityRenderer.getMainModel()).postRenderArm(0.0325f);
                         GlStateManager.scale(1.05f, 1.05f, 1.05f);
-                        GlStateManager.translate(-0.63f, 0.32f, -0.07f);
+                        GlStateManager.translate(-0.63f, 0.30f, -0.07f);
                         GlStateManager
                                 .rotate(-24405.0f, -112710, -2009900.0f, -2654900.0f);
                     } else {
                         ((ModelBiped) livingEntityRenderer.getMainModel()).postRenderArm(0.0325f);
                         GlStateManager.scale(1.05f, 1.05f, 1.05f);
-                        GlStateManager.translate(-0.50f, 0.25f, -0.07f);
+                        GlStateManager.translate(-0.50f, 0.23f, -0.07f);
                         GlStateManager
                                 .rotate(-24405.0f, -112710, -2009900.0f, -2654900.0f);
                     }
@@ -81,11 +81,10 @@ public class LayerHeldItemTransformer implements ITransformer {
 
             if (!OldAnimationsSettings.oldItemHeld || ((EntityPlayer) entityLivingBase).isBlocking()) {
                 GlStateManager.translate(-0.0625f, 0.4375f, 0.0625f);
-            } else if (entityLivingBase.getHeldItem().getItem().isFull3D() || entityLivingBase.getHeldItem().getItem() instanceof ItemBlock){
+            } else if (entityLivingBase.getHeldItem().getItem().isFull3D() || entityLivingBase.getHeldItem().getItem() instanceof ItemBlock) {
                 GlStateManager.translate(-0.0855f, 0.4775f, 0.1585f);
                 GlStateManager.rotate(-19.0f, 20.0f, 0.0f, -6.0f);
-                }
-            else {
+            } else {
                 GlStateManager.translate(-0.03f, 0.475f, 0.0885f);
                 GlStateManager.rotate(-19.0f, 5f, 5.0f, -6.0f);
             }
@@ -94,12 +93,13 @@ public class LayerHeldItemTransformer implements ITransformer {
             GlStateManager.translate(-0.0625f, 0.4375f, 0.0625f);
         }
     }
+
     public InsnList callTheHook() {
         InsnList list = new InsnList();
         list.add(new VarInsnNode(Opcodes.ALOAD, 1));
         list.add(new VarInsnNode(Opcodes.ALOAD, 0));
         list.add(new FieldInsnNode(Opcodes.GETFIELD, "net/minecraft/client/renderer/entity/layers/LayerHeldItem", "field_177206_a", // livingEntityRenderer
-        "Lnet/minecraft/client/renderer/entity/RendererLivingEntity;"));
+                "Lnet/minecraft/client/renderer/entity/RendererLivingEntity;"));
         list.add(new MethodInsnNode(Opcodes.INVOKESTATIC, "club/sk1er/mods/sk1eroldanimations/asm/LayerHeldItemTransformer", "doOldTransformations", "(Lnet/minecraft/entity/EntityLivingBase;Lnet/minecraft/client/renderer/entity/RendererLivingEntity;)V", false));
         return list;
     }
