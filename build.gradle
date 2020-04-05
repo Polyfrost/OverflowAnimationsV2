@@ -1,5 +1,3 @@
-
-// For those who want the bleeding edge
 buildscript {
     repositories {
         jcenter()
@@ -16,16 +14,13 @@ buildscript {
 }
 apply plugin: 'net.minecraftforge.gradle.forge'
 
-/*
-// for people who want stable - not yet functional for MC 1.8.8 - we require the forgegradle 2.1 snapshot
-plugins {
-    id "net.minecraftforge.gradle.forge" version "2.0.2"
-}
-*/
+
 version = "1.0"
-group= "club.sk1er" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+group= "club.sk1er"
 archivesBaseName = "Sk1er Old Animations"
+
 sourceCompatibility = targetCompatibility = 1.8
+compileJava.options.encoding = 'UTF-8'
 
 minecraft {
     version = "1.8.9-11.15.1.2318-1.8.9"
@@ -55,6 +50,7 @@ processResources {
     from(sourceSets.main.resources.srcDirs) {
         exclude 'mcmod.info'
     }
+
     rename '(.+_at.cfg)', 'META-INF/$1'
 }
 
@@ -67,6 +63,7 @@ jar {
                 'FMLAT': 'old_animations_at.cfg'
     }
 }
+
 task moveResources {
     doLast {
         ant.move file: "${buildDir}/resources/main",
