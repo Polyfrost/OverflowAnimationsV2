@@ -2,12 +2,15 @@ package club.sk1er.mods.sk1eroldanimations.asm;
 
 import club.sk1er.mods.sk1eroldanimations.config.OldAnimationsSettings;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.RendererLivingEntity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 
 public class Hooks {
@@ -57,5 +60,22 @@ public class Hooks {
             player.swingProgressInt = -1;
             player.isSwingInProgress = true;
         }
+    }
+    public static void doOldEat(AbstractClientPlayer clientPlayer, float partialTicks, ItemStack itemToRender) {
+        float f = (float)clientPlayer.getItemInUseCount() - partialTicks + 1.0F;
+        float f1 = f / (float)itemToRender.getMaxItemUseDuration();
+        float f2 = MathHelper.abs(MathHelper.cos(f / 4.0F * (float)Math.PI) * 0.1F);
+
+        if (f1 >= 0.8F)
+        {
+            f2 = 0.0F;
+        }
+
+        GlStateManager.translate(0.0F, f2, 0.0F);
+        float f3 = 1.0F - (float)Math.pow(f1, 27.0D);
+        GlStateManager.translate(f3 * 0.72F, f3 * -0.5F, f3 * 0.08F);
+        GlStateManager.rotate(f3 * 90.0F, 0.0F, 1.0F, 0.0F);
+        GlStateManager.rotate(f3 * 4.0F, 1.0F, 0.0F, 0.0F);
+        GlStateManager.rotate(f3 * 33.0F, 0.0F, 0.0F, 1.0F);
     }
 }

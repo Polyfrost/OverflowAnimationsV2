@@ -25,7 +25,11 @@ public class ItemRendererTransformer implements ITransformer {
                 methodNode.instructions.insertBefore(methodNode.instructions.getFirst(), moveIfHoldingRod(veryEnd));
                 methodNode.instructions.insertBefore(methodNode.instructions.getFirst(), moveIfHoldingBow(veryEnd));
                 methodNode.instructions.insertBefore(methodNode.instructions.getFirst(), moveIfOldSwing(veryEnd));
-            } else if (methodName.equals("renderItemInFirstPerson") || methodName.equals("func_78440_a")) {
+            }
+            else if (methodName.equals("performDrinking") || methodName.equals("func_178104_a")) {
+                methodNode.instructions.insertBefore(methodNode.instructions.getFirst(), doOldDrinking());
+            }
+            else if (methodName.equals("renderItemInFirstPerson") || methodName.equals("func_78440_a")) {
                 int f1Index = -1;
                 int fIndex = -1;
                 for (LocalVariableNode variableNode : methodNode.localVariables) {
@@ -91,6 +95,21 @@ public class ItemRendererTransformer implements ITransformer {
                 }
             }
         }
+    }
+
+    public InsnList doOldDrinking() {
+        InsnList list = new InsnList();
+        list.add(new FieldInsnNode(Opcodes.GETSTATIC, Sk1erOldAnimations.getConfigClass(), "oldEating", "Z"));
+        LabelNode after = new LabelNode();
+        list.add(new JumpInsnNode(Opcodes.IFEQ, after));
+        list.add(new VarInsnNode(Opcodes.ALOAD, 1));
+        list.add(new VarInsnNode(Opcodes.FLOAD, 2));
+        list.add(new VarInsnNode(Opcodes.ALOAD, 0));
+        list.add(new FieldInsnNode(Opcodes.GETFIELD, "net/minecraft/client/renderer/ItemRenderer", "field_78453_b", "Lnet/minecraft/item/ItemStack;"));
+        list.add(new MethodInsnNode(Opcodes.INVOKESTATIC, Sk1erOldAnimations.getHookClass(), "doOldEat", "(Lnet/minecraft/client/entity/AbstractClientPlayer;FLnet/minecraft/item/ItemStack;)V", false));
+        list.add(new InsnNode(Opcodes.RETURN));
+        list.add(after);
+        return list;
     }
 
     public InsnList swingProgressIfNecessary(LabelNode labelNode, int f1Index) {
