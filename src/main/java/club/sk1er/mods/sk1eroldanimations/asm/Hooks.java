@@ -73,7 +73,7 @@ public class Hooks {
 
         GlStateManager.translate(0.0F, f2, 0.0F);
         float f3 = 1.0F - (float)Math.pow(f1, 27.0D);
-        GlStateManager.translate(f3 * 0.72F, f3 * -0.5F, f3 * 0.08F);
+        GlStateManager.translate(f3 * 0.69F, f3 * -0.54F, f3 * 0.0F);
         GlStateManager.rotate(f3 * 90.0F, 0.0F, 1.0F, 0.0F);
         GlStateManager.rotate(f3 * 4.0F, 1.0F, 0.0F, 0.0F);
         GlStateManager.rotate(f3 * 33.0F, 0.0F, 0.0F, 1.0F);
