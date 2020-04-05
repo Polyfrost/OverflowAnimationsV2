@@ -10,9 +10,9 @@
 * Old health
 * Old blocking
 * Old item held
+* Punching a block while doing stuff
 
 **To-do:**
 * 1.7 Debug
-* Punching while doing stuff
 * Old Eating Animation
 

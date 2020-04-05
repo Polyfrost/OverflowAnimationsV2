@@ -92,6 +92,15 @@ public class OldAnimationsSettings extends Vigilant {
     @Property(
             type = PropertyType.SWITCH,
             category = "Animations",
+            subcategory = "Interaction",
+            description = "Allows you to punch blocks whilst using an item (VISUAL ONLY!)",
+            name = "Punching during Usage"
+    )
+    public static boolean punching = true;
+
+    @Property(
+            type = PropertyType.SWITCH,
+            category = "Animations",
             subcategory = "HUD",
             description = "Stops your health bar flashing when you take damage",
             name = "1.7 Health Bar"

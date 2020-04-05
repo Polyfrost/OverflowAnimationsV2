@@ -1,20 +1,13 @@
 package club.sk1er.mods.sk1eroldanimations.asm;
 
 import club.sk1er.mods.sk1eroldanimations.Sk1erOldAnimations;
+import club.sk1er.mods.sk1eroldanimations.config.OldAnimationsSettings;
 import club.sk1er.mods.sk1eroldanimations.tweaker.transformer.ITransformer;
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.MovingObjectPosition;
 import org.objectweb.asm.Opcodes;
-import org.objectweb.asm.tree.AbstractInsnNode;
-import org.objectweb.asm.tree.ClassNode;
-import org.objectweb.asm.tree.FieldInsnNode;
-import org.objectweb.asm.tree.InsnList;
-import org.objectweb.asm.tree.IntInsnNode;
-import org.objectweb.asm.tree.JumpInsnNode;
-import org.objectweb.asm.tree.LabelNode;
-import org.objectweb.asm.tree.LdcInsnNode;
-import org.objectweb.asm.tree.LocalVariableNode;
-import org.objectweb.asm.tree.MethodInsnNode;
-import org.objectweb.asm.tree.MethodNode;
-import org.objectweb.asm.tree.VarInsnNode;
+import org.objectweb.asm.tree.*;
 
 import java.util.Iterator;
 
@@ -39,7 +32,6 @@ public class ItemRendererTransformer implements ITransformer {
             } else if (methodName.equals("renderItemInFirstPerson") || methodName.equals("func_78440_a")) {
                 int f1Index = -1;
                 int fIndex = -1;
-                int abstractclientplayerIndex = -1;
                 for (LocalVariableNode variableNode : methodNode.localVariables) {
                     switch (variableNode.name) {
                         case "f1":
@@ -47,9 +39,6 @@ public class ItemRendererTransformer implements ITransformer {
                             break;
                         case "f":
                             fIndex = variableNode.index;
-                            break;
-                        case "abstractclientplayer":
-                            abstractclientplayerIndex = variableNode.index;
                             break;
                     }
                 }
@@ -61,13 +50,14 @@ public class ItemRendererTransformer implements ITransformer {
                         switch (nodeName) {
                             case "doBowTransformations":
                             case "func_178098_a": {
-                                LabelNode veryEnd = new LabelNode();
+                                LabelNode labelNode = new LabelNode();
                                 AbstractInsnNode start = node;
-                                for (int i = 0; i < 9; i++) {
+                                for (int i = 0; i < 7; i++) {
                                     start = start.getPrevious();
                                 }
-                                methodNode.instructions.insertBefore(start, moveIfOldBow(veryEnd, fIndex, f1Index, abstractclientplayerIndex));
-                                methodNode.instructions.insert(node, veryEnd);
+                                methodNode.instructions.insertBefore(start, swingProgressIfNecessary(labelNode, f1Index));
+                                methodNode.instructions.insert(start, labelNode);
+                                methodNode.instructions.insert(node, moveIfOldBow(labelNode));
                                 break;
                             }
                             case "performDrinking":
@@ -83,19 +73,60 @@ public class ItemRendererTransformer implements ITransformer {
                             }
                             case "doBlockTransformations":
                             case "func_178103_d": {
-                                LabelNode veryEnd = new LabelNode();
                                 AbstractInsnNode start = node;
-                                for (int i = 0; i < 7; i++) {
+                                for (int i = 0; i < 5; i++) {
                                     start = start.getPrevious();
                                 }
-                                methodNode.instructions.insertBefore(start, moveIfBlocking(veryEnd, fIndex, f1Index));
-                                methodNode.instructions.insert(node, veryEnd);
+                                LabelNode labelNode = new LabelNode();
+                                methodNode.instructions.insertBefore(start, blockhitSwingProgressIfNecessary(labelNode, f1Index));
+                                methodNode.instructions.insert(start, labelNode);
+                                methodNode.instructions.insert(node, moveIfBlocking(fIndex, f1Index));
                                 break;
                             }
                         }
                     }
+                    else if (node.getOpcode() == Opcodes.INVOKEVIRTUAL) {
+                        String nodeName = mapMethodNameFromNode(node);
+                        if (nodeName.equals("func_71052_bv") || nodeName.equals("getItemInUseCount")) {
+                            AbstractInsnNode pos = node.getNext().getNext().getNext().getNext();
+                            methodNode.instructions.insertBefore(pos, new MethodInsnNode(Opcodes.INVOKESTATIC, "club/sk1er/mods/sk1eroldanimations/asm/ItemRendererTransformer", "swingIfNecessary", "()V", false));
+                        }
+                    }
                 }
             }
+        }
+    }
+
+    public InsnList swingProgressIfNecessary(LabelNode labelNode, int f1Index) {
+        InsnList list = new InsnList();
+        list.add(new FieldInsnNode(Opcodes.GETSTATIC, Sk1erOldAnimations.getConfigClass(), "punching", "Z"));
+        LabelNode after = new LabelNode();
+        list.add(new JumpInsnNode(Opcodes.IFEQ, after));
+        list.add(new VarInsnNode(Opcodes.FLOAD, f1Index));
+        list.add(new JumpInsnNode(Opcodes.GOTO, labelNode));
+        list.add(after);
+        return list;
+    }
+
+    public InsnList blockhitSwingProgressIfNecessary(LabelNode labelNode, int f1Index) {
+        InsnList list = new InsnList();
+        list.add(new FieldInsnNode(Opcodes.GETSTATIC, Sk1erOldAnimations.getConfigClass(), "oldBlockhitting", "Z"));
+        list.add(new FieldInsnNode(Opcodes.GETSTATIC, Sk1erOldAnimations.getConfigClass(), "punching", "Z"));
+        list.add(new InsnNode(Opcodes.IOR));
+        LabelNode after = new LabelNode();
+        list.add(new JumpInsnNode(Opcodes.IFEQ, after));
+        list.add(new VarInsnNode(Opcodes.FLOAD, f1Index));
+        list.add(new JumpInsnNode(Opcodes.GOTO, labelNode));
+        list.add(after);
+        return list;
+    }
+
+    public static void swingIfNecessary() {
+        EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+        if (!OldAnimationsSettings.punching || !Minecraft.getMinecraft().gameSettings.keyBindAttack.isKeyDown() || Minecraft.getMinecraft().objectMouseOver == null || Minecraft.getMinecraft().objectMouseOver.typeOfHit != MovingObjectPosition.MovingObjectType.BLOCK) return;
+        if (!player.isSwingInProgress || player.swingProgressInt >= player.getArmSwingAnimationEnd() / 2 || player.swingProgressInt < 0) {
+            player.swingProgressInt = -1;
+            player.isSwingInProgress = true;
         }
     }
 
@@ -143,24 +174,15 @@ public class ItemRendererTransformer implements ITransformer {
         return list;
     }
 
-    public InsnList moveIfOldBow(LabelNode veryEnd, int fIndex, int f1Index, int abstractclientplayerIndex) {
+    public InsnList moveIfOldBow(LabelNode labelNode) {
         InsnList list = new InsnList();
         LabelNode after = new LabelNode();
         list.add(new FieldInsnNode(Opcodes.GETSTATIC, Sk1erOldAnimations.getConfigClass(), "oldBowPosition", "Z"));
         list.add(new JumpInsnNode(Opcodes.IFEQ, after));
-        list.add(new VarInsnNode(Opcodes.ALOAD, 0));
-        list.add(new VarInsnNode(Opcodes.FLOAD, fIndex));
-        list.add(new VarInsnNode(Opcodes.FLOAD, f1Index));
-        list.add(new MethodInsnNode(Opcodes.INVOKESPECIAL, "net/minecraft/client/renderer/ItemRenderer", "func_178096_b", "(FF)V", false)); // transformFirstPersonItem
-        list.add(new VarInsnNode(Opcodes.ALOAD, 0));
-        list.add(new VarInsnNode(Opcodes.FLOAD, 1));
-        list.add(new VarInsnNode(Opcodes.ALOAD, abstractclientplayerIndex));
-        list.add(new MethodInsnNode(Opcodes.INVOKESPECIAL, "net/minecraft/client/renderer/ItemRenderer", "func_178098_a", "(FLnet/minecraft/client/entity/AbstractClientPlayer;)V", false)); // doBowTransformations
         list.add(new LdcInsnNode(0f));
         list.add(new LdcInsnNode(0.1f));
         list.add(new LdcInsnNode(-0.15f));
         list.add(new MethodInsnNode(Opcodes.INVOKESTATIC, "net/minecraft/client/renderer/GlStateManager", "func_179109_b", "(FFF)V", false)); // translate
-        list.add(new JumpInsnNode(Opcodes.GOTO, veryEnd));
         list.add(after);
         return list;
     }
@@ -168,7 +190,7 @@ public class ItemRendererTransformer implements ITransformer {
     public InsnList moveIfOldEat(LabelNode veryEnd, int fIndex, int f1Index) {
         InsnList list = new InsnList();
         LabelNode after = new LabelNode();
-        list.add(new FieldInsnNode(Opcodes.GETSTATIC, Sk1erOldAnimations.getConfigClass(), "oldEating", "Z"));
+        list.add(new FieldInsnNode(Opcodes.GETSTATIC, Sk1erOldAnimations.getConfigClass(), "punching", "Z"));
         list.add(new JumpInsnNode(Opcodes.IFEQ, after));
         list.add(new VarInsnNode(Opcodes.ALOAD, 0));
         list.add(new VarInsnNode(Opcodes.FLOAD, fIndex));
@@ -216,17 +238,17 @@ public class ItemRendererTransformer implements ITransformer {
         return list;
     }
 
-    public InsnList moveIfBlocking(LabelNode veryEnd, int fIndex, int f1Index) {
+    public InsnList moveIfBlocking(int fIndex, int f1Index) {
         InsnList list = new InsnList();
         LabelNode after = new LabelNode();
         list.add(new FieldInsnNode(Opcodes.GETSTATIC, Sk1erOldAnimations.getConfigClass(), "oldBlockhitting", "Z"));
         list.add(new JumpInsnNode(Opcodes.IFEQ, after));
-        list.add(new VarInsnNode(Opcodes.ALOAD, 0));
-        list.add(new VarInsnNode(Opcodes.FLOAD, fIndex));
-        list.add(new VarInsnNode(Opcodes.FLOAD, f1Index));
-        list.add(new MethodInsnNode(Opcodes.INVOKESPECIAL, "net/minecraft/client/renderer/ItemRenderer", "func_178096_b", "(FF)V", false)); // transformFirstPersonItem
-        list.add(new VarInsnNode(Opcodes.ALOAD, 0));
-        list.add(new MethodInsnNode(Opcodes.INVOKESPECIAL, "net/minecraft/client/renderer/ItemRenderer", "func_178103_d", "()V", false)); // doBlockTransformations
+//        list.add(new VarInsnNode(Opcodes.ALOAD, 0));
+//        list.add(new VarInsnNode(Opcodes.FLOAD, fIndex));
+//        list.add(new VarInsnNode(Opcodes.FLOAD, f1Index));
+//        list.add(new MethodInsnNode(Opcodes.INVOKESPECIAL, "net/minecraft/client/renderer/ItemRenderer", "func_178096_b", "(FF)V", false)); // transformFirstPersonItem
+//        list.add(new VarInsnNode(Opcodes.ALOAD, 0));
+//        list.add(new MethodInsnNode(Opcodes.INVOKESPECIAL, "net/minecraft/client/renderer/ItemRenderer", "func_178103_d", "()V", false)); // doBlockTransformations
         list.add(new LdcInsnNode(-0.3f));
         list.add(new LdcInsnNode(0.1f));
         list.add(new LdcInsnNode(0f));
@@ -235,7 +257,6 @@ public class ItemRendererTransformer implements ITransformer {
         list.add(new LdcInsnNode(0.88f));
         list.add(new LdcInsnNode(0.85f));
         list.add(new MethodInsnNode(Opcodes.INVOKESTATIC, "net/minecraft/client/renderer/GlStateManager", "func_179152_a", "(FFF)V", false)); // scale
-        list.add(new JumpInsnNode(Opcodes.GOTO, veryEnd));
         list.add(after);
         return list;
     }

@@ -55,6 +55,7 @@ processResources {
     from(sourceSets.main.resources.srcDirs) {
         exclude 'mcmod.info'
     }
+    rename '(.+_at.cfg)', 'META-INF/$1'
 }
 
 jar {
@@ -62,6 +63,16 @@ jar {
         attributes "FMLCorePlugin": "club.sk1er.mods.sk1eroldanimations.forge.FMLLoadingPlugin",
                 "ModSide": "CLIENT",
                 "FMLCorePluginContainsFMLMod": "Yes, yes it does",
-                "ForceLoadAsMod": true
+                "ForceLoadAsMod": true,
+                'FMLAT': 'old_animations_at.cfg'
     }
 }
+task moveResources {
+    doLast {
+        ant.move file: "${buildDir}/resources/main",
+                todir: "${buildDir}/classes/java"
+    }
+}
+
+moveResources.dependsOn processResources
+classes.dependsOn moveResources
