@@ -5,7 +5,7 @@
 * Old Bow Position
 * Old Blockhitting
 * Old Swing Animation
-* Old Sneak Animation (broken atm idk whyyyy)
+* Old Sneak Animation
 * Armor turning red when hit
 * Old health
 * Old blocking

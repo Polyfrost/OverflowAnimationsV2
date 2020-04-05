@@ -1,11 +1,7 @@
 package club.sk1er.mods.sk1eroldanimations.asm;
 
 import club.sk1er.mods.sk1eroldanimations.Sk1erOldAnimations;
-import club.sk1er.mods.sk1eroldanimations.config.OldAnimationsSettings;
 import club.sk1er.mods.sk1eroldanimations.tweaker.transformer.ITransformer;
-import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.MovingObjectPosition;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.*;
 
@@ -89,7 +85,7 @@ public class ItemRendererTransformer implements ITransformer {
                         String nodeName = mapMethodNameFromNode(node);
                         if (nodeName.equals("func_71052_bv") || nodeName.equals("getItemInUseCount")) {
                             AbstractInsnNode pos = node.getNext().getNext().getNext().getNext();
-                            methodNode.instructions.insertBefore(pos, new MethodInsnNode(Opcodes.INVOKESTATIC, "club/sk1er/mods/sk1eroldanimations/asm/ItemRendererTransformer", "swingIfNecessary", "()V", false));
+                            methodNode.instructions.insertBefore(pos, new MethodInsnNode(Opcodes.INVOKESTATIC, Sk1erOldAnimations.getHookClass(), "swingIfNecessary", "()V", false));
                         }
                     }
                 }
@@ -119,15 +115,6 @@ public class ItemRendererTransformer implements ITransformer {
         list.add(new JumpInsnNode(Opcodes.GOTO, labelNode));
         list.add(after);
         return list;
-    }
-
-    public static void swingIfNecessary() {
-        EntityPlayer player = Minecraft.getMinecraft().thePlayer;
-        if (!OldAnimationsSettings.punching || !Minecraft.getMinecraft().gameSettings.keyBindAttack.isKeyDown() || Minecraft.getMinecraft().objectMouseOver == null || Minecraft.getMinecraft().objectMouseOver.typeOfHit != MovingObjectPosition.MovingObjectType.BLOCK) return;
-        if (!player.isSwingInProgress || player.swingProgressInt >= player.getArmSwingAnimationEnd() / 2 || player.swingProgressInt < 0) {
-            player.swingProgressInt = -1;
-            player.isSwingInProgress = true;
-        }
     }
 
     public InsnList moveIfHoldingRod(LabelNode veryEnd) {
