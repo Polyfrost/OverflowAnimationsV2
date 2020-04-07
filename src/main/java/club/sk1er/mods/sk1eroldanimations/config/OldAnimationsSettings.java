@@ -48,7 +48,7 @@ public class OldAnimationsSettings extends Vigilant {
         type = PropertyType.SWITCH,
         category = "Animations",
         subcategory = "Interaction",
-        description = "Smoothly transitions between punching and eating, like in 1.7.",
+        description = "Makes eating and drinking look like it did in 1.7.",
         name = "1.7 Eating"
     )
     public static boolean oldEating = true;
