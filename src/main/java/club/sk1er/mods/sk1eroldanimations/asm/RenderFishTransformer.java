@@ -1,6 +1,5 @@
 package club.sk1er.mods.sk1eroldanimations.asm;
 
-import club.sk1er.mods.sk1eroldanimations.Sk1erOldAnimations;
 import club.sk1er.mods.sk1eroldanimations.tweaker.transformer.ITransformer;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.*;
@@ -41,7 +40,7 @@ public class RenderFishTransformer implements ITransformer {
 
     public InsnList checkAndJump(LabelNode toJump) {
         InsnList list = new InsnList();
-        list.add(new FieldInsnNode(Opcodes.GETSTATIC, Sk1erOldAnimations.getConfigClass(), "oldRodPosition", "Z"));
+        list.add(new FieldInsnNode(Opcodes.GETSTATIC, getConfigClass(), "oldRodPosition", "Z"));
         list.add(new JumpInsnNode(Opcodes.IFNE, toJump));
         return list;
     }

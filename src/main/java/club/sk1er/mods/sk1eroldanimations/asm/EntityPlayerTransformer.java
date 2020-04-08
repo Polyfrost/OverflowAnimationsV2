@@ -1,6 +1,5 @@
 package club.sk1er.mods.sk1eroldanimations.asm;
 
-import club.sk1er.mods.sk1eroldanimations.Sk1erOldAnimations;
 import club.sk1er.mods.sk1eroldanimations.tweaker.transformer.ITransformer;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.*;
@@ -49,7 +48,7 @@ public class EntityPlayerTransformer implements ITransformer {
         list.add(new FieldInsnNode(Opcodes.GETFIELD, "net/minecraft/client/Minecraft", "field_71439_g", // thePlayer
             "Lnet/minecraft/client/entity/EntityPlayerSP;"));
         list.add(new VarInsnNode(Opcodes.ASTORE, 1));
-        list.add(new FieldInsnNode(Opcodes.GETSTATIC, Sk1erOldAnimations.getConfigClass(), "oldSneaking", "Z"));
+        list.add(new FieldInsnNode(Opcodes.GETSTATIC, getConfigClass(), "oldSneaking", "Z"));
         LabelNode ifeq = new LabelNode(); // L1
         list.add(new JumpInsnNode(Opcodes.IFEQ, ifeq));
         list.add(new IntInsnNode(Opcodes.BIPUSH, 10));

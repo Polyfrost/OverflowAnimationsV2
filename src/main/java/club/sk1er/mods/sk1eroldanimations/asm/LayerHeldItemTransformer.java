@@ -1,6 +1,5 @@
 package club.sk1er.mods.sk1eroldanimations.asm;
 
-import club.sk1er.mods.sk1eroldanimations.Sk1erOldAnimations;
 import club.sk1er.mods.sk1eroldanimations.tweaker.transformer.ITransformer;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.*;
@@ -54,7 +53,7 @@ public class LayerHeldItemTransformer implements ITransformer {
         list.add(new VarInsnNode(Opcodes.ALOAD, 0));
         list.add(new FieldInsnNode(Opcodes.GETFIELD, "net/minecraft/client/renderer/entity/layers/LayerHeldItem", "field_177206_a", // livingEntityRenderer
                 "Lnet/minecraft/client/renderer/entity/RendererLivingEntity;"));
-        list.add(new MethodInsnNode(Opcodes.INVOKESTATIC, Sk1erOldAnimations.getHookClass(), "doOldTransformations", "(Lnet/minecraft/entity/EntityLivingBase;Lnet/minecraft/client/renderer/entity/RendererLivingEntity;)V", false));
+        list.add(new MethodInsnNode(Opcodes.INVOKESTATIC, getHookClass(), "doOldTransformations", "(Lnet/minecraft/entity/EntityLivingBase;Lnet/minecraft/client/renderer/entity/RendererLivingEntity;)V", false));
         return list;
     }
 }

@@ -24,12 +24,4 @@ public class Sk1erOldAnimations {
         oldAnimationsSettings = new OldAnimationsSettings();
         oldAnimationsSettings.preload();
     }
-
-    public static String getConfigClass() {
-        return "club/sk1er/mods/sk1eroldanimations/config/OldAnimationsSettings";
-    }
-
-    public static String getHookClass() {
-        return "club/sk1er/mods/sk1eroldanimations/asm/Hooks";
-    }
 }

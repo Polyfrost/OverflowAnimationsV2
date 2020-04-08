@@ -1,6 +1,5 @@
 package club.sk1er.mods.sk1eroldanimations.asm;
 
-import club.sk1er.mods.sk1eroldanimations.Sk1erOldAnimations;
 import club.sk1er.mods.sk1eroldanimations.tweaker.transformer.ITransformer;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.*;
@@ -26,7 +25,7 @@ public class ModelBipedTransformer implements ITransformer {
 
                     if (node.getOpcode() == Opcodes.LDC && ((LdcInsnNode) node).cst.equals(-0.5235988f)) {
                         LabelNode ifne = new LabelNode();
-                        methodNode.instructions.insertBefore(node.getPrevious().getPrevious(), new FieldInsnNode(Opcodes.GETSTATIC, Sk1erOldAnimations.getConfigClass(), "oldBlocking", "Z"));
+                        methodNode.instructions.insertBefore(node.getPrevious().getPrevious(), new FieldInsnNode(Opcodes.GETSTATIC, getConfigClass(), "oldBlocking", "Z"));
                         methodNode.instructions.insertBefore(node.getPrevious().getPrevious(), new JumpInsnNode(Opcodes.IFNE, ifne));
                         methodNode.instructions.insert(node.getNext(), ifne);
                         break;

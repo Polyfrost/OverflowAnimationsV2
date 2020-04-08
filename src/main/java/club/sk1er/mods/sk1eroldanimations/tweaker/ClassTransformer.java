@@ -27,12 +27,12 @@ public class ClassTransformer implements IClassTransformer {
         if (developmentEnvironment) {
             registerTransformer(new RenderFishTransformer());
             registerTransformer(new ItemRendererTransformer());
-            registerTransformer(new EntityPlayerTransformer());
             registerTransformer(new LayerArmorBaseTransformer());
             registerTransformer(new GuiIngameForgeTransformer());
             registerTransformer(new LayerHeldItemTransformer());
             registerTransformer(new ModelBipedTransformer());
         }
+        registerTransformer(new EntityPlayerTransformer());
     }
 
     private void registerTransformer(ITransformer transformer) {
@@ -65,7 +65,7 @@ public class ClassTransformer implements IClassTransformer {
         }
 
         ClassWriter classWriter =
-                new ClassWriter(/*ClassWriter.COMPUTE_FRAMES |*/ ClassWriter.COMPUTE_MAXS);
+                new ClassWriter(ClassWriter.COMPUTE_FRAMES | ClassWriter.COMPUTE_MAXS);
 
         try {
             classNode.accept(classWriter);

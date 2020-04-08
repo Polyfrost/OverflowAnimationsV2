@@ -1,6 +1,5 @@
 package club.sk1er.mods.sk1eroldanimations.asm;
 
-import club.sk1er.mods.sk1eroldanimations.Sk1erOldAnimations;
 import club.sk1er.mods.sk1eroldanimations.tweaker.transformer.ITransformer;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.*;
@@ -89,7 +88,7 @@ public class ItemRendererTransformer implements ITransformer {
                         String nodeName = mapMethodNameFromNode(node);
                         if (nodeName.equals("func_71052_bv") || nodeName.equals("getItemInUseCount")) {
                             AbstractInsnNode pos = node.getNext().getNext().getNext().getNext();
-                            methodNode.instructions.insertBefore(pos, new MethodInsnNode(Opcodes.INVOKESTATIC, Sk1erOldAnimations.getHookClass(), "swingIfNecessary", "()V", false));
+                            methodNode.instructions.insertBefore(pos, new MethodInsnNode(Opcodes.INVOKESTATIC, getHookClass(), "swingIfNecessary", "()V", false));
                         }
                     }
                 }
@@ -99,14 +98,14 @@ public class ItemRendererTransformer implements ITransformer {
 
     public InsnList doOldDrinking() {
         InsnList list = new InsnList();
-        list.add(new FieldInsnNode(Opcodes.GETSTATIC, Sk1erOldAnimations.getConfigClass(), "oldEating", "Z"));
+        list.add(new FieldInsnNode(Opcodes.GETSTATIC, getConfigClass(), "oldEating", "Z"));
         LabelNode after = new LabelNode();
         list.add(new JumpInsnNode(Opcodes.IFEQ, after));
         list.add(new VarInsnNode(Opcodes.ALOAD, 1));
         list.add(new VarInsnNode(Opcodes.FLOAD, 2));
         list.add(new VarInsnNode(Opcodes.ALOAD, 0));
         list.add(new FieldInsnNode(Opcodes.GETFIELD, "net/minecraft/client/renderer/ItemRenderer", "field_78453_b", "Lnet/minecraft/item/ItemStack;"));
-        list.add(new MethodInsnNode(Opcodes.INVOKESTATIC, Sk1erOldAnimations.getHookClass(), "doOldEat", "(Lnet/minecraft/client/entity/AbstractClientPlayer;FLnet/minecraft/item/ItemStack;)V", false));
+        list.add(new MethodInsnNode(Opcodes.INVOKESTATIC, getHookClass(), "doOldEat", "(Lnet/minecraft/client/entity/AbstractClientPlayer;FLnet/minecraft/item/ItemStack;)V", false));
         list.add(new InsnNode(Opcodes.RETURN));
         list.add(after);
         return list;
@@ -114,7 +113,7 @@ public class ItemRendererTransformer implements ITransformer {
 
     public InsnList swingProgressIfNecessary(LabelNode labelNode, int f1Index) {
         InsnList list = new InsnList();
-        list.add(new FieldInsnNode(Opcodes.GETSTATIC, Sk1erOldAnimations.getConfigClass(), "punching", "Z"));
+        list.add(new FieldInsnNode(Opcodes.GETSTATIC, getConfigClass(), "punching", "Z"));
         LabelNode after = new LabelNode();
         list.add(new JumpInsnNode(Opcodes.IFEQ, after));
         list.add(new VarInsnNode(Opcodes.FLOAD, f1Index));
@@ -125,8 +124,8 @@ public class ItemRendererTransformer implements ITransformer {
 
     public InsnList blockhitSwingProgressIfNecessary(LabelNode labelNode, int f1Index) {
         InsnList list = new InsnList();
-        list.add(new FieldInsnNode(Opcodes.GETSTATIC, Sk1erOldAnimations.getConfigClass(), "oldBlockhitting", "Z"));
-        list.add(new FieldInsnNode(Opcodes.GETSTATIC, Sk1erOldAnimations.getConfigClass(), "punching", "Z"));
+        list.add(new FieldInsnNode(Opcodes.GETSTATIC, getConfigClass(), "oldBlockhitting", "Z"));
+        list.add(new FieldInsnNode(Opcodes.GETSTATIC, getConfigClass(), "punching", "Z"));
         list.add(new InsnNode(Opcodes.IOR));
         LabelNode after = new LabelNode();
         list.add(new JumpInsnNode(Opcodes.IFEQ, after));
@@ -139,7 +138,7 @@ public class ItemRendererTransformer implements ITransformer {
     public InsnList moveIfHoldingRod(LabelNode veryEnd) {
         LabelNode after = new LabelNode();
         InsnList list = new InsnList();
-        list.add(new FieldInsnNode(Opcodes.GETSTATIC, Sk1erOldAnimations.getConfigClass(), "oldRodPosition", "Z"));
+        list.add(new FieldInsnNode(Opcodes.GETSTATIC, getConfigClass(), "oldRodPosition", "Z"));
         list.add(new JumpInsnNode(Opcodes.IFEQ, after));
         list.add(new VarInsnNode(Opcodes.ALOAD, 0));
         list.add(new FieldInsnNode(Opcodes.GETFIELD, "net/minecraft/client/renderer/ItemRenderer", "field_78453_b", "Lnet/minecraft/item/ItemStack;")); // itemToRender
@@ -163,7 +162,7 @@ public class ItemRendererTransformer implements ITransformer {
     public InsnList moveIfHoldingBow(LabelNode veryEnd) {
         LabelNode after = new LabelNode();
         InsnList list = new InsnList();
-        list.add(new FieldInsnNode(Opcodes.GETSTATIC, Sk1erOldAnimations.getConfigClass(), "oldBowPosition", "Z"));
+        list.add(new FieldInsnNode(Opcodes.GETSTATIC, getConfigClass(), "oldBowPosition", "Z"));
         list.add(new JumpInsnNode(Opcodes.IFEQ, after));
         list.add(new VarInsnNode(Opcodes.ALOAD, 0));
         list.add(new FieldInsnNode(Opcodes.GETFIELD, "net/minecraft/client/renderer/ItemRenderer", "field_78453_b", "Lnet/minecraft/item/ItemStack;")); // itemToRender
@@ -183,7 +182,7 @@ public class ItemRendererTransformer implements ITransformer {
     public InsnList moveIfOldBow(LabelNode labelNode) {
         InsnList list = new InsnList();
         LabelNode after = new LabelNode();
-        list.add(new FieldInsnNode(Opcodes.GETSTATIC, Sk1erOldAnimations.getConfigClass(), "oldBowPosition", "Z"));
+        list.add(new FieldInsnNode(Opcodes.GETSTATIC, getConfigClass(), "oldBowPosition", "Z"));
         list.add(new JumpInsnNode(Opcodes.IFEQ, after));
         list.add(new LdcInsnNode(0f));
         list.add(new LdcInsnNode(0.1f));
@@ -196,7 +195,7 @@ public class ItemRendererTransformer implements ITransformer {
     public InsnList moveIfOldEat(LabelNode veryEnd, int fIndex, int f1Index) {
         InsnList list = new InsnList();
         LabelNode after = new LabelNode();
-        list.add(new FieldInsnNode(Opcodes.GETSTATIC, Sk1erOldAnimations.getConfigClass(), "punching", "Z"));
+        list.add(new FieldInsnNode(Opcodes.GETSTATIC, getConfigClass(), "punching", "Z"));
         list.add(new JumpInsnNode(Opcodes.IFEQ, after));
         list.add(new VarInsnNode(Opcodes.ALOAD, 0));
         list.add(new VarInsnNode(Opcodes.FLOAD, fIndex));
@@ -210,7 +209,7 @@ public class ItemRendererTransformer implements ITransformer {
     public InsnList moveIfOldSwing(LabelNode veryEnd) {
         LabelNode after = new LabelNode();
         InsnList list = new InsnList();
-        list.add(new FieldInsnNode(Opcodes.GETSTATIC, Sk1erOldAnimations.getConfigClass(), "oldSwing", "Z"));
+        list.add(new FieldInsnNode(Opcodes.GETSTATIC, getConfigClass(), "oldSwing", "Z"));
         list.add(new JumpInsnNode(Opcodes.IFEQ, after));
         list.add(new VarInsnNode(Opcodes.ALOAD, 0));
         list.add(new FieldInsnNode(Opcodes.GETFIELD, "net/minecraft/client/renderer/ItemRenderer", "field_78455_a", "Lnet/minecraft/client/Minecraft;")); // mc
@@ -247,7 +246,7 @@ public class ItemRendererTransformer implements ITransformer {
     public InsnList moveIfBlocking(int fIndex, int f1Index) {
         InsnList list = new InsnList();
         LabelNode after = new LabelNode();
-        list.add(new FieldInsnNode(Opcodes.GETSTATIC, Sk1erOldAnimations.getConfigClass(), "oldBlockhitting", "Z"));
+        list.add(new FieldInsnNode(Opcodes.GETSTATIC, getConfigClass(), "oldBlockhitting", "Z"));
         list.add(new JumpInsnNode(Opcodes.IFEQ, after));
 //        list.add(new VarInsnNode(Opcodes.ALOAD, 0));
 //        list.add(new VarInsnNode(Opcodes.FLOAD, fIndex));

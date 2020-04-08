@@ -1,6 +1,5 @@
 package club.sk1er.mods.sk1eroldanimations.asm;
 
-import club.sk1er.mods.sk1eroldanimations.Sk1erOldAnimations;
 import club.sk1er.mods.sk1eroldanimations.tweaker.transformer.ITransformer;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.*;
@@ -52,7 +51,7 @@ public class GuiIngameForgeTransformer implements ITransformer {
     public InsnList jumpIfOldHealth(LabelNode veryEnd) {
         InsnList list = new InsnList();
         LabelNode after = new LabelNode();
-        list.add(new FieldInsnNode(Opcodes.GETSTATIC, Sk1erOldAnimations.getConfigClass(), "oldHealth", "Z"));
+        list.add(new FieldInsnNode(Opcodes.GETSTATIC, getConfigClass(), "oldHealth", "Z"));
         list.add(new JumpInsnNode(Opcodes.IFEQ, after));
         list.add(new InsnNode(Opcodes.ICONST_0));
         list.add(new JumpInsnNode(Opcodes.GOTO, veryEnd));

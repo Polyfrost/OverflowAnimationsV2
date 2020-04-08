@@ -29,4 +29,11 @@ public interface ITransformer {
     default String mapMethodDesc(MethodNode methodNode) {
         return FMLDeobfuscatingRemapper.INSTANCE.mapMethodDesc(methodNode.desc);
     }
+    default String getConfigClass() {
+        return "club/sk1er/mods/sk1eroldanimations/config/OldAnimationsSettings";
+    }
+
+    default String getHookClass() {
+        return "club/sk1er/mods/sk1eroldanimations/asm/Hooks";
+    }
 }

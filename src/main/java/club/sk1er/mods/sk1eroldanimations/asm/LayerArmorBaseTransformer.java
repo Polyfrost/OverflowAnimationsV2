@@ -1,6 +1,5 @@
 package club.sk1er.mods.sk1eroldanimations.asm;
 
-import club.sk1er.mods.sk1eroldanimations.Sk1erOldAnimations;
 import club.sk1er.mods.sk1eroldanimations.tweaker.transformer.ITransformer;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.*;
@@ -18,7 +17,7 @@ public class LayerArmorBaseTransformer implements ITransformer {
 
             if (methodName.equals("shouldCombineTextures") || methodName.equals("func_177142_b")) {
                 methodNode.instructions = new InsnList();
-                methodNode.instructions.add(new FieldInsnNode(Opcodes.GETSTATIC, Sk1erOldAnimations.getConfigClass(), "redArmor", "Z"));
+                methodNode.instructions.add(new FieldInsnNode(Opcodes.GETSTATIC, getConfigClass(), "redArmor", "Z"));
                 methodNode.instructions.add(new InsnNode(Opcodes.IRETURN));
                 break;
             }
