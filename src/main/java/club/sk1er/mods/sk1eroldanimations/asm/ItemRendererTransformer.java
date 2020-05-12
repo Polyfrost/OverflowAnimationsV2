@@ -19,11 +19,15 @@ public class ItemRendererTransformer implements ITransformer {
             String methodName = mapMethodName(classNode, methodNode);
 
             if (methodName.equals("transformFirstPersonItem") || methodName.equals("func_178096_b")) {
+                LabelNode varStartLabel = new LabelNode();
                 LabelNode veryEnd = new LabelNode();
+                methodNode.localVariables.add(new LocalVariableNode("itemID", "I", null, varStartLabel, veryEnd, 200));
                 methodNode.instructions.insertBefore(methodNode.instructions.getFirst(), veryEnd);
                 methodNode.instructions.insertBefore(methodNode.instructions.getFirst(), moveIfHoldingRod(veryEnd));
                 methodNode.instructions.insertBefore(methodNode.instructions.getFirst(), moveIfHoldingBow(veryEnd));
                 methodNode.instructions.insertBefore(methodNode.instructions.getFirst(), moveIfOldSwing(veryEnd));
+                methodNode.instructions.insertBefore(methodNode.instructions.getFirst(), initializeVar());
+                methodNode.instructions.insertBefore(methodNode.instructions.getFirst(), varStartLabel);
             }
             else if (methodName.equals("performDrinking") || methodName.equals("func_178104_a")) {
                 methodNode.instructions.insertBefore(methodNode.instructions.getFirst(), doOldDrinking());
@@ -98,6 +102,16 @@ public class ItemRendererTransformer implements ITransformer {
         }
     }
 
+    public InsnList initializeVar() {
+        InsnList list = new InsnList();
+        list.add(new VarInsnNode(Opcodes.ALOAD, 0));
+        list.add(new FieldInsnNode(Opcodes.GETFIELD, "net/minecraft/client/renderer/ItemRenderer", "field_78453_b", "Lnet/minecraft/item/ItemStack;")); // itemToRender
+        list.add(new MethodInsnNode(Opcodes.INVOKEVIRTUAL, "net/minecraft/item/ItemStack", "func_77973_b", "()Lnet/minecraft/item/Item;", false)); // getItem
+        list.add(new MethodInsnNode(Opcodes.INVOKESTATIC, "net/minecraft/item/Item", "func_150891_b", "(Lnet/minecraft/item/Item;)I", false)); // getIdFromItem
+        list.add(new VarInsnNode(Opcodes.ISTORE, 200));
+        return list;
+    }
+
     public InsnList doOldDrinking() {
         InsnList list = new InsnList();
         list.add(new FieldInsnNode(Opcodes.GETSTATIC, getConfigClass(), "oldEating", "Z"));
@@ -142,12 +156,14 @@ public class ItemRendererTransformer implements ITransformer {
         InsnList list = new InsnList();
         list.add(new FieldInsnNode(Opcodes.GETSTATIC, getConfigClass(), "oldRodPosition", "Z"));
         list.add(new JumpInsnNode(Opcodes.IFEQ, after));
-        list.add(new VarInsnNode(Opcodes.ALOAD, 0));
-        list.add(new FieldInsnNode(Opcodes.GETFIELD, "net/minecraft/client/renderer/ItemRenderer", "field_78453_b", "Lnet/minecraft/item/ItemStack;")); // itemToRender
-        list.add(new MethodInsnNode(Opcodes.INVOKEVIRTUAL, "net/minecraft/item/ItemStack", "func_77973_b", "()Lnet/minecraft/item/Item;", false)); // getItem
-        list.add(new MethodInsnNode(Opcodes.INVOKESTATIC, "net/minecraft/item/Item", "func_150891_b", "(Lnet/minecraft/item/Item;)I", false)); // getIdFromItem
+        list.add(new VarInsnNode(Opcodes.ILOAD, 200));
         list.add(new IntInsnNode(Opcodes.SIPUSH, 346));
+        LabelNode labelNode = new LabelNode();
+        list.add(new JumpInsnNode(Opcodes.IF_ICMPEQ, labelNode));
+        list.add(new VarInsnNode(Opcodes.ILOAD, 200));
+        list.add(new IntInsnNode(Opcodes.SIPUSH, 398));
         list.add(new JumpInsnNode(Opcodes.IF_ICMPNE, after));
+        list.add(labelNode);
         list.add(new LdcInsnNode(0.08f));
         list.add(new LdcInsnNode(-0.027f));
         list.add(new LdcInsnNode(-0.33f));
@@ -166,10 +182,7 @@ public class ItemRendererTransformer implements ITransformer {
         InsnList list = new InsnList();
         list.add(new FieldInsnNode(Opcodes.GETSTATIC, getConfigClass(), "oldBowPosition", "Z"));
         list.add(new JumpInsnNode(Opcodes.IFEQ, after));
-        list.add(new VarInsnNode(Opcodes.ALOAD, 0));
-        list.add(new FieldInsnNode(Opcodes.GETFIELD, "net/minecraft/client/renderer/ItemRenderer", "field_78453_b", "Lnet/minecraft/item/ItemStack;")); // itemToRender
-        list.add(new MethodInsnNode(Opcodes.INVOKEVIRTUAL, "net/minecraft/item/ItemStack", "func_77973_b", "()Lnet/minecraft/item/Item;", false)); // getItem
-        list.add(new MethodInsnNode(Opcodes.INVOKESTATIC, "net/minecraft/item/Item", "func_150891_b", "(Lnet/minecraft/item/Item;)I", false)); // getIdFromItem
+        list.add(new VarInsnNode(Opcodes.ILOAD, 200));
         list.add(new IntInsnNode(Opcodes.SIPUSH, 261));
         list.add(new JumpInsnNode(Opcodes.IF_ICMPNE, after));
         list.add(new LdcInsnNode(0f));
