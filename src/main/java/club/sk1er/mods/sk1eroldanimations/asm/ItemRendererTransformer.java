@@ -34,9 +34,11 @@ public class ItemRendererTransformer implements ITransformer {
                 for (LocalVariableNode variableNode : methodNode.localVariables) {
                     switch (variableNode.name) {
                         case "f1":
+                        case "var4":
                             f1Index = variableNode.index;
                             break;
                         case "f":
+                        case "var2":
                             fIndex = variableNode.index;
                             break;
                     }
