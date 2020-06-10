@@ -19,7 +19,7 @@ import java.net.URL;
 import java.util.Map;
 
 @IFMLLoadingPlugin.MCVersion(ForgeVersion.mcVersion)
-@IFMLLoadingPlugin.SortingIndex(Integer.MIN_VALUE)
+@IFMLLoadingPlugin.SortingIndex(-1)
 public class FMLLoadingPlugin implements IFMLLoadingPlugin {
     public FMLLoadingPlugin() throws URISyntaxException, InvocationTargetException, IllegalAccessException {
         FMLLaunchHandler launchHandler = ReflectionHelper.getPrivateValue(FMLLaunchHandler.class, null, "INSTANCE");
