@@ -107,6 +107,15 @@ public class OldAnimationsSettings extends Vigilant {
     )
     public static boolean oldHealth = true;
 
+    @Property(
+            type = PropertyType.SWITCH,
+            category = "Animations",
+            subcategory = "HUD",
+            description = "Remove the boxes in the debug screen.",
+            name = "1.7 Debug Screen"
+    )
+    public static boolean oldDebugScreen = true;
+
     public OldAnimationsSettings() {
         super(new File("./config/sk1eroldanimations.toml"));
         initialize();

@@ -13,6 +13,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 
+@SuppressWarnings("unused")
 public class Hooks {
     public static void doOldTransformations(EntityLivingBase entityLivingBase, RendererLivingEntity<?> livingEntityRenderer) {
         if (entityLivingBase instanceof EntityPlayer) {
@@ -53,26 +54,28 @@ public class Hooks {
             GlStateManager.translate(-0.0625f, 0.4375f, 0.0625f);
         }
     }
+
     public static void swingIfNecessary() {
         EntityPlayer player = Minecraft.getMinecraft().thePlayer;
-        if (!OldAnimationsSettings.punching || !Minecraft.getMinecraft().gameSettings.keyBindAttack.isKeyDown() || Minecraft.getMinecraft().objectMouseOver == null || Minecraft.getMinecraft().objectMouseOver.typeOfHit != MovingObjectPosition.MovingObjectType.BLOCK) return;
+        if (!OldAnimationsSettings.punching || !Minecraft.getMinecraft().gameSettings.keyBindAttack.isKeyDown() || Minecraft.getMinecraft().objectMouseOver == null || Minecraft.getMinecraft().objectMouseOver.typeOfHit != MovingObjectPosition.MovingObjectType.BLOCK)
+            return;
         if (!player.isSwingInProgress || player.swingProgressInt >= player.getArmSwingAnimationEnd() / 2 || player.swingProgressInt < 0) {
             player.swingProgressInt = -1;
             player.isSwingInProgress = true;
         }
     }
-    public static void doOldEat(AbstractClientPlayer clientPlayer, float partialTicks, ItemStack itemToRender) {
-        float f = (float)clientPlayer.getItemInUseCount() - partialTicks + 1.0F;
-        float f1 = f / (float)itemToRender.getMaxItemUseDuration();
-        float f2 = MathHelper.abs(MathHelper.cos(f / 4.0F * (float)Math.PI) * 0.1F);
 
-        if (f1 >= 0.8F)
-        {
+    public static void doOldEat(AbstractClientPlayer clientPlayer, float partialTicks, ItemStack itemToRender) {
+        float f = (float) clientPlayer.getItemInUseCount() - partialTicks + 1.0F;
+        float f1 = f / (float) itemToRender.getMaxItemUseDuration();
+        float f2 = MathHelper.abs(MathHelper.cos(f / 4.0F * (float) Math.PI) * 0.1F);
+
+        if (f1 >= 0.8F) {
             f2 = 0.0F;
         }
 
         GlStateManager.translate(0.0F, f2, 0.0F);
-        float f3 = 1.0F - (float)Math.pow(f1, 27.0D);
+        float f3 = 1.0F - (float) Math.pow(f1, 27.0D);
         GlStateManager.translate(f3 * 0.69F, f3 * -0.54F, f3 * 0.0F);
         GlStateManager.rotate(f3 * 90.0F, 0.0F, 1.0F, 0.0F);
         GlStateManager.rotate(f3 * 4.0F, 1.0F, 0.0F, 0.0F);

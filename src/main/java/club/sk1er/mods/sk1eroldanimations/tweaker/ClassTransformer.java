@@ -46,7 +46,6 @@ public class ClassTransformer implements IClassTransformer {
         return createTransformer(transformedName, bytes, transformerMap, outputBytecode);
     }
 
-    @SuppressWarnings("ResultOfMethodCallIgnored")
     public static byte[] createTransformer(String transformedName, byte[] bytes, Multimap<String, ITransformer> transformerMap, boolean outputBytecode) {
         if (bytes == null) return null;
 
@@ -75,16 +74,20 @@ public class ClassTransformer implements IClassTransformer {
         }
 
         if (outputBytecode) {
-            try {
-                File bytecodeDirectory = new File("bytecode");
-                File bytecodeOutput = new File(bytecodeDirectory, transformedName + ".class"); // inner classes suckkkk
+            File bytecodeDirectory = new File("bytecode");
+            String transformedClassName;
 
-                if (!bytecodeDirectory.exists()) bytecodeDirectory.mkdirs();
-                if (!bytecodeOutput.exists()) bytecodeOutput.createNewFile();
+            // anonymous classes
+            if (transformedName.contains("$")) {
+                transformedClassName = transformedName.replace('$', '.') + ".class";
+            } else {
+                transformedClassName = transformedName + ".class";
+            }
 
-                FileOutputStream os = new FileOutputStream(bytecodeOutput);
+            File bytecodeOutput = new File(bytecodeDirectory, transformedClassName);
+
+            try (FileOutputStream os = new FileOutputStream(bytecodeOutput)) {
                 os.write(classWriter.toByteArray());
-                os.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }

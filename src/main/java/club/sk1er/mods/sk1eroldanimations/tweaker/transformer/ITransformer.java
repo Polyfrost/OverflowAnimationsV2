@@ -1,11 +1,7 @@
 package club.sk1er.mods.sk1eroldanimations.tweaker.transformer;
 
 import net.minecraftforge.fml.common.asm.transformers.deobf.FMLDeobfuscatingRemapper;
-import org.objectweb.asm.tree.AbstractInsnNode;
-import org.objectweb.asm.tree.ClassNode;
-import org.objectweb.asm.tree.FieldInsnNode;
-import org.objectweb.asm.tree.MethodInsnNode;
-import org.objectweb.asm.tree.MethodNode;
+import org.objectweb.asm.tree.*;
 
 public interface ITransformer {
     String[] getClassName();
@@ -29,6 +25,7 @@ public interface ITransformer {
     default String mapMethodDesc(MethodNode methodNode) {
         return FMLDeobfuscatingRemapper.INSTANCE.mapMethodDesc(methodNode.desc);
     }
+
     default String getConfigClass() {
         return "club/sk1er/mods/sk1eroldanimations/config/OldAnimationsSettings";
     }
