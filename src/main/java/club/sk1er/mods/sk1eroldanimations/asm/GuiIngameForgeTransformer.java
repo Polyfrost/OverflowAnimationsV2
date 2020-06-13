@@ -85,16 +85,23 @@ public class GuiIngameForgeTransformer implements ITransformer {
                                     methodNode.instructions.insertBefore(current.getNext(), setLabel(ifne));
                                 }
                             }
-                            // todo: fix i am in a major state of Pain
-                        }/* else if (next.getOpcode() == Opcodes.INVOKEVIRTUAL) {
+                        } else if (next.getOpcode() == Opcodes.INVOKEVIRTUAL) {
                             String methodInsnName = mapMethodNameFromNode(next);
                             if ((methodInsnName.equals("drawString") || methodInsnName.equals("func_78276_b"))) {
                                 int msgIndex = -1;
-
+                                int leftIndex = -1;
+                                int topIndex = -1;
                                 for (LocalVariableNode variableNode : methodNode.localVariables) {
-                                    if (variableNode.name.equals("msg")) {
-                                        msgIndex = variableNode.index;
-                                        break;
+                                    switch (variableNode.name) {
+                                        case "msg":
+                                            msgIndex = variableNode.index;
+                                            break;
+                                        case "left":
+                                            leftIndex = variableNode.index;
+                                            break;
+                                        case "top":
+                                            topIndex = variableNode.index;
+                                            break;
                                     }
                                 }
 
@@ -108,17 +115,17 @@ public class GuiIngameForgeTransformer implements ITransformer {
                                     methodNode.instructions.remove(next.getPrevious());
                                 }
 
-                                methodNode.instructions.insertBefore(next, useShadow(msgIndex, left));
+                                methodNode.instructions.insertBefore(next, useShadow(msgIndex, left, leftIndex, topIndex));
                                 methodNode.instructions.remove(next);
                             }
-                        }*/
+                        }
                     }
                 }
             }
         }
     }
 
-    private InsnList useShadow(int msgIndex, boolean left) {
+    private InsnList useShadow(int msgIndex, boolean left, int leftIndex, int topIndex) {
         InsnList list = new InsnList();
         list.add(new VarInsnNode(Opcodes.ALOAD, 0));
         list.add(new FieldInsnNode(Opcodes.GETFIELD, "net/minecraftforge/client/GuiIngameForge", "fontrenderer", "Lnet/minecraft/client/gui/FontRenderer;"));
@@ -127,11 +134,11 @@ public class GuiIngameForgeTransformer implements ITransformer {
         if (left) {
             list.add(new InsnNode(Opcodes.FCONST_2));
         } else {
-            list.add(new VarInsnNode(Opcodes.ILOAD, 10));
+            list.add(new VarInsnNode(Opcodes.ILOAD, leftIndex));
             list.add(new InsnNode(Opcodes.I2F));
         }
 
-        list.add(new VarInsnNode(Opcodes.ILOAD, 6));
+        list.add(new VarInsnNode(Opcodes.ILOAD, topIndex));
         list.add(new InsnNode(Opcodes.I2F));
         list.add(new LdcInsnNode(14737632));
         list.add(new FieldInsnNode(Opcodes.GETSTATIC, getConfigClass(), "oldDebugScreen", "Z"));
