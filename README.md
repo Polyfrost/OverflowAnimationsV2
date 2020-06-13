@@ -11,8 +11,9 @@
 * Old blocking
 * Old item held
 * Punching a block while doing stuff
-
-**To-do:**
 * 1.7 Debug
 * Old Eating Animation
+
+**To-do:**
+* Third-person stuff
 
