@@ -28,20 +28,14 @@ public class GuiIngameForgeTransformer implements ITransformer {
                 }
 
                 ListIterator<AbstractInsnNode> iterator = methodNode.instructions.iterator();
-                LabelNode veryEnd = new LabelNode();
-                boolean foundFirst = false;
                 while (iterator.hasNext()) {
                     AbstractInsnNode node = iterator.next();
-
-                    if (node.getOpcode() == Opcodes.INVOKESTATIC) {
-                        String nodeName = mapMethodNameFromNode(node);
-                        if (!foundFirst && (nodeName.equals("ceiling_float_int") || nodeName.equals("func_76123_f"))) {
-                            foundFirst = true;
-                            AbstractInsnNode pos = node.getNext().getNext().getNext();
-                            methodNode.instructions.insert(pos, jumpIfOldHealth(veryEnd));
+                    if (node.getOpcode() == Opcodes.ILOAD && ((VarInsnNode) node).var == highlightIndex) {
+                        if (node.getNext().getNext().getOpcode() != Opcodes.BIPUSH) {
+                            JumpInsnNode ifeq = (JumpInsnNode) node.getNext();
+                            methodNode.instructions.insert(ifeq, jumpIfOldHealth(ifeq.label));
+                            break;
                         }
-                    } else if (node.getOpcode() == Opcodes.ISTORE && ((VarInsnNode) node).var == highlightIndex) {
-                        methodNode.instructions.insertBefore(node, veryEnd);
                     }
                 }
             } else if (methodNode.name.equals("renderHUDText")) {
@@ -160,14 +154,10 @@ public class GuiIngameForgeTransformer implements ITransformer {
         return list;
     }
 
-    public InsnList jumpIfOldHealth(LabelNode veryEnd) {
+    public InsnList jumpIfOldHealth(LabelNode label) {
         InsnList list = new InsnList();
-        LabelNode after = new LabelNode();
         list.add(new FieldInsnNode(Opcodes.GETSTATIC, getConfigClass(), "oldHealth", "Z"));
-        list.add(new JumpInsnNode(Opcodes.IFEQ, after));
-        list.add(new InsnNode(Opcodes.ICONST_0));
-        list.add(new JumpInsnNode(Opcodes.GOTO, veryEnd));
-        list.add(after);
+        list.add(new JumpInsnNode(Opcodes.IFNE, label));
         return list;
     }
 }
