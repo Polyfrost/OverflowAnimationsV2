@@ -9,13 +9,14 @@ import net.minecraft.launchwrapper.LaunchClassLoader;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 
+import javax.swing.GroupLayout;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JProgressBar;
-import java.awt.Dimension;
+import javax.swing.LayoutStyle;
+import javax.swing.SwingConstants;
+import javax.swing.UIManager;
 import java.awt.Font;
-import java.awt.GridLayout;
-import java.awt.TextArea;
-import java.awt.Toolkit;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -29,9 +30,11 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public class ModCoreInstaller {
+
 
     private static final String VERSION_URL = "https://api.sk1er.club/modcore_versions";
     private static final String className = "club.sk1er.mods.core.ModCore";
@@ -157,88 +160,112 @@ public class ModCoreInstaller {
     private static boolean download(String url, String version, File file, String mcver, JsonHolder versionData) {
         url = url.replace(" ", "%20");
         System.out.println("Downloading ModCore " + " version " + version + " from: " + url);
+
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         JFrame frame = new JFrame("ModCore Initializer");
         JProgressBar bar = new JProgressBar();
-        TextArea comp = new TextArea("", 1, 1, TextArea.SCROLLBARS_NONE);
-        frame.getContentPane().add(comp);
+        JLabel label = new JLabel("Downloading ModCore " + version, SwingConstants.CENTER);
+        label.setSize(600, 120);
+        frame.getContentPane().add(label);
         frame.getContentPane().add(bar);
-        GridLayout manager = new GridLayout();
-        frame.setLayout(manager);
-        manager.setColumns(1);
-        manager.setRows(2);
-        comp.setText("Downloading Sk1er ModCore Library Version " + version + " for Minecraft " + mcver);
-        comp.setSize(399, 80);
-        comp.setEditable(false);
-        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-
-
-        Dimension preferredSize = new Dimension(400, 225);
-        bar.setSize(preferredSize);
-        frame.setSize(preferredSize);
+        GroupLayout layout = new GroupLayout(frame.getContentPane());
+        frame.getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                    .addComponent(label, GroupLayout.Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 376, Short.MAX_VALUE)
+                    .addComponent(bar, GroupLayout.Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap()));
+        layout.setVerticalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(label, GroupLayout.PREFERRED_SIZE, 55, GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(bar, GroupLayout.PREFERRED_SIZE, 33, GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
         frame.setResizable(false);
         bar.setBorderPainted(true);
         bar.setMinimum(0);
         bar.setStringPainted(true);
-        frame.setVisible(true);
-        frame.setLocation(dim.width / 2 - frame.getSize().width / 2, dim.height / 2 - frame.getSize().height / 2);
         Font font = bar.getFont();
-        bar.setFont(new Font(font.getName(), font.getStyle(), font.getSize() * 4));
-        comp.setFont(new Font(font.getName(), font.getStyle(), font.getSize() * 2));
+        bar.setFont(new Font(font.getName(), font.getStyle(), font.getSize() * 2));
+        label.setFont(new Font(font.getName(), font.getStyle(), font.getSize() * 2));
+        frame.pack();
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
 
-        try {
-
+        HttpURLConnection connection = null;
+        try (FileOutputStream outputStream = new FileOutputStream(file)) {
             URL u = new URL(url);
-            HttpURLConnection connection = (HttpURLConnection) u.openConnection();
+            connection = (HttpURLConnection) u.openConnection();
             connection.setRequestMethod("GET");
             connection.setUseCaches(true);
             connection.addRequestProperty("User-Agent", "Mozilla/4.76 (Sk1er Modcore Initializer)");
             connection.setReadTimeout(15000);
             connection.setConnectTimeout(15000);
             connection.setDoOutput(true);
-            InputStream is = connection.getInputStream();
-            int contentLength = connection.getContentLength();
-            FileOutputStream outputStream = new FileOutputStream(file);
-            byte[] buffer = new byte[1024];
-            System.out.println("MAX: " + contentLength);
-            bar.setMaximum(contentLength);
-            int read;
-            bar.setValue(0);
-            while ((read = is.read(buffer)) > 0) {
-                outputStream.write(buffer, 0, read);
-                bar.setValue(bar.getValue() + 1024);
+            try (InputStream is = connection.getInputStream()) {
+                int contentLength = connection.getContentLength();
+                byte[] buffer = new byte[1024];
+                System.out.println("MAX: " + contentLength);
+                bar.setMaximum(contentLength);
+                int read;
+                bar.setValue(0);
+                while ((read = is.read(buffer)) > 0) {
+                    outputStream.write(buffer, 0, read);
+                    bar.setValue(bar.getValue() + 1024);
+                }
             }
-            outputStream.close();
             FileUtils.write(new File(dataDir, "metadata.json"), versionData.put(mcver, version).toString());
         } catch (Exception e) {
             e.printStackTrace();
             frame.dispose();
             return false;
+        } finally {
+            if (connection != null) {
+                connection.disconnect();
+            }
         }
+
         frame.dispose();
         return true;
     }
 
-    public static final JsonHolder fetchJSON(String url) {
+    public static JsonHolder fetchJSON(String url) {
         return new JsonHolder(fetchString(url));
     }
 
-    public static final String fetchString(String url) {
+    public static String fetchString(String url) {
         url = url.replace(" ", "%20");
         System.out.println("Fetching " + url);
+
+        HttpURLConnection connection = null;
         try {
             URL u = new URL(url);
-            HttpURLConnection connection = (HttpURLConnection) u.openConnection();
+            connection = (HttpURLConnection) u.openConnection();
             connection.setRequestMethod("GET");
             connection.setUseCaches(true);
             connection.addRequestProperty("User-Agent", "Mozilla/4.76 (Sk1er ModCore)");
             connection.setReadTimeout(15000);
             connection.setConnectTimeout(15000);
             connection.setDoOutput(true);
-            InputStream is = connection.getInputStream();
-            return IOUtils.toString(is, Charset.defaultCharset());
+            try (InputStream is = connection.getInputStream()) {
+                return IOUtils.toString(is, Charset.defaultCharset());
+            }
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            if (connection != null) {
+                connection.disconnect();
+            }
         }
+
         return "Failed to fetch";
     }
 
@@ -417,7 +444,9 @@ public class ModCoreInstaller {
 
         public List<String> getKeys() {
             List<String> tmp = new ArrayList<>();
-            object.entrySet().forEach(e -> tmp.add(e.getKey()));
+            for (Map.Entry<String, JsonElement> e : object.entrySet()) {
+                tmp.add(e.getKey());
+            }
             return tmp;
         }
 

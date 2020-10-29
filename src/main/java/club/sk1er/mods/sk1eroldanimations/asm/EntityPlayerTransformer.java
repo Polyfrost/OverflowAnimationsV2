@@ -22,8 +22,8 @@ public class EntityPlayerTransformer implements ITransformer {
             if (methodNode.name.equals("<init>")) {
                 methodNode.instructions.insertBefore(methodNode.instructions.getLast().getPrevious(), createHeightAndMillis());
             }
-            String methodName = mapMethodName(classNode, methodNode);
 
+            String methodName = mapMethodName(classNode, methodNode);
             if (methodName.equals("getEyeHeight") || methodName.equals("func_70047_e")) {
                 methodNode.instructions.insertBefore(methodNode.instructions.getFirst(), changeEyeHeightInstructions());
             }

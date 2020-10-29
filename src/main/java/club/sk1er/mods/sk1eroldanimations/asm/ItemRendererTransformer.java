@@ -28,11 +28,9 @@ public class ItemRendererTransformer implements ITransformer {
                 methodNode.instructions.insertBefore(methodNode.instructions.getFirst(), moveIfOldSwing(veryEnd));
                 methodNode.instructions.insertBefore(methodNode.instructions.getFirst(), initializeVar());
                 methodNode.instructions.insertBefore(methodNode.instructions.getFirst(), varStartLabel);
-            }
-            else if (methodName.equals("performDrinking") || methodName.equals("func_178104_a")) {
+            } else if (methodName.equals("performDrinking") || methodName.equals("func_178104_a")) {
                 methodNode.instructions.insertBefore(methodNode.instructions.getFirst(), doOldDrinking());
-            }
-            else if (methodName.equals("renderItemInFirstPerson") || methodName.equals("func_78440_a")) {
+            } else if (methodName.equals("renderItemInFirstPerson") || methodName.equals("func_78440_a")) {
                 int f1Index = -1;
                 int fIndex = -1;
                 for (LocalVariableNode variableNode : methodNode.localVariables) {

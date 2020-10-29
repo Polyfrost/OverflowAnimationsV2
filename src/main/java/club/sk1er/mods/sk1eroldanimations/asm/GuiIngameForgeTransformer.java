@@ -26,6 +26,7 @@ public class GuiIngameForgeTransformer implements ITransformer {
                         break;
                     }
                 }
+
                 ListIterator<AbstractInsnNode> iterator = methodNode.instructions.iterator();
                 LabelNode veryEnd = new LabelNode();
                 boolean foundFirst = false;

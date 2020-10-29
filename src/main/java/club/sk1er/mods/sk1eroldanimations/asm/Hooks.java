@@ -15,29 +15,30 @@ import net.minecraft.util.MovingObjectPosition;
 
 @SuppressWarnings("unused")
 public class Hooks {
+
+    private static final Minecraft mc = Minecraft.getMinecraft();
+
     public static void doOldTransformations(EntityLivingBase entityLivingBase, RendererLivingEntity<?> livingEntityRenderer) {
+        final ModelBiped model = (ModelBiped) livingEntityRenderer.getMainModel();
         if (entityLivingBase instanceof EntityPlayer) {
             if (OldAnimationsSettings.oldBlocking) {
                 if (((EntityPlayer) entityLivingBase).isBlocking()) {
                     if (entityLivingBase.isSneaking()) {
-                        ((ModelBiped) livingEntityRenderer.getMainModel()).postRenderArm(0.0325f);
+                        model.postRenderArm(0.0325f);
                         GlStateManager.scale(1.05f, 1.05f, 1.05f);
                         GlStateManager.translate(-0.63f, 0.30f, -0.07f);
-                        GlStateManager
-                                .rotate(-24405.0f, -112710, -2009900.0f, -2654900.0f);
+                        GlStateManager.rotate(-24405.0f, -112710, -2009900.0f, -2654900.0f);
                     } else {
-                        ((ModelBiped) livingEntityRenderer.getMainModel()).postRenderArm(0.0325f);
+                        model.postRenderArm(0.0325f);
                         GlStateManager.scale(1.05f, 1.05f, 1.05f);
                         GlStateManager.translate(-0.50f, 0.23f, -0.07f);
-                        GlStateManager
-                                .rotate(-24405.0f, -112710, -2009900.0f, -2654900.0f);
+                        GlStateManager.rotate(-24405.0f, -112710, -2009900.0f, -2654900.0f);
                     }
                 } else {
-                    ((ModelBiped) livingEntityRenderer.getMainModel())
-                            .postRenderArm(0.0625f);
+                    model.postRenderArm(0.0625f);
                 }
             } else {
-                ((ModelBiped) livingEntityRenderer.getMainModel()).postRenderArm(0.0625f);
+                model.postRenderArm(0.0625f);
             }
 
             if (!OldAnimationsSettings.oldItemHeld || ((EntityPlayer) entityLivingBase).isBlocking()) {
@@ -50,15 +51,16 @@ public class Hooks {
                 GlStateManager.rotate(-19.0f, 5f, 5.0f, -6.0f);
             }
         } else {
-            ((ModelBiped) livingEntityRenderer.getMainModel()).postRenderArm(0.0625f);
+            model.postRenderArm(0.0625f);
             GlStateManager.translate(-0.0625f, 0.4375f, 0.0625f);
         }
     }
 
     public static void swingIfNecessary() {
-        EntityPlayer player = Minecraft.getMinecraft().thePlayer;
-        if (!OldAnimationsSettings.punching || !Minecraft.getMinecraft().gameSettings.keyBindAttack.isKeyDown() || Minecraft.getMinecraft().objectMouseOver == null || Minecraft.getMinecraft().objectMouseOver.typeOfHit != MovingObjectPosition.MovingObjectType.BLOCK)
+        final EntityPlayer player = mc.thePlayer;
+        if (!OldAnimationsSettings.punching || !mc.gameSettings.keyBindAttack.isKeyDown() || mc.objectMouseOver == null || mc.objectMouseOver.typeOfHit != MovingObjectPosition.MovingObjectType.BLOCK)
             return;
+
         if (!player.isSwingInProgress || player.swingProgressInt >= player.getArmSwingAnimationEnd() / 2 || player.swingProgressInt < 0) {
             player.swingProgressInt = -1;
             player.isSwingInProgress = true;
@@ -66,8 +68,8 @@ public class Hooks {
     }
 
     public static void doOldEat(AbstractClientPlayer clientPlayer, float partialTicks, ItemStack itemToRender) {
-        float f = (float) clientPlayer.getItemInUseCount() - partialTicks + 1.0F;
-        float f1 = f / (float) itemToRender.getMaxItemUseDuration();
+        final float f = (float) clientPlayer.getItemInUseCount() - partialTicks + 1.0F;
+        final float f1 = f / (float) itemToRender.getMaxItemUseDuration();
         float f2 = MathHelper.abs(MathHelper.cos(f / 4.0F * (float) Math.PI) * 0.1F);
 
         if (f1 >= 0.8F) {
@@ -75,7 +77,7 @@ public class Hooks {
         }
 
         GlStateManager.translate(0.0F, f2, 0.0F);
-        float f3 = 1.0F - (float) Math.pow(f1, 27.0D);
+        final float f3 = 1.0F - (float) Math.pow(f1, 27.0D);
         GlStateManager.translate(f3 * 0.69F, f3 * -0.54F, f3 * 0.0F);
         GlStateManager.rotate(f3 * 90.0F, 0.0F, 1.0F, 0.0F);
         GlStateManager.rotate(f3 * 4.0F, 1.0F, 0.0F, 0.0F);
