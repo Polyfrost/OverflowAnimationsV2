@@ -21,13 +21,7 @@ public class ItemRendererTransformer implements ITransformer {
             if (methodName.equals("transformFirstPersonItem") || methodName.equals("func_178096_b")) {
                 LabelNode varStartLabel = new LabelNode();
                 LabelNode veryEnd = new LabelNode();
-                methodNode.localVariables.add(new LocalVariableNode("itemID", "I", null, varStartLabel, veryEnd, 200));
-                methodNode.instructions.insertBefore(methodNode.instructions.getFirst(), veryEnd);
-                methodNode.instructions.insertBefore(methodNode.instructions.getFirst(), moveIfHoldingRod(veryEnd));
-                methodNode.instructions.insertBefore(methodNode.instructions.getFirst(), moveIfHoldingBow(veryEnd));
-                methodNode.instructions.insertBefore(methodNode.instructions.getFirst(), moveIfOldSwing(veryEnd));
-                methodNode.instructions.insertBefore(methodNode.instructions.getFirst(), initializeVar());
-                methodNode.instructions.insertBefore(methodNode.instructions.getFirst(), varStartLabel);
+                methodNode.instructions.insertBefore(methodNode.instructions.getFirst(), doOldTransformations());
             } else if (methodName.equals("performDrinking") || methodName.equals("func_178104_a")) {
                 methodNode.instructions.insertBefore(methodNode.instructions.getFirst(), doOldDrinking());
             } else if (methodName.equals("renderItemInFirstPerson") || methodName.equals("func_78440_a")) {
@@ -100,13 +94,11 @@ public class ItemRendererTransformer implements ITransformer {
         }
     }
 
-    public InsnList initializeVar() {
+    private InsnList doOldTransformations() {
         InsnList list = new InsnList();
         list.add(new VarInsnNode(Opcodes.ALOAD, 0));
-        list.add(new FieldInsnNode(Opcodes.GETFIELD, "net/minecraft/client/renderer/ItemRenderer", "field_78453_b", "Lnet/minecraft/item/ItemStack;")); // itemToRender
-        list.add(new MethodInsnNode(Opcodes.INVOKEVIRTUAL, "net/minecraft/item/ItemStack", "func_77973_b", "()Lnet/minecraft/item/Item;", false)); // getItem
-        list.add(new MethodInsnNode(Opcodes.INVOKESTATIC, "net/minecraft/item/Item", "func_150891_b", "(Lnet/minecraft/item/Item;)I", false)); // getIdFromItem
-        list.add(new VarInsnNode(Opcodes.ISTORE, 200));
+        list.add(new FieldInsnNode(Opcodes.GETFIELD, "net/minecraft/client/renderer/ItemRenderer", "field_78453_b", "Lnet/minecraft/item/ItemStack;"));
+        list.add(new MethodInsnNode(Opcodes.INVOKESTATIC, getHookClass(), "doOldItemTransformation", "(Lnet/minecraft/item/ItemStack;)V", false));
         return list;
     }
 
@@ -149,49 +141,6 @@ public class ItemRendererTransformer implements ITransformer {
         return list;
     }
 
-    public InsnList moveIfHoldingRod(LabelNode veryEnd) {
-        LabelNode after = new LabelNode();
-        InsnList list = new InsnList();
-        list.add(new FieldInsnNode(Opcodes.GETSTATIC, getConfigClass(), "oldRodPosition", "Z"));
-        list.add(new JumpInsnNode(Opcodes.IFEQ, after));
-        list.add(new VarInsnNode(Opcodes.ILOAD, 200));
-        list.add(new IntInsnNode(Opcodes.SIPUSH, 346));
-        LabelNode labelNode = new LabelNode();
-        list.add(new JumpInsnNode(Opcodes.IF_ICMPEQ, labelNode));
-        list.add(new VarInsnNode(Opcodes.ILOAD, 200));
-        list.add(new IntInsnNode(Opcodes.SIPUSH, 398));
-        list.add(new JumpInsnNode(Opcodes.IF_ICMPNE, after));
-        list.add(labelNode);
-        list.add(new LdcInsnNode(0.08f));
-        list.add(new LdcInsnNode(-0.027f));
-        list.add(new LdcInsnNode(-0.33f));
-        list.add(new MethodInsnNode(Opcodes.INVOKESTATIC, "net/minecraft/client/renderer/GlStateManager", "func_179109_b", "(FFF)V", false)); // translate
-        list.add(new LdcInsnNode(0.93f));
-        list.add(new LdcInsnNode(1f));
-        list.add(new LdcInsnNode(1f));
-        list.add(new MethodInsnNode(Opcodes.INVOKESTATIC, "net/minecraft/client/renderer/GlStateManager", "func_179152_a", "(FFF)V", false)); // scale
-        list.add(new JumpInsnNode(Opcodes.GOTO, veryEnd));
-        list.add(after);
-        return list;
-    }
-
-    public InsnList moveIfHoldingBow(LabelNode veryEnd) {
-        LabelNode after = new LabelNode();
-        InsnList list = new InsnList();
-        list.add(new FieldInsnNode(Opcodes.GETSTATIC, getConfigClass(), "oldBowPosition", "Z"));
-        list.add(new JumpInsnNode(Opcodes.IFEQ, after));
-        list.add(new VarInsnNode(Opcodes.ILOAD, 200));
-        list.add(new IntInsnNode(Opcodes.SIPUSH, 261));
-        list.add(new JumpInsnNode(Opcodes.IF_ICMPNE, after));
-        list.add(new LdcInsnNode(0f));
-        list.add(new LdcInsnNode(0.05f));
-        list.add(new LdcInsnNode(0.04f));
-        list.add(new MethodInsnNode(Opcodes.INVOKESTATIC, "net/minecraft/client/renderer/GlStateManager", "func_179109_b", "(FFF)V", false)); // translate
-        list.add(new JumpInsnNode(Opcodes.GOTO, veryEnd));
-        list.add(after);
-        return list;
-    }
-
     public InsnList moveIfOldBow(LabelNode labelNode) {
         InsnList list = new InsnList();
         LabelNode after = new LabelNode();
@@ -219,54 +168,11 @@ public class ItemRendererTransformer implements ITransformer {
         return list;
     }
 
-    public InsnList moveIfOldSwing(LabelNode veryEnd) {
-        LabelNode after = new LabelNode();
-        InsnList list = new InsnList();
-        list.add(new FieldInsnNode(Opcodes.GETSTATIC, getConfigClass(), "oldSwing", "Z"));
-        list.add(new JumpInsnNode(Opcodes.IFEQ, after));
-        list.add(new VarInsnNode(Opcodes.ALOAD, 0));
-        list.add(new FieldInsnNode(Opcodes.GETFIELD, "net/minecraft/client/renderer/ItemRenderer", "field_78455_a", "Lnet/minecraft/client/Minecraft;")); // mc
-        list.add(new FieldInsnNode(Opcodes.GETFIELD, "net/minecraft/client/Minecraft", "field_71439_g", "Lnet/minecraft/client/entity/EntityPlayerSP;")); // thePlayer
-        list.add(new FieldInsnNode(Opcodes.GETFIELD, "net/minecraft/entity/EntityLivingBase", "field_82175_bq", "Z")); // isSwingInProgress
-        list.add(new JumpInsnNode(Opcodes.IFEQ, after));
-        list.add(new VarInsnNode(Opcodes.ALOAD, 0));
-        list.add(new FieldInsnNode(Opcodes.GETFIELD, "net/minecraft/client/renderer/ItemRenderer", "field_78455_a", "Lnet/minecraft/client/Minecraft;")); // mc
-        list.add(new FieldInsnNode(Opcodes.GETFIELD, "net/minecraft/client/Minecraft", "field_71439_g", "Lnet/minecraft/client/entity/EntityPlayerSP;")); // thePlayer
-        list.add(new MethodInsnNode(Opcodes.INVOKEVIRTUAL, "net/minecraft/entity/player/EntityPlayer", "func_71045_bC", "()Lnet/minecraft/item/ItemStack;", false)); // getCurrentEquippedItem
-        list.add(new JumpInsnNode(Opcodes.IFNULL, after));
-        list.add(new VarInsnNode(Opcodes.ALOAD, 0));
-        list.add(new FieldInsnNode(Opcodes.GETFIELD, "net/minecraft/client/renderer/ItemRenderer", "field_78455_a", "Lnet/minecraft/client/Minecraft;")); // mc
-        list.add(new FieldInsnNode(Opcodes.GETFIELD, "net/minecraft/client/Minecraft", "field_71439_g", "Lnet/minecraft/client/entity/EntityPlayerSP;")); // thePlayer
-        list.add(new MethodInsnNode(Opcodes.INVOKEVIRTUAL, "net/minecraft/entity/player/EntityPlayer", "func_70632_aY", "()Z", false)); // isBlocking
-        list.add(new JumpInsnNode(Opcodes.IFNE, after));
-        list.add(new VarInsnNode(Opcodes.ALOAD, 0));
-        list.add(new FieldInsnNode(Opcodes.GETFIELD, "net/minecraft/client/renderer/ItemRenderer", "field_78455_a", "Lnet/minecraft/client/Minecraft;")); // mc
-        list.add(new FieldInsnNode(Opcodes.GETFIELD, "net/minecraft/client/Minecraft", "field_71439_g", "Lnet/minecraft/client/entity/EntityPlayerSP;")); // thePlayer
-        list.add(new MethodInsnNode(Opcodes.INVOKEVIRTUAL, "net/minecraft/entity/Entity", "func_70113_ah", "()Z", false)); // isEating
-        list.add(new JumpInsnNode(Opcodes.IFNE, after));
-        list.add(new LdcInsnNode(-0.078f));
-        list.add(new LdcInsnNode(0.003f));
-        list.add(new LdcInsnNode(0.05f));
-        list.add(new MethodInsnNode(Opcodes.INVOKESTATIC, "net/minecraft/client/renderer/GlStateManager", "func_179109_b", "(FFF)V", false)); // translate
-        list.add(new LdcInsnNode(0.85f));
-        list.add(new LdcInsnNode(0.85f));
-        list.add(new LdcInsnNode(0.85f));
-        list.add(new MethodInsnNode(Opcodes.INVOKESTATIC, "net/minecraft/client/renderer/GlStateManager", "func_179152_a", "(FFF)V", false)); // scale
-        list.add(after);
-        return list;
-    }
-
     public InsnList moveIfBlocking(int fIndex, int f1Index) {
         InsnList list = new InsnList();
         LabelNode after = new LabelNode();
         list.add(new FieldInsnNode(Opcodes.GETSTATIC, getConfigClass(), "oldBlockhitting", "Z"));
         list.add(new JumpInsnNode(Opcodes.IFEQ, after));
-//        list.add(new VarInsnNode(Opcodes.ALOAD, 0));
-//        list.add(new VarInsnNode(Opcodes.FLOAD, fIndex));
-//        list.add(new VarInsnNode(Opcodes.FLOAD, f1Index));
-//        list.add(new MethodInsnNode(Opcodes.INVOKESPECIAL, "net/minecraft/client/renderer/ItemRenderer", "func_178096_b", "(FF)V", false)); // transformFirstPersonItem
-//        list.add(new VarInsnNode(Opcodes.ALOAD, 0));
-//        list.add(new MethodInsnNode(Opcodes.INVOKESPECIAL, "net/minecraft/client/renderer/ItemRenderer", "func_178103_d", "()V", false)); // doBlockTransformations
         list.add(new LdcInsnNode(-0.3f));
         list.add(new LdcInsnNode(0.1f));
         list.add(new LdcInsnNode(0f));

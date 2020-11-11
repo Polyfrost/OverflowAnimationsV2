@@ -3,11 +3,13 @@ package club.sk1er.mods.sk1eroldanimations.asm;
 import club.sk1er.mods.sk1eroldanimations.config.OldAnimationsSettings;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.RendererLivingEntity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.MathHelper;
@@ -82,5 +84,53 @@ public class Hooks {
         GlStateManager.rotate(f3 * 90.0F, 0.0F, 1.0F, 0.0F);
         GlStateManager.rotate(f3 * 4.0F, 1.0F, 0.0F, 0.0F);
         GlStateManager.rotate(f3 * 33.0F, 0.0F, 0.0F, 1.0F);
+    }
+
+    public static void doOldItemTransformation(ItemStack itemToRender) {
+        final int itemID = Item.getIdFromItem(itemToRender.getItem());
+        if (OldAnimationsSettings.oldSwing && mc.thePlayer.isSwingInProgress && mc.thePlayer.getCurrentEquippedItem() != null && !mc.thePlayer.isBlocking() && !mc.thePlayer.isEating()) {
+            GlStateManager.translate(-0.078F, 0.003F, 0.05F);
+            GlStateManager.scale(0.85F, 0.85F, 0.85F);
+        }
+
+        if (OldAnimationsSettings.oldBowPosition && itemID == 261) {
+            GlStateManager.translate(0.0F, 0.05F, 0.04F);
+        } else if (OldAnimationsSettings.oldRodPosition && (itemID == 346 || itemID == 398)) {
+            GlStateManager.translate(0.08F, -0.027F, -0.33F);
+            GlStateManager.scale(0.93F, 1.0F, 1.0F);
+        }
+    }
+
+    private static float currentHeight = 1.62F;
+    private static long lastMillis = System.currentTimeMillis();
+
+    public static float getEyeHeight() {
+        final EntityPlayerSP player = mc.thePlayer;
+        final int delay = 1000 / 100;
+        if (player.isSneaking()) {
+            final float sneakingHeight = 1.54F;
+            if (currentHeight > sneakingHeight) {
+                final long time = System.currentTimeMillis();
+                final long timeSinceLastChange = time - lastMillis;
+                if (timeSinceLastChange > delay) {
+                    currentHeight -= 0.012F;
+                    lastMillis = time;
+                }
+            }
+        } else {
+            final float standingHeight = 1.62F;
+            if (currentHeight < standingHeight && currentHeight > 0.2F) {
+                final long time = System.currentTimeMillis();
+                final long timeSinceLastChange = time - lastMillis;
+                if (timeSinceLastChange > delay) {
+                    currentHeight += 0.012F;
+                    lastMillis = time;
+                }
+            } else {
+                currentHeight = 1.62F;
+            }
+        }
+
+        return currentHeight;
     }
 }
