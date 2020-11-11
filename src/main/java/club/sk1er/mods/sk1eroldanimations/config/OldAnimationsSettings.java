@@ -10,56 +10,56 @@ import java.io.File;
 public class OldAnimationsSettings extends Vigilant {
 
     @Property(
-        type = PropertyType.SWITCH, name = "1.7 Rod Position",
+        type = PropertyType.SWITCH, name = "Rod Position",
         description = "Brings back the zoomed-out look of the 1.7 fishing rod.",
         category = "Animations", subcategory = "Position"
     )
     public static boolean oldRodPosition = true;
 
     @Property(
-        type = PropertyType.SWITCH, name = "1.7 Bow Position",
+        type = PropertyType.SWITCH, name = "Bow Position",
         description = "Brings back the 1.7 look of the bow for improved visibility.",
         category = "Animations", subcategory = "Position"
     )
     public static boolean oldBowPosition = true;
 
     @Property(
-        type = PropertyType.SWITCH, name = "1.7 Blocking",
+        type = PropertyType.SWITCH, name = "Blocking Position",
         description = "Brings the sword more parallel to the player when they are blocking.",
         category = "Animations", subcategory = "Position"
     )
     public static boolean oldBlocking = true;
 
     @Property(
-        type = PropertyType.SWITCH, name = "1.7 Item Held",
+        type = PropertyType.SWITCH, name = "Item Holding Position",
         description = "Brings the item a little bit closer to the player in third person, like in 1.7.",
         category = "Animations", subcategory = "Position"
     )
     public static boolean oldItemHeld = true;
 
     @Property(
-        type = PropertyType.SWITCH, name = "1.7 Eating",
+        type = PropertyType.SWITCH, name = "Eating Animation",
         description = "Makes eating and drinking look like it did in 1.7.",
         category = "Animations", subcategory = "Interaction"
     )
     public static boolean oldEating = true;
 
     @Property(
-        type = PropertyType.SWITCH, name = "1.7 Block Hitting",
+        type = PropertyType.SWITCH, name = "Block Hitting Animation",
         description = "Makes block hitting look much smoother, like it did in 1.7.",
         category = "Animations", subcategory = "Interaction"
     )
     public static boolean oldBlockhitting = true;
 
     @Property(
-        type = PropertyType.SWITCH, name = "1.7 Swing Animation",
+        type = PropertyType.SWITCH, name = "Swing Animation",
         description = "Makes swinging an item look like it did in 1.7.",
         category = "Animations", subcategory = "Interaction"
     )
     public static boolean oldSwing = true;
 
     @Property(
-        type = PropertyType.SWITCH, name = "1.7 Sneaking",
+        type = PropertyType.SWITCH, name = "Sneaking Animation",
         description = "Applies smoothing to the sneak animation.",
         category = "Animations", subcategory = "Interaction"
     )
@@ -80,21 +80,21 @@ public class OldAnimationsSettings extends Vigilant {
     public static boolean punching = true;
 
     @Property(
-        type = PropertyType.SWITCH, name = "1.7 Health Bar",
+        type = PropertyType.SWITCH, name = "Health Bar Flashing",
         description = "Stops your health bar flashing when you take damage.",
         category = "Animations", subcategory = "HUD"
     )
     public static boolean oldHealth = true;
 
     @Property(
-        type = PropertyType.SWITCH, name = "1.7 Debug Screen",
+        type = PropertyType.SWITCH, name = "Debug Screen",
         description = "Remove the boxes in the debug screen.",
         category = "Animations", subcategory = "HUD"
     )
     public static boolean oldDebugScreen = true;
 
     @Property(
-        type = PropertyType.SWITCH, name = "1.7 Debug Hitbox",
+        type = PropertyType.SWITCH, name = "Debug Hitbox",
         description = "Remove the entity eye line and box from F3+B hitboxes.",
         category = "Animations", subcategory = "World"
     )

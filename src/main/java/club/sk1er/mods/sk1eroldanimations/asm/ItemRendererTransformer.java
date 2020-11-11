@@ -2,7 +2,18 @@ package club.sk1er.mods.sk1eroldanimations.asm;
 
 import club.sk1er.mods.sk1eroldanimations.tweaker.transformer.ITransformer;
 import org.objectweb.asm.Opcodes;
-import org.objectweb.asm.tree.*;
+import org.objectweb.asm.tree.AbstractInsnNode;
+import org.objectweb.asm.tree.ClassNode;
+import org.objectweb.asm.tree.FieldInsnNode;
+import org.objectweb.asm.tree.InsnList;
+import org.objectweb.asm.tree.InsnNode;
+import org.objectweb.asm.tree.JumpInsnNode;
+import org.objectweb.asm.tree.LabelNode;
+import org.objectweb.asm.tree.LdcInsnNode;
+import org.objectweb.asm.tree.LocalVariableNode;
+import org.objectweb.asm.tree.MethodInsnNode;
+import org.objectweb.asm.tree.MethodNode;
+import org.objectweb.asm.tree.VarInsnNode;
 
 import java.util.Iterator;
 
@@ -18,78 +29,82 @@ public class ItemRendererTransformer implements ITransformer {
         for (MethodNode methodNode : classNode.methods) {
             String methodName = mapMethodName(classNode, methodNode);
 
-            if (methodName.equals("transformFirstPersonItem") || methodName.equals("func_178096_b")) {
-                LabelNode varStartLabel = new LabelNode();
-                LabelNode veryEnd = new LabelNode();
-                methodNode.instructions.insertBefore(methodNode.instructions.getFirst(), doOldTransformations());
-            } else if (methodName.equals("performDrinking") || methodName.equals("func_178104_a")) {
-                methodNode.instructions.insertBefore(methodNode.instructions.getFirst(), doOldDrinking());
-            } else if (methodName.equals("renderItemInFirstPerson") || methodName.equals("func_78440_a")) {
-                int f1Index = -1;
-                int fIndex = -1;
-                for (LocalVariableNode variableNode : methodNode.localVariables) {
-                    switch (variableNode.name) {
-                        case "f1":
-                        case "var4":
-                            f1Index = variableNode.index;
-                            break;
-                        case "f":
-                        case "var2":
-                            fIndex = variableNode.index;
-                            break;
+            switch (methodName) {
+                case "transformFirstPersonItem":
+                case "func_178096_b":
+                    methodNode.instructions.insertBefore(methodNode.instructions.getFirst(), doOldTransformations());
+                    break;
+                case "performDrinking":
+                case "func_178104_a":
+                    methodNode.instructions.insertBefore(methodNode.instructions.getFirst(), doOldDrinking());
+                    break;
+                case "renderItemInFirstPerson":
+                case "func_78440_a":
+                    int f1Index = -1;
+                    int fIndex = -1;
+                    for (LocalVariableNode variableNode : methodNode.localVariables) {
+                        switch (variableNode.name) {
+                            case "f1":
+                            case "var4":
+                                f1Index = variableNode.index;
+                                break;
+                            case "f":
+                            case "var2":
+                                fIndex = variableNode.index;
+                                break;
+                        }
                     }
-                }
-                Iterator<AbstractInsnNode> iterator = methodNode.instructions.iterator();
-                while (iterator.hasNext()) {
-                    AbstractInsnNode node = iterator.next();
-                    if (node.getOpcode() == Opcodes.INVOKESPECIAL) {
-                        String nodeName = mapMethodNameFromNode(node);
-                        switch (nodeName) {
-                            case "doBowTransformations":
-                            case "func_178098_a": {
-                                LabelNode labelNode = new LabelNode();
-                                AbstractInsnNode start = node;
-                                for (int i = 0; i < 7; i++) {
-                                    start = start.getPrevious();
+                    Iterator<AbstractInsnNode> iterator = methodNode.instructions.iterator();
+                    while (iterator.hasNext()) {
+                        AbstractInsnNode node = iterator.next();
+                        if (node.getOpcode() == Opcodes.INVOKESPECIAL) {
+                            String nodeName = mapMethodNameFromNode(node);
+                            switch (nodeName) {
+                                case "doBowTransformations":
+                                case "func_178098_a": {
+                                    LabelNode labelNode = new LabelNode();
+                                    AbstractInsnNode start = node;
+                                    for (int i = 0; i < 7; i++) {
+                                        start = start.getPrevious();
+                                    }
+                                    methodNode.instructions.insertBefore(start, swingProgressIfNecessary(labelNode, f1Index));
+                                    methodNode.instructions.insert(start, labelNode);
+                                    methodNode.instructions.insert(node, moveIfOldBow());
+                                    break;
                                 }
-                                methodNode.instructions.insertBefore(start, swingProgressIfNecessary(labelNode, f1Index));
-                                methodNode.instructions.insert(start, labelNode);
-                                methodNode.instructions.insert(node, moveIfOldBow(labelNode));
-                                break;
+                                case "performDrinking":
+                                case "func_178104_a": {
+                                    LabelNode veryEnd = new LabelNode();
+                                    AbstractInsnNode endNode = node;
+                                    for (int i = 0; i < 6; i++) {
+                                        endNode = endNode.getNext();
+                                    }
+                                    methodNode.instructions.insert(node, moveIfOldEat(veryEnd, fIndex, f1Index));
+                                    methodNode.instructions.insert(endNode, veryEnd);
+                                    break;
+                                }
+                                case "doBlockTransformations":
+                                case "func_178103_d": {
+                                    AbstractInsnNode start = node;
+                                    for (int i = 0; i < 5; i++) {
+                                        start = start.getPrevious();
+                                    }
+                                    LabelNode labelNode = new LabelNode();
+                                    methodNode.instructions.insertBefore(start, blockhitSwingProgressIfNecessary(labelNode, f1Index));
+                                    methodNode.instructions.insert(start, labelNode);
+                                    methodNode.instructions.insert(node, moveIfBlocking());
+                                    break;
+                                }
                             }
-                            case "performDrinking":
-                            case "func_178104_a": {
-                                LabelNode veryEnd = new LabelNode();
-                                AbstractInsnNode endNode = node;
-                                for (int i = 0; i < 6; i++) {
-                                    endNode = endNode.getNext();
-                                }
-                                methodNode.instructions.insert(node, moveIfOldEat(veryEnd, fIndex, f1Index));
-                                methodNode.instructions.insert(endNode, veryEnd);
-                                break;
-                            }
-                            case "doBlockTransformations":
-                            case "func_178103_d": {
-                                AbstractInsnNode start = node;
-                                for (int i = 0; i < 5; i++) {
-                                    start = start.getPrevious();
-                                }
-                                LabelNode labelNode = new LabelNode();
-                                methodNode.instructions.insertBefore(start, blockhitSwingProgressIfNecessary(labelNode, f1Index));
-                                methodNode.instructions.insert(start, labelNode);
-                                methodNode.instructions.insert(node, moveIfBlocking(fIndex, f1Index));
-                                break;
+                        } else if (node.getOpcode() == Opcodes.INVOKEVIRTUAL) {
+                            String nodeName = mapMethodNameFromNode(node);
+                            if (nodeName.equals("func_71052_bv") || nodeName.equals("getItemInUseCount")) {
+                                AbstractInsnNode pos = node.getNext().getNext().getNext().getNext();
+                                methodNode.instructions.insertBefore(pos, new MethodInsnNode(Opcodes.INVOKESTATIC, getHookClass(), "swingIfNecessary", "()V", false));
                             }
                         }
                     }
-                    else if (node.getOpcode() == Opcodes.INVOKEVIRTUAL) {
-                        String nodeName = mapMethodNameFromNode(node);
-                        if (nodeName.equals("func_71052_bv") || nodeName.equals("getItemInUseCount")) {
-                            AbstractInsnNode pos = node.getNext().getNext().getNext().getNext();
-                            methodNode.instructions.insertBefore(pos, new MethodInsnNode(Opcodes.INVOKESTATIC, getHookClass(), "swingIfNecessary", "()V", false));
-                        }
-                    }
-                }
+                    break;
             }
         }
     }
@@ -141,7 +156,7 @@ public class ItemRendererTransformer implements ITransformer {
         return list;
     }
 
-    public InsnList moveIfOldBow(LabelNode labelNode) {
+    public InsnList moveIfOldBow() {
         InsnList list = new InsnList();
         LabelNode after = new LabelNode();
         list.add(new FieldInsnNode(Opcodes.GETSTATIC, getConfigClass(), "oldBowPosition", "Z"));
@@ -168,7 +183,7 @@ public class ItemRendererTransformer implements ITransformer {
         return list;
     }
 
-    public InsnList moveIfBlocking(int fIndex, int f1Index) {
+    public InsnList moveIfBlocking() {
         InsnList list = new InsnList();
         LabelNode after = new LabelNode();
         list.add(new FieldInsnNode(Opcodes.GETSTATIC, getConfigClass(), "oldBlockhitting", "Z"));
