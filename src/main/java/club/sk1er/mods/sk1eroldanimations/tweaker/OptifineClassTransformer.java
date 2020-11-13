@@ -19,6 +19,7 @@ public class OptifineClassTransformer implements IClassTransformer {
             registerTransformer(new LayerHeldItemTransformer());
             registerTransformer(new ModelBipedTransformer());
             registerTransformer(new EntityRendererTransformer());
+            registerTransformer(new GuiPlayerTabOverlayTransformer());
         }
     }
 

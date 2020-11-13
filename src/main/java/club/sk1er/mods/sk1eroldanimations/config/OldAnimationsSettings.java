@@ -94,6 +94,13 @@ public class OldAnimationsSettings extends Vigilant {
     public static boolean oldDebugScreen = true;
 
     @Property(
+        type = PropertyType.SWITCH, name = "Tab Overlay",
+        description = "Remove player heads in tab.\n§eCurrently disables rendering of ModCore's Online Indicator while enabled.",
+        category = "Animations", subcategory = "HUD"
+    )
+    public static boolean oldTab;
+
+    @Property(
         type = PropertyType.SWITCH, name = "Debug Hitbox",
         description = "Remove the entity eye line and box from F3+B hitboxes.",
         category = "Animations", subcategory = "World"

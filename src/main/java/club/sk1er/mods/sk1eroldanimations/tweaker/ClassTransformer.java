@@ -2,6 +2,7 @@ package club.sk1er.mods.sk1eroldanimations.tweaker;
 
 import club.sk1er.mods.sk1eroldanimations.Sk1erOldAnimations;
 import club.sk1er.mods.sk1eroldanimations.asm.*;
+import club.sk1er.mods.sk1eroldanimations.asm.modcore.OnlineIndicatorTransformer;
 import club.sk1er.mods.sk1eroldanimations.tweaker.transformer.ITransformer;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
@@ -32,8 +33,10 @@ public class ClassTransformer implements IClassTransformer {
             registerTransformer(new LayerHeldItemTransformer());
             registerTransformer(new ModelBipedTransformer());
             registerTransformer(new EntityRendererTransformer());
+            registerTransformer(new GuiPlayerTabOverlayTransformer());
         }
         registerTransformer(new EntityPlayerTransformer());
+        registerTransformer(new OnlineIndicatorTransformer());
     }
 
     private void registerTransformer(ITransformer transformer) {
@@ -64,8 +67,7 @@ public class ClassTransformer implements IClassTransformer {
             transformer.transform(classNode, transformedName);
         }
 
-        ClassWriter classWriter =
-                new ClassWriter(ClassWriter.COMPUTE_FRAMES | ClassWriter.COMPUTE_MAXS);
+        ClassWriter classWriter = new ClassWriter(ClassWriter.COMPUTE_FRAMES);
 
         try {
             classNode.accept(classWriter);
