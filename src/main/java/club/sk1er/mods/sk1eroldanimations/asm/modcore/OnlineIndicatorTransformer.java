@@ -21,6 +21,7 @@ public class OnlineIndicatorTransformer implements ITransformer {
         for (MethodNode method : classNode.methods) {
             if (method.name.equals("draw")) {
                 method.instructions.insertBefore(method.instructions.getFirst(), stopRendering());
+                break;
             }
         }
     }

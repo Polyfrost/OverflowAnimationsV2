@@ -107,7 +107,7 @@ public class Hooks {
     public static float getEyeHeight() {
         final EntityPlayerSP player = mc.thePlayer;
         final int delay = 1000 / 100;
-        if (player.isSneaking()) {
+        if (player != null && player.isSneaking()) {
             final float sneakingHeight = 1.54F;
             if (currentHeight > sneakingHeight) {
                 final long time = System.currentTimeMillis();
