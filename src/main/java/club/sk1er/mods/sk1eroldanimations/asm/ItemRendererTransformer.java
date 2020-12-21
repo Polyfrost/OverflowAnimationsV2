@@ -16,7 +16,9 @@ import org.objectweb.asm.tree.MethodNode;
 import org.objectweb.asm.tree.VarInsnNode;
 
 import java.util.Iterator;
+import java.util.ListIterator;
 
+@HotReloadable
 public class ItemRendererTransformer implements ITransformer {
 
     @Override
@@ -102,6 +104,25 @@ public class ItemRendererTransformer implements ITransformer {
                                 AbstractInsnNode pos = node.getNext().getNext().getNext().getNext();
                                 methodNode.instructions.insertBefore(pos, new MethodInsnNode(Opcodes.INVOKESTATIC, getHookClass(), "swingIfNecessary", "()V", false));
                             }
+                        }
+                    }
+                    break;
+                case "updateEquippedItem":
+                case "func_78441_a":
+                    boolean foundJump = false;
+                    LabelNode end = new LabelNode();
+                    for (ListIterator<AbstractInsnNode> it = methodNode.instructions.iterator(); it.hasNext(); ) {
+                        AbstractInsnNode node = it.next();
+                        if (!foundJump && node.getOpcode() == Opcodes.IFNULL && node.getPrevious().getOpcode() == Opcodes.GETFIELD) {
+                            FieldInsnNode fieldInsnNode = (FieldInsnNode) node.getPrevious();
+                            String fieldName = mapFieldNameFromNode(fieldInsnNode);
+                            if (fieldName.equals("itemToRender") || fieldName.equals("field_78453_b")) {
+                                foundJump = true;
+                                methodNode.instructions.insertBefore(fieldInsnNode.getPrevious(), handleOldItemSwitch(end));
+                            }
+                        } else if (node instanceof LdcInsnNode && ((LdcInsnNode) node).cst.equals(0.4f)) {
+                            methodNode.instructions.insertBefore(node, end);
+                            break;
                         }
                     }
                     break;
@@ -197,6 +218,21 @@ public class ItemRendererTransformer implements ITransformer {
         list.add(new LdcInsnNode(0.85f));
         list.add(new MethodInsnNode(Opcodes.INVOKESTATIC, "net/minecraft/client/renderer/GlStateManager", "func_179152_a", "(FFF)V", false)); // scale
         list.add(after);
+        return list;
+    }
+
+    private InsnList handleOldItemSwitch(LabelNode end) {
+        InsnList list = new InsnList();
+        list.add(new FieldInsnNode(Opcodes.GETSTATIC, getConfigClass(), "itemSwitch", "Z"));
+        LabelNode optionIsOff = new LabelNode();
+        list.add(new JumpInsnNode(Opcodes.IFEQ, optionIsOff));
+        list.add(new VarInsnNode(Opcodes.ALOAD, 0));
+        list.add(new VarInsnNode(Opcodes.ALOAD, 1));
+        list.add(new VarInsnNode(Opcodes.ALOAD, 2));
+        list.add(new MethodInsnNode(Opcodes.INVOKESTATIC, getHookClass(), "oldUpdateEquippedItem", "(Lnet/minecraft/client/renderer/ItemRenderer;Lnet/minecraft/entity/player/EntityPlayer;Lnet/minecraft/item/ItemStack;)Z", false));
+        list.add(new VarInsnNode(Opcodes.ISTORE, 3));
+        list.add(new JumpInsnNode(Opcodes.GOTO, end));
+        list.add(optionIsOff);
         return list;
     }
 }

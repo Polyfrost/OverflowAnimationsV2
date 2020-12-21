@@ -80,6 +80,13 @@ public class OldAnimationsSettings extends Vigilant {
     public static boolean punching = true;
 
     @Property(
+            type = PropertyType.SWITCH, name = "Item Switching Animation",
+            description = "1.7 behaviour for deciding when your hand should move when switching items.",
+            category = "Animations", subcategory = "Interaction"
+    )
+    public static boolean itemSwitch = true;
+
+    @Property(
         type = PropertyType.SWITCH, name = "Health Bar Flashing",
         description = "Stops your health bar flashing when you take damage.",
         category = "Animations", subcategory = "HUD"

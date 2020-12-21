@@ -6,6 +6,7 @@ import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.entity.RendererLivingEntity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -132,5 +133,17 @@ public class Hooks {
         }
 
         return currentHeight;
+    }
+
+    public static boolean oldUpdateEquippedItem(ItemRenderer itemRenderer, EntityPlayer player, ItemStack itemStack) {
+        boolean var3 = itemRenderer.equippedItemSlot == player.inventory.currentItem && itemStack == itemRenderer.itemToRender;
+        if (itemRenderer.itemToRender == null && itemStack == null) {
+            var3 = true;
+        }
+        if (itemStack != null && itemRenderer.itemToRender != null && itemStack != itemRenderer.itemToRender && itemStack.getItem() == itemRenderer.itemToRender.getItem() && itemStack.getItemDamage() == itemRenderer.itemToRender.getItemDamage()) {
+            itemRenderer.itemToRender = itemStack;
+            var3 = true;
+        }
+        return !var3;
     }
 }
