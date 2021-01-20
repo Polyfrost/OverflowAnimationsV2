@@ -1,17 +1,16 @@
-package club.sk1er.mods.sk1eroldanimations;
+package club.sk1er.oldanimations;
 
-import club.sk1er.mods.sk1eroldanimations.command.OldAnimationsCommand;
-import club.sk1er.mods.sk1eroldanimations.config.OldAnimationsSettings;
-import net.minecraft.client.Minecraft;
-import net.minecraftforge.client.ClientCommandHandler;
+import club.sk1er.oldanimations.command.OldAnimationsCommand;
+import club.sk1er.oldanimations.config.OldAnimationsSettings;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.modcore.api.ModCoreAPI;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-@Mod(modid = Sk1erOldAnimations.MODID, name = "Sk1er Old Animations", version = Sk1erOldAnimations.VERSION)
-public class Sk1erOldAnimations {
+@Mod(modid = OldAnimations.MODID, name = "Sk1er Old Animations", version = OldAnimations.VERSION)
+public class OldAnimations {
     public static final String MODID = "sk1er_old_animations";
     public static final String VERSION = "1.0";
     public static OldAnimationsSettings oldAnimationsSettings;
@@ -19,8 +18,7 @@ public class Sk1erOldAnimations {
 
     @EventHandler
     public void init(FMLInitializationEvent event) {
-        ClientCommandHandler.instance.registerCommand(new OldAnimationsCommand());
-        ModCoreInstaller.initializeModCore(Minecraft.getMinecraft().mcDataDir);
+        ModCoreAPI.getCommandRegistry().registerCommand(new OldAnimationsCommand());
         oldAnimationsSettings = new OldAnimationsSettings();
         oldAnimationsSettings.preload();
     }

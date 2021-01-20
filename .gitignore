@@ -27,4 +27,5 @@ build
 run
 .DS_Store
 Thumbs.db
-/gradle.properties
+
+.mixin.out

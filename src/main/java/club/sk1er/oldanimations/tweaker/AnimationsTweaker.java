@@ -1,17 +1,23 @@
-package club.sk1er.mods.sk1eroldanimations.forge;
+package club.sk1er.oldanimations.tweaker;
 
-import club.sk1er.mods.sk1eroldanimations.tweaker.OptifineClassTransformer;
 import net.minecraftforge.common.ForgeVersion;
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
+import org.spongepowered.asm.launch.MixinBootstrap;
+import org.spongepowered.asm.mixin.Mixins;
 
 import java.util.Map;
 
 @IFMLLoadingPlugin.MCVersion(ForgeVersion.mcVersion)
-@IFMLLoadingPlugin.SortingIndex(1001)
-public class OptifinePatcherTweaker implements IFMLLoadingPlugin {
+public class AnimationsTweaker implements IFMLLoadingPlugin {
+
+    public AnimationsTweaker() {
+        MixinBootstrap.init();
+        Mixins.addConfiguration("mixins.oldanimations.json");
+    }
+
     @Override
     public String[] getASMTransformerClass() {
-        return new String[]{OptifineClassTransformer.class.getName()};
+        return new String[0];
     }
 
     @Override
@@ -25,7 +31,7 @@ public class OptifinePatcherTweaker implements IFMLLoadingPlugin {
     }
 
     @Override
-    public void injectData(Map<String, Object> data) {
+    public void injectData(Map<String, Object> map) {
 
     }
 

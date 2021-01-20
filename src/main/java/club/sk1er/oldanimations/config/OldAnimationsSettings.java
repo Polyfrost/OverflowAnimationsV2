@@ -1,4 +1,4 @@
-package club.sk1er.mods.sk1eroldanimations.config;
+package club.sk1er.oldanimations.config;
 
 import club.sk1er.vigilance.Vigilant;
 import club.sk1er.vigilance.data.Property;
