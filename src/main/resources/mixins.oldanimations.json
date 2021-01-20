@@ -5,5 +5,11 @@
   "target": "@env(DEFAULT)",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
+    "EntityPlayerMixin",
+    "GuiIngameForgeMixin",
+    "LayerArmorBaseMixin",
+    "ModelBipedMixin",
+    "RenderFishMixin",
+    "RenderManagerMixin"
   ]
 }
