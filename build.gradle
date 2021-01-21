@@ -176,7 +176,7 @@ minecraft {
                 11100: "snapshot_20161111",
                 11002: "snapshot_20160518",
                 10904: "snapshot_20160518",
-                10809: "stable_22"
+                10809: "stable_20"
         ][mcVersion]
 
 
