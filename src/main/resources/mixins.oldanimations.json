@@ -10,6 +10,8 @@
     "LayerArmorBaseMixin",
     "ModelBipedMixin",
     "RenderFishMixin",
-    "RenderManagerMixin"
+    "RenderManagerMixin",
+    "MixinItemRenderer",
+    "ItemFoodAccessor"
   ]
 }
