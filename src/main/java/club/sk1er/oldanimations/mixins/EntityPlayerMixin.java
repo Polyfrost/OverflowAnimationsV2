@@ -24,6 +24,7 @@ public abstract class EntityPlayerMixin extends EntityLivingBase {
     @Inject(method = "getEyeHeight", at = @At("HEAD"), cancellable = true)
     private void modifyEyeHeight(CallbackInfoReturnable<Float> cir) {
         if (!OldAnimationsSettings.oldSneaking) return;
+
         final int delay = 1000 / 100;
         if (isSneaking()) {
             final float sneakingHeight = 1.54F;
