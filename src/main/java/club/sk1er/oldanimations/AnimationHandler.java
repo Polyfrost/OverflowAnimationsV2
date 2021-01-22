@@ -1,5 +1,6 @@
 package club.sk1er.oldanimations;
 
+import club.sk1er.oldanimations.config.OldAnimationsSettings;
 import club.sk1er.oldanimations.mixins.ItemFoodAccessor;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -7,17 +8,18 @@ import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderPlayer;
-import net.minecraft.item.EnumAction;
-import net.minecraft.item.ItemCloth;
-import net.minecraft.item.ItemFood;
-import net.minecraft.item.ItemStack;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
+import net.minecraft.item.*;
 import net.minecraft.potion.Potion;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.util.vector.Vector3f;
 
 public class AnimationHandler {
 
@@ -73,7 +75,7 @@ public class AnimationHandler {
 
         int max = getArmSwingAnimationEnd(p);
 
-        if (Minecraft.getMinecraft().gameSettings.keyBindAttack.isKeyDown() &&
+        if (OldAnimationsSettings.punching && Minecraft.getMinecraft().gameSettings.keyBindAttack.isKeyDown() &&
                 Minecraft.getMinecraft().objectMouseOver != null &&
                 Minecraft.getMinecraft().objectMouseOver.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK) {
             if (!this.isSwingInProgress || this.swingProgressInt >= max / 2 || this.swingProgressInt < 0) {
@@ -106,13 +108,28 @@ public class AnimationHandler {
     /**
      * Renders an item from the first person perspective
      * The following code has been taken from 1.7 and heavily modified to be readable
+     *
      * @return whether to cancel default item rendering
      */
     public boolean renderItemInFirstPerson(ItemRenderer renderer, ItemStack stack, float equipProgress, float partialTicks) {
-        if(stack == null) {
+        if (stack == null) {
             //Let the ItemRenderer render the player hand, we don't need to change it at all
             return false;
         }
+
+        if(stack.getItem() == Items.fishing_rod && !OldAnimationsSettings.oldRod) {
+            return false;
+        } else if(stack.getItemUseAction() == EnumAction.NONE && !OldAnimationsSettings.oldModel) {
+            return false;
+        }
+
+        if(stack.getItemUseAction() == EnumAction.BLOCK && !OldAnimationsSettings.oldSwordBlock) {
+            return false;
+        }
+        if(stack.getItemUseAction() == EnumAction.BOW && !OldAnimationsSettings.oldBow) {
+            return false;
+        }
+
         EntityPlayerSP player = Minecraft.getMinecraft().thePlayer;
 
         float var4 = player.prevRotationPitch + (player.rotationPitch - player.prevRotationPitch) * partialTicks;
@@ -147,39 +164,40 @@ public class AnimationHandler {
 
         GL11.glPushMatrix();
 
-        int useCount = player.getItemInUseCount();
         EnumAction useAction = stack.getItemUseAction();
+        int useCount = player.getItemInUseCount();
         float swingProgress = getSwingProgress(partialTicks);
 
         boolean blockHitOverride = false;
-        if (useCount <= 0 && Minecraft.getMinecraft().gameSettings.keyBindUseItem.isKeyDown()) {
+        if (OldAnimationsSettings.punching &&
+                useCount <= 0 && Minecraft.getMinecraft().gameSettings.keyBindUseItem.isKeyDown()) {
             boolean block = useAction == EnumAction.BLOCK;
             boolean consume = false;
-            if(stack.getItem() instanceof ItemFood) {
-                boolean alwaysEdible = ((ItemFoodAccessor)(Object)(stack.getItem())).getAlwaysEdible();
-                if(Minecraft.getMinecraft().thePlayer.canEat(alwaysEdible)) {
+            if (stack.getItem() instanceof ItemFood) {
+                boolean alwaysEdible = ((ItemFoodAccessor) (stack.getItem())).getAlwaysEdible();
+                if (Minecraft.getMinecraft().thePlayer.canEat(alwaysEdible)) {
                     consume = useAction == EnumAction.EAT || useAction == EnumAction.DRINK;
                 }
             }
 
-            if(block || consume) {
+            if (block || consume) {
                 blockHitOverride = true;
             }
         }
 
-        if((useCount > 0 || blockHitOverride) && useAction != EnumAction.NONE) {
+        if ((useCount > 0 || blockHitOverride) && useAction != EnumAction.NONE) {
             switch (useAction) {
                 case EAT:
                 case DRINK:
                     doConsumeAnimation(stack, useCount, partialTicks);
-                    doEquipAndSwingTransform(equipProgress, swingProgress);
+                    doEquipAndSwingTransform(equipProgress, OldAnimationsSettings.oldBlockhitting ? swingProgress : 0);
                     break;
                 case BLOCK:
-                    doEquipAndSwingTransform(equipProgress, swingProgress);
+                    doEquipAndSwingTransform(equipProgress, OldAnimationsSettings.oldBlockhitting ? swingProgress : 0);
                     doSwordBlockAnimation();
                     break;
                 case BOW:
-                    doEquipAndSwingTransform(equipProgress, swingProgress);
+                    doEquipAndSwingTransform(equipProgress, OldAnimationsSettings.oldBlockhitting ? swingProgress : 0);
                     doBowAnimation(stack, useCount, partialTicks);
             }
         } else {
@@ -191,9 +209,7 @@ public class AnimationHandler {
             GlStateManager.rotate(180.0F, 0.0F, 1.0F, 0.0F);
         }
 
-        doFirstPersonTransform(stack);
-
-        if (Minecraft.getMinecraft().getRenderItem().shouldRenderItemIn3D(stack)) {
+        if (doFirstPersonTransform(stack)) {
             renderer.renderItem(player, stack, ItemCameraTransforms.TransformType.FIRST_PERSON);
         } else {
             renderer.renderItem(player, stack, ItemCameraTransforms.TransformType.NONE);
@@ -207,16 +223,40 @@ public class AnimationHandler {
 
         GlStateManager.disableRescaleNormal();
         RenderHelper.disableStandardItemLighting();
-        
+
         return true;
+    }
+
+    public void doSwordBlock3rdPersonTransform() {
+        if(OldAnimationsSettings.oldSwordBlock3) {
+            GlStateManager.translate(-0.15f, -0.2f, 0);
+            GlStateManager.rotate(70, 1, 0, 0);
+            GlStateManager.translate(0.119f, 0.2f, -0.024f);
+        }
     }
 
     /**
      * Transforms the item to make it look like the player is holding it in first person,
-     *    replicating the 1.7 positioning
+     * replicating the 1.7 positioning
      * (This was a ****** nightmare to put together)
+     * @return Whether to perform the 1.8 First Person transform as well
      */
-    private void doFirstPersonTransform(ItemStack stack) {
+    private boolean doFirstPersonTransform(ItemStack stack) {
+        switch(stack.getItemUseAction()) {
+            case BOW:
+                if(!OldAnimationsSettings.oldBow) return true;
+                break;
+            case EAT:
+            case DRINK:
+                if(!OldAnimationsSettings.oldEating) return true;
+                break;
+            case BLOCK:
+                if(!OldAnimationsSettings.oldSwordBlock) return true;
+                break;
+            case NONE:
+                if(!OldAnimationsSettings.oldModel) return true;
+        }
+
         GlStateManager.translate(0.58800083f, 0.36999986f, -0.77000016f);
         GlStateManager.translate(0, -0.3f, 0.0F);
         GlStateManager.scale(1.5f, 1.5f, 1.5f);
@@ -232,25 +272,45 @@ public class AnimationHandler {
             GlStateManager.rotate(0, 1.0F, 0.0F, 0.0F);
             GlStateManager.rotate(135, 0.0F, 1.0F, 0.0F);
             GlStateManager.translate(0, -4f * 0.0625F, -2f * 0.0625F);
+            GlStateManager.scale(1 / 2f, 1 / 2f, 1 / 2f);
+            return true;
         }
 
         GlStateManager.scale(1 / 2f, 1 / 2f, 1 / 2f);
+        return false;
     }
 
     private void doConsumeAnimation(ItemStack stack, int useCount, float partialTicks) {
-        float useAmount = (float) useCount - partialTicks + 1.0F;
-        float useAmountNorm = 1.0F - useAmount / (float) stack.getMaxItemUseDuration();
-        float useAmountPow = 1.0F - useAmountNorm;
-        useAmountPow = useAmountPow * useAmountPow * useAmountPow;
-        useAmountPow = useAmountPow * useAmountPow * useAmountPow;
-        useAmountPow = useAmountPow * useAmountPow * useAmountPow;
-        float useAmountFinal = 1.0F - useAmountPow;
-        GlStateManager.translate(0.0F, MathHelper.abs(MathHelper.cos(useAmount / 4.0F *
-                (float) Math.PI) * 0.1F) * (float) ((double) useAmountNorm > 0.2D ? 1 : 0), 0.0F);
-        GlStateManager.translate(useAmountFinal * 0.6F, -useAmountFinal * 0.5F, 0.0F);
-        GlStateManager.rotate(useAmountFinal * 90.0F, 0.0F, 1.0F, 0.0F);
-        GlStateManager.rotate(useAmountFinal * 10.0F, 1.0F, 0.0F, 0.0F);
-        GlStateManager.rotate(useAmountFinal * 30.0F, 0.0F, 0.0F, 1.0F);
+        if(OldAnimationsSettings.oldEating) {
+            float useAmount = (float) useCount - partialTicks + 1.0F;
+            float useAmountNorm = 1.0F - useAmount / (float) stack.getMaxItemUseDuration();
+            float useAmountPow = 1.0F - useAmountNorm;
+            useAmountPow = useAmountPow * useAmountPow * useAmountPow;
+            useAmountPow = useAmountPow * useAmountPow * useAmountPow;
+            useAmountPow = useAmountPow * useAmountPow * useAmountPow;
+            float useAmountFinal = 1.0F - useAmountPow;
+            GlStateManager.translate(0.0F, MathHelper.abs(MathHelper.cos(useAmount / 4.0F *
+                    (float) Math.PI) * 0.1F) * (float) ((double) useAmountNorm > 0.2D ? 1 : 0), 0.0F);
+            GlStateManager.translate(useAmountFinal * 0.6F, -useAmountFinal * 0.5F, 0.0F);
+            GlStateManager.rotate(useAmountFinal * 90.0F, 0.0F, 1.0F, 0.0F);
+            GlStateManager.rotate(useAmountFinal * 10.0F, 1.0F, 0.0F, 0.0F);
+            GlStateManager.rotate(useAmountFinal * 30.0F, 0.0F, 0.0F, 1.0F);
+        } else {
+            float f = (float)useCount - partialTicks + 1.0F;
+            float f1 = f / (float)stack.getMaxItemUseDuration();
+            float f2 = MathHelper.abs(MathHelper.cos(f / 4.0F * (float)Math.PI) * 0.1F);
+
+            if (f1 >= 0.8F) {
+                f2 = 0.0F;
+            }
+
+            GlStateManager.translate(0.0F, f2, 0.0F);
+            float f3 = 1.0F - (float)Math.pow(f1, 27.0D);
+            GlStateManager.translate(f3 * 0.6F, f3 * -0.5F, f3 * 0.0F);
+            GlStateManager.rotate(f3 * 90.0F, 0.0F, 1.0F, 0.0F);
+            GlStateManager.rotate(f3 * 10.0F, 1.0F, 0.0F, 0.0F);
+            GlStateManager.rotate(f3 * 30.0F, 0.0F, 0.0F, 1.0F);
+        }
     }
 
     private void doSwingTranslation(float swingProgress) {
@@ -298,14 +358,21 @@ public class AnimationHandler {
         }
 
         GlStateManager.translate(0.0F, 0.0F, pullbackNorm * 0.1F);
-        GlStateManager.rotate(-335.0F, 0.0F, 0.0F, 1.0F);
-        GlStateManager.rotate(-50.0F, 0.0F, 1.0F, 0.0F);
-        GlStateManager.translate(0.0F, 0.5F, 0.0F);
+
+        if(OldAnimationsSettings.oldBow) {
+            GlStateManager.rotate(-335.0F, 0.0F, 0.0F, 1.0F);
+            GlStateManager.rotate(-50.0F, 0.0F, 1.0F, 0.0F);
+            GlStateManager.translate(0.0F, 0.5F, 0.0F);
+        }
+
         float zScale = 1.0F + pullbackNorm * 0.2F;
         GlStateManager.scale(1.0F, 1.0F, zScale);
-        GlStateManager.translate(0.0F, -0.5F, 0.0F);
-        GlStateManager.rotate(50.0F, 0.0F, 1.0F, 0.0F);
-        GlStateManager.rotate(335.0F, 0.0F, 0.0F, 1.0F);
+
+        if(OldAnimationsSettings.oldBow) {
+            GlStateManager.translate(0.0F, -0.5F, 0.0F);
+            GlStateManager.rotate(50.0F, 0.0F, 1.0F, 0.0F);
+            GlStateManager.rotate(335.0F, 0.0F, 0.0F, 1.0F);
+        }
     }
 
 
