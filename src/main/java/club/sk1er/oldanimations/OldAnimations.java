@@ -24,6 +24,8 @@ public class OldAnimations {
         ModCoreAPI.getCommandRegistry().registerCommand(new OldAnimationsCommand());
         oldAnimationsSettings = new OldAnimationsSettings();
         oldAnimationsSettings.preload();
+
         MinecraftForge.EVENT_BUS.register(AnimationHandler.getInstance());
+        MinecraftForge.EVENT_BUS.register(SneakHandler.getInstance());
     }
 }

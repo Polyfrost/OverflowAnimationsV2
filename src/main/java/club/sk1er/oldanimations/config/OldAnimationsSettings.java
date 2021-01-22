@@ -73,11 +73,19 @@ public class OldAnimationsSettings extends Vigilant {
     public static boolean oldSwing = true;*/
 
     @Property(
-        type = PropertyType.SWITCH, name = "Sneaking Animation",
-        description = "Applies smoothing to the sneak animation.",
+        type = PropertyType.SWITCH, name = "Smooth Sneaking",
+        description = "Makes the transition between sneaking/not sneaking smooth.\n§eCombine with longer unsneak to match 1.7",
         category = "Animations", subcategory = "Interaction"
     )
-    public static boolean oldSneaking = true;
+    public static boolean smoothSneaking = true;
+
+
+    @Property(
+            type = PropertyType.SWITCH, name = "Longer Unsneak",
+            description = "Makes moving up take longer than moving down\n§eCombine with smooth sneaking to match 1.7",
+            category = "Animations", subcategory = "Interaction"
+    )
+    public static boolean longSneaking = true;
 
     @Property(
         type = PropertyType.SWITCH, name = "Red Armor",
@@ -101,7 +109,7 @@ public class OldAnimationsSettings extends Vigilant {
     public static boolean itemSwitch = true;
 
     @Property(
-        type = PropertyType.SWITCH, name = "Health Bar Flashing",
+        type = PropertyType.SWITCH, name = "Remove Health Bar Flashing",
         description = "Stops your health bar flashing when you take damage.",
         category = "Animations", subcategory = "HUD"
     )
