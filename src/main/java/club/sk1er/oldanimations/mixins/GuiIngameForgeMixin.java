@@ -21,9 +21,8 @@ public class GuiIngameForgeMixin {
         return fontRenderer.drawString(text, x, y, color, OldAnimationsSettings.oldDebugScreen);
     }
 
-    @ModifyVariable(method = "renderHealth", at=@At(value = "STORE"), ordinal = 0, name = "highlight", remap = false)
-    public boolean renderHealth_highlight(boolean original) {
-        return !OldAnimationsSettings.oldHealth && original;
+    @ModifyVariable(method = "renderHealth", at = @At(value = "LOAD", opcode = Opcodes.ILOAD, ordinal = 1), index = 5, remap = false)
+    private boolean cancelFlash(boolean original) {
+        return original && !OldAnimationsSettings.oldHealth;
     }
-
 }
