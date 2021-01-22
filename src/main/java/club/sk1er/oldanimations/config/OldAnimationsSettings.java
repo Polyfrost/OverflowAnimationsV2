@@ -10,53 +10,67 @@ import java.io.File;
 public class OldAnimationsSettings extends Vigilant {
 
     @Property(
-        type = PropertyType.SWITCH, name = "Rod Position",
-        description = "Brings back the zoomed-out look of the 1.7 fishing rod.",
-        category = "Animations", subcategory = "Position"
+            type = PropertyType.SWITCH, name = "1.7 Item Positions",
+            description = "Change all item models to be in the same position as 1.7",
+            category = "Animations", subcategory = "Position"
     )
-    public static boolean oldRodPosition = true;
+    public static boolean oldModel = true;
 
     @Property(
-        type = PropertyType.SWITCH, name = "Bow Position",
-        description = "Brings back the 1.7 look of the bow for improved visibility.",
+        type = PropertyType.SWITCH, name = "1.7 Bow Pullback",
+        description = "Change the bow pullback animation to be like 1.7",
         category = "Animations", subcategory = "Position"
     )
-    public static boolean oldBowPosition = true;
+    public static boolean oldBow = true;
 
     @Property(
-        type = PropertyType.SWITCH, name = "Blocking Position",
-        description = "Brings the sword more parallel to the player when they are blocking.",
+        type = PropertyType.SWITCH, name = "1.7 Block Animation",
+        description = "Change the sword block animation to be like 1.7",
         category = "Animations", subcategory = "Position"
     )
-    public static boolean oldBlocking = true;
+    public static boolean oldSwordBlock = true;
 
     @Property(
+        type = PropertyType.SWITCH, name = "1.7 Rod Position",
+        description = "Change the fishing rod model to be in the same position as 1.7",
+        category = "Animations", subcategory = "Position"
+    )
+    public static boolean oldRod = true;
+
+    @Property(
+            type = PropertyType.SWITCH, name = "1.7 3rd Person Block Animation",
+            description = "Change the 3rd person blocking animation to be like 1.7",
+            category = "Animations", subcategory = "Position"
+    )
+    public static boolean oldSwordBlock3 = true;
+
+    /*@Property(
         type = PropertyType.SWITCH, name = "Item Holding Position",
         description = "Brings the item a little bit closer to the player in third person, like in 1.7.",
         category = "Animations", subcategory = "Position"
     )
-    public static boolean oldItemHeld = true;
+    public static boolean oldItemHeld = true;*/
 
     @Property(
-        type = PropertyType.SWITCH, name = "Eating Animation",
-        description = "Makes eating and drinking look like it did in 1.7.",
+        type = PropertyType.SWITCH, name = "Consume Animation",
+        description = "Change the eating and drinking animation to look like 1.7",
         category = "Animations", subcategory = "Interaction"
     )
     public static boolean oldEating = true;
 
     @Property(
-        type = PropertyType.SWITCH, name = "Block Hitting Animation",
+        type = PropertyType.SWITCH, name = "Block-Hitting Animation",
         description = "Makes block hitting look much smoother, like it did in 1.7.",
         category = "Animations", subcategory = "Interaction"
     )
     public static boolean oldBlockhitting = true;
 
-    @Property(
+    /*@Property(
         type = PropertyType.SWITCH, name = "Swing Animation",
         description = "Makes swinging an item look like it did in 1.7.",
         category = "Animations", subcategory = "Interaction"
     )
-    public static boolean oldSwing = true;
+    public static boolean oldSwing = true;*/
 
     @Property(
         type = PropertyType.SWITCH, name = "Sneaking Animation",
@@ -81,7 +95,7 @@ public class OldAnimationsSettings extends Vigilant {
 
     @Property(
             type = PropertyType.SWITCH, name = "Item Switching Animation",
-            description = "1.7 behaviour for deciding when your hand should move when switching items.",
+            description = "Stop held items from playing the switching animation when right clicking on blocks",
             category = "Animations", subcategory = "Interaction"
     )
     public static boolean itemSwitch = true;
