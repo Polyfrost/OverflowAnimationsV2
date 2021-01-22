@@ -11,9 +11,6 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 public class RenderFishMixin {
     @Redirect(method = "doRender", at = @At(value = "NEW", target = "net/minecraft/util/Vec3", ordinal = 0))
     private Vec3 oldFishingLine(double x, double y, double z) {
-        if (OldAnimationsSettings.oldRod) {
-            return new Vec3(-0.5, 0.03, 0.8);
-        }
-        return new Vec3(x, y, z);
+        return OldAnimationsSettings.oldRod ? new Vec3(-0.5, 0.03, 0.8) : new Vec3(x, y, z);
     }
 }

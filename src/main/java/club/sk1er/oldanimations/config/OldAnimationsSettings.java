@@ -10,9 +10,9 @@ import java.io.File;
 public class OldAnimationsSettings extends Vigilant {
 
     @Property(
-            type = PropertyType.SWITCH, name = "1.7 Item Positions",
-            description = "Change all item models to be in the same position as 1.7",
-            category = "Animations", subcategory = "Position"
+        type = PropertyType.SWITCH, name = "1.7 Item Positions",
+        description = "Change all item models to be in the same position as 1.7",
+        category = "Animations", subcategory = "Position"
     )
     public static boolean oldModel = true;
 
@@ -38,9 +38,9 @@ public class OldAnimationsSettings extends Vigilant {
     public static boolean oldRod = true;
 
     @Property(
-            type = PropertyType.SWITCH, name = "1.7 3rd Person Block Animation",
-            description = "Change the 3rd person blocking animation to be like 1.7",
-            category = "Animations", subcategory = "Position"
+        type = PropertyType.SWITCH, name = "1.7 3rd Person Block Animation",
+        description = "Change the 3rd person blocking animation to be like 1.7",
+        category = "Animations", subcategory = "Position"
     )
     public static boolean oldSwordBlock3 = true;
 
@@ -81,9 +81,9 @@ public class OldAnimationsSettings extends Vigilant {
 
 
     @Property(
-            type = PropertyType.SWITCH, name = "Longer Unsneak",
-            description = "Makes moving up take longer than moving down\n§eCombine with smooth sneaking to match 1.7",
-            category = "Animations", subcategory = "Interaction"
+        type = PropertyType.SWITCH, name = "Longer Unsneak",
+        description = "Makes moving up take longer than moving down\n§eCombine with smooth sneaking to match 1.7",
+        category = "Animations", subcategory = "Interaction"
     )
     public static boolean longSneaking = true;
 
@@ -102,9 +102,9 @@ public class OldAnimationsSettings extends Vigilant {
     public static boolean punching = true;
 
     @Property(
-            type = PropertyType.SWITCH, name = "Item Switching Animation",
-            description = "Stop held items from playing the switching animation when right clicking on blocks",
-            category = "Animations", subcategory = "Interaction"
+        type = PropertyType.SWITCH, name = "Item Switching Animation",
+        description = "Stop held items from playing the switching animation when right clicking on blocks",
+        category = "Animations", subcategory = "Interaction"
     )
     public static boolean itemSwitch = true;
 
