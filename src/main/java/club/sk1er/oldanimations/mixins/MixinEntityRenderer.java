@@ -1,7 +1,6 @@
 package club.sk1er.oldanimations.mixins;
 
 import club.sk1er.oldanimations.SneakHandler;
-import club.sk1er.oldanimations.config.OldAnimationsSettings;
 import net.minecraft.client.renderer.EntityRenderer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -16,12 +15,12 @@ public class MixinEntityRenderer {
     @Unique
     private float partialTicks;
 
-    @Inject(method="orientCamera", at=@At("HEAD"))
+    @Inject(method = "orientCamera", at = @At("HEAD"))
     public void orientCamera(float partialTicks, CallbackInfo ci) {
         this.partialTicks = partialTicks;
     }
 
-    @ModifyVariable(method="orientCamera", at=@At(value = "STORE", ordinal = 0), ordinal = 1)
+    @ModifyVariable(method = "orientCamera", at = @At(value = "STORE", ordinal = 0), ordinal = 1)
     public float modifyEyeHeight(float eyeHeight) {
         return SneakHandler.getInstance().getEyeHeight(partialTicks);
     }

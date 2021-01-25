@@ -1,7 +1,6 @@
 package club.sk1er.oldanimations.mixins;
 
 import club.sk1er.oldanimations.AnimationHandler;
-import club.sk1er.oldanimations.config.OldAnimationsSettings;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.resources.model.IBakedModel;
@@ -10,7 +9,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.ForgeHooksClient;
-import org.checkerframework.checker.units.qual.A;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -24,7 +22,7 @@ public class MixinRenderItem {
     @Unique
     private EntityLivingBase lastEntityToRenderFor = null;
 
-    @Inject(method="renderItemModelForEntity", at=@At("HEAD"))
+    @Inject(method = "renderItemModelForEntity", at = @At("HEAD"))
     public void renderItemModelForEntity(ItemStack stack, EntityLivingBase entityToRenderFor,
                                          ItemCameraTransforms.TransformType cameraTransformType, CallbackInfo ci) {
         lastEntityToRenderFor = entityToRenderFor;
@@ -42,8 +40,8 @@ public class MixinRenderItem {
                 lastEntityToRenderFor instanceof EntityPlayer) {
             EntityPlayer p = (EntityPlayer) lastEntityToRenderFor;
             ItemStack heldStack = p.getHeldItem();
-            if(heldStack != null && p.getItemInUseCount() > 0 &&
-                    heldStack.getItemUseAction() == EnumAction.BLOCK) {
+            if (heldStack != null && p.getItemInUseCount() > 0 &&
+                heldStack.getItemUseAction() == EnumAction.BLOCK) {
                 AnimationHandler.getInstance().doSwordBlock3rdPersonTransform();
             }
         }
