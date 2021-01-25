@@ -30,17 +30,15 @@ public class MixinRenderItem {
         lastEntityToRenderFor = entityToRenderFor;
     }
 
-    @Redirect(method="renderItemModelTransform", at=@At(
+    @Inject(method="renderItemModelTransform", at=@At(
             value = "INVOKE",
-            target="Lnet/minecraftforge/client/ForgeHooksClient;handleCameraTransforms(" +
-                    "Lnet/minecraft/client/resources/model/IBakedModel;" +
-                    "Lnet/minecraft/client/renderer/block/model/ItemCameraTransforms$TransformType;)" +
-                    "Lnet/minecraft/client/resources/model/IBakedModel;",
-            remap = false)
+            target = "Lnet/minecraft/client/renderer/entity/RenderItem;renderItem(" +
+                    "Lnet/minecraft/item/ItemStack;Lnet/minecraft/client/resources/model/IBakedModel;)V"
+        )
     )
-    public IBakedModel renderItemModelTransform_transform(IBakedModel model, ItemCameraTransforms.TransformType type) {
-        model = ForgeHooksClient.handleCameraTransforms(model, type);
-        if(type == ItemCameraTransforms.TransformType.THIRD_PERSON &&
+    public void renderItemModelForEntity_renderItem(ItemStack stack, IBakedModel model,
+                                    ItemCameraTransforms.TransformType cameraTransformType, CallbackInfo ci) {
+        if(cameraTransformType == ItemCameraTransforms.TransformType.THIRD_PERSON &&
                 lastEntityToRenderFor instanceof EntityPlayer) {
             EntityPlayer p = (EntityPlayer) lastEntityToRenderFor;
             ItemStack heldStack = p.getHeldItem();
@@ -49,7 +47,6 @@ public class MixinRenderItem {
                 AnimationHandler.getInstance().doSwordBlock3rdPersonTransform();
             }
         }
-        return model;
     }
 
 }

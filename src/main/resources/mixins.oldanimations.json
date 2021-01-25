@@ -14,6 +14,7 @@
     "RenderManagerMixin",
     "MixinItemRenderer",
     "ItemFoodAccessor",
-    "MixinRenderItem"
+    "MixinRenderItem",
+    "MixinMinecraft"
   ]
 }
