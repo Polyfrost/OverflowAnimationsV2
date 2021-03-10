@@ -305,7 +305,7 @@ dependencies {
     }
 
     embed("net.modcore:Loader:2.0.0")
-    implementation "net.modcore:ModCore:714-${mcVersion}-SNAPSHOT"
+    implementation "net.modcore:ModCore:776-${mcVersion}-SNAPSHOT"
 
     // FG already adds this even though it is not available at runtime, so we need to manually list it to bundle it
     if (VANILLA) {

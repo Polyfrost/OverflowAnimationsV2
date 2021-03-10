@@ -116,6 +116,10 @@ public class AnimationHandler {
             return false;
         }
 
+        if (stack.getItem() == Items.filled_map || mc.getRenderItem().shouldRenderItemIn3D(stack)) {
+            return false;
+        }
+
         if (stack.getItem() == Items.fishing_rod && !OldAnimationsSettings.oldRod) {
             return false;
         } else if (stack.getItemUseAction() == EnumAction.NONE && !OldAnimationsSettings.oldModel) {
