@@ -13,6 +13,7 @@
     "MixinGuiPlayerTabOverlay",
     "MixinItemRenderer",
     "MixinMinecraft",
+    "MixinOnlineIndicator",
     "MixinRenderItem",
     "ModelBipedMixin",
     "RenderFishMixin",
