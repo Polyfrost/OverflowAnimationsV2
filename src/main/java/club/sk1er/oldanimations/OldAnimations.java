@@ -7,6 +7,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 
 @Mod(modid = OldAnimations.MODID, name = "Sk1er Old Animations", version = OldAnimations.VERSION)
 public class OldAnimations {
@@ -17,11 +18,15 @@ public class OldAnimations {
 
     @EventHandler
     public void init(FMLInitializationEvent event) {
-        EssentialAPI.getCommandRegistry().registerCommand(new OldAnimationsCommand());
         oldAnimationsSettings = new OldAnimationsSettings();
         oldAnimationsSettings.preload();
 
         MinecraftForge.EVENT_BUS.register(AnimationHandler.getInstance());
         MinecraftForge.EVENT_BUS.register(SneakHandler.getInstance());
+    }
+
+    @EventHandler
+    public void postInit(FMLPostInitializationEvent event) {
+        EssentialAPI.getCommandRegistry().registerCommand(new OldAnimationsCommand());
     }
 }

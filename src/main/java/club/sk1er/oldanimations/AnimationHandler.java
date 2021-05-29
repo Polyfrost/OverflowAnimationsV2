@@ -11,6 +11,7 @@ import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.init.Items;
 import net.minecraft.item.EnumAction;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemCloth;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
@@ -20,6 +21,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
+import org.lwjgl.opengl.GL11;
 
 public class AnimationHandler {
 
@@ -77,7 +79,7 @@ public class AnimationHandler {
         if (OldAnimationsSettings.punching && mc.gameSettings.keyBindAttack.isKeyDown() &&
             mc.objectMouseOver != null &&
             mc.objectMouseOver.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK) {
-            if (!this.isSwingInProgress || this.swingProgressInt >= max / 2 || this.swingProgressInt < 0) {
+            if (!this.isSwingInProgress || this.swingProgressInt >= max >> 1 || this.swingProgressInt < 0) {
                 isSwingInProgress = true;
                 swingProgressInt = -1;
             }
@@ -116,20 +118,16 @@ public class AnimationHandler {
             return false;
         }
 
-        if (stack.getItem() == Items.filled_map || mc.getRenderItem().shouldRenderItemIn3D(stack)) {
+        final Item item = stack.getItem();
+        if (item == Items.filled_map || mc.getRenderItem().shouldRenderItemIn3D(stack)) {
             return false;
         }
 
-        if (stack.getItem() == Items.fishing_rod && !OldAnimationsSettings.oldRod) {
-            return false;
-        } else if (stack.getItemUseAction() == EnumAction.NONE && !OldAnimationsSettings.oldModel) {
-            return false;
-        }
-
-        if (stack.getItemUseAction() == EnumAction.BLOCK && !OldAnimationsSettings.oldSwordBlock) {
-            return false;
-        }
-        if (stack.getItemUseAction() == EnumAction.BOW && !OldAnimationsSettings.oldBow) {
+        final EnumAction action = stack.getItemUseAction();
+        if ((item == Items.fishing_rod && !OldAnimationsSettings.oldRod)
+            || (action == EnumAction.NONE && !OldAnimationsSettings.oldModel)
+            || (action == EnumAction.BLOCK && !OldAnimationsSettings.oldSwordBlock)
+            || (action == EnumAction.BOW && !OldAnimationsSettings.oldBow)) {
             return false;
         }
 
@@ -149,9 +147,9 @@ public class AnimationHandler {
 
         GlStateManager.enableRescaleNormal();
 
-        if (stack.getItem() instanceof ItemCloth) {
+        if (item instanceof ItemCloth) {
             GlStateManager.enableBlend();
-            GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
+            GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ZERO);
         }
 
         int i = mc.theWorld.getCombinedLight(new BlockPos(player.posX, player.posY + (double) player.getEyeHeight(), player.posZ), 0);
@@ -159,7 +157,7 @@ public class AnimationHandler {
         float brightnessY = (float) (i >> 16);
         OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, brightnessX, brightnessY);
 
-        int rgb = stack.getItem().getColorFromItemStack(stack, 0);
+        int rgb = item.getColorFromItemStack(stack, 0);
         float red = (float) (rgb >> 16 & 255) / 255.0F;
         float green = (float) (rgb >> 8 & 255) / 255.0F;
         float blue = (float) (rgb & 255) / 255.0F;
@@ -167,19 +165,17 @@ public class AnimationHandler {
 
         GlStateManager.pushMatrix();
 
-        final EnumAction useAction = stack.getItemUseAction();
         final int useCount = player.getItemInUseCount();
         final float swingProgress = getSwingProgress(partialTicks);
 
         boolean blockHitOverride = false;
-        if (OldAnimationsSettings.punching &&
-            useCount <= 0 && mc.gameSettings.keyBindUseItem.isKeyDown()) {
-            boolean block = useAction == EnumAction.BLOCK;
+        if (OldAnimationsSettings.punching && useCount <= 0 && mc.gameSettings.keyBindUseItem.isKeyDown()) {
+            boolean block = action == EnumAction.BLOCK;
             boolean consume = false;
-            if (stack.getItem() instanceof ItemFood) {
-                boolean alwaysEdible = ((ItemFoodAccessor) (stack.getItem())).getAlwaysEdible();
+            if (item instanceof ItemFood) {
+                boolean alwaysEdible = ((ItemFoodAccessor) item).getAlwaysEdible();
                 if (player.canEat(alwaysEdible)) {
-                    consume = useAction == EnumAction.EAT || useAction == EnumAction.DRINK;
+                    consume = action == EnumAction.EAT || action == EnumAction.DRINK;
                 }
             }
 
@@ -188,8 +184,8 @@ public class AnimationHandler {
             }
         }
 
-        if ((useCount > 0 || blockHitOverride) && useAction != EnumAction.NONE) {
-            switch (useAction) {
+        if ((useCount > 0 || blockHitOverride) && action != EnumAction.NONE) {
+            switch (action) {
                 case EAT:
                 case DRINK:
                     doConsumeAnimation(stack, useCount, partialTicks);
@@ -208,7 +204,7 @@ public class AnimationHandler {
             doEquipAndSwingTransform(equipProgress, swingProgress);
         }
 
-        if (stack.getItem().shouldRotateAroundWhenRendering()) {
+        if (item.shouldRotateAroundWhenRendering()) {
             GlStateManager.rotate(180.0F, 0.0F, 1.0F, 0.0F);
         }
 
@@ -220,7 +216,7 @@ public class AnimationHandler {
 
         GlStateManager.popMatrix();
 
-        if (stack.getItem() instanceof ItemCloth) {
+        if (item instanceof ItemCloth) {
             GlStateManager.disableBlend();
         }
 
@@ -271,16 +267,16 @@ public class AnimationHandler {
         GlStateManager.scale(-2, 2, -2);
 
         if (mc.getRenderItem().shouldRenderItemIn3D(stack)) {
-            GlStateManager.scale(1 / 1.7f, 1 / 1.7f, 1 / 1.7f);
+            GlStateManager.scale(0.58823526f, 0.58823526f, 0.58823526f);
             GlStateManager.rotate(-25, 0.0F, 0.0F, 1.0F);
             GlStateManager.rotate(0, 1.0F, 0.0F, 0.0F);
             GlStateManager.rotate(135, 0.0F, 1.0F, 0.0F);
-            GlStateManager.translate(0, -4f * 0.0625F, -2f * 0.0625F);
-            GlStateManager.scale(1 / 2f, 1 / 2f, 1 / 2f);
+            GlStateManager.translate(0, -0.25f, -0.125f);
+            GlStateManager.scale(0.5f, 0.5f, 0.5f);
             return true;
         }
 
-        GlStateManager.scale(1 / 2f, 1 / 2f, 1 / 2f);
+        GlStateManager.scale(0.5f, 0.5f, 0.5f);
         return false;
     }
 
@@ -378,6 +374,4 @@ public class AnimationHandler {
             GlStateManager.rotate(335.0F, 0.0F, 0.0F, 1.0F);
         }
     }
-
-
 }

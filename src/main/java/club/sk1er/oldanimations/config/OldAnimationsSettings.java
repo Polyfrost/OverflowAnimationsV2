@@ -11,35 +11,35 @@ public class OldAnimationsSettings extends Vigilant {
 
     @Property(
         type = PropertyType.SWITCH, name = "1.7 Item Positions",
-        description = "Change all item models to be in the same position as 1.7",
+        description = "Change all item models to be in the same position as 1.7.",
         category = "Animations", subcategory = "Position"
     )
     public static boolean oldModel = true;
 
     @Property(
         type = PropertyType.SWITCH, name = "1.7 Bow Pullback",
-        description = "Change the bow pullback animation to be like 1.7",
+        description = "Change the bow pullback animation to be like 1.7.",
         category = "Animations", subcategory = "Position"
     )
     public static boolean oldBow = true;
 
     @Property(
         type = PropertyType.SWITCH, name = "1.7 Block Animation",
-        description = "Change the sword block animation to be like 1.7",
+        description = "Change the sword block animation to be like 1.7.",
         category = "Animations", subcategory = "Position"
     )
     public static boolean oldSwordBlock = true;
 
     @Property(
         type = PropertyType.SWITCH, name = "1.7 Rod Position",
-        description = "Change the fishing rod model to be in the same position as 1.7",
+        description = "Change the fishing rod model to be in the same position as 1.7.",
         category = "Animations", subcategory = "Position"
     )
     public static boolean oldRod = true;
 
     @Property(
         type = PropertyType.SWITCH, name = "1.7 3rd Person Block Animation",
-        description = "Change the 3rd person blocking animation to be like 1.7",
+        description = "Change the 3rd person blocking animation to be like 1.7.",
         category = "Animations", subcategory = "Position"
     )
     public static boolean oldSwordBlock3 = true;
@@ -53,7 +53,7 @@ public class OldAnimationsSettings extends Vigilant {
 
     @Property(
         type = PropertyType.SWITCH, name = "Consume Animation",
-        description = "Change the eating and drinking animation to look like 1.7",
+        description = "Change the eating and drinking animation to look like 1.7.",
         category = "Animations", subcategory = "Interaction"
     )
     public static boolean oldEating = true;
@@ -74,7 +74,7 @@ public class OldAnimationsSettings extends Vigilant {
 
     @Property(
         type = PropertyType.SWITCH, name = "Smooth Sneaking",
-        description = "Makes the transition between sneaking/not sneaking smooth.\n§eCombine with longer unsneak to match 1.7",
+        description = "Makes the transition between sneaking/not sneaking smooth.\n§eCombine with longer unsneak to match 1.7.",
         category = "Animations", subcategory = "Interaction"
     )
     public static boolean smoothSneaking = true;
@@ -82,7 +82,7 @@ public class OldAnimationsSettings extends Vigilant {
 
     @Property(
         type = PropertyType.SWITCH, name = "Longer Unsneak",
-        description = "Makes moving up take longer than moving down\n§eCombine with smooth sneaking to match 1.7",
+        description = "Makes moving up take longer than moving down\n§eCombine with smooth sneaking to match 1.7.",
         category = "Animations", subcategory = "Interaction"
     )
     public static boolean longSneaking = true;
@@ -103,7 +103,7 @@ public class OldAnimationsSettings extends Vigilant {
 
     @Property(
         type = PropertyType.SWITCH, name = "Item Switching Animation",
-        description = "Stop held items from playing the switching animation when right clicking on blocks",
+        description = "Stop held items from playing the switching animation when right clicking on blocks.",
         category = "Animations", subcategory = "Interaction"
     )
     public static boolean itemSwitch = true;
@@ -124,7 +124,7 @@ public class OldAnimationsSettings extends Vigilant {
 
     @Property(
         type = PropertyType.SWITCH, name = "Tab Overlay",
-        description = "Remove player heads in tab.\n§eCurrently disables rendering of ModCore's Online Indicator while enabled.",
+        description = "Remove player heads in tab.\n§eCurrently disables rendering of Essential's Online Indicator while enabled.",
         category = "Animations", subcategory = "HUD"
     )
     public static boolean oldTab;

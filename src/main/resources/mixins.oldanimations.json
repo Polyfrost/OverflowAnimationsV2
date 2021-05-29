@@ -6,15 +6,16 @@
   "target": "@env(DEFAULT)",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
-    "MixinEntityRenderer",
     "GuiIngameForgeMixin",
+    "ItemFoodAccessor",
     "LayerArmorBaseMixin",
+    "MixinEntityRenderer",
+    "MixinGuiPlayerTabOverlay",
+    "MixinItemRenderer",
+    "MixinMinecraft",
+    "MixinRenderItem",
     "ModelBipedMixin",
     "RenderFishMixin",
-    "RenderManagerMixin",
-    "MixinItemRenderer",
-    "ItemFoodAccessor",
-    "MixinRenderItem",
-    "MixinMinecraft"
+    "RenderManagerMixin"
   ]
 }
