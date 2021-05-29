@@ -8,12 +8,10 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.client.ForgeHooksClient;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(RenderItem.class)
@@ -28,16 +26,15 @@ public class MixinRenderItem {
         lastEntityToRenderFor = entityToRenderFor;
     }
 
-    @Inject(method="renderItemModelTransform", at=@At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/client/renderer/entity/RenderItem;renderItem(" +
-                    "Lnet/minecraft/item/ItemStack;Lnet/minecraft/client/resources/model/IBakedModel;)V"
-        )
+    @Inject(method = "renderItemModelTransform", at = @At(
+        value = "INVOKE",
+        target = "Lnet/minecraft/client/renderer/entity/RenderItem;renderItem(" +
+            "Lnet/minecraft/item/ItemStack;Lnet/minecraft/client/resources/model/IBakedModel;)V")
     )
     public void renderItemModelForEntity_renderItem(ItemStack stack, IBakedModel model,
-                                    ItemCameraTransforms.TransformType cameraTransformType, CallbackInfo ci) {
-        if(cameraTransformType == ItemCameraTransforms.TransformType.THIRD_PERSON &&
-                lastEntityToRenderFor instanceof EntityPlayer) {
+                                                    ItemCameraTransforms.TransformType cameraTransformType, CallbackInfo ci) {
+        if (cameraTransformType == ItemCameraTransforms.TransformType.THIRD_PERSON &&
+            lastEntityToRenderFor instanceof EntityPlayer) {
             EntityPlayer p = (EntityPlayer) lastEntityToRenderFor;
             ItemStack heldStack = p.getHeldItem();
             if (heldStack != null && p.getItemInUseCount() > 0 &&

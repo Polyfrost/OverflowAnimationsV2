@@ -12,32 +12,13 @@ buildscript {
     project.ext.forge = forge
 
     repositories {
-        jcenter()
         mavenCentral()
-        maven {
-            name = "fabric"
-            url = "https://maven.fabricmc.net/"
-        }
-        if (!fabric) {
-            maven {
-                name = "forge"
-                url = "https://files.minecraftforge.net/maven"
-            }
-        }
-        maven {
-            name = "sonatype"
-            url = "https://oss.sonatype.org/content/repositories/snapshots/"
-        }
+        maven { url "https://maven.fabricmc.net/" }
+        if (!fabric) maven { url "https://files.minecraftforge.net/maven" }
+        maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
         maven { url 'https://jitpack.io' }
-        maven {
-            url = "https://repo.sk1er.club/repository/maven-public"
-        }
-        maven {
-            name = 'sponge'
-            url = 'https://repo.spongepowered.org/maven'
-        }
-        flatDir dirs: 'libs'
-
+        maven { url "https://repo.sk1er.club/repository/maven-public" }
+        maven { url 'https://repo.spongepowered.org/maven' }
     }
 
     dependencies {
@@ -51,36 +32,24 @@ buildscript {
         } else if (mcVersion >= 10800) {
             classpath 'org.spongepowered:mixingradle:0.6-SNAPSHOT'
             classpath('com.github.ReplayMod:ForgeGradle:' + (
-                    mcVersion >= 11200 ? '2817481' : // FG 2.3
-                            mcVersion >= 10904 ? '5bb7a53' : // FG 2.2
-                                    'dcfe5a56'   // FG 2.1
+                    mcVersion >= 11200 ? '541e148' : // FG 2.3
+                            mcVersion >= 10904 ? '5c1f53d' : // FG 2.2
+                                    '48c4f0c'   // FG 2.1
             ) + ':all')
         } else {
             classpath 'org.spongepowered:mixingradle:0.6-SNAPSHOT'
-            classpath 'com.github.ReplayMod:ForgeGradle:e93f77b4' // FG 1.2
+            classpath 'com.github.ReplayMod:ForgeGradle:a8a9e0ca' // FG 1.2
         }
     }
 }
-def kotlin_version = "1.3.72"
+
 def useMixin = true
-apply plugin: 'kotlin'
 
 repositories {
     mavenCentral()
-    jcenter()
-    maven {
-        name = "kryonet"
-        url = "http://clojars.org/repo/"
-    }
-    maven {
-        url 'https://repository.apache.org/content/repositories/releases/org/apache/xmlgraphics/'
-    }
     maven { url 'https://jitpack.io' }
     maven { url "https://repo.sk1er.club/repository/maven-public" }
-    maven {
-        name = 'sponge'
-        url = 'https://repo.spongepowered.org/maven'
-    }
+    maven { url 'https://repo.spongepowered.org/maven' }
 }
 def FABRIC = fabric
 def VANILLA = vanilla
@@ -102,7 +71,6 @@ if (mcVersion >= 10800) {
 } else {
     apply plugin: 'forge'
 }
-
 if (!FABRIC && useMixin) {
     ext {
         mixinSrg = new File(project.buildDir, 'tmp/mixins/mixins.srg')
@@ -183,8 +151,6 @@ minecraft {
 
         runDir = "run"
         makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
-        clientJvmArgs += ["-Dfml.coreMods.load=club.sk1er.oldanimations.tweaker.AnimationsTweaker"]
-        clientRunArgs += ["--tweakClass=club.sk1er.oldanimations.loader.AnimationsTweak"]
     }
     if (FG3) {
         mappings channel: 'snapshot', version: '20200220-1.15.1'
@@ -204,7 +170,7 @@ minecraft {
                 property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
 
                 // Recommended logging level for the console
-                property 'forge.logging.console.level', 'info'
+                property 'forge.logging.console.level', 'debug'
 
                 mods {
                     examplemod {
@@ -220,7 +186,7 @@ minecraft {
                 property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
 
                 // Recommended logging level for the console
-                property 'forge.logging.console.level', 'info'
+                property 'forge.logging.console.level', 'debug'
 
                 mods {
                     examplemod {
@@ -236,7 +202,7 @@ minecraft {
                 property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
 
                 // Recommended logging level for the console
-                property 'forge.logging.console.level', 'info'
+                property 'forge.logging.console.level', 'debug'
 
                 args '--mod', 'examplemod', '--all', '--output', file('src/generated/resources/')
 
@@ -304,8 +270,10 @@ dependencies {
         ][mcVersion]
     }
 
-    embed("net.modcore:Loader:2.0.0")
-    implementation "net.modcore:ModCore:776-${mcVersion}-SNAPSHOT"
+    embed("gg.essential:Loader:0.9.8-SNAPSHOT")
+    implementation("gg.essential:Essential:835-${mcVersion}-SNAPSHOT") {
+        exclude module: 'WaifUPnP'
+    }
 
     // FG already adds this even though it is not available at runtime, so we need to manually list it to bundle it
     if (VANILLA) {
@@ -431,19 +399,19 @@ jar {
             from files(project.mixinRefMap.canonicalPath)
         }
 
-        jar {
-            manifest {
-                attributes "TweakClass": "club.sk1er.oldanimations.loader.AnimationsTweak",
-                        "TweakOrder": "0"
-            }
+        manifest {
+            attributes "ModSide": "CLIENT",
+                    "FMLCorePluginContainsFMLMod": "Yes, yes it does",
+                    "TweakClass": "club.sk1er.oldanimations.loader.AnimationsTweak",
+                    "TweakOrder": "0"
         }
     }
 }
 
-/*publishing {
+publishing {
     publications {
         maven(MavenPublication) {
-            artifactId = "Old Animations"
+            artifactId = "OldAnimations"
             version = "${this.properties.getOrDefault("branch", "master") != "master" ? this.properties.getOrDefault("branch", "master") + "-" : ""}${project.version}-$mcVersion${VANILLA ? "-vanilla" : ""}${this.properties.getOrDefault("IS_CI", false) ? "-SNAPSHOT" : ""}"
 
             pom.withXml {
@@ -474,4 +442,4 @@ jar {
             }
         }
     }
-}*/
+}

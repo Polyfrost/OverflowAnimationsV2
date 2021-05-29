@@ -1,9 +1,9 @@
 package club.sk1er.oldanimations.command;
 
 import club.sk1er.oldanimations.OldAnimations;
-import net.modcore.api.commands.Command;
-import net.modcore.api.commands.DefaultHandler;
-import net.modcore.api.utils.GuiUtil;
+import gg.essential.api.commands.Command;
+import gg.essential.api.commands.DefaultHandler;
+import gg.essential.api.utils.GuiUtil;
 
 import java.util.Objects;
 
