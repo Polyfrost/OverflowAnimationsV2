@@ -1,6 +1,6 @@
 package club.sk1er.oldanimations.loader;
 
-import gg.essential.loader.EssentialSetupTweaker;
+import gg.essential.loader.stage0.EssentialSetupTweaker;
 import net.minecraft.launchwrapper.LaunchClassLoader;
 import net.minecraftforge.common.ForgeVersion;
 import net.minecraftforge.fml.relauncher.CoreModManager;
