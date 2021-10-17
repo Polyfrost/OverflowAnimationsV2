@@ -184,7 +184,7 @@ public class AnimationHandler {
             }
         }
 
-        if ((useCount > 0 || blockHitOverride) && action != EnumAction.NONE) {
+        if ((useCount > 0 || blockHitOverride) && action != EnumAction.NONE && mc.thePlayer.isUsingItem()) {
             switch (action) {
                 case EAT:
                 case DRINK:
