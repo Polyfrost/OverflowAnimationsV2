@@ -1,0 +1,27 @@
+{
+  "compatibilityLevel": "JAVA_8",
+  "minVersion": "0.7",
+  "package": "cc.polyfrost.overflowanimations.mixin",
+  "refmap": "mixins.${id}.refmap.json",
+  "verbose": true,
+  "client": [
+    "EntityRendererMixin",
+    "ForgeHooksClientMixin",
+    "GuiIngameForgeMixin",
+    "GuiPlayerTabOverlayMixin",
+    "ItemFoodAccessor",
+    "ItemRendererMixin",
+    "LayerArmorBaseMixin",
+    "ModelBipedMixin",
+    "OnlineIndicatorMixin",
+    "PlayerControllerMPMixin",
+    "RenderEntityItemMixin",
+    "RendererLivingEntityMixin",
+    "RenderFishMixin",
+    "RenderItemAccessor",
+    "RenderItemMixin",
+    "RenderItemMixin_Glint",
+    "RenderManagerMixin",
+    "RenderSnowballMixin"
+  ]
+}

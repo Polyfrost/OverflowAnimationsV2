@@ -1,36 +1,34 @@
 pluginManagement {
     repositories {
-        mavenLocal()
         gradlePluginPortal()
-        jcenter()
         mavenCentral()
-        google()
-        maven("https://jitpack.io")
-        maven("https://maven.fabricmc.net")
-        flatDir {
-                dirs=setOf(file("../../libs"))
-        }
+        maven("https://repo.polyfrost.cc/releases")
+        maven("https://maven.architectury.dev/")
+    }
+    plugins {
+        val egtVersion = "0.1.11"
+        id("gg.essential.multi-version.root") version egtVersion
     }
     resolutionStrategy {
         eachPlugin {
-            when (requested.id.id) {
-                "com.replaymod.preprocess" -> {
-                    useModule("com.github.replaymod:preprocessor:${requested.version}")
-                }
+            if (requested.id.id == "io.github.juuxel.loom-quiltflower-mini") {
+                useModule("com.github.wyvest:loom-quiltflower-mini:${requested.version}")
             }
         }
     }
 }
 
+val mod_name: String by settings
+
+rootProject.name = mod_name
 rootProject.buildFileName = "root.gradle.kts"
 
 listOf(
-    "1.8.9"
+    "1.8.9-forge"
 ).forEach { version ->
     include(":$version")
     project(":$version").apply {
         projectDir = file("versions/$version")
-        buildFileName = "../../build.gradle"
+        buildFileName = "../../build.gradle.kts"
     }
-
 }
