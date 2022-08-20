@@ -1,10 +1,13 @@
 package cc.polyfrost.overflowanimations.mixin;
 
+import cc.polyfrost.overflowanimations.OverflowAnimations;
 import cc.polyfrost.overflowanimations.config.OldAnimationsSettings;
 import cc.polyfrost.overflowanimations.handlers.AnimationHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.renderer.ItemRenderer;
+import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -31,6 +34,16 @@ public class ItemRendererMixin {
     @Shadow
     @Final
     private Minecraft mc;
+
+    @Inject(method = "renderItem", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/entity/RenderItem;renderItemModelForEntity(Lnet/minecraft/item/ItemStack;Lnet/minecraft/entity/EntityLivingBase;Lnet/minecraft/client/renderer/block/model/ItemCameraTransforms$TransformType;)V"))
+    private void setRenderingEntity(EntityLivingBase entityIn, ItemStack heldStack, ItemCameraTransforms.TransformType transform, CallbackInfo ci) {
+        OverflowAnimations.renderingEntity = entityIn;
+    }
+
+    @Inject(method = "renderItem", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/entity/RenderItem;renderItemModelForEntity(Lnet/minecraft/item/ItemStack;Lnet/minecraft/entity/EntityLivingBase;Lnet/minecraft/client/renderer/block/model/ItemCameraTransforms$TransformType;)V", shift = At.Shift.AFTER))
+    private void unsetRenderingEntity(EntityLivingBase entityIn, ItemStack heldStack, ItemCameraTransforms.TransformType transform, CallbackInfo ci) {
+        OverflowAnimations.renderingEntity = null;
+    }
 
     @Inject(method = "renderItemInFirstPerson", at = @At("HEAD"), cancellable = true)
     public void renderItemInFirstPerson(float partialTicks, CallbackInfo ci) {

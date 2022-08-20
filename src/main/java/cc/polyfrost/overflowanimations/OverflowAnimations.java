@@ -5,6 +5,7 @@ import cc.polyfrost.overflowanimations.command.OldAnimationsCommand;
 import cc.polyfrost.overflowanimations.config.OldAnimationsSettings;
 import cc.polyfrost.overflowanimations.handlers.AnimationHandler;
 import cc.polyfrost.overflowanimations.handlers.SneakHandler;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
@@ -21,6 +22,7 @@ public class OverflowAnimations {
     public static OldAnimationsSettings oldAnimationsSettings;
 
     public static ItemStack renderingStack;
+    public static EntityLivingBase renderingEntity;
 
     @EventHandler
     public void init(FMLInitializationEvent event) {

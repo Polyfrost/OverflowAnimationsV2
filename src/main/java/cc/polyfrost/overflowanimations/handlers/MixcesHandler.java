@@ -7,6 +7,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemBow;
 import net.minecraft.item.ItemSkull;
@@ -18,7 +19,7 @@ public class MixcesHandler {
             ItemStack stack = OverflowAnimations.renderingStack;
             final EntityPlayerSP player = Minecraft.getMinecraft().thePlayer;
             if (stack != null) {
-                if (type == ItemCameraTransforms.TransformType.THIRD_PERSON) {
+                if (type == ItemCameraTransforms.TransformType.THIRD_PERSON && OverflowAnimations.renderingEntity instanceof EntityPlayer) {
                     if (stack.getItem() instanceof ItemBlock) {
                         Block block = ((ItemBlock) stack.getItem()).getBlock();
                         if (block instanceof BlockCarpet || block instanceof BlockSnow) {
