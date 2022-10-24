@@ -15,7 +15,6 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 
 @Mod(modid = OverflowAnimations.MODID, name = OverflowAnimations.NAME, version = OverflowAnimations.VERSION)
 public class OverflowAnimations {
-
     public static final String MODID = "@ID@";
     public static final String NAME = "@NAME@";
     public static final String VERSION = "@VER@";
@@ -34,6 +33,6 @@ public class OverflowAnimations {
 
     @EventHandler
     public void postInit(FMLPostInitializationEvent event) {
-        CommandManager.INSTANCE.registerCommand(OldAnimationsCommand.class);
+        CommandManager.INSTANCE.registerCommand(new OldAnimationsCommand());
     }
 }

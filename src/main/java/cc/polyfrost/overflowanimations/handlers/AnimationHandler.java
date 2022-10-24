@@ -102,11 +102,12 @@ public class AnimationHandler {
     }
 
     /**
-     * Renders an item from the first person perspective
+     * Renders an item from the first-person perspective
      * The following code has been taken from 1.7 and heavily modified to be readable
      *
      * @return whether to cancel default item rendering
      */
+    @SuppressWarnings("deprecation")
     public boolean renderItemInFirstPerson(ItemRenderer renderer, ItemStack stack, float equipProgress, float partialTicks) {
         if (stack == null) {
             //Let the ItemRenderer render the player hand, we don't need to change it at all

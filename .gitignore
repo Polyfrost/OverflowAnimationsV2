@@ -1,3 +1,9 @@
+# vscode
+.vscode
+
+# fleet
+.fleet
+
 # eclipse
 eclipse
 bin

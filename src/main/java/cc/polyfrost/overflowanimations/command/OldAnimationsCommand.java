@@ -6,9 +6,8 @@ import cc.polyfrost.overflowanimations.OverflowAnimations;
 
 @Command(value = "overflowanimations", aliases = {"oam", "oldanimations"}, description = "Overflow Animations")
 public class OldAnimationsCommand {
-
     @Main
-    public static void handle() {
+    public void handle() {
         OverflowAnimations.oldAnimationsSettings.openGui();
     }
 }
