@@ -1,37 +1,25 @@
 package cc.polyfrost.overflowanimations.handlers;
 
-import cc.polyfrost.oneconfigwrapper.OneConfigWrapper;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.stream.MalformedJsonException;
+import net.minecraft.launchwrapper.ITweaker;
 import net.minecraft.launchwrapper.Launch;
-import net.minecraft.launchwrapper.LaunchClassLoader;
+import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
 
 import javax.swing.*;
 import java.io.File;
 import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.util.List;
+import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
-public class ModDetectorOneConfigTweaker extends OneConfigWrapper {
-    private final boolean alreadyLoaded;
-    public ModDetectorOneConfigTweaker() {
-        super();
-        boolean someWeirdThingForJava = false;
-        try {
-            Class.forName("cc.polyfrost.oneconfigloader.OneConfigLoader");
-            someWeirdThingForJava = true;
-        } catch (Exception ignored) {
-        }
-        alreadyLoaded = someWeirdThingForJava;
-    }
+public class ModDetectorPlugin implements IFMLLoadingPlugin {
 
-    @Override
-    public void acceptOptions(List<String> args, File gameDir, File assetsDir, String profile) {
+    public ModDetectorPlugin() {
         try {
-            Class.forName("club.sk1er.oldanimations.loader.AnimationsTweak");
             File modsFolder = new File(Launch.minecraftHome, "mods");
             File[] modFolder = modsFolder.listFiles((dir, name) -> name.endsWith(".jar"));
             if (modFolder != null) {
@@ -51,9 +39,7 @@ public class ModDetectorOneConfigTweaker extends OneConfigWrapper {
                                     }
 
                                     String modid = modInfo.get("modid").getAsString();
-                                    if (!modid.equals("sk1er_old_animations")) {
-                                        continue;
-                                    } else {
+                                    if (modid.equals("sk1er_old_animations")) {
                                         oldFile = file;
                                         break;
                                     }
@@ -84,7 +70,35 @@ public class ModDetectorOneConfigTweaker extends OneConfigWrapper {
                                 frame,
                                 "You have both Sk1er Old Animations and Overflow Animations installed.\n" +
                                         "Please remove Sk1er Old Animations from your mod folder, as OverflowAnimations replaces it.\n" +
-                                "It is in " + oldFile.getAbsolutePath(),
+                                        "It is in " + oldFile.getAbsolutePath(),
+                                "Sk1er Old Animations detected!", JOptionPane.ERROR_MESSAGE
+                        );
+                        try {
+                            Method exit = Class.forName("java.lang.Shutdown").getDeclaredMethod("exit", int.class);
+                            exit.setAccessible(true);
+                            exit.invoke(null, 1);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            System.exit(1);
+                        }
+                    } else {
+                        try {
+                            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+                        final JFrame frame = new JFrame();
+                        frame.setUndecorated(true);
+                        frame.setAlwaysOnTop(true);
+                        frame.setLocationRelativeTo(null);
+                        frame.setVisible(true);
+
+                        JOptionPane.showMessageDialog(
+                                frame,
+                                "You had both Sk1er Old Animations and Overflow Animations installed, so Overflow Animations removed Sk1er OAM.\n" +
+                                        "This is because OverflowAnimations replaces it.\n" +
+                                "Close this and restart your game.",
                                 "Sk1er Old Animations detected!", JOptionPane.ERROR_MESSAGE
                         );
                         try {
@@ -100,19 +114,32 @@ public class ModDetectorOneConfigTweaker extends OneConfigWrapper {
             }
 
         } catch (Exception ignored) {
-            // we fine
+
         }
-        if (alreadyLoaded) {
-            return;
-        }
-        super.acceptOptions(args, gameDir, assetsDir, profile);
     }
 
     @Override
-    public void injectIntoClassLoader(LaunchClassLoader classLoader) {
-        if (alreadyLoaded) {
-            return;
-        }
-        super.injectIntoClassLoader(classLoader);
+    public String[] getASMTransformerClass() {
+        return new String[0];
+    }
+
+    @Override
+    public String getModContainerClass() {
+        return null;
+    }
+
+    @Override
+    public String getSetupClass() {
+        return null;
+    }
+
+    @Override
+    public void injectData(Map<String, Object> map) {
+
+    }
+
+    @Override
+    public String getAccessTransformerClass() {
+        return null;
     }
 }
