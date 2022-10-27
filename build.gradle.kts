@@ -36,7 +36,7 @@ loom {
     noServerRunConfigs()
     if (project.platform.isLegacyForge) {
         launchConfigs.named("client") {
-            arg("--tweakClass", "cc.polyfrost.oneconfigwrapper.OneConfigWrapper")
+            arg("--tweakClass", "cc.polyfrost.overflowanimations.handlers.ModDetectorOneConfigTweaker")
             property("mixin.debug.export", "true")
         }
     }
@@ -148,7 +148,7 @@ tasks {
                     "ForceLoadAsMod" to true,
                     "TweakOrder" to "0",
                     "MixinConfigs" to "mixins.${mod_id}.json",
-                    "TweakClass" to "cc.polyfrost.oneconfigwrapper.OneConfigWrapper"
+                    "TweakClass" to "cc.polyfrost.overflowanimations.handlers.ModDetectorOneConfigTweaker"
                 )
             )
         }
