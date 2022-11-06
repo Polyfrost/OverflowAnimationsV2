@@ -71,12 +71,13 @@ public class AnimationHandler {
         prevSwingProgress = swingProgress;
 
         int max = getArmSwingAnimationEnd(player);
-        if (this.swingProgressInt >= max) {
+        if (this.swingProgressInt >= max || !mc.gameSettings.keyBindUseItem.isKeyDown()) {
             this.swingProgressInt = 0;
             this.isSwingInProgress = false;
         }
 
         if (OldAnimationsSettings.punching && mc.gameSettings.keyBindAttack.isKeyDown() &&
+                mc.gameSettings.keyBindUseItem.isKeyDown() &&
                 mc.objectMouseOver != null &&
                 mc.objectMouseOver.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK) {
             if (!this.isSwingInProgress || this.swingProgressInt >= max >> 1 || this.swingProgressInt < 0) {

@@ -23,18 +23,6 @@ public class GlintHandler {
         Minecraft.getMinecraft().renderEngine.bindTexture(RES_ITEM_GLINT);
         GlStateManager.matrixMode(5890);
 
-        // first
-            /*?
-            GlStateManager.pushMatrix();
-            GlStateManager.scale(8.0, 8.0, 8.0);
-            GlStateManager.translate((Minecraft.getSystemTime() % 3000L) / 3000.0F / 8.0F, 0.0F, 0.0F);
-            GlStateManager.rotate(-50.0F, 0.0F, 0.0F, 1.0F);
-            ((RenderItemAccessor) instance).invokeRenderModel(model, -8372020);
-            GlStateManager.popMatrix();
-             */
-
-
-        // second
         GlStateManager.pushMatrix();
         GlStateManager.scale(8.0, 8.0, 8.0);
         GlStateManager.translate((Minecraft.getSystemTime() % 4873L) / 4873.0F / 8.0F, 0.0F, 0.0F);

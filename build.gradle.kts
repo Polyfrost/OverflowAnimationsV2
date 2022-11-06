@@ -40,6 +40,9 @@ loom {
             property("fml.coreMods.load", "cc.polyfrost.overflowanimations.handlers.ModDetectorPlugin")
             property("mixin.debug.export", "true")
         }
+        runConfigs.named("client") {
+            vmArgs.remove("-XstartOnFirstThread")
+        }
     }
     if (project.platform.isForge) {
         forge {
