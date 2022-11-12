@@ -12,6 +12,10 @@ public class GuiPlayerTabOverlayMixin {
 
     @ModifyVariable(method = "renderPlayerlist", at = @At("STORE"), index = 11)
     private boolean checkTabSetting(boolean original) {
-        return !OverflowAnimations.oldAnimationsSettings.enabled && !OldAnimationsSettings.oldTab && original;
+        if (!OverflowAnimations.oldAnimationsSettings.enabled) {
+            return original;
+        }
+
+        return !OldAnimationsSettings.oldTab && original;
     }
 }
