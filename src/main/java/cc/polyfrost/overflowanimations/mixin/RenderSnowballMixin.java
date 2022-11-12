@@ -1,5 +1,6 @@
 package cc.polyfrost.overflowanimations.mixin;
 
+import cc.polyfrost.overflowanimations.OverflowAnimations;
 import cc.polyfrost.overflowanimations.config.OldAnimationsSettings;
 import cc.polyfrost.overflowanimations.handlers.MicroSpriteHandler;
 import net.minecraft.client.renderer.GlStateManager;
@@ -25,19 +26,19 @@ public abstract class RenderSnowballMixin<T extends Entity> extends Render<T> {
 
     @ModifyArg(method = "doRender", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GlStateManager;rotate(FFFF)V", ordinal = 1), index = 0)
     private float fixRotation(float angle) {
-        return (renderManager.options.thirdPersonView == 2 && OldAnimationsSettings.oldProjectiles ? -1F : 1F) * angle;
+        return (renderManager.options.thirdPersonView == 2 && OldAnimationsSettings.oldProjectiles && OverflowAnimations.oldAnimationsSettings.enabled ? -1F : 1F) * angle;
     }
 
     @Inject(method = "doRender", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GlStateManager;rotate(FFFF)V", ordinal = 1, shift = At.Shift.AFTER))
     private void flipProjectile(T entity, double x, double y, double z, float entityYaw, float partialTicks, CallbackInfo ci) {
-        if (OldAnimationsSettings.oldProjectiles) {
+        if (OldAnimationsSettings.oldProjectiles && OverflowAnimations.oldAnimationsSettings.enabled) {
             GlStateManager.translate(-0.07, 0.47, 0.1);
         }
     }
 
     @Redirect(method = "doRender", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/entity/RenderItem;renderItem(Lnet/minecraft/item/ItemStack;Lnet/minecraft/client/renderer/block/model/ItemCameraTransforms$TransformType;)V"))
     public void changeToSprite(RenderItem instance, ItemStack item, ItemCameraTransforms.TransformType type) {
-        if (OldAnimationsSettings.oldProjectiles && OldAnimationsSettings.projectileSprites) {
+        if (OldAnimationsSettings.oldProjectiles && OldAnimationsSettings.projectileSprites && OverflowAnimations.oldAnimationsSettings.enabled) {
             MicroSpriteHandler.oldProjectileRender(instance, item);
         } else {
             instance.renderItem(item, type);

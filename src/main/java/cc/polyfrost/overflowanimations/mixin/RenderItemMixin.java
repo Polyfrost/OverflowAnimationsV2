@@ -39,7 +39,7 @@ public class RenderItemMixin {
     public void renderItemModelForEntity_renderItem(ItemStack stack, IBakedModel model,
                                                     ItemCameraTransforms.TransformType cameraTransformType, CallbackInfo ci) {
         if (cameraTransformType == ItemCameraTransforms.TransformType.THIRD_PERSON &&
-                lastEntityToRenderFor instanceof EntityPlayer) {
+                lastEntityToRenderFor instanceof EntityPlayer && OverflowAnimations.oldAnimationsSettings.enabled) {
             EntityPlayer p = (EntityPlayer) lastEntityToRenderFor;
             ItemStack heldStack = p.getHeldItem();
             if (heldStack != null && p.getItemInUseCount() > 0 &&
@@ -53,7 +53,7 @@ public class RenderItemMixin {
     private void setRenderingStack(ItemStack stack, IBakedModel model, ItemCameraTransforms.TransformType cameraTransformType, CallbackInfo ci) {
         if (cameraTransformType == ItemCameraTransforms.TransformType.THIRD_PERSON) {
             OverflowAnimations.renderingStack = stack;
-        } else if (OldAnimationsSettings.mixcesAnimations && stack.getItem() != null && !model.isBuiltInRenderer()) {
+        } else if (OldAnimationsSettings.mixcesFirstPersonAnimations && OldAnimationsSettings.itemTransformations && stack.getItem() != null && !model.isBuiltInRenderer() && OverflowAnimations.oldAnimationsSettings.enabled) {
             GlStateManager.translate(-0.01, 0.002, 0.0005);
             GlStateManager.rotate(0, 0, 1, 0);
             GlStateManager.rotate(0, 1, 0, 0);

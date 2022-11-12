@@ -6,7 +6,7 @@ import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
-public class SneakHandler {
+public class SneakHandler { 
 
     private static final float START_HEIGHT = 1.62f;
     private static final float END_HEIGHT = 1.54f;

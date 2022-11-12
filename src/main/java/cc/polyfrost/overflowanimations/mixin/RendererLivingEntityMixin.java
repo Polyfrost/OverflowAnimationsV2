@@ -1,5 +1,6 @@
 package cc.polyfrost.overflowanimations.mixin;
 
+import cc.polyfrost.overflowanimations.OverflowAnimations;
 import cc.polyfrost.overflowanimations.config.OldAnimationsSettings;
 import cc.polyfrost.overflowanimations.handlers.AnimationHandler;
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -19,7 +20,7 @@ public abstract class RendererLivingEntityMixin<T extends EntityLivingBase> {
 
     @Redirect(method = "doRender(Lnet/minecraft/entity/EntityLivingBase;DDDFF)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/entity/RendererLivingEntity;getSwingProgress(Lnet/minecraft/entity/EntityLivingBase;F)F"))
     private float redirectSwing(RendererLivingEntity<T> instance, T livingBase, float partialTickTime) {
-        if (OldAnimationsSettings.oldSwordBlock3 && livingBase instanceof EntityPlayerSP) {
+        if (OldAnimationsSettings.oldSwordBlock3 && livingBase instanceof EntityPlayerSP && OverflowAnimations.oldAnimationsSettings.enabled) {
             final ItemStack stack = ((EntityPlayerSP) livingBase).getItemInUse();
             if (stack != null && stack.getItemUseAction() != EnumAction.NONE) {
                 return AnimationHandler.getInstance().getSwingProgress(partialTickTime);

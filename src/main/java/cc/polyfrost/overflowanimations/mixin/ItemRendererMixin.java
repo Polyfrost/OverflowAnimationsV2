@@ -47,7 +47,7 @@ public class ItemRendererMixin {
 
     @Inject(method = "renderItemInFirstPerson", at = @At("HEAD"), cancellable = true)
     public void renderItemInFirstPerson(float partialTicks, CallbackInfo ci) {
-        if (itemToRender != null) {
+        if (itemToRender != null && OverflowAnimations.oldAnimationsSettings.enabled) {
             ItemRenderer $this = (ItemRenderer) (Object) this;
             float equipProgress = prevEquippedProgress + (equippedProgress - prevEquippedProgress) * partialTicks;
             if (AnimationHandler.getInstance().renderItemInFirstPerson($this, itemToRender, equipProgress, partialTicks)) {
@@ -58,7 +58,7 @@ public class ItemRendererMixin {
 
     @Inject(method = "updateEquippedItem", at = @At("HEAD"), cancellable = true)
     private void handleItemSwitch(CallbackInfo ci) {
-        if (OldAnimationsSettings.itemSwitch) {
+        if (OldAnimationsSettings.itemSwitch && OverflowAnimations.oldAnimationsSettings.enabled) {
             ci.cancel();
             prevEquippedProgress = equippedProgress;
             EntityPlayerSP player = mc.thePlayer;

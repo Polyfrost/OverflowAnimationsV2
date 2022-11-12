@@ -1,5 +1,6 @@
 package cc.polyfrost.overflowanimations.handlers;
 
+import cc.polyfrost.overflowanimations.OverflowAnimations;
 import cc.polyfrost.overflowanimations.config.OldAnimationsSettings;
 import cc.polyfrost.overflowanimations.mixin.RenderItemAccessor;
 import net.minecraft.client.Minecraft;
@@ -13,7 +14,7 @@ public class GlintHandler {
     private static final ResourceLocation RES_ITEM_GLINT = new ResourceLocation("textures/misc/enchanted_item_glint.png");
 
     public static boolean renderGlint(RenderItem instance, IBakedModel model) {
-        if (!OldAnimationsSettings.enchantmentGlint) {
+        if (!OldAnimationsSettings.enchantmentGlint || !OverflowAnimations.oldAnimationsSettings.enabled) {
             return false;
         }
         GlStateManager.depthMask(false);

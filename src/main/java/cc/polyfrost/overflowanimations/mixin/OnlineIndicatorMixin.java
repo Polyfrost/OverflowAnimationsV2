@@ -1,5 +1,6 @@
 package cc.polyfrost.overflowanimations.mixin;
 
+import cc.polyfrost.overflowanimations.OverflowAnimations;
 import cc.polyfrost.overflowanimations.config.OldAnimationsSettings;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Pseudo;
@@ -13,6 +14,6 @@ public class OnlineIndicatorMixin {
     @SuppressWarnings("UnresolvedMixinReference")
     @Inject(method = "drawTabIndicator", at = @At("HEAD"), cancellable = true, remap = false)
     private static void removeTabIndicator(CallbackInfo ci) {
-        if (OldAnimationsSettings.oldTab) ci.cancel();
+        if (OldAnimationsSettings.oldTab && OverflowAnimations.oldAnimationsSettings.enabled) ci.cancel();
     }
 }

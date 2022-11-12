@@ -56,8 +56,17 @@ public class OldAnimationsSettings extends Config {
     @VigilanceName(name = "oldSwordBlock3", category = "Animations", subcategory = "Position")
     public static boolean oldSwordBlock3 = true;
 
+    @Switch(name = "1.7 Item Transformations", description = "Whether to apply 1.7 item transformations. Turn off to use resource packs that modify item transformations.", subcategory = "Position")
+    public static boolean itemTransformations = true;
+
     @Switch(
-            name = "1.7 Mixces Item / Block Hand Positions",
+            name = "1.7 Mixces First Person Item / Block Hand Positions",
+            subcategory = "Position"
+    )
+    public static boolean mixcesFirstPersonAnimations = true;
+
+    @Switch(
+            name = "1.7 Mixces Third Person Item / Block Hand Positions",
             subcategory = "Position"
     )
     public static boolean mixcesAnimations = true;
@@ -139,5 +148,6 @@ public class OldAnimationsSettings extends Config {
         addDependency("firstPersonCarpetPosition", "mixcesAnimations");
         addDependency("itemSprites", "items2D");
         addDependency("projectileSprites", "oldProjectiles");
+        addDependency("mixcesFirstPersonAnimations", "itemTransformations");
     }
 }

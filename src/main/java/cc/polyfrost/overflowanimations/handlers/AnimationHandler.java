@@ -206,7 +206,7 @@ public class AnimationHandler {
         }
 
         OverflowAnimations.renderingStack = stack;
-        if (doFirstPersonTransform(stack)) {
+        if (!OldAnimationsSettings.itemTransformations || doFirstPersonTransform(stack)) {
             renderer.renderItem(player, stack, ItemCameraTransforms.TransformType.FIRST_PERSON);
         } else {
             renderer.renderItem(player, stack, ItemCameraTransforms.TransformType.NONE);
@@ -245,7 +245,7 @@ public class AnimationHandler {
     /**
      * Transforms the item to make it look like the player is holding it in first person,
      * replicating the 1.7 positioning
-     * (This was a ****** nightmare to put together)
+     * (This was a nightmare to put together)
      *
      * @return Whether to perform the 1.8 First Person transform as well
      */
@@ -285,6 +285,7 @@ public class AnimationHandler {
         }
 
         GlStateManager.scale(0.5f, 0.5f, 0.5f);
+
         return false;
     }
 

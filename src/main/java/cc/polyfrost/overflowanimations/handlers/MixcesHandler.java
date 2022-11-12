@@ -15,7 +15,7 @@ import net.minecraft.item.ItemStack;
 
 public class MixcesHandler {
     public static void applyMixcesTransformations(ItemCameraTransforms.TransformType type) {
-        if (OldAnimationsSettings.mixcesAnimations) {
+        if (OldAnimationsSettings.mixcesAnimations && OverflowAnimations.oldAnimationsSettings.enabled) {
             ItemStack stack = OverflowAnimations.renderingStack;
             final EntityPlayerSP player = Minecraft.getMinecraft().thePlayer;
             if (stack != null) {

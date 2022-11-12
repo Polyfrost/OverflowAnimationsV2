@@ -1,5 +1,6 @@
 package cc.polyfrost.overflowanimations.mixin;
 
+import cc.polyfrost.overflowanimations.OverflowAnimations;
 import cc.polyfrost.overflowanimations.config.OldAnimationsSettings;
 import net.minecraft.client.gui.GuiPlayerTabOverlay;
 import org.spongepowered.asm.mixin.Mixin;
@@ -11,6 +12,6 @@ public class GuiPlayerTabOverlayMixin {
 
     @ModifyVariable(method = "renderPlayerlist", at = @At("STORE"), index = 11)
     private boolean checkTabSetting(boolean original) {
-        return !OldAnimationsSettings.oldTab && original;
+        return !OverflowAnimations.oldAnimationsSettings.enabled && !OldAnimationsSettings.oldTab && original;
     }
 }

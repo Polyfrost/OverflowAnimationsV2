@@ -1,5 +1,6 @@
 package cc.polyfrost.overflowanimations.mixin;
 
+import cc.polyfrost.overflowanimations.OverflowAnimations;
 import cc.polyfrost.overflowanimations.handlers.SneakHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.EntityRenderer;
@@ -28,13 +29,13 @@ public class EntityRendererMixin {
 
     @ModifyVariable(method = "orientCamera", at = @At(value = "STORE", ordinal = 0), ordinal = 1)
     public float modifyEyeHeight_orientCamera(float eyeHeight) {
-        if (mc.getRenderViewEntity() != mc.thePlayer) return eyeHeight;
+        if (mc.getRenderViewEntity() != mc.thePlayer || !OverflowAnimations.oldAnimationsSettings.enabled) return eyeHeight;
         return SneakHandler.getInstance().getEyeHeight(partialTicks);
     }
 
     @Redirect(method = "renderWorldDirections", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;getEyeHeight()F"))
     public float modifyEyeHeight_renderWorldDirections(Entity entity) {
-        if (mc.getRenderViewEntity() != mc.thePlayer) return entity.getEyeHeight();
+        if (mc.getRenderViewEntity() != mc.thePlayer || !OverflowAnimations.oldAnimationsSettings.enabled) return entity.getEyeHeight();
         return SneakHandler.getInstance().getEyeHeight(partialTicks);
     }
 
