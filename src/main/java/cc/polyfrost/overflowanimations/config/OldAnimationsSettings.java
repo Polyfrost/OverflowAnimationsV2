@@ -13,19 +13,25 @@ import cc.polyfrost.overflowanimations.OverflowAnimations;
 public class OldAnimationsSettings extends Config {
 
     @Switch(
-            name = "2D Items",
+            name = "1.7 2D Items",
             subcategory = "2D Items"
     )
     public static boolean items2D = false;
 
     @Checkbox(
-            name = "Microextent 2D Sprites",
+            name = "1.7 Microextent 2D Sprites",
             subcategory = "2D Items"
     )
     public static boolean itemSprites = true;
 
+    @Checkbox(
+            name = "1.7 Microextent Projectile Sprites",
+            subcategory = "2D Items"
+    )
+    public static boolean projectileSprites = true;
+
     @Switch(
-            name = "Cleaner Enchantment Glint",
+            name = "1.7 Enchantment Glint",
             subcategory = "Enchantment Glint"
     )
     public static boolean enchantmentGlint = true;
@@ -83,46 +89,38 @@ public class OldAnimationsSettings extends Config {
     )
     public static boolean oldProjectiles = true;
 
-    @Checkbox(
-            name = "Microextent Projectile Sprites",
-            subcategory = "Position"
-    )
-    public static boolean projectileSprites = true;
-
-    /*@Switch
-
-    me = "Item Holding Position",
-      ,
-        subcategory = "Position"
-    )
-    public static boolean oldItemHeld = true;*/
-
-    @Switch(name = "Consume Animation", subcategory = "Interaction")
+    @Switch(name = "1.7 Consume Animation", subcategory = "Interaction")
     @VigilanceName(name = "oldEating", category = "Animations", subcategory = "Interaction")
     public static boolean oldEating = true;
 
-    @Switch(name = "Block-Hitting Animation", subcategory = "Interaction")
+    @Switch(name = "1.7 Block-Hitting Animation", subcategory = "Interaction")
     @VigilanceName(name = "oldBlockhitting", category = "Animations", subcategory = "Interaction")
     public static boolean oldBlockhitting = true;
 
-    @Switch(name = "Smooth Sneaking", subcategory = "Interaction")
+    @Switch(name = "1.7 Smoother Sneaking", subcategory = "Interaction")
     @VigilanceName(name = "smoothSneaking", category = "Animations", subcategory = "Interaction")
     public static boolean smoothSneaking = true;
 
 
-    @Switch(name = "Longer Unsneak", subcategory = "Interaction")
+    @Switch(name = "1.7 Longer Unsneak", subcategory = "Interaction")
     @VigilanceName(name = "longSneaking", category = "Animations", subcategory = "Interaction")
     public static boolean longSneaking = true;
 
-    @Switch(name = "Red Armor", subcategory = "Interaction")
+    @Switch(name = "1.7 Red Armor Tint", subcategory = "Interaction")
     @VigilanceName(name = "redArmor", category = "Animations", subcategory = "Interaction")
     public static boolean redArmor = true;
 
-    @Switch(name = "Punching During Usage", subcategory = "Interaction")
+    @Switch(name = "1.7 Punching During Usage", subcategory = "Interaction")
     @VigilanceName(name = "punching", category = "Animations", subcategory = "Interaction")
     public static boolean punching = true;
 
-    @Switch(name = "Item Switching Animation", subcategory = "Interaction")
+    @Checkbox(
+            name = "1.7 Punching During Usage Particles", description = "Spawns Particles whilst Punching During Usage",
+            subcategory = "Interaction"
+    )
+    public static boolean punchingParticles = true;
+
+    @Switch(name = "1.7 Item Switching Animation", subcategory = "Interaction")
     @VigilanceName(name = "itemSwitch", category = "Animations", subcategory = "Interaction")
     public static boolean itemSwitch = true;
 
@@ -130,15 +128,15 @@ public class OldAnimationsSettings extends Config {
     @VigilanceName(name = "oldHealth", category = "Animations", subcategory = "HUD")
     public static boolean oldHealth = true;
 
-    @Switch(name = "Debug Screen", subcategory = "HUD")
+    @Switch(name = "Remove Debug Screen Background", subcategory = "HUD")
     @VigilanceName(name = "oldDebugScreen", category = "Animations", subcategory = "HUD")
     public static boolean oldDebugScreen = true;
 
-    @Switch(name = "Tab Overlay", subcategory = "HUD")
+    @Switch(name = "Remove Tab Menu Heads", subcategory = "HUD")
     @VigilanceName(name = "oldTab", category = "Animations", subcategory = "HUD")
     public static boolean oldTab;
 
-    @Switch(name = "Debug Hitbox", subcategory = "World")
+    @Switch(name = "Remove Debug Hitbox Line", subcategory = "World")
     @VigilanceName(name = "oldDebugHitbox", category = "Animations", subcategory = "World")
     public static boolean oldDebugHitbox = true;
 
@@ -149,5 +147,7 @@ public class OldAnimationsSettings extends Config {
         addDependency("itemSprites", "items2D");
         addDependency("projectileSprites", "oldProjectiles");
         addDependency("mixcesFirstPersonAnimations", "itemTransformations");
+        addDependency("oldRod", "itemTransformations");
+        addDependency("punchingParticles", "punching");
     }
 }

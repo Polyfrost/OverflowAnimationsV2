@@ -77,9 +77,13 @@ public class AnimationHandler {
         }
 
         if (OldAnimationsSettings.punching && mc.gameSettings.keyBindAttack.isKeyDown() &&
+                player.capabilities.allowEdit &&
                 mc.gameSettings.keyBindUseItem.isKeyDown() &&
                 mc.objectMouseOver != null &&
                 mc.objectMouseOver.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK) {
+            if (OldAnimationsSettings.punchingParticles) {
+                mc.effectRenderer.addBlockHitEffects(mc.objectMouseOver.getBlockPos(), mc.objectMouseOver.sideHit);
+            }
             if (!this.isSwingInProgress || this.swingProgressInt >= max >> 1 || this.swingProgressInt < 0) {
                 isSwingInProgress = true;
                 swingProgressInt = -1;
