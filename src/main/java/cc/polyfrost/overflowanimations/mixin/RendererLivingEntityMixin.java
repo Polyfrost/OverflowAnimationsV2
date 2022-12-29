@@ -1,12 +1,13 @@
 package cc.polyfrost.overflowanimations.mixin;
 
-import cc.polyfrost.overflowanimations.OverflowAnimations;
 import cc.polyfrost.overflowanimations.config.OldAnimationsSettings;
 import cc.polyfrost.overflowanimations.handlers.AnimationHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.renderer.entity.RendererLivingEntity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.item.EnumAction;
+import net.minecraft.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -20,10 +21,12 @@ public abstract class RendererLivingEntityMixin<T extends EntityLivingBase> {
     @Redirect(method = "doRender(Lnet/minecraft/entity/EntityLivingBase;DDDFF)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/entity/RendererLivingEntity;getSwingProgress(Lnet/minecraft/entity/EntityLivingBase;F)F"))
     private float redirectSwing(RendererLivingEntity<T> instance, T livingBase, float partialTickTime) {
         final EntityPlayerSP player = Minecraft.getMinecraft().thePlayer;
-        if (OldAnimationsSettings.oldSwordBlock3 && player.capabilities.allowEdit && OverflowAnimations.oldAnimationsSettings.enabled) {
-            return AnimationHandler.getInstance().getSwingProgress(partialTickTime);
-        } else {
-            return getSwingProgress(livingBase, partialTickTime);
+        if (OldAnimationsSettings.oldSwordBlock3 && livingBase instanceof EntityPlayerSP && (player.capabilities.allowEdit || !OldAnimationsSettings.adventurePunching)) {
+            final ItemStack stack = ((EntityPlayerSP) livingBase).getItemInUse();
+            if (stack != null && stack.getItemUseAction() != EnumAction.NONE) {
+                return AnimationHandler.getInstance().getSwingProgress(partialTickTime);
+            }
         }
+        return getSwingProgress(livingBase, partialTickTime);
     }
 }
