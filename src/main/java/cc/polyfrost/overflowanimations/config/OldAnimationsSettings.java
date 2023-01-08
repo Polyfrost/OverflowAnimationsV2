@@ -142,7 +142,7 @@ public class OldAnimationsSettings extends Config {
     @Switch(name = "Disable Punching Particles During Usage in Adventure Mode", subcategory = "World")
     public static boolean adventureParticles = false;
 
-    @Switch(name = "Remove Debug Hitbox Line", subcategory = "World")
+    @Switch(name = "Remove Debug Hitbox Line", subcategory = "World", description = "Must Enable Punching Particles First")
     @VigilanceName(name = "oldDebugHitbox", category = "Animations", subcategory = "World")
     public static boolean oldDebugHitbox = true;
 
@@ -155,5 +155,6 @@ public class OldAnimationsSettings extends Config {
         addDependency("mixcesFirstPersonAnimations", "itemTransformations");
         addDependency("oldRod", "itemTransformations");
         addDependency("punchingParticles", "punching");
+        addDependency("adventureParticles", "punchingParticles");
     }
 }
