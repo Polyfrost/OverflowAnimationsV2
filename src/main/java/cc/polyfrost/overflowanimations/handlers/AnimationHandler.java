@@ -81,11 +81,10 @@ public class AnimationHandler {
                 mc.gameSettings.keyBindUseItem.isKeyDown() &&
                 mc.objectMouseOver != null &&
                 mc.objectMouseOver.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK) {
-            if (OldAnimationsSettings.punchingParticles) {
+            if (OldAnimationsSettings.punchingParticles && isSwingInProgress) {
                 if (!OldAnimationsSettings.adventureParticles) {
                     mc.effectRenderer.addBlockHitEffects(mc.objectMouseOver.getBlockPos(), mc.objectMouseOver.sideHit);
-                }
-                if (player.capabilities.allowEdit) {
+                } else if (player.capabilities.allowEdit) {
                     mc.effectRenderer.addBlockHitEffects(mc.objectMouseOver.getBlockPos(), mc.objectMouseOver.sideHit);
                 }
             }
