@@ -81,7 +81,7 @@ public class AnimationHandler {
                 mc.gameSettings.keyBindUseItem.isKeyDown() &&
                 mc.objectMouseOver != null &&
                 mc.objectMouseOver.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK) {
-            if (OldAnimationsSettings.punchingParticles && player.capabilities.allowEdit) {
+            if (OldAnimationsSettings.punchingParticles || (player.capabilities.allowEdit || !OldAnimationsSettings.adventureParticles)) {
                 mc.effectRenderer.addBlockHitEffects(mc.objectMouseOver.getBlockPos(), mc.objectMouseOver.sideHit);
             }
             if (!this.isSwingInProgress || this.swingProgressInt >= max >> 1 || this.swingProgressInt < 0) {

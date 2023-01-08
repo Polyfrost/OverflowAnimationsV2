@@ -139,6 +139,9 @@ public class OldAnimationsSettings extends Config {
     @Switch(name = "Disable Punch During Usage in Adventure Mode", subcategory = "World")
     public static boolean adventurePunching = false;
 
+    @Switch(name = "Disable Punching Particles During Usage in Adventure Mode", subcategory = "World")
+    public static boolean adventureParticles = false;
+
     @Switch(name = "Remove Debug Hitbox Line", subcategory = "World")
     @VigilanceName(name = "oldDebugHitbox", category = "Animations", subcategory = "World")
     public static boolean oldDebugHitbox = true;
