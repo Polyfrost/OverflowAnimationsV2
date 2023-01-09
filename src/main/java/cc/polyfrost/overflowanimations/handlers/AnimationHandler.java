@@ -82,10 +82,13 @@ public class AnimationHandler {
                 mc.objectMouseOver != null &&
                 mc.objectMouseOver.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK) {
             if (OldAnimationsSettings.punchingParticles && isSwingInProgress) {
-                if (!OldAnimationsSettings.adventureParticles) {
-                    mc.effectRenderer.addBlockHitEffects(mc.objectMouseOver.getBlockPos(), mc.objectMouseOver.sideHit);
-                } else if (player.capabilities.allowEdit) {
-                    mc.effectRenderer.addBlockHitEffects(mc.objectMouseOver.getBlockPos(), mc.objectMouseOver.sideHit);
+                ItemStack heldItem = mc.thePlayer.getHeldItem();
+                if (heldItem != null && heldItem.getItemUseAction() != EnumAction.NONE) {
+                    if (!OldAnimationsSettings.adventureParticles) {
+                        mc.effectRenderer.addBlockHitEffects(mc.objectMouseOver.getBlockPos(), mc.objectMouseOver.sideHit);
+                    } else if (player.capabilities.allowEdit) {
+                        mc.effectRenderer.addBlockHitEffects(mc.objectMouseOver.getBlockPos(), mc.objectMouseOver.sideHit);
+                    }
                 }
             }
             if (!this.isSwingInProgress || this.swingProgressInt >= max >> 1 || this.swingProgressInt < 0) {
