@@ -43,23 +43,23 @@ public class OldAnimationsSettings extends Config {
     public static boolean enchantmentGlintNew = true;
 
     @Switch(name = "1.7 Item Positions", subcategory = "Position")
-    @VigilanceName(name = "oldModel", category = "Animations", subcategory = "Position")
+    @VigilanceName(name = "1.7 Item Position", category = "Animations", subcategory = "Position")
     public static boolean oldModel = true;
 
     @Switch(name = "1.7 Bow Pullback", subcategory = "Position")
-    @VigilanceName(name = "oldBow", category = "Animations", subcategory = "Position")
+    @VigilanceName(name = "1.7 Bow Pullback", category = "Animations", subcategory = "Position")
     public static boolean oldBow = true;
 
     @Switch(name = "1.7 Block Animation", subcategory = "Position")
-    @VigilanceName(name = "oldSwordBlock", category = "Animations", subcategory = "Position")
+    @VigilanceName(name = "1.7 Block Animation", category = "Animations", subcategory = "Position")
     public static boolean oldSwordBlock = true;
 
     @Switch(name = "1.7 Rod Position", subcategory = "Position")
-    @VigilanceName(name = "oldRod", category = "Animations", subcategory = "Position")
+    @VigilanceName(name = "1.7 Rod Position", category = "Animations", subcategory = "Position")
     public static boolean oldRod = true;
 
     @Switch(name = "1.7 3rd Person Block Animation", subcategory = "Position")
-    @VigilanceName(name = "oldSwordBlock3", category = "Animations", subcategory = "Position")
+    @VigilanceName(name = "1.7 3rd Person Block Animation", category = "Animations", subcategory = "Position")
     public static boolean oldSwordBlock3 = true;
 
     @Switch(name = "1.7 Item Transformations", description = "Whether to apply 1.7 item transformations. Turn off to use resource packs that modify item transformations.", subcategory = "Position")
@@ -90,28 +90,28 @@ public class OldAnimationsSettings extends Config {
     public static boolean oldProjectiles = true;
 
     @Switch(name = "1.7 Consume Animation", subcategory = "Interaction")
-    @VigilanceName(name = "oldEating", category = "Animations", subcategory = "Interaction")
+    @VigilanceName(name = "1.7 Consume Animation", category = "Animations", subcategory = "Interaction")
     public static boolean oldEating = true;
 
     @Switch(name = "1.7 Block-Hitting Animation", subcategory = "Interaction")
-    @VigilanceName(name = "oldBlockhitting", category = "Animations", subcategory = "Interaction")
+    @VigilanceName(name = "1.7 Block-Hitting Animation", category = "Animations", subcategory = "Interaction")
     public static boolean oldBlockhitting = true;
 
     @Switch(name = "1.7 Smoother Sneaking", subcategory = "Interaction")
-    @VigilanceName(name = "smoothSneaking", category = "Animations", subcategory = "Interaction")
+    @VigilanceName(name = "1.7 Smoother Sneaking", category = "Animations", subcategory = "Interaction")
     public static boolean smoothSneaking = true;
 
 
     @Switch(name = "1.7 Longer Unsneak", subcategory = "Interaction")
-    @VigilanceName(name = "longSneaking", category = "Animations", subcategory = "Interaction")
+    @VigilanceName(name = "1.7 Longer Unsneak", category = "Animations", subcategory = "Interaction")
     public static boolean longSneaking = true;
 
     @Switch(name = "1.7 Red Armor Tint", subcategory = "Interaction")
-    @VigilanceName(name = "redArmor", category = "Animations", subcategory = "Interaction")
+    @VigilanceName(name = "1.7 Red Armor Tint", category = "Animations", subcategory = "Interaction")
     public static boolean redArmor = true;
 
     @Switch(name = "1.7 Punching During Usage", subcategory = "Interaction")
-    @VigilanceName(name = "punching", category = "Animations", subcategory = "Interaction")
+    @VigilanceName(name = "1.7 Punching During Usage", category = "Animations", subcategory = "Interaction")
     public static boolean punching = true;
 
     @Checkbox(
@@ -121,19 +121,19 @@ public class OldAnimationsSettings extends Config {
     public static boolean punchingParticles = true;
 
     @Switch(name = "1.7 Item Switching Animation", subcategory = "Interaction")
-    @VigilanceName(name = "itemSwitch", category = "Animations", subcategory = "Interaction")
+    @VigilanceName(name = "1.7 Item Switching Animation", category = "Animations", subcategory = "Interaction")
     public static boolean itemSwitch = true;
 
     @Switch(name = "Remove Health Bar Flashing", subcategory = "HUD")
-    @VigilanceName(name = "oldHealth", category = "Animations", subcategory = "HUD")
+    @VigilanceName(name = "Remove Health Bar Flashing", category = "Animations", subcategory = "HUD")
     public static boolean oldHealth = true;
 
     @Switch(name = "Remove Debug Screen Background", subcategory = "HUD")
-    @VigilanceName(name = "oldDebugScreen", category = "Animations", subcategory = "HUD")
+    @VigilanceName(name = "Debug Screen", category = "Animations", subcategory = "HUD")
     public static boolean oldDebugScreen = true;
 
     @Switch(name = "Remove Tab Menu Heads", subcategory = "HUD")
-    @VigilanceName(name = "oldTab", category = "Animations", subcategory = "HUD")
+    @VigilanceName(name = "Tab Overlay", category = "Animations", subcategory = "HUD")
     public static boolean oldTab;
 
     @Switch(name = "Disable Punch During Usage in Adventure Mode", subcategory = "World")
@@ -143,7 +143,7 @@ public class OldAnimationsSettings extends Config {
     public static boolean adventureParticles = false;
 
     @Switch(name = "Remove Debug Hitbox Line", subcategory = "World")
-    @VigilanceName(name = "oldDebugHitbox", category = "Animations", subcategory = "World")
+    @VigilanceName(name = "Debug Hitbox", category = "Animations", subcategory = "World")
     public static boolean oldDebugHitbox = true;
 
     public OldAnimationsSettings() {
