@@ -101,7 +101,6 @@ public class OldAnimationsSettings extends Config {
     @VigilanceName(name = "1.7 Smoother Sneaking", category = "Animations", subcategory = "Interaction")
     public static boolean smoothSneaking = true;
 
-
     @Switch(name = "1.7 Longer Unsneak", subcategory = "Interaction")
     @VigilanceName(name = "1.7 Longer Unsneak", category = "Animations", subcategory = "Interaction")
     public static boolean longSneaking = true;
@@ -144,10 +143,10 @@ public class OldAnimationsSettings extends Config {
 
     @Switch(name = "Remove Debug Hitbox Line", subcategory = "World")
     @VigilanceName(name = "Debug Hitbox", category = "Animations", subcategory = "World")
-    public static boolean oldDebugHitbox = true;
+    public static boolean oldDebugHitbox = false;
 
     public OldAnimationsSettings() {
-        super(new Mod(OverflowAnimations.NAME, ModType.PVP, new VigilanceMigrator("./config/sk1eroldanimations.toml")), "overflowanimations.json");
+        super(new Mod(OverflowAnimations.NAME, ModType.PVP, "/overflowanimations_dark.svg", new VigilanceMigrator("./config/sk1eroldanimations.toml")), "overflowanimations.json");
         initialize();
         addDependency("firstPersonCarpetPosition", "mixcesAnimations");
         addDependency("itemSprites", "items2D");
