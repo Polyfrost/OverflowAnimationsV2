@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
-@Mixin(RenderManager.class)
+@Mixin(value = RenderManager.class, priority = 2000)
 public class RenderManagerMixin {
     @Redirect(method = "renderDebugBoundingBox", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/RenderGlobal;drawOutlinedBoundingBox(Lnet/minecraft/util/AxisAlignedBB;IIII)V", ordinal = 1))
     private void cancelRenderGlobalCall(AxisAlignedBB boundingBox, int red, int green, int blue, int alpha) {
