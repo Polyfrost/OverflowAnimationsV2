@@ -131,6 +131,9 @@ public class OldAnimationsSettings extends Config {
     @VigilanceName(name = "Debug Screen", category = "Animations", subcategory = "HUD")
     public static boolean oldDebugScreen = true;
 
+    @Switch(name = "Remove Debug Screen Crosshair", subcategory = "HUD")
+    public static boolean oldDebugCrosshair = true;
+
     @Switch(name = "Remove Tab Menu Heads", subcategory = "HUD")
     @VigilanceName(name = "Tab Overlay", category = "Animations", subcategory = "HUD")
     public static boolean oldTab;

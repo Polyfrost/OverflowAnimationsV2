@@ -8,6 +8,7 @@
     "EntityRendererMixin",
     "ForgeHooksClientMixin",
     "GuiIngameForgeMixin",
+    "GuiIngameMixin",
     "GuiPlayerTabOverlayMixin",
     "ItemFoodAccessor",
     "ItemRendererMixin",

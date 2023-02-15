@@ -1,6 +1,7 @@
 package cc.polyfrost.overflowanimations.mixin;
 
 import cc.polyfrost.overflowanimations.OverflowAnimations;
+import cc.polyfrost.overflowanimations.config.OldAnimationsSettings;
 import cc.polyfrost.overflowanimations.handlers.SneakHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.EntityRenderer;
@@ -37,6 +38,13 @@ public class EntityRendererMixin {
     public float modifyEyeHeight_renderWorldDirections(Entity entity) {
         if (mc.getRenderViewEntity() != mc.thePlayer || !OverflowAnimations.oldAnimationsSettings.enabled) return entity.getEyeHeight();
         return SneakHandler.getInstance().getEyeHeight(partialTicks);
+    }
+
+    @Inject(method = "renderWorldDirections", at = {@At("HEAD")}, cancellable = true)
+    public void renderCrosshair(float partialTicks, CallbackInfo ci) {
+        if (OldAnimationsSettings.oldDebugCrosshair) {
+            ci.cancel();
+        }
     }
 
 }
