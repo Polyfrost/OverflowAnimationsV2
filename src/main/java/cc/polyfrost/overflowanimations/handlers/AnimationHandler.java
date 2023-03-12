@@ -24,31 +24,9 @@ public class AnimationHandler {
 
     private static final AnimationHandler INSTANCE = new AnimationHandler();
     private final Minecraft mc = Minecraft.getMinecraft();
-    public float prevSwingProgress;
-    public float swingProgress;
-    private int swingProgressInt;
-    private boolean isSwingInProgress;
 
     public static AnimationHandler getInstance() {
         return INSTANCE;
-    }
-
-    /**
-     * Interpolates swing time using partialTicks. Makes sure to account for possible negative values
-     * If there is no swing override, use the default swing
-     */
-    public float getSwingProgress(float partialTickTime) {
-        float currentProgress = this.swingProgress - this.prevSwingProgress;
-
-        if (!isSwingInProgress) {
-            return mc.thePlayer.getSwingProgress(partialTickTime);
-        }
-
-        if (currentProgress < 0.0F) {
-            ++currentProgress;
-        }
-
-        return this.prevSwingProgress + currentProgress * partialTickTime;
     }
 
     /**
@@ -64,17 +42,6 @@ public class AnimationHandler {
      */
     private void updateSwingProgress() {
         final EntityPlayerSP player = mc.thePlayer;
-        if (player == null) {
-            return;
-        }
-
-        prevSwingProgress = swingProgress;
-
-        int max = getArmSwingAnimationEnd(player);
-        if (this.swingProgressInt >= max || !mc.gameSettings.keyBindUseItem.isKeyDown()) {
-            this.swingProgressInt = 0;
-            this.isSwingInProgress = false;
-        }
 
         if (OldAnimationsSettings.punching && mc.gameSettings.keyBindAttack.isKeyDown() &&
                 (player.capabilities.allowEdit || !OldAnimationsSettings.adventurePunching) &&
@@ -82,28 +49,20 @@ public class AnimationHandler {
                 mc.objectMouseOver != null &&
                 mc.objectMouseOver.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK) {
             ItemStack heldItem = mc.thePlayer.getHeldItem();
-            if (heldItem != null && heldItem.getItemUseAction() != EnumAction.NONE) {
-                if (OldAnimationsSettings.punchingParticles && isSwingInProgress) {
+            if (heldItem != null) {
+                if (OldAnimationsSettings.punchingParticles && player.isSwingInProgress) {
                     if (!OldAnimationsSettings.adventureParticles) {
                         mc.effectRenderer.addBlockHitEffects(mc.objectMouseOver.getBlockPos(), mc.objectMouseOver.sideHit);
                     } else if (player.capabilities.allowEdit) {
                         mc.effectRenderer.addBlockHitEffects(mc.objectMouseOver.getBlockPos(), mc.objectMouseOver.sideHit);
                     }
                 }
-                if (!this.isSwingInProgress || this.swingProgressInt >= max >> 1 || this.swingProgressInt < 0) {
-                    isSwingInProgress = true;
-                    swingProgressInt = -1;
+                if (!player.isSwingInProgress || player.swingProgressInt >= this.getArmSwingAnimationEnd(player) / 2 || mc.thePlayer.swingProgressInt < 0) {
+                    player.swingProgressInt = -1;
+                    player.isSwingInProgress = true;
                 }
             }
         }
-
-        if (this.isSwingInProgress) {
-            ++this.swingProgressInt;
-        } else {
-            this.swingProgressInt = 0;
-        }
-
-        this.swingProgress = (float) this.swingProgressInt / (float) max;
     }
 
     @SubscribeEvent
@@ -174,7 +133,7 @@ public class AnimationHandler {
         GlStateManager.pushMatrix();
 
         final int useCount = player.getItemInUseCount();
-        final float swingProgress = getSwingProgress(partialTicks);
+        final float swingProgress = player.getSwingProgress(partialTicks);
 
         boolean blockHitOverride = false;
         if (OldAnimationsSettings.punching && useCount <= 0 && mc.gameSettings.keyBindUseItem.isKeyDown()) {

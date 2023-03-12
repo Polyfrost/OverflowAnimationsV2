@@ -17,7 +17,6 @@
     "OnlineIndicatorMixin",
     "PlayerControllerMPMixin",
     "RenderEntityItemMixin",
-    "RendererLivingEntityMixin",
     "RenderFishMixin",
     "RenderItemAccessor",
     "RenderItemMixin",
