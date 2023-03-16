@@ -3,7 +3,6 @@ package cc.polyfrost.overflowanimations.handlers;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.stream.MalformedJsonException;
-import net.minecraft.launchwrapper.ITweaker;
 import net.minecraft.launchwrapper.Launch;
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
 
@@ -11,7 +10,6 @@ import javax.swing.*;
 import java.io.File;
 import java.io.InputStream;
 import java.lang.reflect.Method;
-import java.util.List;
 import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;

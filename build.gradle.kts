@@ -1,14 +1,13 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
-import gg.essential.gradle.util.noServerRunConfigs
+import cc.polyfrost.gradle.util.noServerRunConfigs
 
 plugins {
-    id("gg.essential.multi-version")
-    id("gg.essential.defaults.repo")
-    id("gg.essential.defaults.java")
-    id("gg.essential.defaults.loom")
+    id("cc.polyfrost.multi-version")
+    id("cc.polyfrost.defaults.repo")
+    id("cc.polyfrost.defaults.java")
+    id("cc.polyfrost.defaults.loom")
     id("com.github.johnrengelman.shadow")
     id("net.kyori.blossom") version "1.3.0"
-    id("io.github.juuxel.loom-quiltflower-mini")
     id("signing")
     java
 }
@@ -36,12 +35,9 @@ loom {
     noServerRunConfigs()
     if (project.platform.isLegacyForge) {
         launchConfigs.named("client") {
-            arg("--tweakClass", "cc.polyfrost.oneconfigwrapper.OneConfigWrapper")
+            arg("--tweakClass", "cc.polyfrost.oneconfig.loader.stage0.LaunchWrapperTweaker")
             property("fml.coreMods.load", "cc.polyfrost.overflowanimations.handlers.ModDetectorPlugin")
             property("mixin.debug.export", "true")
-        }
-        runConfigs.named("client") {
-            vmArgs.remove("-XstartOnFirstThread")
         }
     }
     if (project.platform.isForge) {
@@ -154,7 +150,7 @@ tasks {
                     "FMLCorePlugin" to "cc.polyfrost.overflowanimations.handlers.ModDetectorPlugin",
                     "TweakOrder" to "0",
                     "MixinConfigs" to "mixins.${mod_id}.json",
-                    "TweakClass" to "cc.polyfrost.oneconfigwrapper.OneConfigWrapper"
+                    "TweakClass" to "cc.polyfrost.oneconfig.loader.stage0.LaunchWrapperTweaker",
                 )
             )
         }
