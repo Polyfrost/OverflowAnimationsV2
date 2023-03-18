@@ -144,10 +144,6 @@ public class OldAnimationsSettings extends Config {
     @Switch(name = "Disable Punching Particles During Usage in Adventure Mode", subcategory = "World")
     public static boolean adventureParticles = false;
 
-    @Switch(name = "Remove Debug Hitbox Line", subcategory = "World")
-    @VigilanceName(name = "Debug Hitbox", category = "Animations", subcategory = "World")
-    public static boolean oldDebugHitbox = false;
-
     public OldAnimationsSettings() {
         super(new Mod(OverflowAnimations.NAME, ModType.PVP, "/overflowanimations_dark.svg", new VigilanceMigrator("./config/sk1eroldanimations.toml")), "overflowanimations.json");
         initialize();

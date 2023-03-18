@@ -21,7 +21,6 @@
     "RenderItemAccessor",
     "RenderItemMixin",
     "RenderItemMixin_Glint",
-    "RenderManagerMixin",
     "RenderSnowballMixin"
   ]
 }
