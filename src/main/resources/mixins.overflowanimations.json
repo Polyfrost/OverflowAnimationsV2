@@ -21,6 +21,7 @@
     "RenderItemAccessor",
     "RenderItemMixin",
     "RenderItemMixin_Glint",
+    "WorldMixin",
     "RenderSnowballMixin"
   ]
 }

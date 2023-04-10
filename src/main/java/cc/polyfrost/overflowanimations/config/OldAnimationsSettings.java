@@ -123,6 +123,9 @@ public class OldAnimationsSettings extends Config {
     @VigilanceName(name = "1.7 Item Switching Animation", category = "Animations", subcategory = "Interaction")
     public static boolean itemSwitch = true;
 
+    @Switch(name = "1.15 Item Throwing Animation", subcategory = "Interaction")
+    public static boolean itemThrow = true;
+
     @Switch(name = "Remove Health Bar Flashing", subcategory = "HUD")
     @VigilanceName(name = "Remove Health Bar Flashing", category = "Animations", subcategory = "HUD")
     public static boolean oldHealth = true;
