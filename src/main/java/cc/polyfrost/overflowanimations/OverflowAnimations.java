@@ -8,6 +8,7 @@ import cc.polyfrost.overflowanimations.handlers.AnimationHandler;
 import cc.polyfrost.overflowanimations.handlers.SneakHandler;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -27,7 +28,7 @@ public class OverflowAnimations {
     public void init(FMLInitializationEvent event) {
         oldAnimationsSettings = new OldAnimationsSettings();
 
-        EventManager.INSTANCE.register(AnimationHandler.getInstance());
+        MinecraftForge.EVENT_BUS.register(AnimationHandler.getInstance());
         EventManager.INSTANCE.register(SneakHandler.getInstance());
     }
 
