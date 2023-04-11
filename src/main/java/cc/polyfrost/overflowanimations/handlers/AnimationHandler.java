@@ -1,5 +1,9 @@
 package cc.polyfrost.overflowanimations.handlers;
 
+import cc.polyfrost.oneconfig.events.event.SendPacketEvent;
+import cc.polyfrost.oneconfig.events.event.Stage;
+import cc.polyfrost.oneconfig.events.event.TickEvent;
+import cc.polyfrost.oneconfig.libs.eventbus.Subscribe;
 import cc.polyfrost.overflowanimations.OverflowAnimations;
 import cc.polyfrost.overflowanimations.config.OldAnimationsSettings;
 import cc.polyfrost.overflowanimations.mixin.ItemFoodAccessor;
@@ -10,14 +14,14 @@ import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
+import net.minecraft.entity.projectile.EntityThrowable;
 import net.minecraft.init.Items;
 import net.minecraft.item.*;
+import net.minecraft.network.play.client.C07PacketPlayerDigging;
 import net.minecraft.potion.Potion;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
 import org.lwjgl.opengl.GL11;
 
 public class AnimationHandler {
@@ -65,10 +69,24 @@ public class AnimationHandler {
         }
     }
 
-    @SubscribeEvent
-    public void onClientTick(TickEvent.ClientTickEvent event) {
-        if (event.phase == TickEvent.Phase.END) {
+    @Subscribe
+    public void onClientTick(TickEvent event) {
+        if (event.stage == Stage.END) {
             updateSwingProgress();
+        }
+    }
+
+    @Subscribe
+    public void onPacket(SendPacketEvent event) {
+        if (event.packet instanceof C07PacketPlayerDigging && OldAnimationsSettings.itemThrow && OverflowAnimations.oldAnimationsSettings.enabled) {
+            C07PacketPlayerDigging packet = (C07PacketPlayerDigging) event.packet;
+            if (packet.getStatus() == C07PacketPlayerDigging.Action.DROP_ITEM || packet.getStatus() == C07PacketPlayerDigging.Action.DROP_ALL_ITEMS) {
+                if ((!mc.thePlayer.isSwingInProgress || mc.thePlayer.swingProgressInt >= this.getArmSwingAnimationEnd(mc.thePlayer) / 2 ||
+                        mc.thePlayer.swingProgressInt < 0) && mc.thePlayer.inventory.getCurrentItem() != null) {
+                    mc.thePlayer.swingProgressInt = -1;
+                    mc.thePlayer.isSwingInProgress = true;
+                }
+            }
         }
     }
 

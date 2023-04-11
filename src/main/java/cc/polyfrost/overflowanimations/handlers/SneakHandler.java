@@ -1,10 +1,11 @@
 package cc.polyfrost.overflowanimations.handlers;
 
+import cc.polyfrost.oneconfig.events.event.Stage;
+import cc.polyfrost.oneconfig.events.event.TickEvent;
+import cc.polyfrost.oneconfig.libs.eventbus.Subscribe;
 import cc.polyfrost.overflowanimations.config.OldAnimationsSettings;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 public class SneakHandler { 
 
@@ -28,9 +29,9 @@ public class SneakHandler {
         return lastEyeHeight + (eyeHeight - lastEyeHeight) * partialTicks;
     }
 
-    @SubscribeEvent
-    public void onTick(TickEvent.ClientTickEvent event) {
-        if (event.phase == TickEvent.Phase.END) {
+    @Subscribe
+    public void onTick(TickEvent event) {
+        if (event.stage == Stage.END) {
             lastEyeHeight = eyeHeight;
 
             final EntityPlayerSP player = Minecraft.getMinecraft().thePlayer;
