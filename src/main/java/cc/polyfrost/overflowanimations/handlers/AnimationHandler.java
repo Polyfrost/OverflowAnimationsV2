@@ -67,7 +67,7 @@ public class AnimationHandler {
     }
 
     @SubscribeEvent
-    public void onClientTick(TickEvent event) {
+    public void onClientTick(TickEvent.ClientTickEvent event) {
         if (event.phase == TickEvent.Phase.END) {
             updateSwingProgress();
         }
@@ -75,7 +75,7 @@ public class AnimationHandler {
 
     @SubscribeEvent
     public void onPacket(ItemTossEvent event) {
-        if (OldAnimationsSettings.itemThrow && OverflowAnimations.oldAnimationsSettings.enabled) {
+        if (OldAnimationsSettings.itemThrow && OverflowAnimations.oldAnimationsSettings.enabled && event.player instanceof EntityPlayerSP) {
             if (!mc.thePlayer.isSwingInProgress || mc.thePlayer.swingProgressInt >= this.getArmSwingAnimationEnd(mc.thePlayer) / 2 ||
                     mc.thePlayer.swingProgressInt < 0) {
                 mc.thePlayer.swingProgressInt = -1;
