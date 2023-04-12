@@ -75,7 +75,7 @@ public class AnimationHandler {
 
     @SubscribeEvent
     public void onPacket(ItemTossEvent event) {
-        if (OldAnimationsSettings.itemThrow && OverflowAnimations.oldAnimationsSettings.enabled && event.player instanceof EntityPlayerSP) {
+        if (OldAnimationsSettings.itemThrow && OverflowAnimations.oldAnimationsSettings.enabled && event.player.equals(mc.thePlayer)) {
             if (!mc.thePlayer.isSwingInProgress || mc.thePlayer.swingProgressInt >= this.getArmSwingAnimationEnd(mc.thePlayer) / 2 ||
                     mc.thePlayer.swingProgressInt < 0) {
                 mc.thePlayer.swingProgressInt = -1;
