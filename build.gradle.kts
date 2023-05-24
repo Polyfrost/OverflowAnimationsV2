@@ -36,7 +36,7 @@ loom {
     if (project.platform.isLegacyForge) {
         launchConfigs.named("client") {
             arg("--tweakClass", "cc.polyfrost.oneconfig.loader.stage0.LaunchWrapperTweaker")
-            property("fml.coreMods.load", "cc.polyfrost.overflowanimations.handlers.ModDetectorPlugin")
+            property("fml.coreMods.load", "cc.polyfrost.overflowanimations.ModDetectorPlugin")
             property("mixin.debug.export", "true")
         }
     }

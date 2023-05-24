@@ -10,18 +10,22 @@
     "GuiIngameForgeMixin",
     "GuiIngameMixin",
     "GuiPlayerTabOverlayMixin",
-    "ItemFoodAccessor",
     "ItemRendererMixin",
     "LayerArmorBaseMixin",
+    "LayerArmorBaseMixin_New",
     "ModelBipedMixin",
     "OnlineIndicatorMixin",
     "PlayerControllerMPMixin",
     "RenderEntityItemMixin",
     "RenderFishMixin",
-    "RenderItemAccessor",
+    "GuiOverlayDebugMixin",
     "RenderItemMixin",
-    "RenderItemMixin_Glint",
     "WorldMixin",
-    "RenderSnowballMixin"
+    "RenderSnowballMixin",
+    "EntityLivingBaseInvoker",
+    "LayerHeldItemMixin",
+    "NetHandlerPlayClientMixin",
+    "EntityPlayerSPMixin",
+    "MinecraftMixin"
   ]
 }

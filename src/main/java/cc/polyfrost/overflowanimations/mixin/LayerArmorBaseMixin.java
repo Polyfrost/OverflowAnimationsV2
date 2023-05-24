@@ -12,6 +12,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class LayerArmorBaseMixin {
     @Inject(method = "shouldCombineTextures", at = @At("HEAD"), cancellable = true)
     private void applyRedArmor(CallbackInfoReturnable<Boolean> cir) {
-        if (OldAnimationsSettings.redArmor && OverflowAnimations.oldAnimationsSettings.enabled) cir.setReturnValue(true);
+        cir.setReturnValue(OldAnimationsSettings.redArmor && OverflowAnimations.oldAnimationsSettings.enabled);
     }
 }

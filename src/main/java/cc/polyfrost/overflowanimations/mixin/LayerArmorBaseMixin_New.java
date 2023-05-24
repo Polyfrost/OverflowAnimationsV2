@@ -16,7 +16,7 @@ import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 
 /**
  * Modified from Skyblockcatia under MIT License
- * https://github.com/SteveKunG/SkyBlockcatia/blob/1.8.9/LICENSE.md
+ * <a href="https://github.com/SteveKunG/SkyBlockcatia/blob/1.8.9/LICENSE.md">...</a>
  */
 @Mixin(LayerArmorBase.class)
 public abstract class LayerArmorBaseMixin_New<T extends ModelBase> implements LayerRenderer<EntityLivingBase> {

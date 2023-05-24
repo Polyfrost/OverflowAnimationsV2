@@ -2,49 +2,55 @@ package cc.polyfrost.overflowanimations.mixin;
 
 import cc.polyfrost.overflowanimations.OverflowAnimations;
 import cc.polyfrost.overflowanimations.config.OldAnimationsSettings;
-import cc.polyfrost.overflowanimations.handlers.SneakHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraft.entity.Entity;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(EntityRenderer.class)
 public class EntityRendererMixin {
 
-    @Shadow
-    private Minecraft mc;
+    @Final
     @Unique
-    private float partialTicks;
+    private final Minecraft mc = Minecraft.getMinecraft();
+    @Unique
+    private float height;
+    @Unique
+    private float previousHeight;
 
-    @Inject(method = "orientCamera", at = @At("HEAD"))
-    public void orientCamera(float partialTicks, CallbackInfo ci) {
-        this.partialTicks = partialTicks;
-    }
-
-    @ModifyVariable(method = "orientCamera", at = @At(value = "STORE", ordinal = 0), ordinal = 1)
-    public float modifyEyeHeight_orientCamera(float eyeHeight) {
-        if (mc.getRenderViewEntity() != mc.thePlayer || !OverflowAnimations.oldAnimationsSettings.enabled) return eyeHeight;
-        return SneakHandler.getInstance().getEyeHeight(partialTicks);
+    @Redirect(method = "orientCamera", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;getEyeHeight()F"))
+    public float modifyEyeHeight(Entity entity, float partialTicks) {
+        return OldAnimationsSettings.smoothSneaking && OverflowAnimations.oldAnimationsSettings.enabled ?
+                previousHeight + (height - previousHeight) * partialTicks : entity.getEyeHeight();
     }
 
     @Redirect(method = "renderWorldDirections", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;getEyeHeight()F"))
-    public float modifyEyeHeight_renderWorldDirections(Entity entity) {
-        if (mc.getRenderViewEntity() != mc.thePlayer || !OverflowAnimations.oldAnimationsSettings.enabled) return entity.getEyeHeight();
-        return SneakHandler.getInstance().getEyeHeight(partialTicks);
+    public float syncCrossHair(Entity entity, float partialTicks) {
+        return modifyEyeHeight(entity, partialTicks);
+    }
+
+    @Inject(method = "updateRenderer", at = @At("HEAD"))
+    private void interpolateHeight(CallbackInfo ci) {
+        Entity entity = mc.getRenderViewEntity();
+        float eyeHeight = entity.getEyeHeight();
+        previousHeight = height;
+        if (eyeHeight < height)
+            height = eyeHeight;
+        else
+            height += (eyeHeight - height) * 0.5f;
+        OverflowAnimations.eyeHeight = height;
     }
 
     @Inject(method = "renderWorldDirections", at = {@At("HEAD")}, cancellable = true)
     public void renderCrosshair(float partialTicks, CallbackInfo ci) {
-        if (OldAnimationsSettings.oldDebugCrosshair) {
+        if (OldAnimationsSettings.oldDebugCrosshair && OverflowAnimations.oldAnimationsSettings.enabled) {
             ci.cancel();
         }
     }
-
 }

@@ -1,4 +1,4 @@
-package cc.polyfrost.overflowanimations.handlers;
+package cc.polyfrost.overflowanimations;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;

@@ -1,14 +1,9 @@
 package cc.polyfrost.overflowanimations;
 
-import cc.polyfrost.oneconfig.events.EventManager;
 import cc.polyfrost.oneconfig.utils.commands.CommandManager;
 import cc.polyfrost.overflowanimations.command.OldAnimationsCommand;
 import cc.polyfrost.overflowanimations.config.OldAnimationsSettings;
-import cc.polyfrost.overflowanimations.handlers.AnimationHandler;
-import cc.polyfrost.overflowanimations.handlers.SneakHandler;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.common.MinecraftForge;
+import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -21,15 +16,12 @@ public class OverflowAnimations {
     public static final String VERSION = "@VER@";
     public static OldAnimationsSettings oldAnimationsSettings;
 
-    public static ItemStack renderingStack;
-    public static EntityLivingBase renderingEntity;
+    public static float eyeHeight;
+    public static ItemCameraTransforms.TransformType transform;
 
     @EventHandler
     public void init(FMLInitializationEvent event) {
         oldAnimationsSettings = new OldAnimationsSettings();
-
-        MinecraftForge.EVENT_BUS.register(AnimationHandler.getInstance());
-        EventManager.INSTANCE.register(SneakHandler.getInstance());
     }
 
     @EventHandler

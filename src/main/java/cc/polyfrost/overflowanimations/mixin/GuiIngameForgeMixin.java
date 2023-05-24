@@ -26,9 +26,6 @@ public class GuiIngameForgeMixin {
 
     @ModifyVariable(method = "renderHealth", at = @At(value = "LOAD", opcode = Opcodes.ILOAD, ordinal = 1), index = 5, remap = false)
     private boolean cancelFlash(boolean original) {
-        if (!OverflowAnimations.oldAnimationsSettings.enabled) {
-            return original;
-        }
-        return original && !OldAnimationsSettings.oldHealth;
+        return (!OldAnimationsSettings.oldHealth || !OverflowAnimations.oldAnimationsSettings.enabled) && original;
     }
 }
