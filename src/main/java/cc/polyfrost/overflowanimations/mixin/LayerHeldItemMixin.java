@@ -34,7 +34,6 @@ public abstract class LayerHeldItemMixin {
      */
     @Overwrite
     public void doRenderLayer(EntityLivingBase entitylivingbaseIn, float f, float g, float partialTicks, float h, float i, float j, float scale) {
-        AbstractClientPlayer player = Minecraft.getMinecraft().thePlayer;
         ItemStack itemStack = entitylivingbaseIn.getHeldItem();
         if (itemStack != null) {
             GlStateManager.pushMatrix();
@@ -71,12 +70,26 @@ public abstract class LayerHeldItemMixin {
                 GlStateManager.translate(0.0F, 0.203125F, 0.0F);
             }
 
+            if (OldAnimationsSettings.thirdTransformations && OverflowAnimations.oldAnimationsSettings.enabled) {
+                AbstractClientPlayer player = null;
+                if (entitylivingbaseIn instanceof AbstractClientPlayer) {
+                    player = (AbstractClientPlayer) entitylivingbaseIn;
+                }
+                EnumAction var26;
+                if (player!= null && player.getItemInUseCount() > 0) {
+                    var26 = itemStack.getItemUseAction();
+                    if (var26 == EnumAction.BLOCK) {
+                        GlStateManager.translate(0.05F, 0.0F, -0.1F);
+                        GlStateManager.rotate(-50.0F, 0.0F, 1.0F, 0.0F);
+                        GlStateManager.rotate(-10.0F, 1.0F, 0.0F, 0.0F);
+                        GlStateManager.rotate(-60.0F, 0.0F, 0.0F, 1.0F);
+                    }
+                }
+
+            }
+
             if (OldAnimationsSettings.thirdTransformations && OverflowAnimations.oldAnimationsSettings.enabled && !(item instanceof ItemSkull) &&
                     (entitylivingbaseIn instanceof EntityPlayer || !OldAnimationsSettings.entityTransforms)) {
-                EnumAction var26 = null;
-                if (player.getItemInUseCount() > 0) {
-                    var26 = itemStack.getItemUseAction();
-                }
                 if (item instanceof ItemBlock) {
                     float var7 = 0.5F;
                     GlStateManager.translate(0.0F, 0.1875F, -0.3125F);
@@ -97,13 +110,6 @@ public abstract class LayerHeldItemMixin {
                     if (item.shouldRotateAroundWhenRendering()) {
                         GlStateManager.rotate(180.0F, 0.0F, 0.0F, 1.0F);
                         GlStateManager.translate(0.0F, -0.125F, 0.0F);
-                    }
-
-                    if (player.getItemInUseCount() > 0 && var26 == EnumAction.BLOCK) {
-                        GlStateManager.translate(0.05F, 0.0F, -0.1F);
-                        GlStateManager.rotate(-50.0F, 0.0F, 1.0F, 0.0F);
-                        GlStateManager.rotate(-10.0F, 1.0F, 0.0F, 0.0F);
-                        GlStateManager.rotate(-60.0F, 0.0F, 0.0F, 1.0F);
                     }
 
                     GlStateManager.translate(0.0F, 0.1875F, 0.0F);
