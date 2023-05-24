@@ -147,7 +147,7 @@ tasks {
                     "ModSide" to "CLIENT",
                     "ForceLoadAsMod" to true,
                     "FMLCorePluginContainsFMLMod" to "Yes, yes it does",
-                    "FMLCorePlugin" to "cc.polyfrost.overflowanimations.handlers.ModDetectorPlugin",
+                    "FMLCorePlugin" to "cc.polyfrost.overflowanimations.ModDetectorPlugin",
                     "TweakOrder" to "0",
                     "MixinConfigs" to "mixins.${mod_id}.json",
                     "TweakClass" to "cc.polyfrost.oneconfig.loader.stage0.LaunchWrapperTweaker",
