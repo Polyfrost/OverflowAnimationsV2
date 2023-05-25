@@ -70,7 +70,7 @@ public abstract class LayerHeldItemMixin {
                 GlStateManager.translate(0.0F, 0.203125F, 0.0F);
             }
 
-            if (OldAnimationsSettings.thirdTransformations && OverflowAnimations.oldAnimationsSettings.enabled) {
+            if (OldAnimationsSettings.oldBlockhitting && OverflowAnimations.oldAnimationsSettings.enabled) {
                 AbstractClientPlayer player = null;
                 if (entitylivingbaseIn instanceof AbstractClientPlayer) {
                     player = (AbstractClientPlayer) entitylivingbaseIn;
