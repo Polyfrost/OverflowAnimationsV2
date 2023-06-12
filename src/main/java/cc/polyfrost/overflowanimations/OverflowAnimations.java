@@ -15,7 +15,7 @@ public class OverflowAnimations {
 
     @EventHandler
     public void init(FMLInitializationEvent event) {
-        OldAnimationsSettings.INSTANCE.preload();
+        OldAnimationsSettings.INSTANCE.preLoad();
         CommandManager.INSTANCE.registerCommand(new OldAnimationsCommand());
     }
 }

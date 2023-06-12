@@ -134,7 +134,7 @@ public class OldAnimationsSettings extends Config {
         addDependency("entityTransforms", "thirdTransformations");
     }
 
-    public void preload() {
+    public void preLoad() {
         // does nothing, used to call static initializers
     }
 }
