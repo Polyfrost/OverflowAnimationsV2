@@ -96,7 +96,7 @@ public class ModDetectorPlugin implements IFMLLoadingPlugin {
                                 frame,
                                 "You had both Sk1er Old Animations and Overflow Animations installed, so Overflow Animations removed Sk1er OAM.\n" +
                                         "This is because OverflowAnimations replaces it.\n" +
-                                "Close this and restart your game.",
+                                        "Close this and restart your game.",
                                 "Sk1er Old Animations detected!", JOptionPane.ERROR_MESSAGE
                         );
                         try {

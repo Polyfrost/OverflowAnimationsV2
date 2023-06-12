@@ -1,6 +1,5 @@
 package cc.polyfrost.overflowanimations.mixin;
 
-import cc.polyfrost.overflowanimations.OverflowAnimations;
 import cc.polyfrost.overflowanimations.config.OldAnimationsSettings;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -26,15 +25,15 @@ public abstract class MinecraftMixin {
     @Shadow
     public EntityPlayerSP thePlayer;
     @Shadow
-    private int leftClickCounter;
-    @Shadow
     public WorldClient theWorld;
     @Shadow
     public GameSettings gameSettings;
+    @Shadow
+    private int leftClickCounter;
 
     @Inject(method = "sendClickBlockToController", at = @At("HEAD"))
     public void blockHitAnimation(boolean leftClick, CallbackInfo ci) {
-        if (OldAnimationsSettings.oldBlockhitting && OldAnimationsSettings.punching && OverflowAnimations.oldAnimationsSettings.enabled && gameSettings.keyBindUseItem.isKeyDown()) {
+        if (OldAnimationsSettings.oldBlockhitting && OldAnimationsSettings.punching && OldAnimationsSettings.INSTANCE.enabled && gameSettings.keyBindUseItem.isKeyDown()) {
             if (leftClickCounter <= 0 && leftClick && objectMouseOver != null && objectMouseOver.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK) {
                 if (!theWorld.isAirBlock(objectMouseOver.getBlockPos()) && (thePlayer.isAllowEdit() || !OldAnimationsSettings.adventurePunching)) {
                     if (!OldAnimationsSettings.adventureParticles && OldAnimationsSettings.punchingParticles) {

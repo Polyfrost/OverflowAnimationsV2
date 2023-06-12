@@ -1,6 +1,5 @@
 package cc.polyfrost.overflowanimations.mixin;
 
-import cc.polyfrost.overflowanimations.OverflowAnimations;
 import cc.polyfrost.overflowanimations.config.OldAnimationsSettings;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
@@ -20,7 +19,7 @@ public abstract class WorldMixin {
 
     @Inject(method = "spawnEntityInWorld", at = @At("HEAD"))
     private void entityThrow(Entity entityIn, CallbackInfoReturnable<Boolean> cir) {
-        if (OldAnimationsSettings.itemThrow && OverflowAnimations.oldAnimationsSettings.enabled && entityIn instanceof EntityThrowable) {
+        if (OldAnimationsSettings.itemThrow && OldAnimationsSettings.INSTANCE.enabled && entityIn instanceof EntityThrowable) {
             if (!mc.thePlayer.isSwingInProgress || mc.thePlayer.swingProgressInt >= ((EntityLivingBaseInvoker) mc.thePlayer).getArmSwingAnimation() / 2 ||
                     mc.thePlayer.swingProgressInt < 0) {
                 mc.thePlayer.swingProgressInt = -1;

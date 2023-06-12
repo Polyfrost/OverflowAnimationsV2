@@ -1,7 +1,7 @@
 package cc.polyfrost.overflowanimations.mixin;
 
-import cc.polyfrost.overflowanimations.OverflowAnimations;
 import cc.polyfrost.overflowanimations.config.OldAnimationsSettings;
+import cc.polyfrost.overflowanimations.hooks.DebugOverlayHook;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraft.entity.Entity;
@@ -17,17 +17,16 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class EntityRendererMixin {
 
     @Final
-    @Unique
     private final Minecraft mc = Minecraft.getMinecraft();
     @Unique
-    private float height;
+    private float overflow$height;
     @Unique
-    private float previousHeight;
+    private float overflow$previousHeight;
 
     @Redirect(method = "orientCamera", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;getEyeHeight()F"))
     public float modifyEyeHeight(Entity entity, float partialTicks) {
-        return OldAnimationsSettings.smoothSneaking && OverflowAnimations.oldAnimationsSettings.enabled ?
-                previousHeight + (height - previousHeight) * partialTicks : entity.getEyeHeight();
+        return OldAnimationsSettings.smoothSneaking && OldAnimationsSettings.INSTANCE.enabled ?
+                overflow$previousHeight + (overflow$height - overflow$previousHeight) * partialTicks : entity.getEyeHeight();
     }
 
     @Redirect(method = "renderWorldDirections", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;getEyeHeight()F"))
@@ -39,17 +38,17 @@ public class EntityRendererMixin {
     private void interpolateHeight(CallbackInfo ci) {
         Entity entity = mc.getRenderViewEntity();
         float eyeHeight = entity.getEyeHeight();
-        previousHeight = height;
-        if (eyeHeight < height)
-            height = eyeHeight;
+        overflow$previousHeight = overflow$height;
+        if (eyeHeight < overflow$height)
+            overflow$height = eyeHeight;
         else
-            height += (eyeHeight - height) * 0.5f;
-        OverflowAnimations.eyeHeight = height;
+            overflow$height += (eyeHeight - overflow$height) * 0.5f;
+        DebugOverlayHook.setOverflowEyeHeight(overflow$height);
     }
 
     @Inject(method = "renderWorldDirections", at = {@At("HEAD")}, cancellable = true)
     public void renderCrosshair(float partialTicks, CallbackInfo ci) {
-        if (OldAnimationsSettings.oldDebugCrosshair && OverflowAnimations.oldAnimationsSettings.enabled) {
+        if (OldAnimationsSettings.oldDebugCrosshair && OldAnimationsSettings.INSTANCE.enabled) {
             ci.cancel();
         }
     }

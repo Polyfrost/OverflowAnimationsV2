@@ -93,7 +93,10 @@ public class OldAnimationsSettings extends Config {
     @Switch(name = "Dropped Item Sprites Rotation Fix", subcategory = "Fixes")
     public static boolean rotationFix = true;
 
-    @Checkbox(name = "Remove Glint From Sprites ", description = "This will disable the enchantment glint for both dropped items and projectiles.", subcategory = "Fixes")
+    @Switch(name = "Fix Block Break Removal", subcategory = "Fixes")
+    public static boolean fixBlockBreak = false;
+
+    @Checkbox(name = "Remove Glint From Sprites", description = "This will disable the enchantment glint for both dropped items and projectiles.", subcategory = "Fixes")
     public static boolean spritesGlint = false;
 
     @Switch(name = "Rod Line Position Based on FOV", subcategory = "Fixes")
@@ -107,6 +110,8 @@ public class OldAnimationsSettings extends Config {
 
     @Switch(name = "Disable Punch-During-Usage Particles in Adventure Mode", subcategory = "Fixes")
     public static boolean adventureParticles = false;
+
+    public static final OldAnimationsSettings INSTANCE = new OldAnimationsSettings();
 
     public OldAnimationsSettings() {
         super(new Mod(OverflowAnimations.NAME, ModType.PVP, "/overflowanimations_dark.svg", new VigilanceMigrator("./config/sk1eroldanimations.toml")), "overflowanimations.json");
@@ -127,5 +132,9 @@ public class OldAnimationsSettings extends Config {
         addDependency("firstPersonCarpetPosition", "itemTransformations");
         addDependency("fixRod", "itemTransformations");
         addDependency("entityTransforms", "thirdTransformations");
+    }
+
+    public void preload() {
+        // does nothing, used to call static initializers
     }
 }

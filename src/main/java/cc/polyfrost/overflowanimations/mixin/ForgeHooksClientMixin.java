@@ -1,6 +1,6 @@
 package cc.polyfrost.overflowanimations.mixin;
 
-import cc.polyfrost.overflowanimations.OverflowAnimations;
+import cc.polyfrost.overflowanimations.hooks.TransformTypeHook;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.resources.model.IBakedModel;
 import net.minecraftforge.client.ForgeHooksClient;
@@ -16,25 +16,25 @@ public class ForgeHooksClientMixin {
     private static void getCameraPerspective(IBakedModel model, ItemCameraTransforms.TransformType cameraTransformType, CallbackInfoReturnable<IBakedModel> cir) {
         switch (cameraTransformType) {
             case NONE:
-                OverflowAnimations.transform = ItemCameraTransforms.TransformType.NONE;
+                TransformTypeHook.transform = ItemCameraTransforms.TransformType.NONE;
                 break;
             case THIRD_PERSON:
-                OverflowAnimations.transform = ItemCameraTransforms.TransformType.THIRD_PERSON;
+                TransformTypeHook.transform = ItemCameraTransforms.TransformType.THIRD_PERSON;
                 break;
             case FIRST_PERSON:
-                OverflowAnimations.transform = ItemCameraTransforms.TransformType.FIRST_PERSON;
+                TransformTypeHook.transform = ItemCameraTransforms.TransformType.FIRST_PERSON;
                 break;
             case HEAD:
-                OverflowAnimations.transform = ItemCameraTransforms.TransformType.HEAD;
+                TransformTypeHook.transform = ItemCameraTransforms.TransformType.HEAD;
                 break;
             case GUI:
-                OverflowAnimations.transform = ItemCameraTransforms.TransformType.GUI;
+                TransformTypeHook.transform = ItemCameraTransforms.TransformType.GUI;
                 break;
             case GROUND:
-                OverflowAnimations.transform = ItemCameraTransforms.TransformType.GROUND;
+                TransformTypeHook.transform = ItemCameraTransforms.TransformType.GROUND;
                 break;
             case FIXED:
-                OverflowAnimations.transform = ItemCameraTransforms.TransformType.FIXED;
+                TransformTypeHook.transform = ItemCameraTransforms.TransformType.FIXED;
                 break;
         }
     }

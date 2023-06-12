@@ -1,6 +1,5 @@
 package cc.polyfrost.overflowanimations.mixin;
 
-import cc.polyfrost.overflowanimations.OverflowAnimations;
 import cc.polyfrost.overflowanimations.config.OldAnimationsSettings;
 import net.minecraft.client.renderer.entity.layers.LayerArmorBase;
 import org.spongepowered.asm.mixin.Mixin;
@@ -12,6 +11,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class LayerArmorBaseMixin {
     @Inject(method = "shouldCombineTextures", at = @At("HEAD"), cancellable = true)
     private void applyRedArmor(CallbackInfoReturnable<Boolean> cir) {
-        cir.setReturnValue(OldAnimationsSettings.redArmor && OverflowAnimations.oldAnimationsSettings.enabled);
+        cir.setReturnValue(OldAnimationsSettings.redArmor && OldAnimationsSettings.INSTANCE.enabled);
     }
 }
