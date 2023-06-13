@@ -18,8 +18,9 @@ public class RenderItemMixin {
 
     @Inject(method = "renderItemModelTransform", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GlStateManager;pushMatrix()V", shift = At.Shift.AFTER))
     private void setRenderingStack(ItemStack stack, IBakedModel model, ItemCameraTransforms.TransformType cameraTransformType, CallbackInfo ci) {
-        if (OldAnimationsSettings.itemTransformations && OldAnimationsSettings.INSTANCE.enabled &&
-                stack.getItem() != null && !model.isBuiltInRenderer()) {
+        if ((OldAnimationsSettings.itemTransformations && cameraTransformType != ItemCameraTransforms.TransformType.THIRD_PERSON) ||
+                (OldAnimationsSettings.thirdTransformations && cameraTransformType == ItemCameraTransforms.TransformType.THIRD_PERSON) &&
+                        OldAnimationsSettings.INSTANCE.enabled && stack.getItem() != null && !model.isBuiltInRenderer()) {
             GlStateManager.translate(-0.01, 0.002, 0.0005);
             if (stack.getItem() instanceof ItemBlock) {
                 Block block = ((ItemBlock) stack.getItem()).getBlock();
@@ -37,6 +38,11 @@ public class RenderItemMixin {
         }
     }
 
+    @ModifyConstant(method = "renderEffect", constant = @Constant(floatValue = 8.0f))
+    private float modifyScale(float original) {
+        return OldAnimationsSettings.enchantmentGlint && OldAnimationsSettings.INSTANCE.enabled ? 6.0f : original;
+    }
+
     @ModifyConstant(method = "renderEffect", constant = @Constant(floatValue = -50F))
     private float modifyEffect(float original) {
         return OldAnimationsSettings.enchantmentGlint && OldAnimationsSettings.INSTANCE.enabled ?
@@ -46,13 +52,24 @@ public class RenderItemMixin {
     @ModifyConstant(method = "renderEffect", constant = @Constant(floatValue = 10.0F))
     private float modifyEffect2(float original) {
         return OldAnimationsSettings.enchantmentGlint && OldAnimationsSettings.INSTANCE.enabled ?
-                TransformTypeHook.transform != ItemCameraTransforms.TransformType.GUI ? 10.0f : 0.0f : original;
+                TransformTypeHook.transform != ItemCameraTransforms.TransformType.GUI ? 205.0f : 0.0f : original;
     }
 
     @ModifyArg(method = "renderEffect", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GlStateManager;translate(FFF)V", ordinal = 1), index = 0)
     private float modifyEffect3(float original) {
-        return (OldAnimationsSettings.enchantmentGlint && OldAnimationsSettings.INSTANCE.enabled &&
-                TransformTypeHook.transform == ItemCameraTransforms.TransformType.GUI ? -1F : 1F) * original;
+        return (OldAnimationsSettings.enchantmentGlint && OldAnimationsSettings.INSTANCE.enabled ? -1F : 1F) * original;
+    }
+
+    @ModifyConstant(method = "renderEffect", constant = @Constant(longValue = 4873L))
+    private long modifyEffectSpeed3(long original) {
+        return OldAnimationsSettings.enchantmentGlint && OldAnimationsSettings.INSTANCE.enabled &&
+                TransformTypeHook.transform != ItemCameraTransforms.TransformType.GUI ? 2000L : original;
+    }
+
+    @ModifyConstant(method = "renderEffect", constant = @Constant(floatValue = 4873.0f))
+    private float modifyEffectSpeed4(float original) {
+        return OldAnimationsSettings.enchantmentGlint && OldAnimationsSettings.INSTANCE.enabled &&
+                TransformTypeHook.transform != ItemCameraTransforms.TransformType.GUI ? 2000.0f : original;
     }
 
     @Inject(method = "renderEffect", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GlStateManager;translate(FFF)V", shift = At.Shift.AFTER))
@@ -62,6 +79,12 @@ public class RenderItemMixin {
             GlStateManager.rotate(70.0F, 0.0F, 1.0F, 0.0F);
             GlStateManager.rotate(90.0F, 1.0F, 0.0F, 0.0F);
         }
+    }
+
+    @ModifyConstant(method = "renderEffect", constant = @Constant(intValue = -8372020))
+    private int modifyEffect6(int original) {
+        return OldAnimationsSettings.enchantmentGlint && OldAnimationsSettings.INSTANCE.enabled ?
+                TransformTypeHook.transform == ItemCameraTransforms.TransformType.GUI ? -6788658 : -10799734 : original;
     }
 
     @Inject(method = "renderEffect", at = @At(value = "HEAD"), cancellable = true)
