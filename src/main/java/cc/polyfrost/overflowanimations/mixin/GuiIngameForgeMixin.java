@@ -11,6 +11,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(GuiIngameForge.class)
 public class GuiIngameForgeMixin {
+
     @Redirect(method = "renderHUDText", at = @At(value = "INVOKE", target = "Lnet/minecraftforge/client/GuiIngameForge;drawRect(IIIII)V"))
     private void cancelBackgroundDrawing(int left, int top, int right, int bottom, int color) {
         if (!OldAnimationsSettings.INSTANCE.enabled || !OldAnimationsSettings.oldDebugScreen) {
