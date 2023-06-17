@@ -92,7 +92,7 @@ public class OldAnimationsSettings extends Config {
     public static boolean itemThrow = false;
 
     @Switch(name = "Disable Camera Shake", description = "Disables the camera damage shake.", subcategory = "Modern Features")
-    public static boolean noHurtCam = true;
+    public static boolean noHurtCam = false;
 
     @Switch(name = "Miss Penalty Swing Animation", description = "This option is purely visual. During the miss penalty, the player's arm will still swing and show particles.",subcategory = "Fixes")
     public static boolean visualSwing = true;
