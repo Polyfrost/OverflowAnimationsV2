@@ -11,11 +11,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Pseudo
 @Mixin(targets = "gg.essential.handlers.OnlineIndicator", remap = false)
 public class OnlineIndicatorMixin {
+
     @Dynamic("Essential")
     @Inject(method = "drawTabIndicator", at = @At("HEAD"), cancellable = true, remap = false)
     private static void removeTabIndicator(CallbackInfo ci) {
-        if (OldAnimationsSettings.INSTANCE.tabMode == 0 ||
-                OldAnimationsSettings.INSTANCE.tabMode == 1 && OldAnimationsSettings.INSTANCE.enabled)
+        if (OldAnimationsSettings.INSTANCE.tabMode == 2 && OldAnimationsSettings.INSTANCE.enabled)
             ci.cancel();
     }
 }

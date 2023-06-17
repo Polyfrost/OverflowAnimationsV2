@@ -91,6 +91,9 @@ public class OldAnimationsSettings extends Config {
     @Switch(name = "1.15+ Item Throwing Animation", description = "Back-ports the 1.15 item throwing animation while dropping items or throwing projectiles.", subcategory = "Modern Features")
     public static boolean itemThrow = false;
 
+    @Switch(name = "Disable Camera Shake", description = "Disables the camera damage shake.", subcategory = "Modern Features")
+    public static boolean noHurtCam = true;
+
     @Switch(name = "Miss Penalty Swing Animation", description = "This option is purely visual. During the miss penalty, the player's arm will still swing and show particles.",subcategory = "Fixes")
     public static boolean visualSwing = true;
 

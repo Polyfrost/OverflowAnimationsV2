@@ -31,7 +31,7 @@ public abstract class GuiPlayerTabOverlayMixin {
     }
 
     @ModifyVariable(method = "renderPlayerlist", at = @At("STORE"), index = 11)
-    private boolean checkTabSetting(boolean original) {
+    private boolean disablePlayerHead(boolean original) {
         return (OldAnimationsSettings.INSTANCE.tabMode != 2 || !OldAnimationsSettings.INSTANCE.enabled) && original;
     }
 }

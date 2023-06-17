@@ -48,8 +48,13 @@ public class EntityRendererMixin {
 
     @Inject(method = "renderWorldDirections", at = {@At("HEAD")}, cancellable = true)
     public void renderCrosshair(float partialTicks, CallbackInfo ci) {
-        if (OldAnimationsSettings.oldDebugCrosshair && OldAnimationsSettings.INSTANCE.enabled) {
+        if (OldAnimationsSettings.oldDebugCrosshair && OldAnimationsSettings.INSTANCE.enabled)
             ci.cancel();
-        }
+    }
+
+    @Inject(method = "hurtCameraEffect", at = @At("HEAD"), cancellable = true)
+    public void cancelHurtCamera(float partialTicks, CallbackInfo ci) {
+        if (OldAnimationsSettings.noHurtCam && OldAnimationsSettings.INSTANCE.enabled)
+            ci.cancel();
     }
 }
