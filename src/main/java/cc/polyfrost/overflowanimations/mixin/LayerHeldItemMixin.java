@@ -5,34 +5,20 @@ import net.minecraft.block.Block;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
-import net.minecraft.client.renderer.entity.RendererLivingEntity;
 import net.minecraft.client.renderer.entity.layers.LayerHeldItem;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.item.EntityArmorStand;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
 import net.minecraft.item.*;
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Mutable;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 @Mixin(LayerHeldItem.class)
 public abstract class LayerHeldItemMixin {
-
-    @Mutable
-    @Final
-    @Shadow
-    private final RendererLivingEntity<?> livingEntityRenderer;
-
-    public LayerHeldItemMixin(RendererLivingEntity<?> rendererLivingEntity) {
-        this.livingEntityRenderer = rendererLivingEntity;
-    }
 
     @Inject(method = "doRenderLayer", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/model/ModelBiped;postRenderArm(F)V"))
     private void applyOldSneaking(EntityLivingBase entitylivingbaseIn, float f, float g, float partialTicks, float h, float i, float j, float scale, CallbackInfo ci) {
@@ -52,13 +38,9 @@ public abstract class LayerHeldItemMixin {
         return instance.isSneaking() && (!OldAnimationsSettings.smoothSneaking || !OldAnimationsSettings.INSTANCE.enabled);
     }
 
-    @Inject(method = "doRenderLayer", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/ItemRenderer;renderItem(Lnet/minecraft/entity/EntityLivingBase;Lnet/minecraft/item/ItemStack;Lnet/minecraft/client/renderer/block/model/ItemCameraTransforms$TransformType;)V"))
-    private void applyOldThirdPersonTransformations(EntityLivingBase entitylivingbaseIn, float f, float g, float partialTicks, float h, float i, float j, float scale, CallbackInfo ci) {
-        ItemStack itemStack = entitylivingbaseIn.getHeldItem();
-        if (entitylivingbaseIn instanceof EntityPlayer && ((EntityPlayer) entitylivingbaseIn).fishEntity != null) {
-            itemStack = new ItemStack(Items.fishing_rod, 0);
-        }
-        Item item = itemStack.getItem();
+    @Inject(method = "doRenderLayer", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/ItemRenderer;renderItem(Lnet/minecraft/entity/EntityLivingBase;Lnet/minecraft/item/ItemStack;Lnet/minecraft/client/renderer/block/model/ItemCameraTransforms$TransformType;)V"), locals = LocalCapture.CAPTURE_FAILHARD)
+    private void applyOldThirdPersonTransformations(EntityLivingBase entitylivingbaseIn, float f, float g, float partialTicks, float h, float i, float j, float scale, CallbackInfo ci, ItemStack itemStack, Item item) {
+        /*
         if (OldAnimationsSettings.oldBlockhitting && OldAnimationsSettings.INSTANCE.enabled) {
             AbstractClientPlayer player = null;
             if (entitylivingbaseIn instanceof AbstractClientPlayer) {
@@ -75,6 +57,16 @@ public abstract class LayerHeldItemMixin {
                 }
             }
 
+        }
+         */
+
+        if (OldAnimationsSettings.oldBlockhitting && OldAnimationsSettings.INSTANCE.enabled) {
+            if (entitylivingbaseIn instanceof AbstractClientPlayer && ((AbstractClientPlayer) entitylivingbaseIn).isBlocking()) {
+                GlStateManager.translate(0.05F, 0.0F, -0.1F);
+                GlStateManager.rotate(-50.0F, 0.0F, 1.0F, 0.0F);
+                GlStateManager.rotate(-10.0F, 1.0F, 0.0F, 0.0F);
+                GlStateManager.rotate(-60.0F, 0.0F, 0.0F, 1.0F);
+            }
         }
 
         if (OldAnimationsSettings.thirdTransformations && OldAnimationsSettings.INSTANCE.enabled && !(item instanceof ItemSkull) && (entitylivingbaseIn instanceof EntityPlayer || !OldAnimationsSettings.entityTransforms)) {
@@ -94,12 +86,10 @@ public abstract class LayerHeldItemMixin {
                 GlStateManager.rotate(45.0F, 0.0F, 1.0F, 0.0F);
             } else if (item.isFull3D()) {
                 float var7 = 0.625F;
-
                 if (item.shouldRotateAroundWhenRendering()) {
                     GlStateManager.rotate(180.0F, 0.0F, 0.0F, 1.0F);
                     GlStateManager.translate(0.0F, -0.125F, 0.0F);
                 }
-
                 GlStateManager.translate(0.0F, 0.1875F, 0.0F);
                 GlStateManager.scale(var7, -var7, var7);
                 GlStateManager.rotate(-100.0F, 1.0F, 0.0F, 0.0F);

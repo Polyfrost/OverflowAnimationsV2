@@ -11,7 +11,6 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntityBanner;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.*;
@@ -31,19 +30,23 @@ public class RenderItemMixin {
     private void setRenderingStack(ItemStack stack, IBakedModel model, ItemCameraTransforms.TransformType cameraTransformType, CallbackInfo ci) {
         if ((OldAnimationsSettings.itemTransformations && cameraTransformType != ItemCameraTransforms.TransformType.THIRD_PERSON) ||
                 (OldAnimationsSettings.thirdTransformations && cameraTransformType == ItemCameraTransforms.TransformType.THIRD_PERSON) &&
-                        OldAnimationsSettings.INSTANCE.enabled && stack.getItem() != null && !model.isBuiltInRenderer() && (overflow$entityToRenderFor instanceof EntityPlayer || !OldAnimationsSettings.entityTransforms)) {
+                        (overflow$entityToRenderFor instanceof EntityPlayer || !OldAnimationsSettings.entityTransforms) &&
+                        OldAnimationsSettings.INSTANCE.enabled && stack.getItem() != null && !model.isBuiltInRenderer()) {
             GlStateManager.translate(-0.01, 0.002, 0.0005);
-            if (stack.getItem() instanceof ItemBlock) {
+            if (stack.getItem() instanceof ItemBlock && !(OldAnimationsSettings.itemTransformations && cameraTransformType != ItemCameraTransforms.TransformType.THIRD_PERSON) &&
+                    !(OldAnimationsSettings.thirdTransformations || cameraTransformType == ItemCameraTransforms.TransformType.THIRD_PERSON)) {
                 Block block = ((ItemBlock) stack.getItem()).getBlock();
-                if (OldAnimationsSettings.firstPersonCarpetPosition && block instanceof BlockCarpet || block instanceof BlockSnow) {
-                    GlStateManager.translate(0.015, -0.331, -0.0005);
-                } else if (block instanceof BlockLadder || block instanceof BlockPane || block instanceof BlockRail || block instanceof BlockRailPowered || block instanceof BlockRailDetector || block instanceof BlockVine || block instanceof BlockWeb || block instanceof BlockLever || block instanceof BlockBush || block instanceof BlockTorch || block instanceof BlockTripWireHook) {
-                    GlStateManager.translate(0, 0, 0.0005);
-                } else if (block instanceof BlockFurnace || block instanceof BlockDispenser || block instanceof BlockPumpkin || block instanceof BlockChest || block instanceof BlockEnderChest || block instanceof BlockFence || block instanceof BlockFenceGate) {
-                    GlStateManager.translate(0.015, -0.004, -0.0005);
-                } else if (block != null) {
-                    GlStateManager.translate(0.015, -0.004, -0.0005);
-                    GlStateManager.rotate(90, 0, 1, 0);
+                if (!(block instanceof BlockBanner)) {
+                    if (OldAnimationsSettings.firstPersonCarpetPosition && block instanceof BlockCarpet || block instanceof BlockSnow) {
+                        GlStateManager.translate(0.015, -0.331, -0.0005);
+                    } else if (block instanceof BlockLadder || block instanceof BlockPane || block instanceof BlockRail || block instanceof BlockRailPowered || block instanceof BlockRailDetector || block instanceof BlockVine || block instanceof BlockWeb || block instanceof BlockLever || block instanceof BlockBush || block instanceof BlockTorch || block instanceof BlockTripWireHook) {
+                        GlStateManager.translate(0, 0, 0.0005);
+                    } else if (block instanceof BlockFurnace || block instanceof BlockDispenser || block instanceof BlockPumpkin || block instanceof BlockChest || block instanceof BlockEnderChest || block instanceof BlockFence || block instanceof BlockFenceGate) {
+                        GlStateManager.translate(0.015, -0.004, -0.0005);
+                    } else if (block != null) {
+                        GlStateManager.translate(0.015, -0.004, -0.0005);
+                        GlStateManager.rotate(90, 0, 1, 0);
+                    }
                 }
             }
         }

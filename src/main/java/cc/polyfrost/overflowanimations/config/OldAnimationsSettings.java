@@ -91,9 +91,6 @@ public class OldAnimationsSettings extends Config {
     @Switch(name = "1.15+ Item Throwing Animation", description = "Back-ports the 1.15 item throwing animation while dropping items or throwing projectiles.", subcategory = "Modern Features")
     public static boolean itemThrow = false;
 
-    @Switch(name = "Disable Camera Shake", description = "Disables the camera damage shake.", subcategory = "Modern Features")
-    public static boolean noHurtCam = false;
-
     @Switch(name = "Miss Penalty Swing Animation", description = "This option is purely visual. During the miss penalty, the player's arm will still swing and show particles.",subcategory = "Fixes")
     public static boolean visualSwing = true;
 
@@ -117,6 +114,12 @@ public class OldAnimationsSettings extends Config {
 
     @Switch(name = "Disable Punch-During-Usage Particles in Adventure Mode", description = "Allows/Disallows the particles played while punching during usage to appear while in Adventure Mode.", subcategory = "Fixes")
     public static boolean adventureParticles = false;
+
+    @Switch(name = "Disable Hurt Camera Shake", description = "Disables the camera damage shake.", subcategory = "Fun")
+    public static boolean noHurtCam = false;
+
+    @Switch(name = "Lunar Block-hitting Position", description = "Brings back the weird block-hitting position from older versions of Lunar Client. Compatible with overlay texture packs!", subcategory = "Fun")
+    public static boolean lunarBlockhit = false;
 
     public static final OldAnimationsSettings INSTANCE = new OldAnimationsSettings();
 
