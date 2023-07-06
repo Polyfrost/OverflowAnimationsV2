@@ -1,15 +1,15 @@
 package cc.polyfrost.overflowanimations.mixin;
 
 import cc.polyfrost.overflowanimations.config.OldAnimationsSettings;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockCarpet;
+import net.minecraft.block.BlockSnow;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemSkull;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemSword;
+import net.minecraft.item.*;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -68,7 +68,11 @@ public class ItemRendererMixin {
 
     @ModifyArg(method = "renderItemInFirstPerson", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/ItemRenderer;renderItem(Lnet/minecraft/entity/EntityLivingBase;Lnet/minecraft/item/ItemStack;Lnet/minecraft/client/renderer/block/model/ItemCameraTransforms$TransformType;)V"), index = 2)
     private ItemCameraTransforms.TransformType removeNewTransformations(ItemCameraTransforms.TransformType transform) {
-        if (OldAnimationsSettings.itemTransformations && OldAnimationsSettings.INSTANCE.enabled && !(itemToRender.getItem() instanceof ItemSword &&
+        if (OldAnimationsSettings.itemTransformations && !OldAnimationsSettings.firstPersonCarpetPosition && OldAnimationsSettings.INSTANCE.enabled && itemToRender.getItem() instanceof ItemBlock) {
+            Block block = ((ItemBlock) itemToRender.getItem()).getBlock();
+            if (block instanceof BlockCarpet || block instanceof BlockSnow)
+                return transform;
+        } else if (OldAnimationsSettings.itemTransformations && OldAnimationsSettings.INSTANCE.enabled && !(itemToRender.getItem() instanceof ItemSword &&
                 OldAnimationsSettings.lunarBlockhit)) {
             return ItemCameraTransforms.TransformType.NONE;
         }
