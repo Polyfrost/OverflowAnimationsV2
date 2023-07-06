@@ -42,7 +42,7 @@ public abstract class LayerHeldItemMixin {
     @Inject(method = "doRenderLayer", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/ItemRenderer;renderItem(Lnet/minecraft/entity/EntityLivingBase;Lnet/minecraft/item/ItemStack;Lnet/minecraft/client/renderer/block/model/ItemCameraTransforms$TransformType;)V"), locals = LocalCapture.CAPTURE_FAILHARD)
     private void applyOldThirdPersonTransformations(EntityLivingBase entitylivingbaseIn, float f, float g, float partialTicks, float h, float i, float j, float scale, CallbackInfo ci, ItemStack itemStack, Item item) {
         if (OldAnimationsSettings.INSTANCE.enabled) {
-            if (OldAnimationsSettings.oldBlockhitting && entitylivingbaseIn instanceof AbstractClientPlayer && ((AbstractClientPlayer) entitylivingbaseIn).isBlocking()) {
+            if (OldAnimationsSettings.thirdPersonBlock && entitylivingbaseIn instanceof AbstractClientPlayer && ((AbstractClientPlayer) entitylivingbaseIn).isBlocking()) {
                 GlStateManager.translate(0.05F, 0.0F, -0.1F);
                 GlStateManager.rotate(-50.0F, 0.0F, 1.0F, 0.0F);
                 GlStateManager.rotate(-10.0F, 1.0F, 0.0F, 0.0F);

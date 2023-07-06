@@ -54,12 +54,16 @@ public class OldAnimationsSettings extends Config {
     @Checkbox(name = "1.7 First-Person Carpet Position", description = "Brings back the old carpet position from 1.7.", subcategory = "Position")
     public static boolean firstPersonCarpetPosition = true;
 
-    @Switch(name = "1.7 Third-Person Block Position", description = "Brings back the old arm rotation while blocking from 1.7.", subcategory = "Position")
+    @Switch(name = "1.7 Third-Person Arm Block Position", description = "Brings back the old arm rotation while blocking from 1.7.", subcategory = "Position")
     @VigilanceName(name = "1.7 3rd Person Block Animation", category = "Animations", subcategory = "Position")
     public static boolean oldSwordBlock3 = true;
 
     @Switch(name = "1.7 Mirrored Projectiles", description = "Mirrors projectiles so that they're facing the correct direction similar to 1.7 or 1.9+.", subcategory = "Position")
     public static boolean oldProjectiles = true;
+
+    @Switch(name = "1.7 Third-Person Sword Block Position", description = "Brings back the old sword rotation while blocking from 1.7.", subcategory = "Position")
+    @VigilanceName(name = "1.7 3rd Person Block Animation", category = "Animations", subcategory = "Position")
+    public static boolean thirdPersonBlock = true;
 
     @Switch(name = "1.7 XP Orbs", description = "Brings back the old XP Orbs position from 1.7.", subcategory = "Position")
     public static boolean oldXPOrbs = true;
@@ -78,7 +82,7 @@ public class OldAnimationsSettings extends Config {
             options = {"1.7", "1.8", "Disable Background"})
     public int debugScreenMode = 1;
 
-    @Switch(name = "1.7 Debug Screen Cross-hair", description = "Disables the RGB cross-hair in the debug menu.", subcategory = "HUD")
+    @Switch(name = "1.7 Debug Screen Crosshair", description = "Disables the RGB cross-hair in the debug menu.", subcategory = "HUD")
     public static boolean oldDebugCrosshair = true;
 
     @Dropdown(name = "Tab Menu Style", description = "Allows you to choose between the 1.7 tab menu, the 1.8 tab menu, " +
