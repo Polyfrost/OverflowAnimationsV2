@@ -72,6 +72,8 @@ public class ItemRendererMixin {
             Block block = ((ItemBlock) itemToRender.getItem()).getBlock();
             if (block instanceof BlockCarpet || block instanceof BlockSnow)
                 return transform;
+            else
+                return ItemCameraTransforms.TransformType.NONE;
         } else if (OldAnimationsSettings.itemTransformations && OldAnimationsSettings.INSTANCE.enabled && !(itemToRender.getItem() instanceof ItemSword &&
                 OldAnimationsSettings.lunarBlockhit)) {
             return ItemCameraTransforms.TransformType.NONE;

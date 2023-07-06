@@ -14,28 +14,6 @@ public class ForgeHooksClientMixin {
 
     @Inject(method = "handleCameraTransforms", at = @At("RETURN"))
     private static void getCameraPerspective(IBakedModel model, ItemCameraTransforms.TransformType cameraTransformType, CallbackInfoReturnable<IBakedModel> cir) {
-        switch (cameraTransformType) {
-            case NONE:
-                TransformTypeHook.transform = ItemCameraTransforms.TransformType.NONE;
-                break;
-            case THIRD_PERSON:
-                TransformTypeHook.transform = ItemCameraTransforms.TransformType.THIRD_PERSON;
-                break;
-            case FIRST_PERSON:
-                TransformTypeHook.transform = ItemCameraTransforms.TransformType.FIRST_PERSON;
-                break;
-            case HEAD:
-                TransformTypeHook.transform = ItemCameraTransforms.TransformType.HEAD;
-                break;
-            case GUI:
-                TransformTypeHook.transform = ItemCameraTransforms.TransformType.GUI;
-                break;
-            case GROUND:
-                TransformTypeHook.transform = ItemCameraTransforms.TransformType.GROUND;
-                break;
-            case FIXED:
-                TransformTypeHook.transform = ItemCameraTransforms.TransformType.FIXED;
-                break;
-        }
+        TransformTypeHook.transform = cameraTransformType;
     }
 }
