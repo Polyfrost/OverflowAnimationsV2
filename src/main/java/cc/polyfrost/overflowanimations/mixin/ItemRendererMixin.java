@@ -55,8 +55,6 @@ public class ItemRendererMixin {
         OldAnimationsSettings.lunarBlockhit) && !mc.getRenderItem().shouldRenderItemIn3D(itemToRender)) {
             if (itemToRender.getItem().shouldRotateAroundWhenRendering())
                 GlStateManager.rotate(180.0F, 0.0F, 1.0F, 0.0F);
-            else if (itemToRender.getItem() instanceof ItemSkull)
-                GlStateManager.scale(0.55F, 0.55F, 0.55F);
             GlStateManager.translate(0.607F, 0.063F, -0.7935F);
             GlStateManager.scale(1.5F, 1.5F, 1.5F);
             GlStateManager.rotate(50.0F, 0.0F, 1.0F, 0.0F);
@@ -64,6 +62,8 @@ public class ItemRendererMixin {
             GlStateManager.translate(-0.9375F, -0.0625F, 0.0F);
             GlStateManager.scale(-1.0F, 1.0F, -1.0F);
         }
+        if (itemToRender.getItem() instanceof ItemSkull)
+            GlStateManager.scale(0.55F, 0.55F, 0.55F);
     }
 
     @ModifyArg(method = "renderItemInFirstPerson", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/ItemRenderer;renderItem(Lnet/minecraft/entity/EntityLivingBase;Lnet/minecraft/item/ItemStack;Lnet/minecraft/client/renderer/block/model/ItemCameraTransforms$TransformType;)V"), index = 2)
