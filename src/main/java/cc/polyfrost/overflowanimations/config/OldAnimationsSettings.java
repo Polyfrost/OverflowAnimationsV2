@@ -74,9 +74,9 @@ public class OldAnimationsSettings extends Config {
     @VigilanceName(name = "Remove Health Bar Flashing", category = "Animations", subcategory = "HUD")
     public static boolean oldHealth = true;
 
-    @Switch(name = "1.7 Debug Screen Text Style", description = "Reverts the debug menu to be aesthetically similar to 1.7", subcategory = "HUD")
-    @VigilanceName(name = "Debug Screen", category = "Animations", subcategory = "HUD")
-    public static boolean oldDebugScreen = true;
+    @Dropdown(name = "Debug Menu Style", description = "Reverts the debug menu to be aesthetically similar to 1.7",
+            options = {"1.7", "1.8", "Disable Background"})
+    public int debugScreenMode = 1;
 
     @Switch(name = "1.7 Debug Screen Cross-hair", description = "Disables the RGB cross-hair in the debug menu.", subcategory = "HUD")
     public static boolean oldDebugCrosshair = true;
@@ -96,9 +96,6 @@ public class OldAnimationsSettings extends Config {
 
     @Switch(name = "Dropped Item Sprites Rotation Fix", description = "Allows 2D items to face the player properly without being stuck on the Y-Axis.", subcategory = "Fixes")
     public static boolean rotationFix = true;
-
-    @Switch(name = "Fix Block Break Removal", description = "Fixes a bug regarding the block destroy texture not disappearing after cancelling mining.", subcategory = "Fixes")
-    public static boolean fixBlockBreak = false;
 
     @Checkbox(name = "Remove Glint From Sprites", description = "This will disable the enchantment glint for both dropped items and projectiles. Only works with 2D items enabled.", subcategory = "Fixes")
     public static boolean spritesGlint = false;

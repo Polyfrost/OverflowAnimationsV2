@@ -1,15 +1,15 @@
 package cc.polyfrost.overflowanimations.mixin;
 
 import cc.polyfrost.overflowanimations.config.OldAnimationsSettings;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockCarpet;
-import net.minecraft.block.BlockSnow;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
-import net.minecraft.item.*;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemSkull;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemSword;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -31,27 +31,45 @@ public class ItemRendererMixin {
                 abstractclientplayer.getSwingProgress(partialTicks) : original;
     }
 
+    @Inject(method = "doBowTransformations", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GlStateManager;scale(FFF)V"))
+    private void simplified$doBowTransformations(float partialTicks, AbstractClientPlayer clientPlayer, CallbackInfo ci) {
+        if (OldAnimationsSettings.itemTransformations && OldAnimationsSettings.INSTANCE.enabled) {
+            GlStateManager.rotate(-335.0F, 0.0F, 0.0F, 1.0F);
+            GlStateManager.rotate(-50.0F, 0.0F, 1.0F, 0.0F);
+            GlStateManager.translate(0.0F, 0.5F, 0.0F);
+        }
+    }
+
+    @Inject(method = "doBowTransformations", at = @At(value = "TAIL"))
+    private void simplified$doBowTransformations2(float partialTicks, AbstractClientPlayer clientPlayer, CallbackInfo ci) {
+        if (OldAnimationsSettings.itemTransformations && OldAnimationsSettings.INSTANCE.enabled) {
+            GlStateManager.translate(0.0F, -0.5F, 0.0F);
+            GlStateManager.rotate(50.0F, 0.0F, 1.0F, 0.0F);
+            GlStateManager.rotate(335.0F, 0.0F, 0.0F, 1.0F);
+        }
+    }
+
     @Inject(method = "renderItemInFirstPerson", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/ItemRenderer;renderItem(Lnet/minecraft/entity/EntityLivingBase;Lnet/minecraft/item/ItemStack;Lnet/minecraft/client/renderer/block/model/ItemCameraTransforms$TransformType;)V"))
     private void transformOldRod(float partialTicks, CallbackInfo ci) {
         if (OldAnimationsSettings.itemTransformations && OldAnimationsSettings.INSTANCE.enabled && !(itemToRender.getItem() instanceof ItemSword &&
         OldAnimationsSettings.lunarBlockhit) && !mc.getRenderItem().shouldRenderItemIn3D(itemToRender)) {
-            if (itemToRender.getItem().shouldRotateAroundWhenRendering()) {
+            if (itemToRender.getItem().shouldRotateAroundWhenRendering())
                 GlStateManager.rotate(180.0F, 0.0F, 1.0F, 0.0F);
-            }
-            GlStateManager.translate(0.58800083f, 0.06999986f, -0.77000016f);
-            GlStateManager.scale(1.5f, 1.5f, 1.5f);
+            else if (itemToRender.getItem() instanceof ItemSkull)
+                GlStateManager.scale(0.55F, 0.55F, 0.55F);
+            GlStateManager.translate(0.607F, 0.063F, -0.7935F);
+            GlStateManager.scale(1.5F, 1.5F, 1.5F);
             GlStateManager.rotate(50.0F, 0.0F, 1.0F, 0.0F);
             GlStateManager.rotate(335.0F, 0.0F, 0.0F, 1.0F);
             GlStateManager.translate(-0.9375F, -0.0625F, 0.0F);
-            GlStateManager.scale(-2, 2, -2);
-            GlStateManager.scale(0.5f, 0.5f, 0.5f);
+            GlStateManager.scale(-1.0F, 1.0F, -1.0F);
         }
     }
 
     @ModifyArg(method = "renderItemInFirstPerson", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/ItemRenderer;renderItem(Lnet/minecraft/entity/EntityLivingBase;Lnet/minecraft/item/ItemStack;Lnet/minecraft/client/renderer/block/model/ItemCameraTransforms$TransformType;)V"), index = 2)
     private ItemCameraTransforms.TransformType removeNewTransformations(ItemCameraTransforms.TransformType transform) {
         if (OldAnimationsSettings.itemTransformations && OldAnimationsSettings.INSTANCE.enabled && !(itemToRender.getItem() instanceof ItemSword &&
-                OldAnimationsSettings.lunarBlockhit) && !mc.getRenderItem().shouldRenderItemIn3D(itemToRender)) {
+                OldAnimationsSettings.lunarBlockhit)) {
             return ItemCameraTransforms.TransformType.NONE;
         }
         return transform;
