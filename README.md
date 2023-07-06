@@ -19,6 +19,7 @@ This mod combines Overflow Animations (V1) with Sk1er Old Animations code into a
 * Old Projectiles
 * Cleaner Enchantment Glint
 * 1.15 Armor Enchantment Glint
+* Various more features not seen in other old animation mods!
 
 *The "Old Debug Hitbox" feature has been removed from the original as [REDACTION](https://github.com/Polyfrost/REDACTION) has the same functionality.*
 
