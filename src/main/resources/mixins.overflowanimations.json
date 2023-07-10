@@ -6,7 +6,7 @@
     "verbose": true,
     "client": [
         "EntityLivingBaseInvoker",
-        "EntityPlayerSPMixin",
+        "EntityPlayerMixin",
         "EntityRendererMixin",
         "ForgeHooksClientMixin",
         "GuiIngameForgeMixin",
@@ -26,7 +26,6 @@
         "RenderEntityItemMixin",
         "RenderFishMixin",
         "RenderItemMixin",
-        "RenderSnowballMixin",
-        "WorldMixin"
+        "RenderSnowballMixin"
     ]
 }

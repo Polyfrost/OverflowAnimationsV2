@@ -53,7 +53,9 @@ val shade: Configuration by configurations.creating {
 }
 
 sourceSets {
+    val dummy by creating
     main {
+        compileClasspath += dummy.output
         output.setResourcesDir(java.classesDirectory)
     }
 }

@@ -34,10 +34,6 @@ public class OldAnimationsSettings extends Config {
     @VigilanceName(name = "1.7 Red Armor Tint", category = "Animations", subcategory = "Interaction")
     public static boolean redArmor = true;
 
-    @Switch(name = "1.7 Item Switching Animation", description = "Re-enables the item switch animation from 1.7.", subcategory = "Interaction")
-    @VigilanceName(name = "1.7 Item Switching Animation", category = "Animations", subcategory = "Interaction")
-    public static boolean itemSwitch = true;
-
     @Switch(name = "1.7 Punching During Usage", description = "Purely visual feature. Re-enables the ability to consume food or block a sword whilst punching a block.", subcategory = "Interaction")
     @VigilanceName(name = "1.7 Punching During Usage", category = "Animations", subcategory = "Interaction")
     public static boolean punching = true;
@@ -83,7 +79,7 @@ public class OldAnimationsSettings extends Config {
     public int debugScreenMode = 1;
 
     @Switch(name = "1.7 Debug Screen Crosshair", description = "Disables the RGB cross-hair in the debug menu.", subcategory = "HUD")
-    public static boolean oldDebugCrosshair = true;
+    public static boolean oldDebugCrosshair = false;
 
     @Dropdown(name = "Tab Menu Style", description = "Allows you to choose between the 1.7 tab menu, the 1.8 tab menu, " +
             "and disabling the player heads in the tab menu.", options = {"1.7", "1.8", "Disable Heads"})
@@ -91,9 +87,6 @@ public class OldAnimationsSettings extends Config {
 
     @Switch(name = "1.15+ Armor Enchantment Glint", description = "Back-ports the 1.15 armor glint rendering.", subcategory = "Modern Features")
     public static boolean enchantmentGlintNew = false;
-
-    @Switch(name = "1.15+ Item Throwing Animation", description = "Back-ports the 1.15 item throwing animation while dropping items or throwing projectiles.", subcategory = "Modern Features")
-    public static boolean itemThrow = false;
 
     @Switch(name = "Miss Penalty Swing Animation", description = "This option is purely visual. During the miss penalty, the player's arm will still swing and show particles.",subcategory = "Fixes")
     public static boolean visualSwing = true;

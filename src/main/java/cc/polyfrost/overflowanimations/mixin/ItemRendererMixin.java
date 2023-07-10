@@ -105,21 +105,4 @@ public class ItemRendererMixin {
     private float weirdLunarAnimation(float original) {
         return OldAnimationsSettings.lunarBlockhit && OldAnimationsSettings.INSTANCE.enabled ? 0.2f : original;
     }
-
-    @Redirect(method = "updateEquippedItem", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;getIsItemStackEqual(Lnet/minecraft/item/ItemStack;)Z"))
-    private boolean useOldEquipCheck(ItemStack itemToRender, ItemStack itemstack) {
-        if (OldAnimationsSettings.itemSwitch && OldAnimationsSettings.INSTANCE.enabled) {
-            return itemstack != null && itemToRender == itemstack &&
-                    itemToRender.getItem() == itemstack.getItem() && itemToRender.getItemDamage() == itemstack.getItemDamage();
-        }
-        return itemToRender.getIsItemStackEqual(itemstack);
-    }
-
-    @Redirect(method = "updateEquippedItem", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/Item;shouldCauseReequipAnimation(Lnet/minecraft/item/ItemStack;Lnet/minecraft/item/ItemStack;Z)Z"), remap = false)
-    private boolean useOldEquipCheck2(Item instance, ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
-        if (OldAnimationsSettings.itemSwitch && OldAnimationsSettings.INSTANCE.enabled) {
-            return slotChanged;
-        }
-        return instance.shouldCauseReequipAnimation(oldStack, newStack, slotChanged);
-    }
 }
