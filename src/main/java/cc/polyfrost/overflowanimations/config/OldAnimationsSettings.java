@@ -98,6 +98,9 @@ public class OldAnimationsSettings extends Config {
     @Switch(name = "Miss Penalty Swing Animation", description = "This option is purely visual. During the miss penalty, the player's arm will still swing and show particles.",subcategory = "Fixes")
     public static boolean visualSwing = true;
 
+    @Switch(name = "Block Breaking Fixes", description = "Resets block removing while using an item or when the player is out of range of a block.",subcategory = "Fixes")
+    public static boolean breakFix = true;
+
     @Switch(name = "Dropped Item Sprites Rotation Fix", description = "Allows 2D items to face the player properly without being stuck on the Y-Axis.", subcategory = "Fixes")
     public static boolean rotationFix = true;
 

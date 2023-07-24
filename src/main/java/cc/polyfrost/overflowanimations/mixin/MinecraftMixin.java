@@ -31,13 +31,13 @@ public abstract class MinecraftMixin {
     @Shadow
     public WorldClient theWorld;
     @Shadow
-    public GameSettings gameSettings;
-    @Shadow
     private int leftClickCounter;
 
     @Inject(method = "sendClickBlockToController", at = @At("HEAD"))
     public void blockHitAnimation(boolean leftClick, CallbackInfo ci) {
-        if (OldAnimationsSettings.oldBlockhitting && OldAnimationsSettings.punching && OldAnimationsSettings.INSTANCE.enabled && gameSettings.keyBindUseItem.isKeyDown()) {
+        if (OldAnimationsSettings.oldBlockhitting && OldAnimationsSettings.punching && OldAnimationsSettings.INSTANCE.enabled && thePlayer.isUsingItem()) {
+            if (OldAnimationsSettings.breakFix)
+                playerController.resetBlockRemoving();
             if (leftClickCounter <= 0 && leftClick && objectMouseOver != null && objectMouseOver.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK) {
                 if (!theWorld.isAirBlock(objectMouseOver.getBlockPos()) && (thePlayer.isAllowEdit() || !OldAnimationsSettings.adventurePunching)) {
                     if (!OldAnimationsSettings.adventureParticles && OldAnimationsSettings.punchingParticles) {
@@ -45,8 +45,7 @@ public abstract class MinecraftMixin {
                     }
                     SwingHook.swingItem();
                 }
-            } else
-                playerController.resetBlockRemoving();
+            }
         }
     }
 
