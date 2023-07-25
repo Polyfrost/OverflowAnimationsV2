@@ -7,7 +7,6 @@ import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.multiplayer.PlayerControllerMP;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.particle.EffectRenderer;
-import net.minecraft.client.settings.GameSettings;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.potion.Potion;
@@ -36,8 +35,10 @@ public abstract class MinecraftMixin {
     @Inject(method = "sendClickBlockToController", at = @At("HEAD"))
     public void blockHitAnimation(boolean leftClick, CallbackInfo ci) {
         if (OldAnimationsSettings.oldBlockhitting && OldAnimationsSettings.punching && OldAnimationsSettings.INSTANCE.enabled && thePlayer.isUsingItem()) {
-            if (OldAnimationsSettings.breakFix)
+            if (OldAnimationsSettings.breakFix) {
                 playerController.resetBlockRemoving();
+                ((PlayerControllerMPInvoker) playerController).setBlockHitDelay(5);
+            }
             if (leftClickCounter <= 0 && leftClick && objectMouseOver != null && objectMouseOver.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK) {
                 if (!theWorld.isAirBlock(objectMouseOver.getBlockPos()) && (thePlayer.isAllowEdit() || !OldAnimationsSettings.adventurePunching)) {
                     if (!OldAnimationsSettings.adventureParticles && OldAnimationsSettings.punchingParticles) {

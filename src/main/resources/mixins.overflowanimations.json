@@ -12,6 +12,7 @@
         "GuiIngameForgeMixin",
         "GuiIngameMixin",
         "GuiOverlayDebugMixin",
+        "PlayerControllerMPInvoker",
         "GuiPlayerTabOverlayInvoker",
         "GuiPlayerTabOverlayMixin",
         "ItemRendererMixin",
