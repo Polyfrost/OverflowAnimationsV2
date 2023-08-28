@@ -2,6 +2,7 @@ package cc.polyfrost.overflowanimations.mixin;
 
 import cc.polyfrost.overflowanimations.config.OldAnimationsSettings;
 import cc.polyfrost.overflowanimations.hooks.SwingHook;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.item.EntityItem;
 import org.spongepowered.asm.mixin.Mixin;
@@ -14,7 +15,7 @@ public abstract class EntityPlayerSPMixin {
 
     @Inject(method = "dropOneItem", at = @At("HEAD"))
     private void dropItem(boolean dropAll, CallbackInfoReturnable<EntityItem> cir) {
-        if (OldAnimationsSettings.itemThrow && OldAnimationsSettings.INSTANCE.enabled) {
+        if (OldAnimationsSettings.itemThrow && OldAnimationsSettings.INSTANCE.enabled && Minecraft.getMinecraft().thePlayer.getHeldItem() != null) {
             SwingHook.swingItem();
         }
     }
