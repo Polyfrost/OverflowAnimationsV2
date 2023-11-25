@@ -1,5 +1,7 @@
 # Overflow Animations V2
 
+![Compact Powered by OneConfig](https://polyfrost.org/img/compact_vector.svg)
+
 This mod combines Overflow Animations (V1) with Sk1er Old Animations code into a singular mod, with bug fixes and additional features.
 
 **Includes:**
