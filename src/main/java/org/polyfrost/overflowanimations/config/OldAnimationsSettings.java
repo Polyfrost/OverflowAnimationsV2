@@ -15,7 +15,7 @@ import org.polyfrost.overflowanimations.OverflowAnimations;
 public class OldAnimationsSettings extends Config {
 
     @Switch(name = "1.7 Dropped Items", description = "Dropped items face the camera.", subcategory = "2D Items")
-    public static boolean items2D = true;
+    public static boolean items2D = false;
 
     @Checkbox(name = "1.7 Item Sprites", description = "This option will render items as sprites rather than as models.", subcategory = "2D Items")
     public static boolean itemSprites = true;
