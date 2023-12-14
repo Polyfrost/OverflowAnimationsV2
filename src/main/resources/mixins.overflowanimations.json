@@ -6,13 +6,11 @@
     "verbose": true,
     "client": [
       "EntityLivingBaseInvoker",
-      "EntityPlayerSPMixin",
       "EntityRendererMixin",
       "ForgeHooksClientMixin",
       "GuiIngameForgeMixin",
       "GuiIngameMixin",
       "GuiOverlayDebugMixin",
-      "PlayerControllerMPInvoker",
       "GuiPlayerTabOverlayInvoker",
       "GuiPlayerTabOverlayMixin",
       "ItemRendererMixin",
@@ -27,7 +25,6 @@
       "RenderEntityItemMixin",
       "RenderFishMixin",
       "RenderItemMixin",
-      "RenderSnowballMixin",
-      "WorldMixin"
+      "RenderSnowballMixin"
     ]
 }

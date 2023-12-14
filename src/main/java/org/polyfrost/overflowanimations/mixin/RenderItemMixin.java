@@ -1,72 +1,131 @@
 package org.polyfrost.overflowanimations.mixin;
 
-import org.polyfrost.overflowanimations.config.OldAnimationsSettings;
-import org.polyfrost.overflowanimations.hooks.TransformTypeHook;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockCarpet;
+import net.minecraft.block.BlockSnow;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.WorldRenderer;
+import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.resources.model.IBakedModel;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemBanner;
+import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
+import org.polyfrost.overflowanimations.config.OldAnimationsSettings;
+import org.polyfrost.overflowanimations.hooks.TransformTypeHook;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.*;
+import org.spongepowered.asm.mixin.Unique;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyArg;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Mixin(RenderItem.class)
 public class RenderItemMixin {
 
-    @ModifyConstant(method = "renderEffect", constant = @Constant(floatValue = 8.0f))
-    private float modifyScale(float original) {
-        return OldAnimationsSettings.enchantmentGlint && OldAnimationsSettings.INSTANCE.enabled ? 6.0f : original;
+    @Unique
+    public IBakedModel simplified$model;
+    @Unique
+    private EntityLivingBase simplified$entityLivingBase = null;
+
+    @Inject(method = "renderModel(Lnet/minecraft/client/resources/model/IBakedModel;ILnet/minecraft/item/ItemStack;)V", at = @At("HEAD"))
+    private void setModel(IBakedModel model, int color, ItemStack stack, CallbackInfo ci) {
+        simplified$model = model;
     }
 
-    @ModifyConstant(method = "renderEffect", constant = @Constant(floatValue = -50F))
-    private float modifyEffect(float original) {
-        return OldAnimationsSettings.enchantmentGlint && OldAnimationsSettings.INSTANCE.enabled ?
-                TransformTypeHook.transform != ItemCameraTransforms.TransformType.GUI ? -5.0f : 0.0f : original;
+    @Inject(method = "renderItemModelForEntity", at = @At("HEAD"))
+    public void getLastEntity(ItemStack stack, EntityLivingBase entityToRenderFor, ItemCameraTransforms.TransformType cameraTransformType, CallbackInfo ci) {
+        simplified$entityLivingBase = entityToRenderFor;
     }
 
-    @ModifyConstant(method = "renderEffect", constant = @Constant(floatValue = 10.0F))
-    private float modifyEffect2(float original) {
-        return OldAnimationsSettings.enchantmentGlint && OldAnimationsSettings.INSTANCE.enabled ?
-                TransformTypeHook.transform != ItemCameraTransforms.TransformType.GUI ? 205.0f : 0.0f : original;
+    @ModifyArg(method = "renderModel(Lnet/minecraft/client/resources/model/IBakedModel;ILnet/minecraft/item/ItemStack;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/entity/RenderItem;renderQuads(Lnet/minecraft/client/renderer/WorldRenderer;Ljava/util/List;ILnet/minecraft/item/ItemStack;)V", ordinal = 1), index = 1)
+    private List<BakedQuad> changeToSprite(List<BakedQuad> quads) {
+        if (OldAnimationsSettings.itemSprites && OldAnimationsSettings.INSTANCE.enabled && !simplified$model.isGui3d() && TransformTypeHook.shouldBeSprite()) {
+            return quads.stream().filter(baked -> baked.getFace() == EnumFacing.SOUTH).collect(Collectors.toList());
+        }
+        return quads;
     }
 
-    @ModifyArg(method = "renderEffect", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GlStateManager;translate(FFF)V", ordinal = 1), index = 0)
-    private float modifyEffect3(float original) {
-        return (OldAnimationsSettings.enchantmentGlint && OldAnimationsSettings.INSTANCE.enabled ? -1F : 1F) * original;
-    }
-
-    @ModifyConstant(method = "renderEffect", constant = @Constant(longValue = 4873L))
-    private long modifyEffectSpeed3(long original) {
-        return OldAnimationsSettings.enchantmentGlint && OldAnimationsSettings.INSTANCE.enabled &&
-                TransformTypeHook.transform != ItemCameraTransforms.TransformType.GUI ? 2000L : original;
-    }
-
-    @ModifyConstant(method = "renderEffect", constant = @Constant(floatValue = 4873.0f))
-    private float modifyEffectSpeed4(float original) {
-        return OldAnimationsSettings.enchantmentGlint && OldAnimationsSettings.INSTANCE.enabled &&
-                TransformTypeHook.transform != ItemCameraTransforms.TransformType.GUI ? 2000.0f : original;
-    }
-
-    @Inject(method = "renderEffect", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GlStateManager;translate(FFF)V", shift = At.Shift.AFTER))
-    public void modifyEffect4(IBakedModel model, CallbackInfo ci) {
-        if (OldAnimationsSettings.enchantmentGlint && OldAnimationsSettings.INSTANCE.enabled &&
-                TransformTypeHook.transform == ItemCameraTransforms.TransformType.GUI) {
-            GlStateManager.rotate(70.0F, 0.0F, 1.0F, 0.0F);
-            GlStateManager.rotate(90.0F, 1.0F, 0.0F, 0.0F);
+    @Redirect(method = "putQuadNormal", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/WorldRenderer;putNormal(FFF)V"))
+    private void modifyNormalValue(WorldRenderer instance, float x, float y, float z, WorldRenderer renderer, BakedQuad quad) {
+        if (OldAnimationsSettings.INSTANCE.enabled && !simplified$model.isGui3d()) {
+            if (OldAnimationsSettings.itemSpritesColor && TransformTypeHook.shouldNotHaveGlint()) {
+                instance.putNormal(x, z, y);
+            } else if (OldAnimationsSettings.oldItemLighting) {
+                instance.putNormal(-x, Minecraft.getMinecraft().thePlayer.isBlocking() ? -y : y, z);
+            }
+        } else {
+            instance.putNormal(x, y, z);
         }
     }
 
-    @ModifyConstant(method = "renderEffect", constant = @Constant(intValue = -8372020))
-    private int modifyEffect6(int original) {
-        return OldAnimationsSettings.enchantmentGlint && OldAnimationsSettings.INSTANCE.enabled ?
-                TransformTypeHook.transform == ItemCameraTransforms.TransformType.GUI ? -6788658 : -10799734 : original;
+    @Redirect(method = "renderItem(Lnet/minecraft/item/ItemStack;Lnet/minecraft/client/resources/model/IBakedModel;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;hasEffect()Z"))
+    private boolean disableGlintOnSprite(ItemStack instance, ItemStack stack, IBakedModel model) {
+        if (OldAnimationsSettings.itemSprites && OldAnimationsSettings.spritesGlint && OldAnimationsSettings.INSTANCE.enabled && TransformTypeHook.shouldNotHaveGlint()) {
+            return false;
+        }
+        return instance.hasEffect();
     }
 
-    @Inject(method = "renderEffect", at = @At(value = "HEAD"), cancellable = true)
-    public void modifyEffect5(IBakedModel model, CallbackInfo ci) {
-        if (OldAnimationsSettings.spritesGlint && OldAnimationsSettings.INSTANCE.enabled &&
-                TransformTypeHook.transform == ItemCameraTransforms.TransformType.GROUND) {
-            ci.cancel();
+    @Inject(method = "renderItem(Lnet/minecraft/item/ItemStack;Lnet/minecraft/client/resources/model/IBakedModel;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/entity/RenderItem;renderModel(Lnet/minecraft/client/resources/model/IBakedModel;Lnet/minecraft/item/ItemStack;)V"))
+    private void translateSprite(ItemStack stack, IBakedModel model, CallbackInfo ci) {
+        if (OldAnimationsSettings.itemSprites && OldAnimationsSettings.INSTANCE.enabled && !model.isGui3d() && TransformTypeHook.shouldNotHaveGlint()) {
+            GlStateManager.translate(0.0F, 0.0F, -0.0625F);
         }
     }
+
+    @Inject(method = "renderItemModelTransform", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/entity/RenderItem;renderItem(Lnet/minecraft/item/ItemStack;Lnet/minecraft/client/resources/model/IBakedModel;)V"))
+    public void modifyModelPosition(ItemStack stack, IBakedModel model, ItemCameraTransforms.TransformType cameraTransformType, CallbackInfo ci) {
+        if (OldAnimationsSettings.INSTANCE.enabled && !(stack.getItem() instanceof ItemBanner)) {
+                boolean isRod = stack.getItem().shouldRotateAroundWhenRendering();
+                boolean isBlock = stack.getItem() instanceof ItemBlock;
+                boolean isCarpet = false;
+                if (isBlock) {
+                    Block block = ((ItemBlock) stack.getItem()).getBlock();
+                    isCarpet = block instanceof BlockCarpet || block instanceof BlockSnow;
+                }
+                if (OldAnimationsSettings.firstTransformations && cameraTransformType == ItemCameraTransforms.TransformType.FIRST_PERSON) {
+                    if (isRod) {
+                        GlStateManager.rotate(180.0F, 0.0F, 1.0F, 0.0F);
+                        GlStateManager.rotate(50.0F, 0.0F, 0.0F, 1.0F);
+                    } else if (OldAnimationsSettings.firstPersonCarpetPosition && isCarpet) {
+                        GlStateManager.translate(0.0F, -5.25F * 0.0625F, 0.0F);
+                    }
+                } else if (OldAnimationsSettings.thirdTransformations && cameraTransformType == ItemCameraTransforms.TransformType.THIRD_PERSON
+                        && (simplified$entityLivingBase instanceof EntityPlayer || !OldAnimationsSettings.entityTransforms)) {
+                    if (isRod) {
+                        GlStateManager.rotate(180.0F, 0.0F, 1.0F, 0.0F);
+                        GlStateManager.rotate(110.0F, 0.0F, 0.0F, 1.0F);
+                        GlStateManager.translate(0.002F, 0.037F, -0.003F);
+                    } else if (OldAnimationsSettings.thirdPersonCarpetPosition && isCarpet) {
+                        GlStateManager.translate(0.0F, -0.25F, 0.0F);
+                    }
+                    if (isBlock) {
+                        if (Block.getBlockFromItem(stack.getItem()).getRenderType() != 2) {
+                            GlStateManager.translate(-0.0285F, -0.0375F, 0.0285F);
+                            GlStateManager.rotate(-5.0f, 1.0f, 0.0f, 0.0f);
+                            GlStateManager.rotate(-5.0f, 0.0f, 0.0f, 1.0f);
+                        }
+                        GlStateManager.scale(-1.0F, 1.0F, -1.0F);
+                    }
+                }
+            }
+    }
+
+    @Inject(method = "renderItemAndEffectIntoGUI", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/entity/RenderItem;renderItemIntoGUI(Lnet/minecraft/item/ItemStack;II)V"))
+    public void fixGlint(ItemStack stack, int xPosition, int yPosition, CallbackInfo ci) {
+        if (OldAnimationsSettings.INSTANCE.enabled) {
+            GlStateManager.enableDepth();
+        }
+    }
+
 }

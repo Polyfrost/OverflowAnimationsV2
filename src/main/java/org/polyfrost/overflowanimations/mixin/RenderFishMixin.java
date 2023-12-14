@@ -16,14 +16,19 @@ public class RenderFishMixin {
     private Vec3 oldFishingLine(double x, double y, double z) {
         double fov = Minecraft.getMinecraft().gameSettings.fovSetting;
         double decimalFov = fov / 110;
-        return OldAnimationsSettings.itemTransformations && OldAnimationsSettings.INSTANCE.enabled ? OldAnimationsSettings.fixRod ?
+        return OldAnimationsSettings.firstTransformations && OldAnimationsSettings.INSTANCE.enabled ? OldAnimationsSettings.fixRod ?
                 new Vec3(((-decimalFov + (decimalFov / 2.5)) - (decimalFov / 8)) + 0.16, 0, 0.4D) :
                 new Vec3(-0.5D, 0.03D, 0.8D) : new Vec3(x, y, z);
     }
 
-    @ModifyConstant(method = "doRender(Lnet/minecraft/entity/projectile/EntityFishHook;DDDFF)V", constant = @Constant(doubleValue = 0.0D))
-    private double lowerLine(double original) {
-        return OldAnimationsSettings.thirdTransformations && OldAnimationsSettings.INSTANCE.enabled ?
-                -0.1875D : original;
+    @ModifyConstant(method = "doRender(Lnet/minecraft/entity/projectile/EntityFishHook;DDDFF)V", constant = @Constant(doubleValue = 0.8D, ordinal = 1))
+    public double moveLinePosition(double constant) {
+        return OldAnimationsSettings.firstTransformations && OldAnimationsSettings.INSTANCE.enabled ? 0.85D : constant;
     }
+
+    @ModifyConstant(method = "doRender(Lnet/minecraft/entity/projectile/EntityFishHook;DDDFF)V", constant = @Constant(doubleValue = 0.8D, ordinal = 2))
+    public double moveLinePosition2(double constant) {
+        return OldAnimationsSettings.firstTransformations && OldAnimationsSettings.INSTANCE.enabled ? 0.85D : constant;
+    }
+
 }
