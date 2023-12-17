@@ -14,7 +14,7 @@ import org.polyfrost.overflowanimations.OverflowAnimations;
 public class OldAnimationsSettings extends Config {
 
     @Switch(name = "2D Dropped Items", description = "This option will render items as sprites rather than as models.", subcategory = "2D Dropped Items")
-    public static boolean itemSprites = true;
+    public static boolean itemSprites = false;
 
     @Checkbox(name = "1.7 Item Sprite Colors", description = "Changes the colors of the dropped item sprites to be brighter just like in 1.7.", subcategory = "2D Dropped Items")
     public static boolean itemSpritesColor = false;
@@ -89,7 +89,7 @@ public class OldAnimationsSettings extends Config {
     public int tabMode = 1;
 
     @Switch(name = "1.15+ Armor Enchantment Glint", description = "Back-ports the 1.15 armor glint rendering.", subcategory = "Misc")
-    public static boolean enchantmentGlintNew = false;
+    public static boolean enchantmentGlintNew = true;
 
     @Switch(name = "1.7 Held Item Lighting", description = "Modifies the held item lighting to resemble 1.7.", subcategory = "Misc")
     public static boolean oldItemLighting = true;
