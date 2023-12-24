@@ -2,18 +2,19 @@
   {
     "modid": "${id}",
     "name": "${name}",
-    "description": "Replace animations & visuals removed in 1.8 with their old 1.7 visuals.",
+    "description": "Replaces animations & visuals removed in 1.8 with their old 1.7 visuals while also offering a plethora of extra features!",
     "version": "${version}",
     "mcversion": "${mcVersionStr}",
     "url": "",
     "updateUrl": "",
     "authorList": [
       "Polyfrost",
-      "Sk1er LLC: Predecessor",
-      "artyye: Item Positions",
-      "TheKodeToad: 1.7 Sneaking",
+      "Sk1er LLC",
+      "artyye",
+      "TheKodeToad",
       "Tellinq",
-      "Microextent: 2d Items"
+      "Microextent",
+      "Dulkir"
     ],
     "credits": "",
     "logoFile": "",

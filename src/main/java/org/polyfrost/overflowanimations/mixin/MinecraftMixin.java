@@ -4,6 +4,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.particle.EffectRenderer;
+import net.minecraft.client.settings.GameSettings;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.potion.Potion;
@@ -30,15 +31,19 @@ public abstract class MinecraftMixin {
     @Shadow
     private int leftClickCounter;
 
+    @Shadow public GameSettings gameSettings;
+
     @Inject(method = "sendClickBlockToController", at = @At("HEAD"))
     public void blockHitAnimation(boolean leftClick, CallbackInfo ci) {
         if (OldAnimationsSettings.oldBlockhitting && OldAnimationsSettings.punching && OldAnimationsSettings.INSTANCE.enabled && thePlayer.isUsingItem()) {
             if (leftClickCounter <= 0 && leftClick && objectMouseOver != null && objectMouseOver.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK) {
-                if (!theWorld.isAirBlock(objectMouseOver.getBlockPos()) && (thePlayer.isAllowEdit() || !OldAnimationsSettings.adventurePunching)) {
-                    if (!OldAnimationsSettings.adventureParticles && OldAnimationsSettings.punchingParticles) {
+                if (!theWorld.isAirBlock(objectMouseOver.getBlockPos())) {
+                    if ((thePlayer.isAllowEdit() || !OldAnimationsSettings.adventureParticles) && OldAnimationsSettings.punchingParticles) {
                         effectRenderer.addBlockHitEffects(objectMouseOver.getBlockPos(), objectMouseOver.sideHit);
                     }
-                    SwingHook.swingItem();
+                    if ((thePlayer.isAllowEdit() || !OldAnimationsSettings.adventurePunching)) {
+                        SwingHook.swingItem();
+                    }
                 }
             }
         }
@@ -61,4 +66,14 @@ public abstract class MinecraftMixin {
             SwingHook.swingItem();
         }
     }
+
+    @Inject(method = "runTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/settings/KeyBinding;isPressed()Z", ordinal = 7))
+    public void fakeBlockHit(CallbackInfo ci) {
+        if (OldAnimationsSettings.fakeBlockHit && OldAnimationsSettings.INSTANCE.enabled) {
+            while (gameSettings.keyBindAttack.isPressed()) {
+                SwingHook.swingItem();
+            }
+        }
+    }
+
 }

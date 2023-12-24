@@ -11,6 +11,6 @@ import org.spongepowered.asm.mixin.injection.ModifyConstant;
 public class ModelBipedMixin extends ModelBase {
     @ModifyConstant(method = "setRotationAngles", constant = @Constant(floatValue = -0.5235988F))
     private float cancelRotation(float original) {
-        return OldAnimationsSettings.thirdPersonBlock && OldAnimationsSettings.INSTANCE.enabled ? 0.0f : original;
+        return OldAnimationsSettings.oldArmPosition && OldAnimationsSettings.INSTANCE.enabled ? 0.0f : original;
     }
 }

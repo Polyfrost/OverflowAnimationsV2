@@ -6,17 +6,28 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.layers.LayerHeldItem;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
 import net.minecraft.item.*;
 import org.polyfrost.overflowanimations.config.OldAnimationsSettings;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 @Mixin(LayerHeldItem.class)
 public abstract class LayerHeldItemMixin {
+
+    @Unique
+    public ItemStack simpliefied$itemStack;
+
+    @Inject(method = "doRenderLayer", at = @At(value = "HEAD"))
+    private void hookHeldItem(EntityLivingBase entitylivingbaseIn, float f, float g, float partialTicks, float h, float i, float j, float scale, CallbackInfo ci) {
+        simpliefied$itemStack = entitylivingbaseIn.getHeldItem();
+    }
 
     @Inject(method = "doRenderLayer", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/model/ModelBiped;postRenderArm(F)V"))
     private void applyOldSneaking(EntityLivingBase entitylivingbaseIn, float f, float g, float partialTicks, float h, float i, float j, float scale, CallbackInfo ci) {
@@ -28,6 +39,18 @@ public abstract class LayerHeldItemMixin {
     @Redirect(method = "doRenderLayer", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/EntityLivingBase;isSneaking()Z"))
     private boolean cancelNewSneaking(EntityLivingBase instance) {
         return instance.isSneaking() && !OldAnimationsSettings.INSTANCE.enabled;
+    }
+
+    @Inject(method = "doRenderLayer", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;getItem()Lnet/minecraft/item/Item;"), locals = LocalCapture.CAPTURE_FAILHARD)
+    private void changeItemToStick(EntityLivingBase entitylivingbaseIn, float f, float g, float partialTicks, float h, float i, float j, float scale, CallbackInfo ci, ItemStack itemStack) {
+        if (entitylivingbaseIn instanceof EntityPlayer && ((EntityPlayer)entitylivingbaseIn).fishEntity != null) {
+            simpliefied$itemStack = new ItemStack(Items.stick, 0);
+        }
+    }
+
+    @Redirect(method = "doRenderLayer", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;getItem()Lnet/minecraft/item/Item;"))
+    private Item replaceStack(ItemStack instance) {
+        return OldAnimationsSettings.fishingStick && OldAnimationsSettings.INSTANCE.enabled ? simpliefied$itemStack.getItem() : instance.getItem();
     }
 
     @Inject(method = "doRenderLayer", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/ItemRenderer;renderItem(Lnet/minecraft/entity/EntityLivingBase;Lnet/minecraft/item/ItemStack;Lnet/minecraft/client/renderer/block/model/ItemCameraTransforms$TransformType;)V"), locals = LocalCapture.CAPTURE_FAILHARD)
@@ -70,6 +93,11 @@ public abstract class LayerHeldItemMixin {
                 }
             }
         }
+    }
+
+    @ModifyArg(method = "doRenderLayer", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/ItemRenderer;renderItem(Lnet/minecraft/entity/EntityLivingBase;Lnet/minecraft/item/ItemStack;Lnet/minecraft/client/renderer/block/model/ItemCameraTransforms$TransformType;)V"))
+    private ItemStack replaceStack2(ItemStack heldStack) {
+        return OldAnimationsSettings.fishingStick && OldAnimationsSettings.INSTANCE.enabled ? simpliefied$itemStack : heldStack;
     }
 
 }

@@ -93,11 +93,11 @@ public class RenderItemMixin {
                     Block block = ((ItemBlock) stack.getItem()).getBlock();
                     isCarpet = block instanceof BlockCarpet || block instanceof BlockSnow;
                 }
-                if (OldAnimationsSettings.firstTransformations && cameraTransformType == ItemCameraTransforms.TransformType.FIRST_PERSON) {
-                    if (isRod) {
+                if (cameraTransformType == ItemCameraTransforms.TransformType.FIRST_PERSON) {
+                    if (OldAnimationsSettings.fishingRodPosition && isRod) {
                         GlStateManager.rotate(180.0F, 0.0F, 1.0F, 0.0F);
                         GlStateManager.rotate(50.0F, 0.0F, 0.0F, 1.0F);
-                    } else if (OldAnimationsSettings.firstPersonCarpetPosition && isCarpet) {
+                    } else if (OldAnimationsSettings.firstTransformations &&  OldAnimationsSettings.firstPersonCarpetPosition && isCarpet) {
                         GlStateManager.translate(0.0F, -5.25F * 0.0625F, 0.0F);
                     }
                 } else if (OldAnimationsSettings.thirdTransformations && cameraTransformType == ItemCameraTransforms.TransformType.THIRD_PERSON

@@ -6,10 +6,12 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemSword;
 import org.polyfrost.overflowanimations.config.OldAnimationsSettings;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
@@ -55,15 +57,22 @@ public class ItemRendererMixin {
 
     @Inject(method = "renderItemInFirstPerson", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/ItemRenderer;renderItem(Lnet/minecraft/entity/EntityLivingBase;Lnet/minecraft/item/ItemStack;Lnet/minecraft/client/renderer/block/model/ItemCameraTransforms$TransformType;)V"))
     private void firstPersonItemPositions(float partialTicks, CallbackInfo ci) {
-        if (OldAnimationsSettings.firstTransformations && OldAnimationsSettings.INSTANCE.enabled && !itemRenderer.shouldRenderItemIn3D(itemToRender)) {
-            if (itemToRender.getItem().shouldRotateAroundWhenRendering()) {
+        if (OldAnimationsSettings.INSTANCE.enabled && !itemRenderer.shouldRenderItemIn3D(itemToRender)) {
+            if ((OldAnimationsSettings.fishingRodPosition && itemToRender.getItem().shouldRotateAroundWhenRendering())) {
                 GlStateManager.rotate(180.0F, 0.0F, 1.0F, 0.0F);
+                overflowanimations$itemTransforms();
+            } else if (OldAnimationsSettings.firstTransformations && !(itemToRender.getItem() instanceof ItemSword && OldAnimationsSettings.lunarBlockhit)) {
+                overflowanimations$itemTransforms();
             }
-            float scale = 1.5F / 1.7F;
-            GlStateManager.scale(scale, scale, scale);
-            GlStateManager.rotate(5.0F, 0.0F, 1.0F, 0.0F);
-            GlStateManager.translate(-0.29F, 0.149F, -0.0328F);
         }
+    }
+
+    @Unique
+    private static void overflowanimations$itemTransforms() {
+        float scale = 1.5F / 1.7F;
+        GlStateManager.scale(scale, scale, scale);
+        GlStateManager.rotate(5.0F, 0.0F, 1.0F, 0.0F);
+        GlStateManager.translate(-0.29F, 0.149F, -0.0328F);
     }
 
     @ModifyArg(method = "updateEquippedItem", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/MathHelper;clamp_float(FFF)F"), index = 0)
