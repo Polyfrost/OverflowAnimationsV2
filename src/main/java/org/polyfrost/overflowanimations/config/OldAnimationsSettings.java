@@ -8,6 +8,7 @@ import cc.polyfrost.oneconfig.config.migration.VigilanceMigrator;
 import cc.polyfrost.oneconfig.config.migration.VigilanceName;
 import net.minecraft.client.Minecraft;
 import org.polyfrost.overflowanimations.OverflowAnimations;
+import org.polyfrost.overflowanimations.hooks.AnimationExportUtils;
 
 @SuppressWarnings("unused")
 public class OldAnimationsSettings extends Config {
@@ -324,6 +325,29 @@ public class OldAnimationsSettings extends Config {
     public static boolean fakeBlockHit = false;
 
     // Item Positions Customization
+
+    @Button(
+            name = "Copy / Export Item Positions As String",
+            text = "Export",
+            description = "Exports the item positions as a Base64 string. Will be copied to your clipboard.",
+            category = "Customize Item Positions", subcategory = "Item Position"
+    )
+    public void exportItemPositions() {
+        AnimationExportUtils.exportItemPositions();
+    }
+
+    @Button(
+            name = "Import Overflow / Dulkir Item Positions As String",
+            text = "Import",
+            description = "Exports the item positions as a Base64 string. Will be copied to your clipboard.",
+            category = "Customize Item Positions", subcategory = "Item Position"
+    )
+    public void importItemPositions() {
+        Minecraft.getMinecraft().displayGuiScreen(null);
+        AnimationExportUtils.importItemPositions();
+        openGui();
+    }
+
     @Slider(
             name = "Item X Position",
             min = -1.5F, max = 1.5F,
@@ -684,6 +708,8 @@ public class OldAnimationsSettings extends Config {
         save();
         openGui();
     });
+
+    public static boolean didTheFunnyDulkirThing = false;
 
     @Exclude public static final OldAnimationsSettings INSTANCE = new OldAnimationsSettings();
 

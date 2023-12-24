@@ -80,8 +80,9 @@ val shade: Configuration by configurations.creating {
 
 // Configures the output directory for when building from the `src/resources` directory.
 sourceSets {
+    val dummy by creating
     main {
-        output.setResourcesDir(java.classesDirectory)
+        compileClasspath += dummy.output
     }
 }
 
