@@ -195,19 +195,13 @@ public class OldAnimationsSettings extends Config {
     )
     public static boolean oldHealth = true;
 
-    @Switch(
-            name = "1.7 Debug Screen Crosshair",
-            description = "Disables the RGB cross-hair in the debug menu.",
-            subcategory = "HUD"
+    @Dropdown(
+            name = "Debug Menu Crosshair Style",
+            description = "Allows you to choose between the 1.7, the vanilla 1.8, and the 1.12+ debug screen crosshair. 1.12+ Debug Screen Crosshair fixes Patcher's Parallax Fix Feature!",
+            subcategory = "HUD",
+            options = {"1.7", "1.8", "1.12+"}
     )
-    public static boolean oldDebugCrosshair = false;
-
-    @Switch(
-            name = "1.12+ Debug Screen Crosshair",
-            description = "Revamps the RGB cross-hair in the debug menu.",
-            subcategory = "HUD"
-    )
-    public static boolean newDebugCrosshair = true;
+    public int debugCrosshairMode = 2;
 
     @Dropdown(
             name = "Debug Menu Style",

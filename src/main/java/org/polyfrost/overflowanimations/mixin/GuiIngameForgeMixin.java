@@ -46,7 +46,7 @@ public class GuiIngameForgeMixin extends GuiIngame {
 
     @Inject(method = "renderGameOverlay", at = @At(value = "FIELD", target = "Lnet/minecraftforge/client/GuiIngameForge;renderCrosshairs:Z"))
     public void renderRGBCrosshair(float partialTicks, CallbackInfo ci) {
-        if (OldAnimationsSettings.newDebugCrosshair && !OldAnimationsSettings.oldDebugCrosshair &&
+        if (OldAnimationsSettings.INSTANCE.debugCrosshairMode == 2 &&
                 OldAnimationsSettings.INSTANCE.enabled && mc.gameSettings.showDebugInfo && !mc.thePlayer.hasReducedDebug() &&
                 !mc.gameSettings.reducedDebugInfo) {
             DebugCrosshairHook.renderDirections(partialTicks, zLevel, res, mc);
