@@ -229,7 +229,7 @@ public class OldAnimationsSettings extends Config {
 
     @Switch(
             name = "1.15+ Backwards Walk Animation",
-            description = "Back-ports the 1.15 armor glint rendering.",
+            description = "Back-ports the 1.15 walking animation.",
             category = "Misc", subcategory = "Modern"
     )
     public static boolean modernMovement = false;
