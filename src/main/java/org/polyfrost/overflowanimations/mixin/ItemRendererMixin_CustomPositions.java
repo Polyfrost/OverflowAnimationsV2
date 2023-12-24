@@ -47,12 +47,16 @@ public class ItemRendererMixin_CustomPositions {
     public void swingTransformations(float swingProgress, CallbackInfo ci) {
         OldAnimationsSettings settings = OldAnimationsSettings.INSTANCE;
         if (settings.enabled) {
-            float scale = (1.0F + (OldAnimationsSettings.shouldScaleSwing ? settings.itemScale : 0.0F));
-            float f = (-0.4f * (1.0F + settings.itemSwingPositionX)) * MathHelper.sin(MathHelper.sqrt_float(swingProgress) * (float) Math.PI) * scale;
-            float f1 = 0.2f * (1.0F - settings.itemSwingPositionY) * MathHelper.sin(MathHelper.sqrt_float(swingProgress) * (float) Math.PI * 2.0f) * scale;
-            float f2 = -0.2f * (1.0F + settings.itemSwingPositionZ) * MathHelper.sin(swingProgress * (float) Math.PI) * scale;
-            GlStateManager.translate(f, f1, f2);
-            ci.cancel();
+            if (OldAnimationsSettings.disableSwing) {
+                ci.cancel();
+            } else {
+                float scale = (1.0F + (OldAnimationsSettings.shouldScaleSwing ? settings.itemScale : 0.0F));
+                float f = (-0.4f * (1.0F + settings.itemSwingPositionX)) * MathHelper.sin(MathHelper.sqrt_float(swingProgress) * (float) Math.PI) * scale;
+                float f1 = 0.2f * (1.0F - settings.itemSwingPositionY) * MathHelper.sin(MathHelper.sqrt_float(swingProgress) * (float) Math.PI * 2.0f) * scale;
+                float f2 = -0.2f * (1.0F + settings.itemSwingPositionZ) * MathHelper.sin(swingProgress * (float) Math.PI) * scale;
+                GlStateManager.translate(f, f1, f2);
+                ci.cancel();
+            }
         }
     }
 

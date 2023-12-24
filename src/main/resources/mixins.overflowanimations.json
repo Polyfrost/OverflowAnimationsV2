@@ -16,6 +16,8 @@
       "ItemRendererMixin",
       "ItemRendererMixin_CustomPositions",
       "RenderSnowballMixin_CustomPositions",
+      "RenderEntityItemMixin_CustomPositions",
+      "EntityMixin",
       "LayerArmorBaseMixin",
       "LayerArmorBaseMixin_New",
       "EntityLivingBaseMixin",

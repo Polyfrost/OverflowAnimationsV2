@@ -261,6 +261,13 @@ public class OldAnimationsSettings extends Config {
     public static boolean fishingStick = false;
 
     @Switch(
+            name = "Allow Particles to No-Clip",
+            description = "Allows particles to no clip through blocks by simply not checking for collisions.",
+            category = "Misc", subcategory = "Fixes, QOL, and Tweaks"
+    )
+    public static boolean particleNoClip = false;
+
+    @Switch(
             name = "Render Fireball Projectile as a Model",
             description = "Renders the thrown fireball projectiles as models rather than as sprites.",
             category = "Misc", subcategory = "Fixes, QOL, and Tweaks"
@@ -434,6 +441,20 @@ public class OldAnimationsSettings extends Config {
     )
     public float itemSwingSpeedFatigue = 0.0F;
 
+    @Checkbox(
+            name = "Scale Item Swing Based on Item Scale",
+            description = "Scales the swing animation based on the scale of the item.",
+            category = "Customize Item Positions", subcategory = "Item Swing Position"
+    )
+    public static boolean shouldScaleSwing = false;
+
+    @Checkbox(
+            name = "Disable Swing Translation",
+            description = "Disables the swing translation.",
+            category = "Customize Item Positions", subcategory = "Item Swing Position"
+    )
+    public static boolean disableSwing = false;
+
     @Button(
             name = "Reset Item Swing Transformations",
             text = "Reset",
@@ -447,16 +468,19 @@ public class OldAnimationsSettings extends Config {
         itemSwingSpeed = 0.0F;
         itemSwingSpeedHaste = 0.0F;
         itemSwingSpeedFatigue = 0.0F;
+        shouldScaleSwing = false;
+        disableSwing = false;
+        ignoreHaste = false;
         save();
         openGui();
     });
 
     @Checkbox(
-            name = "Scale Item Swing Based on Item Scale",
-            description = "Scales the swing animation based on the scale of the item.",
+            name = "Ignore Haste Speed",
+            description = "Ignores the haste speed when setting a custom item swing speed.",
             category = "Customize Item Positions", subcategory = "Item Swing Position"
     )
-    public static boolean shouldScaleSwing = false;
+    public static boolean ignoreHaste = false;
 
     // Eating/Drinking Position
     @Slider(
@@ -538,6 +562,7 @@ public class OldAnimationsSettings extends Config {
         consumeScale = 0.0F;
         consumeIntensity = 0.0F;
         consumeSpeed = 0.0F;
+        shouldScaleEat = false;
         save();
         openGui();
     });
@@ -613,6 +638,74 @@ public class OldAnimationsSettings extends Config {
         blockedRotationPitch = 0.0F;
         blockedRotationRoll = 0.0F;
         blockedScale = 0.0F;
+        save();
+        openGui();
+    });
+
+    // Dropped Item Position
+    @Slider(
+            name = "Dropped Item X Position",
+            min = -1.5F, max = 1.5F,
+            category = "Customize Item Positions", subcategory = "Dropped Item Position"
+    )
+    public float droppedPositionX = 0.0F;
+
+    @Slider(
+            name = "Dropped Item Y Position",
+            min = -1.5F, max = 1.5F,
+            category = "Customize Item Positions", subcategory = "Dropped Item Position"
+    )
+    public float droppedPositionY = 0.0F;
+
+    @Slider(
+            name = "Dropped Item Z Position",
+            min = -1.5F, max = 1.5F,
+            category = "Customize Item Positions", subcategory = "Dropped Item Position"
+    )
+    public float droppedPositionZ = 0.0F;
+
+    @Slider(
+            name = "Dropped Item Rotation Yaw",
+            min = -180f, max = 180f, step = 1,
+            category = "Customize Item Positions", subcategory = "Dropped Item Position"
+    )
+    public float droppedRotationYaw = 0.0F;
+
+    @Slider(
+            name = "Dropped Item Rotation Pitch",
+            min = -180f, max = 180f, step = 1,
+            category = "Customize Item Positions", subcategory = "Dropped Item Position"
+    )
+    public float droppedRotationPitch = 0.0F;
+
+    @Slider(
+            name = "Dropped Item Rotation Roll",
+            min = -180f, max = 180f, step = 1,
+            category = "Customize Item Positions", subcategory = "Dropped Item Position"
+    )
+    public float droppedRotationRoll = 0.0F;
+
+    @Slider(
+            name = "Dropped Item Scale",
+            min = -1.5f, max = 1.5f,
+            category = "Customize Item Positions", subcategory = "Dropped Item Position"
+    )
+    public float droppedScale = 0.0F;
+
+    @Button(
+            name = "Reset Dropped Item Transformations",
+            text = "Reset",
+            category = "Customize Item Positions", subcategory = "Dropped Item Position"
+    )
+    Runnable resetDropped = (() -> {
+        Minecraft.getMinecraft().displayGuiScreen(null);
+        droppedPositionX = 0.0F;
+        droppedPositionY = 0.0F;
+        droppedPositionZ = 0.0F;
+        droppedRotationYaw = 0.0F;
+        droppedRotationPitch = 0.0F;
+        droppedRotationRoll = 0.0F;
+        droppedScale = 0.0F;
         save();
         openGui();
     });

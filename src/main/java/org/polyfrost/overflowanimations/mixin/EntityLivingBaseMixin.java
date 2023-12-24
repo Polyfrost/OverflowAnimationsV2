@@ -32,10 +32,10 @@ public abstract class EntityLivingBaseMixin extends Entity {
     public void modifySwingSpeed(CallbackInfoReturnable<Integer> cir) {
         OldAnimationsSettings settings = OldAnimationsSettings.INSTANCE;
         if (settings.enabled) {
-            if (isPotionActive(Potion.digSpeed)) {
-                cir.setReturnValue(Math.max((int) (6 - (1 + getActivePotionEffect(Potion.digSpeed).getAmplifier()) * (settings.itemSwingSpeedHaste)), 1));
+            if (isPotionActive(Potion.digSpeed) && !OldAnimationsSettings.ignoreHaste) {
+                cir.setReturnValue(Math.max((int) (6 - (1 + getActivePotionEffect(Potion.digSpeed).getAmplifier()) * Math.exp(-settings.itemSwingSpeedHaste)), 1));
             } else if (isPotionActive(Potion.digSlowdown)) {
-                cir.setReturnValue(Math.max((int) (6 + (1 + getActivePotionEffect(Potion.digSlowdown).getAmplifier()) * 2 * (settings.itemSwingSpeedFatigue)), 1));
+                cir.setReturnValue(Math.max((int) (6 + (1 + getActivePotionEffect(Potion.digSlowdown).getAmplifier()) * 2 * Math.exp(-settings.itemSwingSpeedFatigue)), 1));
             } else {
                 cir.setReturnValue(Math.max((int) (6 * Math.exp(-settings.itemSwingSpeed)), 1));
             }
