@@ -199,7 +199,14 @@ public class OldAnimationsSettings extends Config {
             description = "Disables the RGB cross-hair in the debug menu.",
             subcategory = "HUD"
     )
-    public static boolean oldDebugCrosshair = true;
+    public static boolean oldDebugCrosshair = false;
+
+    @Switch(
+            name = "1.12+ Debug Screen Crosshair",
+            description = "Revamps the RGB cross-hair in the debug menu.",
+            subcategory = "HUD"
+    )
+    public static boolean newDebugCrosshair = true;
 
     @Dropdown(
             name = "Debug Menu Style",
