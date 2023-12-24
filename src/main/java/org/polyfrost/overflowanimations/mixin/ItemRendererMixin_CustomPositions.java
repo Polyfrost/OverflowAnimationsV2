@@ -24,7 +24,7 @@ public class ItemRendererMixin_CustomPositions {
         if (settings.enabled) {
             GlStateManager.translate(
                     0.56f * (1.0F + settings.itemPositionX),
-                    -0.52f * (1.0F + settings.itemPositionY),
+                    -0.52f * (1.0F - settings.itemPositionY),
                     -0.72f * (1.0F + settings.itemPositionZ)
             );
             GlStateManager.translate(0.0f, equipProgress * -0.6f, 0.0f);
@@ -49,7 +49,7 @@ public class ItemRendererMixin_CustomPositions {
         if (settings.enabled) {
             float scale = (1.0F + (OldAnimationsSettings.shouldScaleSwing ? settings.itemScale : 0.0F));
             float f = (-0.4f * (1.0F + settings.itemSwingPositionX)) * MathHelper.sin(MathHelper.sqrt_float(swingProgress) * (float) Math.PI) * scale;
-            float f1 = 0.2f * (1.0F + settings.itemSwingPositionY) * MathHelper.sin(MathHelper.sqrt_float(swingProgress) * (float) Math.PI * 2.0f) * scale;
+            float f1 = 0.2f * (1.0F - settings.itemSwingPositionY) * MathHelper.sin(MathHelper.sqrt_float(swingProgress) * (float) Math.PI * 2.0f) * scale;
             float f2 = -0.2f * (1.0F + settings.itemSwingPositionZ) * MathHelper.sin(swingProgress * (float) Math.PI) * scale;
             GlStateManager.translate(f, f1, f2);
             ci.cancel();
