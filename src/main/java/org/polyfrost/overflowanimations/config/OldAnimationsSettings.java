@@ -8,6 +8,7 @@ import cc.polyfrost.oneconfig.config.migration.VigilanceMigrator;
 import cc.polyfrost.oneconfig.config.migration.VigilanceName;
 import net.minecraft.client.Minecraft;
 import org.polyfrost.overflowanimations.OverflowAnimations;
+import org.polyfrost.overflowanimations.hooks.AnimationExportUtils;
 
 @SuppressWarnings("unused")
 public class OldAnimationsSettings extends Config {
@@ -194,19 +195,13 @@ public class OldAnimationsSettings extends Config {
     )
     public static boolean oldHealth = true;
 
-    @Switch(
-            name = "1.7 Debug Screen Crosshair",
-            description = "Disables the RGB cross-hair in the debug menu.",
-            subcategory = "HUD"
+    @Dropdown(
+            name = "Debug Menu Crosshair Style",
+            description = "Allows you to choose between the 1.7, the vanilla 1.8, and the 1.12+ debug screen crosshair. 1.12+ Debug Screen Crosshair fixes Patcher's Parallax Fix Feature!",
+            subcategory = "HUD",
+            options = {"1.7", "1.8", "1.12+"}
     )
-    public static boolean oldDebugCrosshair = false;
-
-    @Switch(
-            name = "1.12+ Debug Screen Crosshair",
-            description = "Revamps the RGB cross-hair in the debug menu.",
-            subcategory = "HUD"
-    )
-    public static boolean newDebugCrosshair = true;
+    public int debugCrosshairMode = 2;
 
     @Dropdown(
             name = "Debug Menu Style",
@@ -234,7 +229,7 @@ public class OldAnimationsSettings extends Config {
 
     @Switch(
             name = "1.15+ Backwards Walk Animation",
-            description = "Back-ports the 1.15 armor glint rendering.",
+            description = "Back-ports the 1.15 walking animation.",
             category = "Misc", subcategory = "Modern"
     )
     public static boolean modernMovement = false;
@@ -331,52 +326,82 @@ public class OldAnimationsSettings extends Config {
     public static boolean fakeBlockHit = false;
 
     // Item Positions Customization
+
+    @Button(
+            name = "Copy / Export Item Positions As String",
+            text = "Export",
+            description = "Exports the item positions as a Base64 string. Will be copied to your clipboard.",
+            category = "Customize Item Positions", subcategory = "Item Position"
+    )
+    public void exportItemPositions() {
+        AnimationExportUtils.exportItemPositions();
+    }
+
+    @Button(
+            name = "Import Overflow / Dulkir Item Positions As String",
+            text = "Import",
+            description = "Exports the item positions as a Base64 string. Will be copied to your clipboard.",
+            category = "Customize Item Positions", subcategory = "Item Position"
+    )
+    public void importItemPositions() {
+        Minecraft.getMinecraft().displayGuiScreen(null);
+        AnimationExportUtils.importItemPositions();
+        openGui();
+    }
+
     @Slider(
             name = "Item X Position",
             min = -1.5F, max = 1.5F,
-            category = "Customize Item Positions", subcategory = "Item Position"
+            category = "Customize Item Positions", subcategory = "Item Position",
+            instant = true
     )
     public float itemPositionX = 0.0F;
 
     @Slider(
             name = "Item Y Position",
             min = -1.5F, max = 1.5F,
-            category = "Customize Item Positions", subcategory = "Item Position"
+            category = "Customize Item Positions", subcategory = "Item Position",
+            instant = true
     )
     public float itemPositionY = 0.0F;
 
     @Slider(
             name = "Item Z Position",
             min = -1.5F, max = 1.5F,
-            category = "Customize Item Positions", subcategory = "Item Position"
+            category = "Customize Item Positions", subcategory = "Item Position",
+            instant = true
     )
     public float itemPositionZ = 0.0F;
 
     @Slider(
             name = "Item Rotation Yaw",
             min = -180f, max = 180f, step = 1,
-            category = "Customize Item Positions", subcategory = "Item Position"
+            category = "Customize Item Positions", subcategory = "Item Position",
+            instant = true
     )
     public float itemRotationYaw = 0.0F;
 
     @Slider(
             name = "Item Rotation Pitch",
             min = -180f, max = 180f, step = 1,
-            category = "Customize Item Positions", subcategory = "Item Position"
+            category = "Customize Item Positions", subcategory = "Item Position",
+            instant = true
     )
     public float itemRotationPitch = 0.0F;
 
     @Slider(
             name = "Item Rotation Roll",
             min = -180f, max = 180f, step = 1,
-            category = "Customize Item Positions", subcategory = "Item Position"
+            category = "Customize Item Positions", subcategory = "Item Position",
+            instant = true
     )
     public float itemRotationRoll = 0.0F;
 
     @Slider(
             name = "Item Scale",
             min = -1.5f, max = 1.5f,
-            category = "Customize Item Positions", subcategory = "Item Position"
+            category = "Customize Item Positions", subcategory = "Item Position",
+            instant = true
     )
     public float itemScale = 0.0F;
 
@@ -402,42 +427,48 @@ public class OldAnimationsSettings extends Config {
     @Slider(
             name = "Item Swing X Position",
             min = -1.5F, max = 1.5F,
-            category = "Customize Item Positions", subcategory = "Item Swing Position"
+            category = "Customize Item Positions", subcategory = "Item Swing Position",
+            instant = true
     )
     public float itemSwingPositionX = 0.0F;
 
     @Slider(
             name = "Item Swing Y Position",
             min = -1.5F, max = 1.5F,
-            category = "Customize Item Positions", subcategory = "Item Swing Position"
+            category = "Customize Item Positions", subcategory = "Item Swing Position",
+            instant = true
     )
     public float itemSwingPositionY = 0.0F;
 
     @Slider(
             name = "Item Swing Z Position",
             min = -1.5F, max = 1.5F,
-            category = "Customize Item Positions", subcategory = "Item Swing Position"
+            category = "Customize Item Positions", subcategory = "Item Swing Position",
+            instant = true
     )
     public float itemSwingPositionZ = 0.0F;
 
     @Slider(
             name = "Item Swing Speed",
             min = -2.5F, max = 2.5F,
-            category = "Customize Item Positions", subcategory = "Item Swing Position"
+            category = "Customize Item Positions", subcategory = "Item Swing Position",
+            instant = true
     )
     public float itemSwingSpeed = 0.0F;
 
     @Slider(
             name = "Haste Swing Speed",
             min = -2.5F, max = 2.5F,
-            category = "Customize Item Positions", subcategory = "Item Swing Position"
+            category = "Customize Item Positions", subcategory = "Item Swing Position",
+            instant = true
     )
     public float itemSwingSpeedHaste = 0.0F;
 
     @Slider(
             name = "Miner's Fatigue Swing Speed",
             min = -2.5F, max = 2.5F,
-            category = "Customize Item Positions", subcategory = "Item Swing Position"
+            category = "Customize Item Positions", subcategory = "Item Swing Position",
+            instant = true
     )
     public float itemSwingSpeedFatigue = 0.0F;
 
@@ -486,63 +517,72 @@ public class OldAnimationsSettings extends Config {
     @Slider(
             name = "Eating/Drinking X Position",
             min = -1.5F, max = 1.5F,
-            category = "Customize Item Positions", subcategory = "Eating/Drinking Position"
+            category = "Customize Item Positions", subcategory = "Eating/Drinking Position",
+            instant = true
     )
     public float consumePositionX = 0.0F;
 
     @Slider(
             name = "Eating/Drinking Y Position",
             min = -1.5F, max = 1.5F,
-            category = "Customize Item Positions", subcategory = "Eating/Drinking Position"
+            category = "Customize Item Positions", subcategory = "Eating/Drinking Position",
+            instant = true
     )
     public float consumePositionY = 0.0F;
 
     @Slider(
             name = "Eating/Drinking Z Position",
             min = -1.5F, max = 1.5F,
-            category = "Customize Item Positions", subcategory = "Eating/Drinking Position"
+            category = "Customize Item Positions", subcategory = "Eating/Drinking Position",
+            instant = true
     )
     public float consumePositionZ = 0.0F;
 
     @Slider(
             name = "Eating/Drinking Rotation Yaw",
             min = -180f, max = 180f, step = 1,
-            category = "Customize Item Positions", subcategory = "Eating/Drinking Position"
+            category = "Customize Item Positions", subcategory = "Eating/Drinking Position",
+            instant = true
     )
     public float consumeRotationYaw = 0.0F;
 
     @Slider(
             name = "Eating/Drinking Rotation Pitch",
             min = -180f, max = 180f, step = 1,
-            category = "Customize Item Positions", subcategory = "Eating/Drinking Position"
+            category = "Customize Item Positions", subcategory = "Eating/Drinking Position",
+            instant = true
     )
     public float consumeRotationPitch = 0.0F;
 
     @Slider(
             name = "Eating/Drinking Rotation Roll",
             min = -180f, max = 180f, step = 1,
-            category = "Customize Item Positions", subcategory = "Eating/Drinking Position"
+            category = "Customize Item Positions", subcategory = "Eating/Drinking Position",
+            instant = true
     )
     public float consumeRotationRoll = 0.0F;
 
     @Slider(
             name = "Eating/Drinking Scale",
             min = -1.5f, max = 1.5f,
-            category = "Customize Item Positions", subcategory = "Eating/Drinking Position"
+            category = "Customize Item Positions", subcategory = "Eating/Drinking Position",
+            instant = true
     )
     public float consumeScale = 0.0F;
 
     @Slider(
             name = "Eating/Drinking Intensity Animation",
             min = -6.5F, max = 6.5F,
-            category = "Customize Item Positions", subcategory = "Eating/Drinking Position"
+            category = "Customize Item Positions", subcategory = "Eating/Drinking Position",
+            instant = true
     )
     public float consumeIntensity = 0.0F;
 
     @Slider(
             name = "Eating/Drinking Rotation Speed",
             min = -1.0F, max = 1.0F,
-            category = "Customize Item Positions", subcategory = "Eating/Drinking Position"
+            category = "Customize Item Positions", subcategory = "Eating/Drinking Position",
+            instant = true
     )
     public float consumeSpeed = 0.0F;
 
@@ -578,49 +618,56 @@ public class OldAnimationsSettings extends Config {
     @Slider(
             name = "Sword Block X Position",
             min = -1.5F, max = 1.5F,
-            category = "Customize Item Positions", subcategory = "Sword Block Position"
+            category = "Customize Item Positions", subcategory = "Sword Block Position",
+            instant = true
     )
     public float blockedPositionX = 0.0F;
 
     @Slider(
             name = "Sword Block Y Position",
             min = -1.5F, max = 1.5F,
-            category = "Customize Item Positions", subcategory = "Sword Block Position"
+            category = "Customize Item Positions", subcategory = "Sword Block Position",
+            instant = true
     )
     public float blockedPositionY = 0.0F;
 
     @Slider(
             name = "Sword Block Z Position",
             min = -1.5F, max = 1.5F,
-            category = "Customize Item Positions", subcategory = "Sword Block Position"
+            category = "Customize Item Positions", subcategory = "Sword Block Position",
+            instant = true
     )
     public float blockedPositionZ = 0.0F;
 
     @Slider(
             name = "Sword Block Rotation Yaw",
             min = -180f, max = 180f, step = 1,
-            category = "Customize Item Positions", subcategory = "Sword Block Position"
+            category = "Customize Item Positions", subcategory = "Sword Block Position",
+            instant = true
     )
     public float blockedRotationYaw = 0.0F;
 
     @Slider(
             name = "Sword Block Rotation Pitch",
             min = -180f, max = 180f, step = 1,
-            category = "Customize Item Positions", subcategory = "Sword Block Position"
+            category = "Customize Item Positions", subcategory = "Sword Block Position",
+            instant = true
     )
     public float blockedRotationPitch = 0.0F;
 
     @Slider(
             name = "Sword Block Rotation Roll",
             min = -180f, max = 180f, step = 1,
-            category = "Customize Item Positions", subcategory = "Sword Block Position"
+            category = "Customize Item Positions", subcategory = "Sword Block Position",
+            instant = true
     )
     public float blockedRotationRoll = 0.0F;
 
     @Slider(
             name = "Sword Block Scale",
             min = -1.5f, max = 1.5f,
-            category = "Customize Item Positions", subcategory = "Sword Block Position"
+            category = "Customize Item Positions", subcategory = "Sword Block Position",
+            instant = true
     )
     public float blockedScale = 0.0F;
 
@@ -714,49 +761,56 @@ public class OldAnimationsSettings extends Config {
     @Slider(
             name = "Thrown Projectile X Position",
             min = -1.5F, max = 1.5F,
-            category = "Customize Item Positions", subcategory = "Thrown Projectile Position"
+            category = "Customize Item Positions", subcategory = "Thrown Projectile Position",
+            instant = true
     )
     public float projectilePositionX = 0.0F;
 
     @Slider(
             name = "Thrown Projectile Y Position",
             min = -1.5F, max = 1.5F,
-            category = "Customize Item Positions", subcategory = "Thrown Projectile Position"
+            category = "Customize Item Positions", subcategory = "Thrown Projectile Position",
+            instant = true
     )
     public float projectilePositionY = 0.0F;
 
     @Slider(
             name = "Thrown Projectile Z Position",
             min = -1.5F, max = 1.5F,
-            category = "Customize Item Positions", subcategory = "Thrown Projectile Position"
+            category = "Customize Item Positions", subcategory = "Thrown Projectile Position",
+            instant = true
     )
     public float projectilePositionZ = 0.0F;
 
     @Slider(
             name = "Thrown Projectile Rotation Yaw",
             min = -180f, max = 180f, step = 1,
-            category = "Customize Item Positions", subcategory = "Thrown Projectile Position"
+            category = "Customize Item Positions", subcategory = "Thrown Projectile Position",
+            instant = true
     )
     public float projectileRotationYaw = 0.0F;
 
     @Slider(
             name = "Thrown Projectile Rotation Pitch",
             min = -180f, max = 180f, step = 1,
-            category = "Customize Item Positions", subcategory = "Thrown Projectile Position"
+            category = "Customize Item Positions", subcategory = "Thrown Projectile Position",
+            instant = true
     )
     public float projectileRotationPitch = 0.0F;
 
     @Slider(
             name = "Thrown Projectile Rotation Roll",
             min = -180f, max = 180f, step = 1,
-            category = "Customize Item Positions", subcategory = "Thrown Projectile Position"
+            category = "Customize Item Positions", subcategory = "Thrown Projectile Position",
+            instant = true
     )
     public float projectileRotationRoll = 0.0F;
 
     @Slider(
             name = "Thrown Projectile Scale",
             min = -1.5f, max = 1.5f,
-            category = "Customize Item Positions", subcategory = "Thrown Projectile Position"
+            category = "Customize Item Positions", subcategory = "Thrown Projectile Position",
+            instant = true
     )
     public float projectileScale = 0.0F;
 
@@ -777,6 +831,8 @@ public class OldAnimationsSettings extends Config {
         save();
         openGui();
     });
+
+    public static boolean didTheFunnyDulkirThing = false;
 
     @Exclude public static final OldAnimationsSettings INSTANCE = new OldAnimationsSettings();
 

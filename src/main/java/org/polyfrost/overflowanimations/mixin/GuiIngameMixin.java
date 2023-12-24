@@ -18,7 +18,7 @@ public class GuiIngameMixin extends Gui {
 
     @Inject(method = "showCrosshair", at = @At("HEAD"), cancellable = true)
     public void renderCrosshair(CallbackInfoReturnable<Boolean> cir) {
-        if (OldAnimationsSettings.oldDebugCrosshair && OldAnimationsSettings.INSTANCE.enabled && mc.gameSettings.showDebugInfo) {
+        if (OldAnimationsSettings.INSTANCE.debugCrosshairMode == 0 && OldAnimationsSettings.INSTANCE.enabled && mc.gameSettings.showDebugInfo) {
             cir.setReturnValue(true);
         }
     }

@@ -48,7 +48,7 @@ public class EntityRendererMixin {
 
     @Inject(method = "renderWorldDirections", at = {@At("HEAD")}, cancellable = true)
     public void renderCrosshair(float partialTicks, CallbackInfo ci) {
-        if ((OldAnimationsSettings.newDebugCrosshair || OldAnimationsSettings.oldDebugCrosshair) && OldAnimationsSettings.INSTANCE.enabled)
+        if ((OldAnimationsSettings.INSTANCE.debugCrosshairMode != 1) && OldAnimationsSettings.INSTANCE.enabled)
             ci.cancel();
     }
 
