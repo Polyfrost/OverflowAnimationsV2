@@ -106,8 +106,9 @@ public class AnimationExportUtils {
         settings.itemRotationRoll = importSettings.getRoll();
         settings.itemScale = importSettings.getSize();
         advanced.itemSwingSpeed = importSettings.getSpeed();
-        advanced.itemSwingSpeedHaste = importSettings.getIgnoreHaste() ? importSettings.getSpeed() : 1.0F;
-        advanced.itemSwingSpeedFatigue = importSettings.getIgnoreHaste() ? importSettings.getSpeed() : 1.0F;
+        advanced.itemSwingSpeedHaste = importSettings.getSpeed();
+        advanced.itemSwingSpeedFatigue = importSettings.getSpeed();
+        ItemPositionAdvancedSettings.ignoreHaste = importSettings.getIgnoreHaste();
         ItemPositionAdvancedSettings.shouldScaleSwing = importSettings.getScaleSwing();
         ItemPositionAdvancedSettings.shouldScaleEat = importSettings.getDrinkingFix() == 2;
 

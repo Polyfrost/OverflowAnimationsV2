@@ -516,7 +516,7 @@ public class OldAnimationsSettings extends Config {
         openGui();
     }
 
-    public static boolean didTheFunnyDulkirThing = false;
+    public static boolean didTheFunnyDulkirThingElectricBoogaloo = false;
 
     @Exclude public static final OldAnimationsSettings INSTANCE = new OldAnimationsSettings();
 
