@@ -1,7 +1,11 @@
 package org.polyfrost.overflowanimations.hooks;
 
+import cc.polyfrost.oneconfig.config.core.ConfigUtils;
 import cc.polyfrost.oneconfig.utils.Notifications;
 import com.google.gson.Gson;
+import dulkirmod.config.DulkirConfig;
+import org.apache.commons.io.Charsets;
+import org.apache.commons.io.FileUtils;
 import org.polyfrost.overflowanimations.config.ItemPositionAdvancedSettings;
 import org.polyfrost.overflowanimations.config.OldAnimationsSettings;
 
@@ -9,6 +13,7 @@ import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.StringSelection;
+import java.io.File;
 import java.util.Base64;
 
 public class AnimationExportUtils {
@@ -113,5 +118,40 @@ public class AnimationExportUtils {
         ItemPositionAdvancedSettings.shouldScaleEat = importSettings.getDrinkingFix() == 2;
 
         settings.save();
+    }
+
+    public static void transferDulkirConfig() {
+        try {
+            File dulkirConfigFile = ConfigUtils.getProfileFile("dulkirmod-config.json");
+            String dulkirConfig = FileUtils.readFileToString(dulkirConfigFile, Charsets.UTF_8);
+            FileUtils.writeStringToFile(new File(dulkirConfigFile.getParentFile(), "dulkirmod-config_backup.json"), dulkirConfig, Charsets.UTF_8);
+            File overflowConfigFile = ConfigUtils.getProfileFile("overflowanimations.json");
+            String overflowConfig = FileUtils.readFileToString(overflowConfigFile, Charsets.UTF_8);
+            FileUtils.writeStringToFile(new File(overflowConfigFile.getParentFile(), "overflowanimations_backup.json"), overflowConfig, Charsets.UTF_8);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Notifications.INSTANCE.send("OverflowAnimations", "Failed to backup configs! Click here if you want to continue despite this error.", AnimationExportUtils::importDulkirConfig);
+            return;
+        }
+        AnimationExportUtils.importDulkirConfig();
+    }
+
+    private static void importDulkirConfig() {
+        DulkirConfigData data = new DulkirConfigData(
+                DulkirConfig.INSTANCE.getCustomSize(),
+                DulkirConfig.INSTANCE.getDoesScaleSwing(),
+                DulkirConfig.INSTANCE.getCustomX(),
+                DulkirConfig.INSTANCE.getCustomY(),
+                DulkirConfig.INSTANCE.getCustomZ(),
+                DulkirConfig.INSTANCE.getCustomYaw(),
+                DulkirConfig.INSTANCE.getCustomPitch(),
+                DulkirConfig.INSTANCE.getCustomRoll(),
+                DulkirConfig.INSTANCE.getCustomSpeed(),
+                DulkirConfig.INSTANCE.getIgnoreHaste(),
+                DulkirConfig.INSTANCE.getDrinkingSelector()
+        );
+        AnimationExportUtils.importDulkir(data);
+        DulkirConfig.INSTANCE.setCustomAnimations(false);
+        Notifications.INSTANCE.send("OverflowAnimations", "Successfully imported DulkirMod config!");
     }
 }

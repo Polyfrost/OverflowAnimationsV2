@@ -411,6 +411,40 @@ public class OldAnimationsSettings extends Config {
         openGui();
     });
 
+    @Button(
+            name = "Copy / Export Item Positions As String",
+            text = "Export",
+            description = "Exports the item positions as a Base64 string. Will be copied to your clipboard.",
+            category = "Customize Item Positions"
+    )
+    public void exportItemPositions() {
+        AnimationExportUtils.exportItemPositions();
+    }
+
+    @Button(
+            name = "Import Overflow / Dulkir Item Positions As String",
+            text = "Import",
+            description = "Exports the item positions as a Base64 string. Will be copied to your clipboard.",
+            category = "Customize Item Positions"
+    )
+    public void importItemPositions() {
+        Minecraft.getMinecraft().displayGuiScreen(null);
+        AnimationExportUtils.importItemPositions();
+        openGui();
+    }
+
+    @Button(
+            name = "Transfer Dulkir Item Positions",
+            text = "Transfer",
+            description = "Transfers your DulkirMod item positions to OverflowAnimations.",
+            category = "Customize Item Positions"
+    )
+    public void transferDulkirItemPositions() {
+        Minecraft.getMinecraft().displayGuiScreen(null);
+        AnimationExportUtils.transferDulkirConfig();
+        openGui();
+    }
+
     // Item Positions Customization
     @Slider(
             name = "Item X Position",
@@ -493,28 +527,6 @@ public class OldAnimationsSettings extends Config {
             category = "Customize Item Positions", subcategory = "Item Position"
     )
     public static ItemPositionAdvancedSettings advancedSettings = new ItemPositionAdvancedSettings();
-
-    @Button(
-            name = "Copy / Export Item Positions As String",
-            text = "Export",
-            description = "Exports the item positions as a Base64 string. Will be copied to your clipboard.",
-            category = "Customize Item Positions", subcategory = "Import/Export Config"
-    )
-    public void exportItemPositions() {
-        AnimationExportUtils.exportItemPositions();
-    }
-
-    @Button(
-            name = "Import Overflow / Dulkir Item Positions As String",
-            text = "Import",
-            description = "Exports the item positions as a Base64 string. Will be copied to your clipboard.",
-            category = "Customize Item Positions", subcategory = "Import/Export Config"
-    )
-    public void importItemPositions() {
-        Minecraft.getMinecraft().displayGuiScreen(null);
-        AnimationExportUtils.importItemPositions();
-        openGui();
-    }
 
     public static boolean didTheFunnyDulkirThingElectricBoogaloo = false;
 
