@@ -39,9 +39,9 @@ public abstract class MinecraftMixin {
     @Inject(method = "sendClickBlockToController", at = @At("HEAD"))
     public void blockHitAnimation(boolean leftClick, CallbackInfo ci) {
         if (OldAnimationsSettings.oldBlockhitting && OldAnimationsSettings.punching && OldAnimationsSettings.INSTANCE.enabled) {
-            BlockPos posBlock = objectMouseOver.getBlockPos();
             if (leftClickCounter <= 0 && leftClick && objectMouseOver != null && objectMouseOver.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK
                     && (thePlayer.isUsingItem() || !OldAnimationsSettings.adventurePunching)) {
+                BlockPos posBlock = objectMouseOver.getBlockPos();
                 if (!theWorld.isAirBlock(posBlock)) {
                     if ((thePlayer.isAllowEdit() || !OldAnimationsSettings.adventureParticles) && OldAnimationsSettings.punchingParticles) {
                         effectRenderer.addBlockHitEffects(posBlock, objectMouseOver.sideHit);
