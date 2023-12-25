@@ -68,12 +68,11 @@ public class RenderItemMixin {
         }
     }
 
-    @Redirect(method = "renderItem(Lnet/minecraft/item/ItemStack;Lnet/minecraft/client/resources/model/IBakedModel;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;hasEffect()Z"))
-    private boolean disableGlintOnSprite(ItemStack instance, ItemStack stack, IBakedModel model) {
+    @Inject(method = "renderEffect", at = @At(value = "HEAD"), cancellable = true)
+    public void disableGlintOnSprite(IBakedModel model, CallbackInfo ci) {
         if (OldAnimationsSettings.itemSprites && OldAnimationsSettings.spritesGlint && OldAnimationsSettings.INSTANCE.enabled && TransformTypeHook.shouldNotHaveGlint()) {
-            return false;
+            ci.cancel();
         }
-        return instance.hasEffect();
     }
 
     @Inject(method = "renderItem(Lnet/minecraft/item/ItemStack;Lnet/minecraft/client/resources/model/IBakedModel;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/entity/RenderItem;renderModel(Lnet/minecraft/client/resources/model/IBakedModel;Lnet/minecraft/item/ItemStack;)V"))

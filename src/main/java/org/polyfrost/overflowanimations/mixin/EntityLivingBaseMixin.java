@@ -35,9 +35,9 @@ public abstract class EntityLivingBaseMixin extends Entity {
         ItemPositionAdvancedSettings advanced = OldAnimationsSettings.advancedSettings;
         if (OldAnimationsSettings.globalPositions && settings.enabled) {
             if (isPotionActive(Potion.digSpeed) && !ItemPositionAdvancedSettings.ignoreHaste) {
-                cir.setReturnValue(Math.max((int) (6 - (1 + getActivePotionEffect(Potion.digSpeed).getAmplifier()) * Math.exp(-advanced.itemSwingSpeedHaste)), 1));
+                cir.setReturnValue(Math.max((6 - (1 + getActivePotionEffect(Potion.digSpeed).getAmplifier())) * (int) Math.exp(-advanced.itemSwingSpeedHaste), 1));
             } else if (isPotionActive(Potion.digSlowdown)) {
-                cir.setReturnValue(Math.max((int) (6 + (1 + getActivePotionEffect(Potion.digSlowdown).getAmplifier()) * 2 * Math.exp(-advanced.itemSwingSpeedFatigue)), 1));
+                cir.setReturnValue(Math.max((6 + (1 + getActivePotionEffect(Potion.digSlowdown).getAmplifier())) * 2 * (int) Math.exp(-advanced.itemSwingSpeedFatigue), 1));
             } else {
                 cir.setReturnValue(Math.max((int) (6 * Math.exp(-advanced.itemSwingSpeed)), 1));
             }
