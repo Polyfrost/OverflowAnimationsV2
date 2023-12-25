@@ -14,9 +14,6 @@
       "GuiPlayerTabOverlayInvoker",
       "GuiPlayerTabOverlayMixin",
       "ItemRendererMixin",
-      "ItemRendererMixin_CustomPositions",
-      "RenderSnowballMixin_CustomPositions",
-      "RenderEntityItemMixin_CustomPositions",
       "EntityMixin",
       "LayerArmorBaseMixin",
       "LayerArmorBaseMixin_New",
@@ -25,13 +22,16 @@
       "MinecraftMixin",
       "ModelBipedMixin",
       "RendererLivingEntityInvoker",
-      "RenderFireballMixin",
       "NetHandlerPlayClientMixin",
       "OnlineIndicatorMixin",
       "PlayerControllerMPMixin",
       "RenderEntityItemMixin",
       "RenderFishMixin",
       "RenderItemMixin",
-      "RenderSnowballMixin"
+      "RenderSnowballMixin",
+      "RenderFireballMixin",
+      "ItemRendererMixin_CustomPositions",
+      "RenderSnowballMixin_CustomPositions",
+      "RenderEntityItemMixin_CustomPositions"
     ]
 }

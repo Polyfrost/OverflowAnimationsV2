@@ -9,6 +9,7 @@ import net.minecraft.client.settings.GameSettings;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.potion.Potion;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.MovingObjectPosition;
 import org.polyfrost.overflowanimations.config.OldAnimationsSettings;
 import org.polyfrost.overflowanimations.hooks.SwingHook;
@@ -37,13 +38,17 @@ public abstract class MinecraftMixin {
 
     @Inject(method = "sendClickBlockToController", at = @At("HEAD"))
     public void blockHitAnimation(boolean leftClick, CallbackInfo ci) {
-        if (OldAnimationsSettings.oldBlockhitting && OldAnimationsSettings.punching && OldAnimationsSettings.INSTANCE.enabled && thePlayer.isUsingItem()) {
-            if (leftClickCounter <= 0 && leftClick && objectMouseOver != null && objectMouseOver.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK) {
-                if (!theWorld.isAirBlock(objectMouseOver.getBlockPos())) {
+        if (objectMouseOver.typeOfHit != MovingObjectPosition.MovingObjectType.BLOCK) {
+            return;
+        }
+        if (OldAnimationsSettings.oldBlockhitting && OldAnimationsSettings.punching && OldAnimationsSettings.INSTANCE.enabled) {
+            BlockPos posBlock = objectMouseOver.getBlockPos();
+            if (leftClickCounter <= 0 && leftClick && objectMouseOver != null && (thePlayer.isUsingItem() || !OldAnimationsSettings.adventurePunching)) {
+                if (!theWorld.isAirBlock(posBlock)) {
                     if ((thePlayer.isAllowEdit() || !OldAnimationsSettings.adventureParticles) && OldAnimationsSettings.punchingParticles) {
-                        effectRenderer.addBlockHitEffects(objectMouseOver.getBlockPos(), objectMouseOver.sideHit);
+                        effectRenderer.addBlockHitEffects(posBlock, objectMouseOver.sideHit);
                     }
-                    if ((thePlayer.isAllowEdit() || !OldAnimationsSettings.adventurePunching)) {
+                    if ((thePlayer.isAllowEdit() || !OldAnimationsSettings.adventureBlockHit)) {
                         SwingHook.swingItem();
                     }
                 }

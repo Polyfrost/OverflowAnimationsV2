@@ -58,7 +58,7 @@ public class RenderItemMixin {
     @Redirect(method = "putQuadNormal", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/WorldRenderer;putNormal(FFF)V"))
     private void modifyNormalValue(WorldRenderer instance, float x, float y, float z, WorldRenderer renderer, BakedQuad quad) {
         if (OldAnimationsSettings.INSTANCE.enabled && !simplified$model.isGui3d()) {
-            if (OldAnimationsSettings.itemSpritesColor && TransformTypeHook.shouldNotHaveGlint()) {
+            if (OldAnimationsSettings.itemSprites && OldAnimationsSettings.itemSpritesColor && TransformTypeHook.shouldNotHaveGlint()) {
                 instance.putNormal(x, z, y);
             } else if (OldAnimationsSettings.oldItemLighting) {
                 instance.putNormal(-x, Minecraft.getMinecraft().thePlayer.isBlocking() ? -y : y, z);

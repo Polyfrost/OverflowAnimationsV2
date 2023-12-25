@@ -2,6 +2,7 @@ package org.polyfrost.overflowanimations.hooks;
 
 import cc.polyfrost.oneconfig.utils.Notifications;
 import com.google.gson.Gson;
+import org.polyfrost.overflowanimations.config.ItemPositionAdvancedSettings;
 import org.polyfrost.overflowanimations.config.OldAnimationsSettings;
 
 import java.awt.*;
@@ -50,62 +51,66 @@ public class AnimationExportUtils {
     }
 
     public static void importOverflow(OverflowConfigData importSettings) {
-        OldAnimationsSettings.INSTANCE.itemPositionX = importSettings.itemPositionX;
-        OldAnimationsSettings.INSTANCE.itemPositionY = importSettings.itemPositionY;
-        OldAnimationsSettings.INSTANCE.itemPositionZ = importSettings.itemPositionZ;
-        OldAnimationsSettings.INSTANCE.itemRotationYaw = importSettings.itemRotationYaw;
-        OldAnimationsSettings.INSTANCE.itemRotationPitch = importSettings.itemRotationPitch;
-        OldAnimationsSettings.INSTANCE.itemRotationRoll = importSettings.itemRotationRoll;
-        OldAnimationsSettings.INSTANCE.itemScale = importSettings.itemScale;
-        OldAnimationsSettings.INSTANCE.itemSwingPositionX = importSettings.itemSwingPositionX;
-        OldAnimationsSettings.INSTANCE.itemSwingPositionY = importSettings.itemSwingPositionY;
-        OldAnimationsSettings.INSTANCE.itemSwingPositionZ = importSettings.itemSwingPositionZ;
-        OldAnimationsSettings.INSTANCE.itemSwingSpeed = importSettings.itemSwingSpeed;
-        OldAnimationsSettings.INSTANCE.itemSwingSpeedHaste = importSettings.itemSwingSpeedHaste;
-        OldAnimationsSettings.INSTANCE.itemSwingSpeedFatigue = importSettings.itemSwingSpeedFatigue;
-        OldAnimationsSettings.shouldScaleSwing = importSettings.shouldScaleSwing;
-        OldAnimationsSettings.INSTANCE.consumePositionX = importSettings.consumePositionX;
-        OldAnimationsSettings.INSTANCE.consumePositionY = importSettings.consumePositionY;
-        OldAnimationsSettings.INSTANCE.consumePositionZ = importSettings.consumePositionZ;
-        OldAnimationsSettings.INSTANCE.consumeRotationYaw = importSettings.consumeRotationYaw;
-        OldAnimationsSettings.INSTANCE.consumeRotationPitch = importSettings.consumeRotationPitch;
-        OldAnimationsSettings.INSTANCE.consumeRotationRoll = importSettings.consumeRotationRoll;
-        OldAnimationsSettings.INSTANCE.consumeScale = importSettings.consumeScale;
-        OldAnimationsSettings.INSTANCE.consumeIntensity = importSettings.consumeIntensity;
-        OldAnimationsSettings.INSTANCE.consumeSpeed = importSettings.consumeSpeed;
-        OldAnimationsSettings.shouldScaleEat = importSettings.shouldScaleEat;
-        OldAnimationsSettings.INSTANCE.blockedPositionX = importSettings.blockedPositionX;
-        OldAnimationsSettings.INSTANCE.blockedPositionY = importSettings.blockedPositionY;
-        OldAnimationsSettings.INSTANCE.blockedPositionZ = importSettings.blockedPositionZ;
-        OldAnimationsSettings.INSTANCE.blockedRotationYaw = importSettings.blockedRotationYaw;
-        OldAnimationsSettings.INSTANCE.blockedRotationPitch = importSettings.blockedRotationPitch;
-        OldAnimationsSettings.INSTANCE.blockedRotationRoll = importSettings.blockedRotationRoll;
-        OldAnimationsSettings.INSTANCE.blockedScale = importSettings.blockedScale;
-        OldAnimationsSettings.INSTANCE.projectilePositionX = importSettings.projectilePositionX;
-        OldAnimationsSettings.INSTANCE.projectilePositionY = importSettings.projectilePositionY;
-        OldAnimationsSettings.INSTANCE.projectilePositionZ = importSettings.projectilePositionZ;
-        OldAnimationsSettings.INSTANCE.projectileRotationYaw = importSettings.projectileRotationYaw;
-        OldAnimationsSettings.INSTANCE.projectileRotationPitch = importSettings.projectileRotationPitch;
-        OldAnimationsSettings.INSTANCE.projectileRotationRoll = importSettings.projectileRotationRoll;
-        OldAnimationsSettings.INSTANCE.projectileScale = importSettings.projectileScale;
+        OldAnimationsSettings settings = OldAnimationsSettings.INSTANCE;
+        ItemPositionAdvancedSettings advanced = OldAnimationsSettings.advancedSettings;
+        settings.itemPositionX = importSettings.itemPositionX;
+        settings.itemPositionY = importSettings.itemPositionY;
+        settings.itemPositionZ = importSettings.itemPositionZ;
+        settings.itemRotationYaw = importSettings.itemRotationYaw;
+        settings.itemRotationPitch = importSettings.itemRotationPitch;
+        settings.itemRotationRoll = importSettings.itemRotationRoll;
+        settings.itemScale = importSettings.itemScale;
+        advanced.itemSwingPositionX = importSettings.itemSwingPositionX;
+        advanced.itemSwingPositionY = importSettings.itemSwingPositionY;
+        advanced.itemSwingPositionZ = importSettings.itemSwingPositionZ;
+        advanced.itemSwingSpeed = importSettings.itemSwingSpeed;
+        advanced.itemSwingSpeedHaste = importSettings.itemSwingSpeedHaste;
+        advanced.itemSwingSpeedFatigue = importSettings.itemSwingSpeedFatigue;
+        ItemPositionAdvancedSettings.shouldScaleSwing = importSettings.shouldScaleSwing;
+        advanced.consumePositionX = importSettings.consumePositionX;
+        advanced.consumePositionY = importSettings.consumePositionY;
+        advanced.consumePositionZ = importSettings.consumePositionZ;
+        advanced.consumeRotationYaw = importSettings.consumeRotationYaw;
+        advanced.consumeRotationPitch = importSettings.consumeRotationPitch;
+        advanced.consumeRotationRoll = importSettings.consumeRotationRoll;
+        advanced.consumeScale = importSettings.consumeScale;
+        advanced.consumeIntensity = importSettings.consumeIntensity;
+        advanced.consumeSpeed = importSettings.consumeSpeed;
+        ItemPositionAdvancedSettings.shouldScaleEat = importSettings.shouldScaleEat;
+        advanced.blockedPositionX = importSettings.blockedPositionX;
+        advanced.blockedPositionY = importSettings.blockedPositionY;
+        advanced.blockedPositionZ = importSettings.blockedPositionZ;
+        advanced.blockedRotationYaw = importSettings.blockedRotationYaw;
+        advanced.blockedRotationPitch = importSettings.blockedRotationPitch;
+        advanced.blockedRotationRoll = importSettings.blockedRotationRoll;
+        advanced.blockedScale = importSettings.blockedScale;
+        advanced.projectilePositionX = importSettings.projectilePositionX;
+        advanced.projectilePositionY = importSettings.projectilePositionY;
+        advanced.projectilePositionZ = importSettings.projectilePositionZ;
+        advanced.projectileRotationYaw = importSettings.projectileRotationYaw;
+        advanced.projectileRotationPitch = importSettings.projectileRotationPitch;
+        advanced.projectileRotationRoll = importSettings.projectileRotationRoll;
+        advanced.projectileScale = importSettings.projectileScale;
 
-        OldAnimationsSettings.INSTANCE.save();
+        settings.save();
     }
 
     public static void importDulkir(DulkirConfigData importSettings) {
-        OldAnimationsSettings.INSTANCE.itemPositionX = importSettings.getX();
-        OldAnimationsSettings.INSTANCE.itemPositionY = importSettings.getY();
-        OldAnimationsSettings.INSTANCE.itemPositionZ = importSettings.getZ();
-        OldAnimationsSettings.INSTANCE.itemRotationYaw = importSettings.getYaw();
-        OldAnimationsSettings.INSTANCE.itemRotationPitch = importSettings.getPitch();
-        OldAnimationsSettings.INSTANCE.itemRotationRoll = importSettings.getRoll();
-        OldAnimationsSettings.INSTANCE.itemScale = importSettings.getSize();
-        OldAnimationsSettings.INSTANCE.itemSwingSpeed = importSettings.getSpeed();
-        OldAnimationsSettings.INSTANCE.itemSwingSpeedHaste = importSettings.getIgnoreHaste() ? importSettings.getSpeed() : 1.0F;
-        OldAnimationsSettings.INSTANCE.itemSwingSpeedFatigue = importSettings.getIgnoreHaste() ? importSettings.getSpeed() : 1.0F;
-        OldAnimationsSettings.shouldScaleSwing = importSettings.getScaleSwing();
-        OldAnimationsSettings.shouldScaleEat = importSettings.getDrinkingFix() == 2;
+        OldAnimationsSettings settings = OldAnimationsSettings.INSTANCE;
+        ItemPositionAdvancedSettings advanced = OldAnimationsSettings.advancedSettings;
+        settings.itemPositionX = importSettings.getX();
+        settings.itemPositionY = importSettings.getY();
+        settings.itemPositionZ = importSettings.getZ();
+        settings.itemRotationYaw = importSettings.getYaw();
+        settings.itemRotationPitch = importSettings.getPitch();
+        settings.itemRotationRoll = importSettings.getRoll();
+        settings.itemScale = importSettings.getSize();
+        advanced.itemSwingSpeed = importSettings.getSpeed();
+        advanced.itemSwingSpeedHaste = importSettings.getIgnoreHaste() ? importSettings.getSpeed() : 1.0F;
+        advanced.itemSwingSpeedFatigue = importSettings.getIgnoreHaste() ? importSettings.getSpeed() : 1.0F;
+        ItemPositionAdvancedSettings.shouldScaleSwing = importSettings.getScaleSwing();
+        ItemPositionAdvancedSettings.shouldScaleEat = importSettings.getDrinkingFix() == 2;
 
-        OldAnimationsSettings.INSTANCE.save();
+        settings.save();
     }
 }

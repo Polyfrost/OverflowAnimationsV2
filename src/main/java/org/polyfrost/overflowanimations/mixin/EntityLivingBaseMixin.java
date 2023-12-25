@@ -6,6 +6,7 @@ import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
+import org.polyfrost.overflowanimations.config.ItemPositionAdvancedSettings;
 import org.polyfrost.overflowanimations.config.OldAnimationsSettings;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -31,13 +32,14 @@ public abstract class EntityLivingBaseMixin extends Entity {
     @Inject(method = "getArmSwingAnimationEnd()I", at = @At("HEAD"), cancellable = true)
     public void modifySwingSpeed(CallbackInfoReturnable<Integer> cir) {
         OldAnimationsSettings settings = OldAnimationsSettings.INSTANCE;
-        if (settings.enabled) {
-            if (isPotionActive(Potion.digSpeed) && !OldAnimationsSettings.ignoreHaste) {
-                cir.setReturnValue(Math.max((int) (6 - (1 + getActivePotionEffect(Potion.digSpeed).getAmplifier()) * Math.exp(-settings.itemSwingSpeedHaste)), 1));
+        ItemPositionAdvancedSettings advanced = OldAnimationsSettings.advancedSettings;
+        if (OldAnimationsSettings.globalPositions && settings.enabled) {
+            if (isPotionActive(Potion.digSpeed) && !ItemPositionAdvancedSettings.ignoreHaste) {
+                cir.setReturnValue(Math.max((int) (6 - (1 + getActivePotionEffect(Potion.digSpeed).getAmplifier()) * Math.exp(-advanced.itemSwingSpeedHaste)), 1));
             } else if (isPotionActive(Potion.digSlowdown)) {
-                cir.setReturnValue(Math.max((int) (6 + (1 + getActivePotionEffect(Potion.digSlowdown).getAmplifier()) * 2 * Math.exp(-settings.itemSwingSpeedFatigue)), 1));
+                cir.setReturnValue(Math.max((int) (6 + (1 + getActivePotionEffect(Potion.digSlowdown).getAmplifier()) * 2 * Math.exp(-advanced.itemSwingSpeedFatigue)), 1));
             } else {
-                cir.setReturnValue(Math.max((int) (6 * Math.exp(-settings.itemSwingSpeed)), 1));
+                cir.setReturnValue(Math.max((int) (6 * Math.exp(-advanced.itemSwingSpeed)), 1));
             }
         }
     }

@@ -4,6 +4,7 @@ import cc.polyfrost.oneconfig.config.Config;
 import cc.polyfrost.oneconfig.config.annotations.*;
 import cc.polyfrost.oneconfig.config.data.Mod;
 import cc.polyfrost.oneconfig.config.data.ModType;
+import cc.polyfrost.oneconfig.config.data.PageLocation;
 import cc.polyfrost.oneconfig.config.migration.VigilanceMigrator;
 import cc.polyfrost.oneconfig.config.migration.VigilanceName;
 import net.minecraft.client.Minecraft;
@@ -297,6 +298,13 @@ public class OldAnimationsSettings extends Config {
     )
     public static boolean adventurePunching = false;
 
+    @Switch(
+            name = "Disable Punching During Usage in Adventure Mode",
+            description = "Allows/Disallows the punching during usage feature in Adventure Mode.",
+            category = "Misc", subcategory = "Fixes, QOL, and Tweaks"
+    )
+    public static boolean adventureBlockHit = false;
+
     @Checkbox(
             name = "Disable Punch-During-Usage Particles in Adventure Mode",
             description = "Allows/Disallows the particles played while punching during usage to appear while in Adventure Mode.",
@@ -319,36 +327,91 @@ public class OldAnimationsSettings extends Config {
     public static boolean lunarBlockhit = false;
 
     @Switch(
-            name = "Swing Arm While Using an Item (Fake KillAura)",
-            description = "This option is purely visual. Swings the arm while clicking and using an item.)",
+            name = "Allow Clicking While Using an Item",
+            description = "This option is purely visual. Allows the player to swing while clicking and using an item.",
             category = "Misc", subcategory = "Fun"
     )
     public static boolean fakeBlockHit = false;
 
-    // Item Positions Customization
+    @Switch(
+            name = "Global Toggle",
+            description = "This option globally enables/disables custom item transformations",
+            category = "Customize Item Positions"
+    )
+    public static boolean globalPositions = true;
 
     @Button(
-            name = "Copy / Export Item Positions As String",
-            text = "Export",
-            description = "Exports the item positions as a Base64 string. Will be copied to your clipboard.",
-            category = "Customize Item Positions", subcategory = "Item Position"
+            name = "Globally Reset ALL Item Transformations",
+            text = "Reset",
+            category = "Customize Item Positions"
     )
-    public void exportItemPositions() {
-        AnimationExportUtils.exportItemPositions();
-    }
-
-    @Button(
-            name = "Import Overflow / Dulkir Item Positions As String",
-            text = "Import",
-            description = "Exports the item positions as a Base64 string. Will be copied to your clipboard.",
-            category = "Customize Item Positions", subcategory = "Item Position"
-    )
-    public void importItemPositions() {
+    Runnable resetGlobally = (() -> {
         Minecraft.getMinecraft().displayGuiScreen(null);
-        AnimationExportUtils.importItemPositions();
-        openGui();
-    }
+        itemPositionX = 0.0F;
+        itemPositionY = 0.0F;
+        itemPositionZ = 0.0F;
+        itemRotationYaw = 0.0F;
+        itemRotationPitch = 0.0F;
+        itemRotationRoll = 0.0F;
+        itemScale = 0.0F;
 
+        advancedSettings.itemSwingPositionX = 0.0F;
+        advancedSettings.itemSwingPositionY = 0.0F;
+        advancedSettings.itemSwingPositionZ = 0.0F;
+        advancedSettings.itemSwingSpeed = 0.0F;
+        advancedSettings.itemSwingSpeedHaste = 0.0F;
+        advancedSettings.itemSwingSpeedFatigue = 0.0F;
+        ItemPositionAdvancedSettings.shouldScaleSwing = false;
+        ItemPositionAdvancedSettings.disableSwing = false;
+        ItemPositionAdvancedSettings.ignoreHaste = false;
+
+        advancedSettings.consumePositionX = 0.0F;
+        advancedSettings.consumePositionY = 0.0F;
+        advancedSettings.consumePositionZ = 0.0F;
+        advancedSettings.consumeRotationYaw = 0.0F;
+        advancedSettings.consumeRotationPitch = 0.0F;
+        advancedSettings.consumeRotationRoll = 0.0F;
+        advancedSettings.consumeScale = 0.0F;
+        advancedSettings.consumeIntensity = 0.0F;
+        advancedSettings.consumeSpeed = 0.0F;
+        ItemPositionAdvancedSettings.shouldScaleEat = false;
+
+        advancedSettings.blockedPositionX = 0.0F;
+        advancedSettings.blockedPositionY = 0.0F;
+        advancedSettings.blockedPositionZ = 0.0F;
+        advancedSettings.blockedRotationYaw = 0.0F;
+        advancedSettings.blockedRotationPitch = 0.0F;
+        advancedSettings.blockedRotationRoll = 0.0F;
+        advancedSettings. blockedScale = 0.0F;
+
+        advancedSettings.droppedPositionX = 0.0F;
+        advancedSettings.droppedPositionY = 0.0F;
+        advancedSettings.droppedPositionZ = 0.0F;
+        advancedSettings.droppedRotationYaw = 0.0F;
+        advancedSettings.droppedRotationPitch = 0.0F;
+        advancedSettings.droppedRotationRoll = 0.0F;
+        advancedSettings.droppedScale = 0.0F;
+
+        advancedSettings.projectilePositionX = 0.0F;
+        advancedSettings.projectilePositionY = 0.0F;
+        advancedSettings.projectilePositionZ = 0.0F;
+        advancedSettings.projectileRotationYaw = 0.0F;
+        advancedSettings.projectileRotationPitch = 0.0F;
+        advancedSettings.projectileRotationRoll = 0.0F;
+        advancedSettings.projectileScale = 0.0F;
+
+        advancedSettings.fireballPositionX = 0.0F;
+        advancedSettings.fireballPositionY = 0.0F;
+        advancedSettings.fireballPositionZ = 0.0F;
+        advancedSettings.fireballRotationYaw = 0.0F;
+        advancedSettings.fireballRotationPitch = 0.0F;
+        advancedSettings.fireballRotationRoll = 0.0F;
+        advancedSettings.fireballScale = 0.0F;
+        save();
+        openGui();
+    });
+
+    // Item Positions Customization
     @Slider(
             name = "Item X Position",
             min = -1.5F, max = 1.5F,
@@ -423,414 +486,35 @@ public class OldAnimationsSettings extends Config {
         openGui();
     });
 
-    // Swing Position Customization
-    @Slider(
-            name = "Item Swing X Position",
-            min = -1.5F, max = 1.5F,
-            category = "Customize Item Positions", subcategory = "Item Swing Position",
-            instant = true
+    @Page(
+            name = "Advanced Item Customization Settings",
+            description = "Customize all sorts of item positions!",
+            location = PageLocation.BOTTOM,
+            category = "Customize Item Positions", subcategory = "Item Position"
     )
-    public float itemSwingPositionX = 0.0F;
-
-    @Slider(
-            name = "Item Swing Y Position",
-            min = -1.5F, max = 1.5F,
-            category = "Customize Item Positions", subcategory = "Item Swing Position",
-            instant = true
-    )
-    public float itemSwingPositionY = 0.0F;
-
-    @Slider(
-            name = "Item Swing Z Position",
-            min = -1.5F, max = 1.5F,
-            category = "Customize Item Positions", subcategory = "Item Swing Position",
-            instant = true
-    )
-    public float itemSwingPositionZ = 0.0F;
-
-    @Slider(
-            name = "Item Swing Speed",
-            min = -2.5F, max = 2.5F,
-            category = "Customize Item Positions", subcategory = "Item Swing Position",
-            instant = true
-    )
-    public float itemSwingSpeed = 0.0F;
-
-    @Slider(
-            name = "Haste Swing Speed",
-            min = -2.5F, max = 2.5F,
-            category = "Customize Item Positions", subcategory = "Item Swing Position",
-            instant = true
-    )
-    public float itemSwingSpeedHaste = 0.0F;
-
-    @Slider(
-            name = "Miner's Fatigue Swing Speed",
-            min = -2.5F, max = 2.5F,
-            category = "Customize Item Positions", subcategory = "Item Swing Position",
-            instant = true
-    )
-    public float itemSwingSpeedFatigue = 0.0F;
-
-    @Checkbox(
-            name = "Scale Item Swing Based on Item Scale",
-            description = "Scales the swing animation based on the scale of the item.",
-            category = "Customize Item Positions", subcategory = "Item Swing Position"
-    )
-    public static boolean shouldScaleSwing = false;
-
-    @Checkbox(
-            name = "Disable Swing Translation",
-            description = "Disables the swing translation.",
-            category = "Customize Item Positions", subcategory = "Item Swing Position"
-    )
-    public static boolean disableSwing = false;
+    public static ItemPositionAdvancedSettings advancedSettings = new ItemPositionAdvancedSettings();
 
     @Button(
-            name = "Reset Item Swing Transformations",
-            text = "Reset",
-            category = "Customize Item Positions", subcategory = "Item Swing Position"
+            name = "Copy / Export Item Positions As String",
+            text = "Export",
+            description = "Exports the item positions as a Base64 string. Will be copied to your clipboard.",
+            category = "Customize Item Positions", subcategory = "Import/Export Config"
     )
-    Runnable resetSwing = (() -> {
-        Minecraft.getMinecraft().displayGuiScreen(null);
-        itemSwingPositionX = 0.0F;
-        itemSwingPositionY = 0.0F;
-        itemSwingPositionZ = 0.0F;
-        itemSwingSpeed = 0.0F;
-        itemSwingSpeedHaste = 0.0F;
-        itemSwingSpeedFatigue = 0.0F;
-        shouldScaleSwing = false;
-        disableSwing = false;
-        ignoreHaste = false;
-        save();
-        openGui();
-    });
-
-    @Checkbox(
-            name = "Ignore Haste Speed",
-            description = "Ignores the haste speed when setting a custom item swing speed.",
-            category = "Customize Item Positions", subcategory = "Item Swing Position"
-    )
-    public static boolean ignoreHaste = false;
-
-    // Eating/Drinking Position
-    @Slider(
-            name = "Eating/Drinking X Position",
-            min = -1.5F, max = 1.5F,
-            category = "Customize Item Positions", subcategory = "Eating/Drinking Position",
-            instant = true
-    )
-    public float consumePositionX = 0.0F;
-
-    @Slider(
-            name = "Eating/Drinking Y Position",
-            min = -1.5F, max = 1.5F,
-            category = "Customize Item Positions", subcategory = "Eating/Drinking Position",
-            instant = true
-    )
-    public float consumePositionY = 0.0F;
-
-    @Slider(
-            name = "Eating/Drinking Z Position",
-            min = -1.5F, max = 1.5F,
-            category = "Customize Item Positions", subcategory = "Eating/Drinking Position",
-            instant = true
-    )
-    public float consumePositionZ = 0.0F;
-
-    @Slider(
-            name = "Eating/Drinking Rotation Yaw",
-            min = -180f, max = 180f, step = 1,
-            category = "Customize Item Positions", subcategory = "Eating/Drinking Position",
-            instant = true
-    )
-    public float consumeRotationYaw = 0.0F;
-
-    @Slider(
-            name = "Eating/Drinking Rotation Pitch",
-            min = -180f, max = 180f, step = 1,
-            category = "Customize Item Positions", subcategory = "Eating/Drinking Position",
-            instant = true
-    )
-    public float consumeRotationPitch = 0.0F;
-
-    @Slider(
-            name = "Eating/Drinking Rotation Roll",
-            min = -180f, max = 180f, step = 1,
-            category = "Customize Item Positions", subcategory = "Eating/Drinking Position",
-            instant = true
-    )
-    public float consumeRotationRoll = 0.0F;
-
-    @Slider(
-            name = "Eating/Drinking Scale",
-            min = -1.5f, max = 1.5f,
-            category = "Customize Item Positions", subcategory = "Eating/Drinking Position",
-            instant = true
-    )
-    public float consumeScale = 0.0F;
-
-    @Slider(
-            name = "Eating/Drinking Intensity Animation",
-            min = -6.5F, max = 6.5F,
-            category = "Customize Item Positions", subcategory = "Eating/Drinking Position",
-            instant = true
-    )
-    public float consumeIntensity = 0.0F;
-
-    @Slider(
-            name = "Eating/Drinking Rotation Speed",
-            min = -1.0F, max = 1.0F,
-            category = "Customize Item Positions", subcategory = "Eating/Drinking Position",
-            instant = true
-    )
-    public float consumeSpeed = 0.0F;
+    public void exportItemPositions() {
+        AnimationExportUtils.exportItemPositions();
+    }
 
     @Button(
-            name = "Reset Eating/Drinking Transformations",
-            text = "Reset",
-            category = "Customize Item Positions", subcategory = "Eating/Drinking Position"
+            name = "Import Overflow / Dulkir Item Positions As String",
+            text = "Import",
+            description = "Exports the item positions as a Base64 string. Will be copied to your clipboard.",
+            category = "Customize Item Positions", subcategory = "Import/Export Config"
     )
-    Runnable resetConsume = (() -> {
+    public void importItemPositions() {
         Minecraft.getMinecraft().displayGuiScreen(null);
-        consumePositionX = 0.0F;
-        consumePositionY = 0.0F;
-        consumePositionZ = 0.0F;
-        consumeRotationYaw = 0.0F;
-        consumeRotationPitch = 0.0F;
-        consumeRotationRoll = 0.0F;
-        consumeScale = 0.0F;
-        consumeIntensity = 0.0F;
-        consumeSpeed = 0.0F;
-        shouldScaleEat = false;
-        save();
+        AnimationExportUtils.importItemPositions();
         openGui();
-    });
-
-    @Checkbox(
-            name = "Scale Eating/Drinking Based on Item Position",
-            description = "Scales the Eating/Drinking animation based on the position of the item.",
-            category = "Customize Item Positions", subcategory = "Eating/Drinking Position"
-    )
-    public static boolean shouldScaleEat = false;
-
-    // Sword Block Position
-    @Slider(
-            name = "Sword Block X Position",
-            min = -1.5F, max = 1.5F,
-            category = "Customize Item Positions", subcategory = "Sword Block Position",
-            instant = true
-    )
-    public float blockedPositionX = 0.0F;
-
-    @Slider(
-            name = "Sword Block Y Position",
-            min = -1.5F, max = 1.5F,
-            category = "Customize Item Positions", subcategory = "Sword Block Position",
-            instant = true
-    )
-    public float blockedPositionY = 0.0F;
-
-    @Slider(
-            name = "Sword Block Z Position",
-            min = -1.5F, max = 1.5F,
-            category = "Customize Item Positions", subcategory = "Sword Block Position",
-            instant = true
-    )
-    public float blockedPositionZ = 0.0F;
-
-    @Slider(
-            name = "Sword Block Rotation Yaw",
-            min = -180f, max = 180f, step = 1,
-            category = "Customize Item Positions", subcategory = "Sword Block Position",
-            instant = true
-    )
-    public float blockedRotationYaw = 0.0F;
-
-    @Slider(
-            name = "Sword Block Rotation Pitch",
-            min = -180f, max = 180f, step = 1,
-            category = "Customize Item Positions", subcategory = "Sword Block Position",
-            instant = true
-    )
-    public float blockedRotationPitch = 0.0F;
-
-    @Slider(
-            name = "Sword Block Rotation Roll",
-            min = -180f, max = 180f, step = 1,
-            category = "Customize Item Positions", subcategory = "Sword Block Position",
-            instant = true
-    )
-    public float blockedRotationRoll = 0.0F;
-
-    @Slider(
-            name = "Sword Block Scale",
-            min = -1.5f, max = 1.5f,
-            category = "Customize Item Positions", subcategory = "Sword Block Position",
-            instant = true
-    )
-    public float blockedScale = 0.0F;
-
-    @Button(
-            name = "Reset Sword Block Transformations",
-            text = "Reset",
-            category = "Customize Item Positions", subcategory = "Sword Block Position"
-    )
-    Runnable resetBlockItem = (() -> {
-        Minecraft.getMinecraft().displayGuiScreen(null);
-        blockedPositionX = 0.0F;
-        blockedPositionY = 0.0F;
-        blockedPositionZ = 0.0F;
-        blockedRotationYaw = 0.0F;
-        blockedRotationPitch = 0.0F;
-        blockedRotationRoll = 0.0F;
-        blockedScale = 0.0F;
-        save();
-        openGui();
-    });
-
-    // Dropped Item Position
-    @Slider(
-            name = "Dropped Item X Position",
-            min = -1.5F, max = 1.5F,
-            category = "Customize Item Positions", subcategory = "Dropped Item Position"
-    )
-    public float droppedPositionX = 0.0F;
-
-    @Slider(
-            name = "Dropped Item Y Position",
-            min = -1.5F, max = 1.5F,
-            category = "Customize Item Positions", subcategory = "Dropped Item Position"
-    )
-    public float droppedPositionY = 0.0F;
-
-    @Slider(
-            name = "Dropped Item Z Position",
-            min = -1.5F, max = 1.5F,
-            category = "Customize Item Positions", subcategory = "Dropped Item Position"
-    )
-    public float droppedPositionZ = 0.0F;
-
-    @Slider(
-            name = "Dropped Item Rotation Yaw",
-            min = -180f, max = 180f, step = 1,
-            category = "Customize Item Positions", subcategory = "Dropped Item Position"
-    )
-    public float droppedRotationYaw = 0.0F;
-
-    @Slider(
-            name = "Dropped Item Rotation Pitch",
-            min = -180f, max = 180f, step = 1,
-            category = "Customize Item Positions", subcategory = "Dropped Item Position"
-    )
-    public float droppedRotationPitch = 0.0F;
-
-    @Slider(
-            name = "Dropped Item Rotation Roll",
-            min = -180f, max = 180f, step = 1,
-            category = "Customize Item Positions", subcategory = "Dropped Item Position"
-    )
-    public float droppedRotationRoll = 0.0F;
-
-    @Slider(
-            name = "Dropped Item Scale",
-            min = -1.5f, max = 1.5f,
-            category = "Customize Item Positions", subcategory = "Dropped Item Position"
-    )
-    public float droppedScale = 0.0F;
-
-    @Button(
-            name = "Reset Dropped Item Transformations",
-            text = "Reset",
-            category = "Customize Item Positions", subcategory = "Dropped Item Position"
-    )
-    Runnable resetDropped = (() -> {
-        Minecraft.getMinecraft().displayGuiScreen(null);
-        droppedPositionX = 0.0F;
-        droppedPositionY = 0.0F;
-        droppedPositionZ = 0.0F;
-        droppedRotationYaw = 0.0F;
-        droppedRotationPitch = 0.0F;
-        droppedRotationRoll = 0.0F;
-        droppedScale = 0.0F;
-        save();
-        openGui();
-    });
-
-    // Projectiles Position
-    @Slider(
-            name = "Thrown Projectile X Position",
-            min = -1.5F, max = 1.5F,
-            category = "Customize Item Positions", subcategory = "Thrown Projectile Position",
-            instant = true
-    )
-    public float projectilePositionX = 0.0F;
-
-    @Slider(
-            name = "Thrown Projectile Y Position",
-            min = -1.5F, max = 1.5F,
-            category = "Customize Item Positions", subcategory = "Thrown Projectile Position",
-            instant = true
-    )
-    public float projectilePositionY = 0.0F;
-
-    @Slider(
-            name = "Thrown Projectile Z Position",
-            min = -1.5F, max = 1.5F,
-            category = "Customize Item Positions", subcategory = "Thrown Projectile Position",
-            instant = true
-    )
-    public float projectilePositionZ = 0.0F;
-
-    @Slider(
-            name = "Thrown Projectile Rotation Yaw",
-            min = -180f, max = 180f, step = 1,
-            category = "Customize Item Positions", subcategory = "Thrown Projectile Position",
-            instant = true
-    )
-    public float projectileRotationYaw = 0.0F;
-
-    @Slider(
-            name = "Thrown Projectile Rotation Pitch",
-            min = -180f, max = 180f, step = 1,
-            category = "Customize Item Positions", subcategory = "Thrown Projectile Position",
-            instant = true
-    )
-    public float projectileRotationPitch = 0.0F;
-
-    @Slider(
-            name = "Thrown Projectile Rotation Roll",
-            min = -180f, max = 180f, step = 1,
-            category = "Customize Item Positions", subcategory = "Thrown Projectile Position",
-            instant = true
-    )
-    public float projectileRotationRoll = 0.0F;
-
-    @Slider(
-            name = "Thrown Projectile Scale",
-            min = -1.5f, max = 1.5f,
-            category = "Customize Item Positions", subcategory = "Thrown Projectile Position",
-            instant = true
-    )
-    public float projectileScale = 0.0F;
-
-    @Button(
-            name = "Reset Thrown Projectile Transformations",
-            text = "Reset",
-            category = "Customize Item Positions", subcategory = "Thrown Projectile Position"
-    )
-    Runnable resetProjectile = (() -> {
-        Minecraft.getMinecraft().displayGuiScreen(null);
-        projectilePositionX = 0.0F;
-        projectilePositionY = 0.0F;
-        projectilePositionZ = 0.0F;
-        projectileRotationYaw = 0.0F;
-        projectileRotationPitch = 0.0F;
-        projectileRotationRoll = 0.0F;
-        projectileScale = 0.0F;
-        save();
-        openGui();
-    });
+    }
 
     public static boolean didTheFunnyDulkirThing = false;
 

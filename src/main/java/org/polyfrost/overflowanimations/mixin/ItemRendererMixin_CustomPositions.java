@@ -5,6 +5,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.MathHelper;
+import org.polyfrost.overflowanimations.config.ItemPositionAdvancedSettings;
 import org.polyfrost.overflowanimations.config.OldAnimationsSettings;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -21,7 +22,7 @@ public class ItemRendererMixin_CustomPositions {
     @Inject(method = "transformFirstPersonItem(FF)V", at = @At("HEAD"), cancellable = true)
     public void itemTransform(float equipProgress, float swingProgress, CallbackInfo ci) {
         OldAnimationsSettings settings = OldAnimationsSettings.INSTANCE;
-        if (settings.enabled) {
+        if (OldAnimationsSettings.globalPositions && settings.enabled) {
             GlStateManager.translate(
                     0.56f * (1.0F + settings.itemPositionX),
                     -0.52f * (1.0F - settings.itemPositionY),
@@ -46,14 +47,15 @@ public class ItemRendererMixin_CustomPositions {
     @Inject(method = "doItemUsedTransformations", at = @At("HEAD"), cancellable = true)
     public void swingTransformations(float swingProgress, CallbackInfo ci) {
         OldAnimationsSettings settings = OldAnimationsSettings.INSTANCE;
-        if (settings.enabled) {
-            if (OldAnimationsSettings.disableSwing) {
+        ItemPositionAdvancedSettings advanced = OldAnimationsSettings.advancedSettings;
+        if (OldAnimationsSettings.globalPositions && settings.enabled) {
+            if (ItemPositionAdvancedSettings.disableSwing) {
                 ci.cancel();
             } else {
-                float scale = (1.0F + (OldAnimationsSettings.shouldScaleSwing ? settings.itemScale : 0.0F));
-                float f = (-0.4f * (1.0F + settings.itemSwingPositionX)) * MathHelper.sin(MathHelper.sqrt_float(swingProgress) * (float) Math.PI) * scale;
-                float f1 = 0.2f * (1.0F - settings.itemSwingPositionY) * MathHelper.sin(MathHelper.sqrt_float(swingProgress) * (float) Math.PI * 2.0f) * scale;
-                float f2 = -0.2f * (1.0F + settings.itemSwingPositionZ) * MathHelper.sin(swingProgress * (float) Math.PI) * scale;
+                float scale = (1.0F + (ItemPositionAdvancedSettings.shouldScaleSwing ? settings.itemScale : 0.0F));
+                float f = (-0.4f * (1.0F + advanced.itemSwingPositionX)) * MathHelper.sin(MathHelper.sqrt_float(swingProgress) * (float) Math.PI) * scale;
+                float f1 = 0.2f * (1.0F - advanced.itemSwingPositionY) * MathHelper.sin(MathHelper.sqrt_float(swingProgress) * (float) Math.PI * 2.0f) * scale;
+                float f2 = -0.2f * (1.0F + advanced.itemSwingPositionZ) * MathHelper.sin(swingProgress * (float) Math.PI) * scale;
                 GlStateManager.translate(f, f1, f2);
                 ci.cancel();
             }
@@ -63,15 +65,16 @@ public class ItemRendererMixin_CustomPositions {
     @Inject(method = "doBlockTransformations", at = @At("HEAD"), cancellable = true)
     public void blockedItemTransform(CallbackInfo ci) {
         OldAnimationsSettings settings = OldAnimationsSettings.INSTANCE;
-        if (settings.enabled) {
+        ItemPositionAdvancedSettings advanced = OldAnimationsSettings.advancedSettings;
+        if (OldAnimationsSettings.globalPositions && settings.enabled) {
             GlStateManager.translate(
-                    -0.5f * (1.0F + settings.blockedPositionX),
-                    0.2f * (1.0F + settings.blockedPositionY),
-                    0.0f + settings.blockedPositionZ
+                    -0.5f * (1.0F + advanced.blockedPositionX),
+                    0.2f * (1.0F + advanced.blockedPositionY),
+                    0.0f + advanced.blockedPositionZ
             );
-            GlStateManager.rotate(settings.blockedRotationPitch, 1.0f, 0.0f, 0.0f);
-            GlStateManager.rotate(settings.blockedRotationYaw, 0.0f, 1.0f, 0.0f);
-            GlStateManager.rotate(settings.blockedRotationRoll, 0.0f, 0.0f, 1.0f);
+            GlStateManager.rotate(advanced.blockedRotationPitch, 1.0f, 0.0f, 0.0f);
+            GlStateManager.rotate(advanced.blockedRotationYaw, 0.0f, 1.0f, 0.0f);
+            GlStateManager.rotate(advanced.blockedRotationRoll, 0.0f, 0.0f, 1.0f);
             GlStateManager.rotate(30.0f, 0.0f, 1.0f, 0.0f);
             GlStateManager.rotate(-80.0f, 1.0f, 0.0f, 0.0f);
             GlStateManager.rotate(60.0f, 0.0f, 1.0f, 0.0f);
@@ -82,7 +85,7 @@ public class ItemRendererMixin_CustomPositions {
                 GlStateManager.rotate(1.0F, 0.25F, 0.0F, 0.0F);
                 GlStateManager.rotate(2.0F, 0.0F, 2.0F, 0.0F);
             }
-            double scale = 1.0f * Math.exp(settings.blockedScale);
+            double scale = 1.0f * Math.exp(advanced.blockedScale);
             GlStateManager.scale(scale, scale, scale);
             ci.cancel();
         }
@@ -96,7 +99,8 @@ public class ItemRendererMixin_CustomPositions {
     @Inject(method = "performDrinking", at = @At("HEAD"), cancellable = true)
     public void drinkingItemTransform(AbstractClientPlayer clientPlayer, float partialTicks, CallbackInfo ci) {
         OldAnimationsSettings settings = OldAnimationsSettings.INSTANCE;
-        if (settings.enabled) {
+        ItemPositionAdvancedSettings advanced = OldAnimationsSettings.advancedSettings;
+        if (OldAnimationsSettings.globalPositions && settings.enabled) {
             float f = (float)clientPlayer.getItemInUseCount() - partialTicks + 1.0f;
             float f1 = f / (float) itemToRender.getMaxItemUseDuration();
             float f2 = MathHelper.abs(MathHelper.cos(f / 4.0f * (float)Math.PI) * 0.1f);
@@ -106,21 +110,21 @@ public class ItemRendererMixin_CustomPositions {
             float posX = 0.56f * (1.0F + settings.itemPositionX);
             float posY = -0.52f * (1.0F - settings.itemPositionY);
             float posZ = -0.72f * (1.0F + settings.itemPositionZ);
-            if (OldAnimationsSettings.shouldScaleEat) {
+            if (ItemPositionAdvancedSettings.shouldScaleEat) {
                 GlStateManager.translate(-0.56f, 0.52f, 0.72f);
                 GlStateManager.translate(posX, posY, posZ);
             }
-            GlStateManager.translate(settings.consumePositionX, settings.consumePositionY, settings.consumePositionZ);
-            GlStateManager.translate(0.0f, f2 * (1.0F + settings.consumeIntensity), 0.0f);
-            float f3 = 1.0f - (float)Math.pow(f1, 27.0f * (1.0F + settings.consumeSpeed));
+            GlStateManager.translate(advanced.consumePositionX, advanced.consumePositionY, advanced.consumePositionZ);
+            GlStateManager.translate(0.0f, f2 * (1.0F + advanced.consumeIntensity), 0.0f);
+            float f3 = 1.0f - (float)Math.pow(f1, 27.0f * (1.0F + advanced.consumeSpeed));
             GlStateManager.translate(f3 * 0.6f, f3 * -0.5f, f3 * 0.0f);
-            GlStateManager.rotate(settings.consumeRotationPitch, 1.0f, 0.0f, 0.0f);
-            GlStateManager.rotate(settings.consumeRotationYaw, 0.0f, 1.0f, 0.0f);
-            GlStateManager.rotate(settings.consumeRotationRoll, 0.0f, 0.0f, 1.0f);
+            GlStateManager.rotate(advanced.consumeRotationPitch, 1.0f, 0.0f, 0.0f);
+            GlStateManager.rotate(advanced.consumeRotationYaw, 0.0f, 1.0f, 0.0f);
+            GlStateManager.rotate(advanced.consumeRotationRoll, 0.0f, 0.0f, 1.0f);
             GlStateManager.rotate(f3 * 90.0f, 0.0f, 1.0f, 0.0f);
             GlStateManager.rotate(f3 * 10.0f , 1.0f, 0.0f, 0.0f);
             GlStateManager.rotate(f3 * 30.0f, 0.0f, 0.0f, 1.0f);
-            if (OldAnimationsSettings.shouldScaleEat) {
+            if (ItemPositionAdvancedSettings.shouldScaleEat) {
                 GlStateManager.translate(0.56f, -0.52f, -0.72f);
                 GlStateManager.translate(-posX, -posY, -posZ);
             }
@@ -131,8 +135,8 @@ public class ItemRendererMixin_CustomPositions {
     @Inject(method = "renderItemInFirstPerson", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/ItemRenderer;transformFirstPersonItem(FF)V", ordinal = 1, shift = At.Shift.AFTER))
     public void drinkingItemScale(float partialTicks, CallbackInfo ci) {
         OldAnimationsSettings settings = OldAnimationsSettings.INSTANCE;
-        if (settings.enabled) {
-            double scale = 1.0f * Math.exp(settings.consumeScale);
+        if (OldAnimationsSettings.globalPositions && settings.enabled) {
+            double scale = 1.0f * Math.exp(OldAnimationsSettings.advancedSettings.consumeScale);
             GlStateManager.scale(scale, scale, scale);
         }
     }
