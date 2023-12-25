@@ -44,7 +44,7 @@ public class GuiIngameForgeMixin extends GuiIngame {
         return (!OldAnimationsSettings.oldHealth || !OldAnimationsSettings.INSTANCE.enabled) && original;
     }
 
-    @Inject(method = "renderGameOverlay", at = @At(value = "FIELD", target = "Lnet/minecraftforge/client/GuiIngameForge;renderCrosshairs:Z"), remap = false)
+    @Inject(method = "renderGameOverlay", at = @At(value = "FIELD", target = "Lnet/minecraftforge/client/GuiIngameForge;renderCrosshairs:Z"))
     public void renderRGBCrosshair(float partialTicks, CallbackInfo ci) {
         if (OldAnimationsSettings.INSTANCE.debugCrosshairMode == 2 &&
                 OldAnimationsSettings.INSTANCE.enabled && mc.gameSettings.showDebugInfo && !mc.thePlayer.hasReducedDebug() &&
