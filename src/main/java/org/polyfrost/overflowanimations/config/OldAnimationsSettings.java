@@ -358,12 +358,11 @@ public class OldAnimationsSettings extends Config {
         advancedSettings.itemSwingPositionX = 0.0F;
         advancedSettings.itemSwingPositionY = 0.0F;
         advancedSettings.itemSwingPositionZ = 0.0F;
-        advancedSettings.itemSwingSpeed = 0.0F;
-        advancedSettings.itemSwingSpeedHaste = 0.0F;
-        advancedSettings.itemSwingSpeedFatigue = 0.0F;
-        ItemPositionAdvancedSettings.shouldScaleSwing = false;
-        ItemPositionAdvancedSettings.disableSwing = false;
-        ItemPositionAdvancedSettings.ignoreHaste = false;
+        itemSwingSpeed = 0.0F;
+        itemSwingSpeedHaste = 0.0F;
+        itemSwingSpeedFatigue = 0.0F;
+        swingSetting = 0;
+        ignoreHaste = false;
 
         advancedSettings.consumePositionX = 0.0F;
         advancedSettings.consumePositionY = 0.0F;
@@ -445,6 +444,7 @@ public class OldAnimationsSettings extends Config {
         openGui();
     }
 
+
     // Item Positions Customization
     @Slider(
             name = "Item X Position",
@@ -502,6 +502,69 @@ public class OldAnimationsSettings extends Config {
     )
     public float itemScale = 0.0F;
 
+    @Slider(
+            name = "Item Swing Speed",
+            min = -2.0F, max = 1.0F,
+            category = "Customize Item Positions", subcategory = "Item Swing",
+            instant = true
+    )
+    public float itemSwingSpeed = 0.0F;
+
+    @Slider(
+            name = "Haste Swing Speed",
+            min = -2.0F, max = 1.0F,
+            category = "Customize Item Positions", subcategory = "Item Swing",
+            instant = true
+    )
+    public float itemSwingSpeedHaste = 0.0F;
+
+    @Slider(
+            name = "Miner's Fatigue Swing Speed",
+            min = -2.0F, max = 1.0F,
+            category = "Customize Item Positions", subcategory = "Item Swing",
+            instant = true
+    )
+    public float itemSwingSpeedFatigue = 0.0F;
+
+    @Dropdown(
+            name = "Swing Behavior",
+            description = "Allows you to choose between the regular swing behavior, scaled swing behavior, and no swing translation!",
+            category = "Customize Item Positions", subcategory = "Item Swing",
+            options = {"Default", "Smart Item Swing Scaling", "Disable Swing Translation"}
+    )
+    public int swingSetting = 0;
+
+    @Button(
+            name = "Reset Item Swing Speed",
+            text = "Reset",
+            category = "Customize Item Positions", subcategory = "Item Swing"
+    )
+    Runnable resetSpeed = (() -> {
+        Minecraft.getMinecraft().displayGuiScreen(null);
+        itemSwingSpeed = 0.0F;
+        itemSwingSpeedHaste = 0.0F;
+        itemSwingSpeedFatigue = 0.0F;
+        swingSetting = 0;
+        ignoreHaste = false;
+        ignoreFatigue = false;
+        OldAnimationsSettings.INSTANCE.save();
+        OldAnimationsSettings.INSTANCE.openGui();
+    });
+
+    @Checkbox(
+            name = "Ignore Haste Speed",
+            description = "Ignores the haste speed when setting a custom item swing speed.",
+            category = "Customize Item Positions", subcategory = "Item Swing"
+    )
+    public static boolean ignoreHaste = false;
+
+    @Checkbox(
+            name = "Ignore Mining Fatigue Speed",
+            description = "Ignores the mining fatigue speed when setting a custom item swing speed.",
+            category = "Customize Item Positions", subcategory = "Item Swing"
+    )
+    public static boolean ignoreFatigue = false;
+
     @Button(
             name = "Reset Item Transformations",
             text = "Reset",
@@ -524,7 +587,7 @@ public class OldAnimationsSettings extends Config {
             name = "Advanced Item Customization Settings",
             description = "Customize all sorts of item positions!",
             location = PageLocation.BOTTOM,
-            category = "Customize Item Positions", subcategory = "Item Position"
+            category = "Customize Item Positions", subcategory = "Advanced Settings"
     )
     public static ItemPositionAdvancedSettings advancedSettings = new ItemPositionAdvancedSettings();
 

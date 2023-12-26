@@ -1,5 +1,6 @@
 package org.polyfrost.overflowanimations.mixin;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.ItemRenderer;
@@ -7,6 +8,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.MathHelper;
 import org.polyfrost.overflowanimations.config.ItemPositionAdvancedSettings;
 import org.polyfrost.overflowanimations.config.OldAnimationsSettings;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -18,6 +20,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class ItemRendererMixin_CustomPositions {
 
     @Shadow private ItemStack itemToRender;
+
+    @Shadow @Final private Minecraft mc;
 
     @Inject(method = "transformFirstPersonItem(FF)V", at = @At("HEAD"), cancellable = true)
     public void itemTransform(float equipProgress, float swingProgress, CallbackInfo ci) {
@@ -49,10 +53,10 @@ public class ItemRendererMixin_CustomPositions {
         OldAnimationsSettings settings = OldAnimationsSettings.INSTANCE;
         ItemPositionAdvancedSettings advanced = OldAnimationsSettings.advancedSettings;
         if (OldAnimationsSettings.globalPositions && settings.enabled) {
-            if (ItemPositionAdvancedSettings.disableSwing) {
+            if (settings.swingSetting == 2) {
                 ci.cancel();
             } else {
-                float scale = (1.0F + (ItemPositionAdvancedSettings.shouldScaleSwing ? settings.itemScale : 0.0F));
+                float scale = (1.0F + (settings.swingSetting == 1 ? settings.itemScale : 0.0F));
                 float f = (-0.4f * (1.0F + advanced.itemSwingPositionX)) * MathHelper.sin(MathHelper.sqrt_float(swingProgress) * (float) Math.PI) * scale;
                 float f1 = 0.2f * (1.0F - advanced.itemSwingPositionY) * MathHelper.sin(MathHelper.sqrt_float(swingProgress) * (float) Math.PI * 2.0f) * scale;
                 float f2 = -0.2f * (1.0F + advanced.itemSwingPositionZ) * MathHelper.sin(swingProgress * (float) Math.PI) * scale;

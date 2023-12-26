@@ -34,12 +34,15 @@ public abstract class EntityLivingBaseMixin extends Entity {
         OldAnimationsSettings settings = OldAnimationsSettings.INSTANCE;
         ItemPositionAdvancedSettings advanced = OldAnimationsSettings.advancedSettings;
         if (OldAnimationsSettings.globalPositions && settings.enabled) {
-            if (isPotionActive(Potion.digSpeed) && !ItemPositionAdvancedSettings.ignoreHaste) {
-                cir.setReturnValue(Math.max((6 - (1 + getActivePotionEffect(Potion.digSpeed).getAmplifier())) * (int) Math.exp(-advanced.itemSwingSpeedHaste), 1));
-            } else if (isPotionActive(Potion.digSlowdown)) {
-                cir.setReturnValue(Math.max((6 + (1 + getActivePotionEffect(Potion.digSlowdown).getAmplifier())) * 2 * (int) Math.exp(-advanced.itemSwingSpeedFatigue), 1));
+            if (isPotionActive(Potion.digSpeed) && !OldAnimationsSettings.ignoreHaste) {
+                cir.setReturnValue(
+                        (6 - (1 + getActivePotionEffect(Potion.digSpeed).getAmplifier())) * Math.max((int) Math.exp(-settings.itemSwingSpeedHaste), 1));
+            } else if (isPotionActive(Potion.digSlowdown) && !OldAnimationsSettings.ignoreFatigue) {
+                cir.setReturnValue(
+                        (6 + (1 + getActivePotionEffect(Potion.digSlowdown).getAmplifier())) * 2 * Math.max((int) Math.exp(-settings.itemSwingSpeedFatigue), 1));
             } else {
-                cir.setReturnValue(Math.max((int) (6 * Math.exp(-advanced.itemSwingSpeed)), 1));
+                cir.setReturnValue(
+                         6 * Math.max((int) Math.exp(-settings.itemSwingSpeed), 1));
             }
         }
     }

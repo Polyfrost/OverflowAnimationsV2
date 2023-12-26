@@ -68,10 +68,10 @@ public class AnimationExportUtils {
         advanced.itemSwingPositionX = importSettings.itemSwingPositionX;
         advanced.itemSwingPositionY = importSettings.itemSwingPositionY;
         advanced.itemSwingPositionZ = importSettings.itemSwingPositionZ;
-        advanced.itemSwingSpeed = importSettings.itemSwingSpeed;
-        advanced.itemSwingSpeedHaste = importSettings.itemSwingSpeedHaste;
-        advanced.itemSwingSpeedFatigue = importSettings.itemSwingSpeedFatigue;
-        ItemPositionAdvancedSettings.shouldScaleSwing = importSettings.shouldScaleSwing;
+        settings.itemSwingSpeed = importSettings.itemSwingSpeed;
+        settings.itemSwingSpeedHaste = importSettings.itemSwingSpeedHaste;
+        settings.itemSwingSpeedFatigue = importSettings.itemSwingSpeedFatigue;
+        settings.swingSetting = importSettings.shouldScaleSwing ? 1 : 0;
         advanced.consumePositionX = importSettings.consumePositionX;
         advanced.consumePositionY = importSettings.consumePositionY;
         advanced.consumePositionZ = importSettings.consumePositionZ;
@@ -110,11 +110,11 @@ public class AnimationExportUtils {
         settings.itemRotationPitch = importSettings.getPitch();
         settings.itemRotationRoll = importSettings.getRoll();
         settings.itemScale = importSettings.getSize();
-        advanced.itemSwingSpeed = importSettings.getSpeed();
-        advanced.itemSwingSpeedHaste = importSettings.getSpeed();
-        advanced.itemSwingSpeedFatigue = importSettings.getSpeed();
-        ItemPositionAdvancedSettings.ignoreHaste = importSettings.getIgnoreHaste();
-        ItemPositionAdvancedSettings.shouldScaleSwing = importSettings.getScaleSwing();
+        settings.itemSwingSpeed = importSettings.getSpeed();
+        settings.itemSwingSpeedHaste = importSettings.getSpeed();
+        settings.itemSwingSpeedFatigue = importSettings.getSpeed();
+        OldAnimationsSettings.ignoreHaste = importSettings.getIgnoreHaste();
+        settings.swingSetting = importSettings.getScaleSwing() ? 1 : 0;
         ItemPositionAdvancedSettings.shouldScaleEat = importSettings.getDrinkingFix() == 2;
 
         settings.save();

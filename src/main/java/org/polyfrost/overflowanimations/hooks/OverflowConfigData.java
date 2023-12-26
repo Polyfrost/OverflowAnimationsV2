@@ -98,10 +98,10 @@ public class OverflowConfigData {
         itemSwingPositionX = advanced.itemSwingPositionX;
         itemSwingPositionY = advanced.itemSwingPositionY;
         itemSwingPositionZ = advanced.itemSwingPositionZ;
-        itemSwingSpeed = advanced.itemSwingSpeed;
-        itemSwingSpeedHaste = advanced.itemSwingSpeedHaste;
-        itemSwingSpeedFatigue = advanced.itemSwingSpeedFatigue;
-        shouldScaleSwing = ItemPositionAdvancedSettings.shouldScaleSwing;
+        itemSwingSpeed = settings.itemSwingSpeed;
+        itemSwingSpeedHaste = settings.itemSwingSpeedHaste;
+        itemSwingSpeedFatigue = settings.itemSwingSpeedFatigue;
+        shouldScaleSwing = settings.swingSetting == 1;
         consumePositionX = advanced.consumePositionX;
         consumePositionY = advanced.consumePositionY;
         consumePositionZ = advanced.consumePositionZ;

@@ -33,44 +33,6 @@ public class ItemPositionAdvancedSettings {
     )
     public float itemSwingPositionZ = 0.0F;
 
-    @Slider(
-            name = "Item Swing Speed",
-            min = -2.5F, max = 2.5F,
-            category = "Customize Item Positions", subcategory = "Item Swing Position",
-            instant = true
-    )
-    public float itemSwingSpeed = 0.0F;
-
-    @Slider(
-            name = "Haste Swing Speed",
-            min = -2.5F, max = 2.5F,
-            category = "Customize Item Positions", subcategory = "Item Swing Position",
-            instant = true
-    )
-    public float itemSwingSpeedHaste = 0.0F;
-
-    @Slider(
-            name = "Miner's Fatigue Swing Speed",
-            min = -2.5F, max = 2.5F,
-            category = "Customize Item Positions", subcategory = "Item Swing Position",
-            instant = true
-    )
-    public float itemSwingSpeedFatigue = 0.0F;
-
-    @Checkbox(
-            name = "Scale Item Swing Based on Item Scale",
-            description = "Scales the swing animation based on the scale of the item.",
-            category = "Customize Item Positions", subcategory = "Item Swing Position"
-    )
-    public static boolean shouldScaleSwing = false;
-
-    @Checkbox(
-            name = "Disable Swing Translation",
-            description = "Disables the swing translation.",
-            category = "Customize Item Positions", subcategory = "Item Swing Position"
-    )
-    public static boolean disableSwing = false;
-
     @Button(
             name = "Reset Item Swing Transformations",
             text = "Reset",
@@ -81,22 +43,9 @@ public class ItemPositionAdvancedSettings {
         itemSwingPositionX = 0.0F;
         itemSwingPositionY = 0.0F;
         itemSwingPositionZ = 0.0F;
-        itemSwingSpeed = 0.0F;
-        itemSwingSpeedHaste = 0.0F;
-        itemSwingSpeedFatigue = 0.0F;
-        shouldScaleSwing = false;
-        disableSwing = false;
-        ignoreHaste = false;
         OldAnimationsSettings.INSTANCE.save();
         OldAnimationsSettings.INSTANCE.openGui();
     });
-
-    @Checkbox(
-            name = "Ignore Haste Speed",
-            description = "Ignores the haste speed when setting a custom item swing speed.",
-            category = "Customize Item Positions", subcategory = "Item Swing Position"
-    )
-    public static boolean ignoreHaste = false;
 
     // Eating/Drinking Position
     @Slider(
