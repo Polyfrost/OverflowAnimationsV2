@@ -292,8 +292,8 @@ public class OldAnimationsSettings extends Config {
     public static boolean entityTransforms = true;
 
     @Switch(
-            name = "Disable Punching During Usage in Adventure Mode",
-            description = "Allows/Disallows the punching during usage feature in Adventure Mode.",
+            name = "Disable swinging at the ground in Adventure Mode",
+            description = "Allows/Disallows swinging at the ground in Adventure Mode.",
             category = "Misc", subcategory = "Fixes, QOL, and Tweaks"
     )
     public static boolean adventurePunching = false;
