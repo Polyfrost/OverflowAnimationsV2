@@ -10,9 +10,11 @@ import org.polyfrost.overflowanimations.config.ItemPositionAdvancedSettings;
 import org.polyfrost.overflowanimations.config.OldAnimationsSettings;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(value = EntityLivingBase.class, priority = 980)
@@ -28,6 +30,32 @@ public abstract class EntityLivingBaseMixin extends Entity {
     @Shadow public float swingProgress;
 
     @Shadow public float renderYawOffset;
+
+    @Shadow
+    public float rotationYawHead;
+
+    @Unique
+    private float overflowAnimations$newHeadYaw;
+
+    @Unique
+    private int overflowAnimations$headYawLerpWeight;
+
+    @Inject(method = "setRotationYawHead", at = @At("HEAD"), cancellable = true)
+    public void overflowAnimations$setAsNewHeadYaw(float rotation, CallbackInfo ci) {
+        if (!OldAnimationsSettings.INSTANCE.enabled || !OldAnimationsSettings.headYawFix) return;
+        ci.cancel();
+        overflowAnimations$newHeadYaw = MathHelper.wrapAngleTo180_float(rotation);
+        overflowAnimations$headYawLerpWeight = 3;
+    }
+
+    @Inject(method = "onLivingUpdate", at = @At("HEAD"))
+    public void overflowAnimations$updateHeadYaw(CallbackInfo ci) {
+        if (!OldAnimationsSettings.INSTANCE.enabled|| !OldAnimationsSettings.headYawFix) return;
+        if (overflowAnimations$headYawLerpWeight <= 0) return;
+        rotationYawHead += MathHelper.wrapAngleTo180_float(overflowAnimations$newHeadYaw - rotationYawHead) / overflowAnimations$headYawLerpWeight;
+        rotationYawHead = MathHelper.wrapAngleTo180_float(rotationYawHead);
+        overflowAnimations$headYawLerpWeight--;
+    }
 
     @Inject(method = "getArmSwingAnimationEnd()I", at = @At("HEAD"), cancellable = true)
     public void modifySwingSpeed(CallbackInfoReturnable<Integer> cir) {

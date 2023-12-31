@@ -285,6 +285,13 @@ public class OldAnimationsSettings extends Config {
     public static boolean breakFix = false;
 
     @Switch(
+        name = "Head Yaw Fixes",
+        description = "Smooths the rotation of mobs' heads when turning left or right.",
+        category = "Misc", subcategory = "Fixes, QOL, and Tweaks"
+    )
+    public static boolean headYawFix = true;
+
+    @Switch(
             name = "Disable Entity/Mob Third-Person Item Transformations",
             description = "Allows/Disallows mobs or entities to have third person item positions applied to them.",
             category = "Misc", subcategory = "Fixes, QOL, and Tweaks"
