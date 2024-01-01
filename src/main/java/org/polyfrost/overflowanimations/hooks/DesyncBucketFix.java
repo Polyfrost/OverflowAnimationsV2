@@ -25,6 +25,7 @@ public class DesyncBucketFix {
 
     @Subscribe
     public void onPacketSent(SendPacketEvent event) {
+        if (!OldAnimationsSettings.INSTANCE.enabled) return;
         if (!OldAnimationsSettings.bucketFix) return;
         if (!capturing) return;
         if (event.packet instanceof C08PacketPlayerBlockPlacement) {
@@ -34,6 +35,7 @@ public class DesyncBucketFix {
 
     @Subscribe
     public void onTick(TickEvent event) {
+        if (!OldAnimationsSettings.INSTANCE.enabled) return;
         if (!OldAnimationsSettings.bucketFix) return;
         capturing = event.stage == Stage.START;
         if (capturing) return;
