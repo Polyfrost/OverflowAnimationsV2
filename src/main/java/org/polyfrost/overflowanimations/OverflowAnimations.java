@@ -31,7 +31,7 @@ public class OverflowAnimations {
         OldAnimationsSettings.INSTANCE.preload();
         CommandManager.INSTANCE.registerCommand(new OldAnimationsCommand());
         EventManager.INSTANCE.register(this);
-        new DesyncBucketFix().init();
+        DesyncBucketFix.init();
     }
 
     @EventHandler

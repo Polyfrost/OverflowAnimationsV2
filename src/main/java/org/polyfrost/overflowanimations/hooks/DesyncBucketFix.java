@@ -2,12 +2,12 @@ package org.polyfrost.overflowanimations.hooks;
 
 import cc.polyfrost.oneconfig.events.EventManager;
 import cc.polyfrost.oneconfig.events.event.SendPacketEvent;
-import cc.polyfrost.oneconfig.events.event.Stage;
-import cc.polyfrost.oneconfig.events.event.TickEvent;
 import cc.polyfrost.oneconfig.libs.eventbus.Subscribe;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemBucket;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.Packet;
+import net.minecraft.network.play.client.C03PacketPlayer;
 import net.minecraft.network.play.client.C08PacketPlayerBlockPlacement;
 import org.polyfrost.overflowanimations.config.OldAnimationsSettings;
 
@@ -15,12 +15,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DesyncBucketFix {
-    private final Minecraft mc = Minecraft.getMinecraft();
-    private final List<C08PacketPlayerBlockPlacement> packetQueue = new ArrayList<>();
-    private boolean capturing;
+    private static final Minecraft mc = Minecraft.getMinecraft();
+    private static final List<C08PacketPlayerBlockPlacement> packetQueue = new ArrayList<>();
+    private static boolean capturing = true;
 
-    public void init() {
-        EventManager.INSTANCE.register(this);
+    public static void init() {
+        EventManager.INSTANCE.register(new DesyncBucketFix());
     }
 
     @Subscribe
@@ -33,21 +33,23 @@ public class DesyncBucketFix {
         }
     }
 
-    @Subscribe
-    public void onTick(TickEvent event) {
+    public static void afterPacketSent(Packet<?> packetSent) {
         if (!OldAnimationsSettings.INSTANCE.enabled) return;
         if (!OldAnimationsSettings.bucketFix) return;
-        capturing = event.stage == Stage.START;
-        if (capturing) return;
+        if (!capturing) return;
+        if (!(packetSent instanceof C03PacketPlayer)) return;
         if (packetQueue.isEmpty()) return;
 
+        capturing = false;
         for (C08PacketPlayerBlockPlacement packet : packetQueue) {
             mc.getNetHandler().addToSendQueue(packet);
+
         }
+        capturing = true;
         packetQueue.clear();
     }
 
-    private void captureBucketPacket(C08PacketPlayerBlockPlacement packet, SendPacketEvent event) {
+    private static void captureBucketPacket(C08PacketPlayerBlockPlacement packet, SendPacketEvent event) {
         if (!isItemBucket(packet.getStack())) return;
         event.isCancelled = true;
         packetQueue.add(packet);
