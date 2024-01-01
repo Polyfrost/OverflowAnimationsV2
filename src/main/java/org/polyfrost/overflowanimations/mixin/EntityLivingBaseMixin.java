@@ -2,6 +2,7 @@ package org.polyfrost.overflowanimations.mixin;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.MathHelper;
@@ -40,8 +41,10 @@ public abstract class EntityLivingBaseMixin extends Entity {
     @Unique
     private int overflowAnimations$headYawLerpWeight;
 
+
     @Inject(method = "setRotationYawHead", at = @At("HEAD"), cancellable = true)
     public void overflowAnimations$setAsNewHeadYaw(float rotation, CallbackInfo ci) {
+        if (!((Object)this instanceof EntityPlayer)) return;
         if (!OldAnimationsSettings.INSTANCE.enabled || !OldAnimationsSettings.headYawFix) return;
         ci.cancel();
         overflowAnimations$newHeadYaw = MathHelper.wrapAngleTo180_float(rotation);
@@ -50,7 +53,8 @@ public abstract class EntityLivingBaseMixin extends Entity {
 
     @Inject(method = "onLivingUpdate", at = @At("HEAD"))
     public void overflowAnimations$updateHeadYaw(CallbackInfo ci) {
-        if (!OldAnimationsSettings.INSTANCE.enabled|| !OldAnimationsSettings.headYawFix) return;
+        if (!((Object)this instanceof EntityPlayer)) return;
+        if (!OldAnimationsSettings.INSTANCE.enabled || !OldAnimationsSettings.headYawFix) return;
         if (overflowAnimations$headYawLerpWeight <= 0) return;
         rotationYawHead += MathHelper.wrapAngleTo180_float(overflowAnimations$newHeadYaw - rotationYawHead) / overflowAnimations$headYawLerpWeight;
         rotationYawHead = MathHelper.wrapAngleTo180_float(rotationYawHead);
