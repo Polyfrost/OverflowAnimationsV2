@@ -36,10 +36,10 @@ public abstract class EntityLivingBaseMixin extends Entity {
     public float rotationYawHead;
 
     @Unique
-    private float overflowAnimations$newHeadYaw;
+    protected float overflowAnimations$newHeadYaw;
 
     @Unique
-    private int overflowAnimations$headYawLerpWeight;
+    protected int overflowAnimations$headYawLerpWeight;
 
 
     @Inject(method = "setRotationYawHead", at = @At("HEAD"), cancellable = true)
