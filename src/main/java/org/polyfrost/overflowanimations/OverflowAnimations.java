@@ -16,6 +16,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import org.polyfrost.overflowanimations.gui.PleaseMigrateDulkirModGui;
+import org.polyfrost.overflowanimations.hooks.DesyncBucketFix;
 
 @Mod(modid = OverflowAnimations.MODID, name = OverflowAnimations.NAME, version = OverflowAnimations.VERSION)
 public class OverflowAnimations {
@@ -30,6 +31,7 @@ public class OverflowAnimations {
         OldAnimationsSettings.INSTANCE.preload();
         CommandManager.INSTANCE.registerCommand(new OldAnimationsCommand());
         EventManager.INSTANCE.register(this);
+        new DesyncBucketFix().init();
     }
 
     @EventHandler

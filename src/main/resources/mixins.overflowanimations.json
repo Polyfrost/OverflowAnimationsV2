@@ -34,5 +34,8 @@
     "RenderItemMixin",
     "RenderSnowballMixin",
     "RenderSnowballMixin_CustomPositions"
+  ],
+  "mixins": [
+    "C03PacketPlayerAccessor"
   ]
 }

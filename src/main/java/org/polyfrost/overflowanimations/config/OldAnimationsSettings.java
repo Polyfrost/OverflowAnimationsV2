@@ -292,6 +292,13 @@ public class OldAnimationsSettings extends Config {
     public static boolean headYawFix = true;
 
     @Switch(
+        name = "Desync Bucket Fixes",
+        description = "Fixes the desync between client and server when pouring or filling buckets",
+        category = "Misc", subcategory = "Fixes, QOL, and Tweaks"
+    )
+    public static boolean bucketFix = false;
+
+    @Switch(
             name = "Disable Entity/Mob Third-Person Item Transformations",
             description = "Allows/Disallows mobs or entities to have third person item positions applied to them.",
             category = "Misc", subcategory = "Fixes, QOL, and Tweaks"
