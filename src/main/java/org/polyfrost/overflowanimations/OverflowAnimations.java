@@ -9,14 +9,13 @@ import cc.polyfrost.oneconfig.utils.gui.GuiUtils;
 import dulkirmod.config.DulkirConfig;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.common.Loader;
-import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
-import org.polyfrost.overflowanimations.command.OldAnimationsCommand;
-import org.polyfrost.overflowanimations.config.OldAnimationsSettings;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
+import org.polyfrost.overflowanimations.command.OldAnimationsCommand;
+import org.polyfrost.overflowanimations.config.OldAnimationsSettings;
 import org.polyfrost.overflowanimations.gui.PleaseMigrateDulkirModGui;
-import org.polyfrost.overflowanimations.hooks.DesyncBucketFix;
 
 @Mod(modid = OverflowAnimations.MODID, name = OverflowAnimations.NAME, version = OverflowAnimations.VERSION)
 public class OverflowAnimations {
@@ -31,7 +30,6 @@ public class OverflowAnimations {
         OldAnimationsSettings.INSTANCE.preload();
         CommandManager.INSTANCE.registerCommand(new OldAnimationsCommand());
         EventManager.INSTANCE.register(this);
-        DesyncBucketFix.init();
     }
 
     @EventHandler
