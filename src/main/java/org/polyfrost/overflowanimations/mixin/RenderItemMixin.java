@@ -5,16 +5,16 @@ import net.minecraft.block.BlockCarpet;
 import net.minecraft.block.BlockSnow;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.ItemModelMesher;
 import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.resources.model.IBakedModel;
+import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemBanner;
-import net.minecraft.item.ItemBlock;
-import net.minecraft.item.ItemStack;
+import net.minecraft.item.*;
 import net.minecraft.util.EnumFacing;
 import org.polyfrost.overflowanimations.config.OldAnimationsSettings;
 import org.polyfrost.overflowanimations.hooks.TransformTypeHook;
@@ -60,7 +60,7 @@ public class RenderItemMixin {
         if (OldAnimationsSettings.INSTANCE.enabled && !simplified$model.isGui3d()) {
             if (OldAnimationsSettings.itemSprites && OldAnimationsSettings.itemSpritesColor && TransformTypeHook.shouldNotHaveGlint()) {
                 instance.putNormal(x, z, y);
-            } else if (OldAnimationsSettings.oldItemLighting) {
+            } else if (OldAnimationsSettings.oldItemLighting && !TransformTypeHook.isRenderingInGUI()) {
                 instance.putNormal(-x, Minecraft.getMinecraft().thePlayer.isBlocking() ? -y : y, z);
             }
         } else {
@@ -125,6 +125,37 @@ public class RenderItemMixin {
         if (OldAnimationsSettings.INSTANCE.enabled) {
             GlStateManager.enableDepth();
         }
+    }
+
+    @Redirect(method = "renderItemIntoGUI", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/ItemModelMesher;getItemModel(Lnet/minecraft/item/ItemStack;)Lnet/minecraft/client/resources/model/IBakedModel;"))
+    public IBakedModel rodBowModelTexture(ItemModelMesher instance, ItemStack stack) {
+        if (OldAnimationsSettings.rodBowGuiFix && OldAnimationsSettings.INSTANCE.enabled) {
+            IBakedModel ibakedmodel = instance.getItemModel(stack);
+            EntityPlayer entityplayer = Minecraft.getMinecraft().thePlayer;
+            Item item = stack.getItem();
+            if (entityplayer != null && item != null && !entityplayer.isBlocking()) {
+                ModelResourceLocation modelresourcelocation = null;
+                if (item instanceof ItemFishingRod && entityplayer.fishEntity != null) {
+                    modelresourcelocation = new ModelResourceLocation("fishing_rod_cast", "inventory");
+                } else if (item instanceof ItemBow && entityplayer.getItemInUse() != null) {
+                    int i = stack.getMaxItemUseDuration() - entityplayer.getItemInUseCount();
+                    if (i >= 18) {
+                        modelresourcelocation = new ModelResourceLocation("bow_pulling_2", "inventory");
+                    } else if (i > 13) {
+                        modelresourcelocation = new ModelResourceLocation("bow_pulling_1", "inventory");
+                    } else if (i > 0) {
+                        modelresourcelocation = new ModelResourceLocation("bow_pulling_0", "inventory");
+                    }
+                } else {
+                    modelresourcelocation = item.getModel(stack, entityplayer, entityplayer.getItemInUseCount());
+                }
+                if (modelresourcelocation != null) {
+                    ibakedmodel = instance.getModelManager().getModel(modelresourcelocation);
+                }
+            }
+            return ibakedmodel;
+        }
+        return instance.getItemModel(stack);
     }
 
 }

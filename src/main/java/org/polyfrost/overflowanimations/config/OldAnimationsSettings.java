@@ -229,6 +229,13 @@ public class OldAnimationsSettings extends Config {
     public static boolean enchantmentGlintNew = true;
 
     @Switch(
+            name = "1.9+ Bow Pullback / Fishing Cast GUI Animation",
+            description = "Shows the Bow Pullback / Fishing Cast textures animating in GUIs.",
+            category = "Misc", subcategory = "Modern"
+    )
+    public static boolean rodBowGuiFix = false;
+
+    @Switch(
             name = "1.15+ Backwards Walk Animation",
             description = "Back-ports the 1.15 walking animation.",
             category = "Misc", subcategory = "Modern"
@@ -290,13 +297,6 @@ public class OldAnimationsSettings extends Config {
         category = "Misc", subcategory = "Fixes, QOL, and Tweaks"
     )
     public static boolean headYawFix = true;
-
-    @Switch(
-        name = "Desync Bucket Fixes",
-        description = "Fixes the desync between client and server when pouring or filling buckets",
-        category = "Misc", subcategory = "Fixes, QOL, and Tweaks"
-    )
-    public static boolean bucketFix = false;
 
     @Switch(
             name = "Disable Entity/Mob Third-Person Item Transformations",
