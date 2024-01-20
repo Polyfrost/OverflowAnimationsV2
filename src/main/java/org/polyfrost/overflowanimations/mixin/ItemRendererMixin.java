@@ -77,6 +77,9 @@ public class ItemRendererMixin {
 
     @ModifyArg(method = "updateEquippedItem", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/MathHelper;clamp_float(FFF)F"), index = 0)
     private float oldItemSwitch(float num) {
+        if (OldAnimationsSettings.fixReequip || OldAnimationsSettings.disableReequip) {
+            return num;
+        }
         if (OldAnimationsSettings.itemSwitch && OldAnimationsSettings.INSTANCE.enabled) {
             ItemStack itemstack = mc.thePlayer.inventory.getCurrentItem();
             boolean flag = equippedItemSlot == mc.thePlayer.inventory.currentItem && itemstack == itemToRender;

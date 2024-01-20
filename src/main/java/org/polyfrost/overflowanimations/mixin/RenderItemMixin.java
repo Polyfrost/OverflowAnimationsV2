@@ -4,6 +4,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockCarpet;
 import net.minecraft.block.BlockSnow;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.ItemModelMesher;
 import net.minecraft.client.renderer.WorldRenderer;
@@ -35,7 +36,7 @@ public class RenderItemMixin {
     @Unique
     public IBakedModel simplified$model;
     @Unique
-    private EntityLivingBase simplified$entityLivingBase = null;
+    private EntityLivingBase simplified$entityLivingBase;
 
     @Inject(method = "renderModel(Lnet/minecraft/client/resources/model/IBakedModel;ILnet/minecraft/item/ItemStack;)V", at = @At("HEAD"))
     private void setModel(IBakedModel model, int color, ItemStack stack, CallbackInfo ci) {
@@ -61,7 +62,8 @@ public class RenderItemMixin {
             if (OldAnimationsSettings.itemSprites && OldAnimationsSettings.itemSpritesColor && TransformTypeHook.shouldNotHaveGlint()) {
                 instance.putNormal(x, z, y);
             } else if (OldAnimationsSettings.oldItemLighting && !TransformTypeHook.isRenderingInGUI()) {
-                instance.putNormal(-x, Minecraft.getMinecraft().thePlayer.isBlocking() ? -y : y, z);
+                instance.putNormal(-x, Minecraft.getMinecraft().thePlayer.isBlocking() &&
+                        simplified$entityLivingBase instanceof AbstractClientPlayer ? -y : y, z);
             }
         } else {
             instance.putNormal(x, y, z);

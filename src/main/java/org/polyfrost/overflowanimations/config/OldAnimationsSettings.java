@@ -264,6 +264,20 @@ public class OldAnimationsSettings extends Config {
     public static boolean fishingStick = false;
 
     @Switch(
+            name = "Disable Item Re-equip Animation",
+            description = "Completely removed the the item re-equip animation.",
+            category = "Misc", subcategory = "Fixes, QOL, and Tweaks"
+    )
+    public static boolean disableReequip = false;
+
+    @Switch(
+            name = "Only Allow Re-equip Animation Upon Switching Slots",
+            description = "Fixes the re-equip animation to only play when items slots are switched.",
+            category = "Misc", subcategory = "Fixes, QOL, and Tweaks"
+    )
+    public static boolean fixReequip = true;
+
+    @Switch(
             name = "Allow Particles to No-Clip",
             description = "Allows particles to no clip through blocks by simply not checking for collisions.",
             category = "Misc", subcategory = "Fixes, QOL, and Tweaks"

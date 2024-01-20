@@ -16,6 +16,7 @@
     "GuiOverlayDebugMixin",
     "GuiPlayerTabOverlayInvoker",
     "GuiPlayerTabOverlayMixin",
+    "ItemMixin",
     "ItemRendererMixin",
     "ItemRendererMixin_CustomPositions",
     "LayerArmorBaseMixin",
