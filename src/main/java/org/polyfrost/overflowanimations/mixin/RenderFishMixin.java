@@ -1,9 +1,11 @@
 package org.polyfrost.overflowanimations.mixin;
 
-import org.polyfrost.overflowanimations.config.OldAnimationsSettings;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.RenderFish;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.Vec3;
+import org.polyfrost.overflowanimations.config.OldAnimationsSettings;
+import org.polyfrost.overflowanimations.hooks.TransformTypeHook;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Constant;
@@ -29,6 +31,11 @@ public class RenderFishMixin {
     @ModifyConstant(method = "doRender(Lnet/minecraft/entity/projectile/EntityFishHook;DDDFF)V", constant = @Constant(doubleValue = 0.8D, ordinal = 2))
     public double moveLinePosition2(double constant) {
         return OldAnimationsSettings.thirdTransformations && OldAnimationsSettings.INSTANCE.enabled ? 0.85D : constant;
+    }
+
+    @Redirect(method = "doRender(Lnet/minecraft/entity/projectile/EntityFishHook;DDDFF)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/EntityPlayer;getEyeHeight()F"))
+    public float modifyEyeHeight(EntityPlayer instance) {
+        return OldAnimationsSettings.smoothSneaking && OldAnimationsSettings.INSTANCE.enabled ? TransformTypeHook.sneakingHeight : instance.getEyeHeight();
     }
 
 }

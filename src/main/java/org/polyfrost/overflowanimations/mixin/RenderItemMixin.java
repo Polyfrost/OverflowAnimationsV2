@@ -34,23 +34,23 @@ import java.util.stream.Collectors;
 public class RenderItemMixin {
 
     @Unique
-    public IBakedModel simplified$model;
+    public IBakedModel oldanimations$model;
     @Unique
-    private EntityLivingBase simplified$entityLivingBase;
+    private EntityLivingBase oldanimations$entityLivingBase;
 
     @Inject(method = "renderModel(Lnet/minecraft/client/resources/model/IBakedModel;ILnet/minecraft/item/ItemStack;)V", at = @At("HEAD"))
     private void setModel(IBakedModel model, int color, ItemStack stack, CallbackInfo ci) {
-        simplified$model = model;
+        oldanimations$model = model;
     }
 
     @Inject(method = "renderItemModelForEntity", at = @At("HEAD"))
     public void getLastEntity(ItemStack stack, EntityLivingBase entityToRenderFor, ItemCameraTransforms.TransformType cameraTransformType, CallbackInfo ci) {
-        simplified$entityLivingBase = entityToRenderFor;
+        oldanimations$entityLivingBase = entityToRenderFor;
     }
 
     @ModifyArg(method = "renderModel(Lnet/minecraft/client/resources/model/IBakedModel;ILnet/minecraft/item/ItemStack;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/entity/RenderItem;renderQuads(Lnet/minecraft/client/renderer/WorldRenderer;Ljava/util/List;ILnet/minecraft/item/ItemStack;)V", ordinal = 1), index = 1)
     private List<BakedQuad> changeToSprite(List<BakedQuad> quads) {
-        if (OldAnimationsSettings.itemSprites && OldAnimationsSettings.INSTANCE.enabled && !simplified$model.isGui3d() && TransformTypeHook.shouldBeSprite()) {
+        if (OldAnimationsSettings.itemSprites && OldAnimationsSettings.INSTANCE.enabled && !oldanimations$model.isGui3d() && TransformTypeHook.shouldBeSprite()) {
             return quads.stream().filter(baked -> baked.getFace() == EnumFacing.SOUTH).collect(Collectors.toList());
         }
         return quads;
@@ -58,12 +58,13 @@ public class RenderItemMixin {
 
     @Redirect(method = "putQuadNormal", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/WorldRenderer;putNormal(FFF)V"))
     private void modifyNormalValue(WorldRenderer instance, float x, float y, float z, WorldRenderer renderer, BakedQuad quad) {
-        if (OldAnimationsSettings.INSTANCE.enabled && !simplified$model.isGui3d()) {
+        if (OldAnimationsSettings.INSTANCE.enabled && !oldanimations$model.isGui3d()) {
             if (OldAnimationsSettings.itemSprites && OldAnimationsSettings.itemSpritesColor && TransformTypeHook.shouldNotHaveGlint()) {
                 instance.putNormal(x, z, y);
             } else if (OldAnimationsSettings.oldItemLighting && !TransformTypeHook.isRenderingInGUI()) {
-                instance.putNormal(-x, Minecraft.getMinecraft().thePlayer.isBlocking() &&
-                        simplified$entityLivingBase instanceof AbstractClientPlayer ? -y : y, z);
+                boolean isBlocking = oldanimations$entityLivingBase instanceof AbstractClientPlayer &&
+                        ((AbstractClientPlayer) oldanimations$entityLivingBase).isBlocking();
+                instance.putNormal(-x, isBlocking ? -y : y, z);
             }
         } else {
             instance.putNormal(x, y, z);
@@ -102,7 +103,7 @@ public class RenderItemMixin {
                         GlStateManager.translate(0.0F, -5.25F * 0.0625F, 0.0F);
                     }
                 } else if (OldAnimationsSettings.thirdTransformations && cameraTransformType == ItemCameraTransforms.TransformType.THIRD_PERSON
-                        && (simplified$entityLivingBase instanceof EntityPlayer || !OldAnimationsSettings.entityTransforms)) {
+                        && (oldanimations$entityLivingBase instanceof EntityPlayer || !OldAnimationsSettings.entityTransforms)) {
                     if (isRod) {
                         GlStateManager.rotate(180.0F, 0.0F, 1.0F, 0.0F);
                         GlStateManager.rotate(110.0F, 0.0F, 0.0F, 1.0F);

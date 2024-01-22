@@ -30,6 +30,7 @@
     "RenderEntityItemMixin",
     "RenderEntityItemMixin_CustomPositions",
     "RendererLivingEntityInvoker",
+    "RendererLivingEntityMixin",
     "RenderFireballMixin",
     "RenderFishMixin",
     "RenderItemMixin",

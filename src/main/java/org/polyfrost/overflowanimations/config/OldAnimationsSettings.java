@@ -14,6 +14,7 @@ import org.polyfrost.overflowanimations.hooks.AnimationExportUtils;
 @SuppressWarnings("unused")
 public class OldAnimationsSettings extends Config {
 
+    // 2D Items
     @Switch(
             name = "2D Dropped Items",
             description = "Renders items as sprites rather than as models.",
@@ -41,6 +42,39 @@ public class OldAnimationsSettings extends Config {
     )
     public static boolean rotationFix = true;
 
+    // Smooth Sneaking
+
+    @Switch(
+            name = "1.7 Smoother Sneaking",
+            description = "Smoothens the player camera to appear just like the 1.7 smoother sneaking camera.",
+            subcategory = "Smooth Sneaking"
+    )
+    @VigilanceName(
+            name = "Smooth Sneaking",
+            category = "Animations",
+            subcategory = "Interaction"
+    )
+    public static boolean smoothSneaking = true;
+
+    @Switch(
+            name = "1.7 Longer Unsneak",
+            description = "Lengthens the player camera's speed to appear just like the 1.7 smoother sneaking camera.",
+            subcategory = "Smooth Sneaking"
+    )
+    @VigilanceName(
+            name = "Longer Unsneak",
+            category = "Animations",
+            subcategory = "Interaction"
+    )
+    public static boolean longerUnsneak = true;
+
+    @Switch(
+            name = "1.7 Third Person Smooth Sneaking",
+            description = "Smoothens the player model while sneaking to replicate the same behavior in 1.7. Disable if incompatible with cosmetic mods",
+            subcategory = "Smooth Sneaking"
+    )
+    public static boolean smoothModelSneak = true;
+
     // Interaction
     @Switch(
             name = "1.7 Block-Hitting Animation",
@@ -48,23 +82,11 @@ public class OldAnimationsSettings extends Config {
             subcategory = "Interaction"
     )
     @VigilanceName(
-            name = "1.7 Block-Hitting Animation",
+            name = "Block-Hitting Animation",
             category = "Animations",
             subcategory = "Interaction"
     )
     public static boolean oldBlockhitting = true;
-
-    @Switch(
-            name = "1.7 Smoother Sneaking",
-            description = "Smoothens the player camera to appear just like the 1.7 smoother sneaking camera.",
-            subcategory = "Interaction"
-    )
-    @VigilanceName(
-            name = "1.7 Smoother Sneaking",
-            category = "Animations",
-            subcategory = "Interaction"
-    )
-    public static boolean smoothSneaking = true;
 
     @Switch(
             name = "1.7 Armor Damage Tint",
@@ -72,7 +94,7 @@ public class OldAnimationsSettings extends Config {
             subcategory = "Interaction"
     )
     @VigilanceName(
-            name = "1.7 Red Armor Tint",
+            name = "Red Armor",
             category = "Animations",
             subcategory = "Interaction"
     )
@@ -84,18 +106,25 @@ public class OldAnimationsSettings extends Config {
             subcategory = "Interaction"
     )
     @VigilanceName(
-            name = "1.7 Item Switching Animation",
+            name = "Item Switching Animation",
             category = "Animations",
             subcategory = "Interaction"
     )
     public static boolean itemSwitch = true;
 
     @Switch(
+            name = "1.7 Miss Penalty Swing Animation",
+            description = "This option is purely visual. During the miss penalty, the player's arm will still swing and show particles just like in 1.7.",
+            subcategory = "Interaction"
+    )
+    public static boolean visualSwing = true;
+
+    @Switch(
             name = "1.7 Punching During Usage",
             description = "Purely visual feature. Re-enables the ability to consume food or block a sword whilst punching a block.",
             subcategory = "Interaction")
     @VigilanceName(
-            name = "1.7 Punching During Usage",
+            name = "Punching During Usage",
             category = "Animations",
             subcategory = "Interaction"
     )
@@ -183,6 +212,21 @@ public class OldAnimationsSettings extends Config {
     )
     public static boolean oldPickup = true;
 
+    // Item Changes
+    @Switch(
+            name = "1.7 Held Item Lighting",
+            description = "Modifies the held item lighting to resemble 1.7.",
+            subcategory = "Item Changes"
+    )
+    public static boolean oldItemLighting = true;
+
+    @Switch(
+            name = "1.7 Third-Person Fishing Rod Cast Texture",
+            description = "For some reason, in 1.7, when a fishing rod is cast, the third person texture becomes a stick rather than the fishing rod texture. This feature brings back that questionable feature.",
+            subcategory = "Item Changes"
+    )
+    public static boolean fishingStick = false;
+
     // HUD
     @Switch(
             name = "1.7 Health Bar Flashing",
@@ -243,37 +287,24 @@ public class OldAnimationsSettings extends Config {
     public static boolean modernMovement = false;
 
     @Switch(
-            name = "1.7 Held Item Lighting",
-            description = "Modifies the held item lighting to resemble 1.7.",
-            category = "Misc", subcategory = "Fixes, QOL, and Tweaks"
-    )
-    public static boolean oldItemLighting = true;
-
-    @Switch(
-            name = "1.7 Miss Penalty Swing Animation",
-            description = "This option is purely visual. During the miss penalty, the player's arm will still swing and show particles just like in 1.7.",
-            category = "Misc", subcategory = "Fixes, QOL, and Tweaks"
-    )
-    public static boolean visualSwing = true;
-
-    @Switch(
-            name = "1.7 Third-Person Fishing Rod Cast Texture",
-            description = "For some reason, in 1.7, when a fishing rod is cast, the third person texture becomes a stick rather than the fishing rod texture. This feature brings back that questionable feature.",
-            category = "Misc", subcategory = "Fixes, QOL, and Tweaks"
-    )
-    public static boolean fishingStick = false;
-
-    @Switch(
             name = "Disable Item Re-equip Animation",
             description = "Completely removed the the item re-equip animation.",
-            category = "Misc", subcategory = "Fixes, QOL, and Tweaks"
+            category = "Misc", subcategory = "Re-quip Animation"
     )
     public static boolean disableReequip = false;
+
+    @Slider(
+            name = "Item Re-equip Animation Speed",
+            min = 0.1F, max = 1.0F,
+            category = "Misc", subcategory = "Re-quip Animation",
+            instant = true
+    )
+    public float reequipSpeed = 0.4F;
 
     @Switch(
             name = "Only Allow Re-equip Animation Upon Switching Slots",
             description = "Fixes the re-equip animation to only play when items slots are switched.",
-            category = "Misc", subcategory = "Fixes, QOL, and Tweaks"
+            category = "Misc", subcategory = "Re-quip Animation"
     )
     public static boolean fixReequip = true;
 

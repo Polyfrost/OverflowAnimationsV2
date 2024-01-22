@@ -95,4 +95,9 @@ public class ItemRendererMixin {
         return num;
     }
 
+    @ModifyConstant(method = "updateEquippedItem", constant = @Constant(floatValue = 0.4F))
+    private float changeEquipSpeed(float original) {
+        return OldAnimationsSettings.INSTANCE.enabled ? OldAnimationsSettings.INSTANCE.reequipSpeed : original;
+    }
+
 }

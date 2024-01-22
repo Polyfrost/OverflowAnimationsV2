@@ -6,6 +6,8 @@ import java.util.EnumSet;
 
 public class TransformTypeHook {
 
+    public static float sneakingHeight;
+
     public static ItemCameraTransforms.TransformType transform;
     private static final EnumSet<ItemCameraTransforms.TransformType> cameraTypes =
             EnumSet.of(
