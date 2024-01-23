@@ -63,4 +63,11 @@ public class EntityRendererMixin {
         if (OldAnimationsSettings.noHurtCam && OldAnimationsSettings.INSTANCE.enabled)
             ci.cancel();
     }
+
+    @Inject(method = "setupViewBobbing", at = {@At("HEAD")}, cancellable = true)
+    public void smartBobbing(float partialTicks, CallbackInfo ci) {
+        if (OldAnimationsSettings.modernBobbing && OldAnimationsSettings.INSTANCE.enabled && !overflowAnimations$mc.getRenderViewEntity().onGround)
+            ci.cancel();
+    }
+
 }

@@ -3,6 +3,7 @@ package org.polyfrost.overflowanimations.config;
 import cc.polyfrost.oneconfig.config.annotations.Button;
 import cc.polyfrost.oneconfig.config.annotations.Checkbox;
 import cc.polyfrost.oneconfig.config.annotations.Slider;
+import cc.polyfrost.oneconfig.config.annotations.Switch;
 import net.minecraft.client.Minecraft;
 
 @SuppressWarnings("unused")
@@ -444,6 +445,53 @@ public class ItemPositionAdvancedSettings {
         fireballRotationPitch = 0.0F;
         fireballRotationRoll = 0.0F;
         fireballScale = 0.0F;
+        OldAnimationsSettings.INSTANCE.save();
+        OldAnimationsSettings.INSTANCE.openGui();
+    });
+
+    // Fishing Line Position
+
+    @Switch(
+            name = "Custom Fishing Rod Line Position",
+            description = "Allows customization of the fishing rod line.",
+            category = "Customize Item Positions", subcategory = "Fishing Rod Line Position"
+    )
+    public static boolean customRodLine = false;
+
+    @Slider(
+            name = "Fishing Line X Position",
+            min = -1.5F, max = 1.5F,
+            category = "Customize Item Positions", subcategory = "Fishing Rod Line Position",
+            instant = true
+    )
+    public float fishingLinePositionX = -0.36F;
+
+    @Slider(
+            name = "Fishing Line Y Position",
+            min = -1.5F, max = 1.5F,
+            category = "Customize Item Positions", subcategory = "Fishing Rod Line Position",
+            instant = true
+    )
+    public float fishingLinePositionY = 0.03f;
+
+    @Slider(
+            name = "Fishing Line Z Position",
+            min = -1.5F, max = 1.5F,
+            category = "Customize Item Positions", subcategory = "Fishing Rod Line Position",
+            instant = true
+    )
+    public float fishingLinePositionZ = 0.35f;
+
+    @Button(
+            name = "Reset Fireball Projectile Transformations",
+            text = "Reset",
+            category = "Customize Item Positions", subcategory = "Fishing Rod Line Position"
+    )
+    Runnable resetFishingLine = (() -> {
+        Minecraft.getMinecraft().displayGuiScreen(null);
+        fishingLinePositionX = -0.36f;
+        fishingLinePositionY = 0.03f;
+        fishingLinePositionZ = 0.35f;
         OldAnimationsSettings.INSTANCE.save();
         OldAnimationsSettings.INSTANCE.openGui();
     });

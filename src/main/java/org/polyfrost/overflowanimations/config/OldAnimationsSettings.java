@@ -287,6 +287,13 @@ public class OldAnimationsSettings extends Config {
     public static boolean modernMovement = false;
 
     @Switch(
+            name = "1.14+ View Bobbing",
+            description = "Disables view bobbing when the player is falling.",
+            category = "Misc", subcategory = "Modern"
+    )
+    public static boolean modernBobbing = false;
+
+    @Switch(
             name = "Disable Item Re-equip Animation",
             description = "Completely removed the the item re-equip animation.",
             category = "Misc", subcategory = "Re-quip Animation"
@@ -578,7 +585,7 @@ public class OldAnimationsSettings extends Config {
     public float itemSwingSpeedHaste = 0.0F;
 
     @Slider(
-            name = "Miner's Fatigue Swing Speed",
+            name = "Mining Fatigue Swing Speed",
             min = -2.0F, max = 1.0F,
             category = "Customize Item Positions", subcategory = "Item Swing",
             instant = true

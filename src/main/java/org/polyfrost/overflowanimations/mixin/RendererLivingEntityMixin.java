@@ -22,7 +22,7 @@ public abstract class RendererLivingEntityMixin<T extends EntityLivingBase> exte
     }
 
     @Inject(method = "doRender(Lnet/minecraft/entity/EntityLivingBase;DDDFF)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GlStateManager;translate(FFF)V"))
-    public void simplified$doRender2(T entity, double x, double y, double z, float entityYaw, float partialTicks, CallbackInfo ci) {
+    public void movePlayerModel(T entity, double x, double y, double z, float entityYaw, float partialTicks, CallbackInfo ci) {
         if (OldAnimationsSettings.longerUnsneak && OldAnimationsSettings.INSTANCE.enabled && entity instanceof AbstractClientPlayer) {
             boolean player = entity.getName().equals(Minecraft.getMinecraft().thePlayer.getName());
             float eyeHeight = player ? TransformTypeHook.sneakingHeight : entity.getEyeHeight();
