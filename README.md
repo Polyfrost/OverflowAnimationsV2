@@ -1,6 +1,6 @@
 # Overflow Animations V2
 
-![Compact Powered by OneConfig](https://polyfrost.org/img/compact_vector.svg)
+![Compact Powered by OneConfig](https://raw.githubusercontent.com/Polyfrost/Nexus/main/apps/website/public/media/branding/badges/badge_1.png)
 
 ## [Downloads](https://github.com/Polyfrost/OverflowAnimationsV2/releases)
 
