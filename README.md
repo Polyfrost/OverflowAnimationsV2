@@ -2,7 +2,7 @@
 
 ![Compact Powered by OneConfig](https://polyfrost.org/img/compact_vector.svg)
 
-## [Downloads](https://github.com/Polyfrost/OverflowAnimationsV2/releases)
+## [Download (Modrinth)](https://modrinth.com/mod/animations)
 
 This mod combines Overflow Animations (V1) with Sk1er's Old Animations code into a singular mod, with bug fixes, and additional features.
 
@@ -24,7 +24,8 @@ This mod combines Overflow Animations (V1) with Sk1er's Old Animations code into
 * Punching a block while doing stuff
 * 1.7 Debug
 * Old Eating Animation
-* The "Old Debug Hitbox" feature has been removed as [REDACTION](https://github.com/Polyfrost/REDACTION) has the same functionality.*
+
+*The "Old Debug Hitbox" feature has been removed as [REDACTION](https://github.com/Polyfrost/REDACTION) has the same functionality.*
 
 </details>
 
