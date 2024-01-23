@@ -52,10 +52,15 @@ public class EntityRendererMixin {
         Entity entity = overflowAnimations$mc.getRenderViewEntity();
         float eyeHeight = entity.getEyeHeight();
         overflow$previousHeight = overflow$height;
-        if (eyeHeight < overflow$height)
+
+        if (OldAnimationsSettings.longerUnsneak) {
+            if (eyeHeight < overflow$height)
+                overflow$height = eyeHeight;
+            else
+                overflow$height += (eyeHeight - overflow$height) * 0.5f;
+        } else {
             overflow$height = eyeHeight;
-        else if (OldAnimationsSettings.longerUnsneak)
-            overflow$height += (eyeHeight - overflow$height) * 0.5f;
+        }
         DebugOverlayHook.setOverflowEyeHeight(overflow$height);
     }
 
