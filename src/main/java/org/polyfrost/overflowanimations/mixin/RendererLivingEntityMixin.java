@@ -33,4 +33,13 @@ public abstract class RendererLivingEntityMixin<T extends EntityLivingBase> exte
         }
     }
 
+    @Inject(method = "rotateCorpse", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GlStateManager;rotate(FFFF)V", shift = At.Shift.AFTER))
+    public void rotateCorpse(T bat, float p_77043_2_, float p_77043_3_, float partialTicks, CallbackInfo ci) {
+        boolean player = bat.getName().equals(Minecraft.getMinecraft().thePlayer.getName());
+        if (OldAnimationsSettings.dinnerBoneMode && OldAnimationsSettings.INSTANCE.enabled && player) {
+            GlStateManager.translate(0.0f, bat.height + 0.1f, 0.0f);
+            GlStateManager.rotate(180.0f, 0.0f, 0.0f, 1.0f);
+        }
+    }
+
 }

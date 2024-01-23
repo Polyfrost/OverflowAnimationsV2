@@ -393,6 +393,13 @@ public class OldAnimationsSettings extends Config {
     public static boolean lunarBlockhit = false;
 
     @Switch(
+            name = "Dinnerbone Mode",
+            description = "LETS BE UPSIDE DOWN!!!",
+            category = "Misc", subcategory = "Fun"
+    )
+    public static boolean dinnerBoneMode = false;
+
+    @Switch(
             name = "Allow Clicking While Using an Item",
             description = "This option is purely visual. Allows the player to swing while clicking and using an item.",
             category = "Misc", subcategory = "Fun"
