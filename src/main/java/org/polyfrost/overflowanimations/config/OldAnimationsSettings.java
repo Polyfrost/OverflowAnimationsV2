@@ -291,7 +291,7 @@ public class OldAnimationsSettings extends Config {
             description = "Disables view bobbing when the player is falling.",
             category = "Misc", subcategory = "Modern"
     )
-    public static boolean modernBobbing = false;
+    public static boolean modernBobbing = true;
 
     @Switch(
             name = "Disable Item Re-equip Animation",

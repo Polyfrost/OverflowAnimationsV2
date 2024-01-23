@@ -20,12 +20,16 @@ public class RenderFishMixin {
         ItemPositionAdvancedSettings advanced = OldAnimationsSettings.advancedSettings;
         double fov = Minecraft.getMinecraft().gameSettings.fovSetting;
         double decimalFov = fov / 110;
-        return OldAnimationsSettings.fishingRodPosition && OldAnimationsSettings.INSTANCE.enabled ?
-                ItemPositionAdvancedSettings.customRodLine ?
-                        new Vec3(advanced.fishingLinePositionX, advanced.fishingLinePositionY, advanced.fishingLinePositionZ) :
-                OldAnimationsSettings.fixRod ?
-                        new Vec3(((-decimalFov + (decimalFov / 2.5)) - (decimalFov / 8)) + 0.16, 0, 0.4D) :
-                new Vec3(-0.5D, 0.03D, 0.8D) : new Vec3(x, y, z);
+        if (OldAnimationsSettings.INSTANCE.enabled) {
+            if (ItemPositionAdvancedSettings.customRodLine)
+                return new Vec3(advanced.fishingLinePositionX, advanced.fishingLinePositionY, advanced.fishingLinePositionZ);
+            if (OldAnimationsSettings.fishingRodPosition && !OldAnimationsSettings.fixRod) {
+                return new Vec3(-0.5D, 0.03D, 0.8D);
+            } else if (OldAnimationsSettings.fixRod)
+                return new Vec3(((-decimalFov + (decimalFov / 2.5)) - (decimalFov / 8)) + 0.16, 0, 0.4D);
+        }
+        return new Vec3(x, y, z);
+
     }
 
     @ModifyConstant(method = "doRender(Lnet/minecraft/entity/projectile/EntityFishHook;DDDFF)V", constant = @Constant(doubleValue = 0.8D, ordinal = 1))

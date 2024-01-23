@@ -1,5 +1,6 @@
 package org.polyfrost.overflowanimations.mixin;
 
+import net.minecraft.client.renderer.GlStateManager;
 import org.polyfrost.overflowanimations.config.OldAnimationsSettings;
 import org.polyfrost.overflowanimations.hooks.DebugOverlayHook;
 import net.minecraft.client.Minecraft;
@@ -40,7 +41,7 @@ public class EntityRendererMixin {
         return modifyEyeHeight(entity, partialTicks);
     }
 
-    @Inject(method = "renderWorldDirections", at = {@At("HEAD")}, cancellable = true)
+    @Inject(method = "renderWorldDirections", at = @At("HEAD"), cancellable = true)
     public void renderCrosshair(float partialTicks, CallbackInfo ci) {
         if ((OldAnimationsSettings.INSTANCE.debugCrosshairMode != 1) && OldAnimationsSettings.INSTANCE.enabled)
             ci.cancel();
@@ -64,10 +65,11 @@ public class EntityRendererMixin {
             ci.cancel();
     }
 
-    @Inject(method = "setupViewBobbing", at = {@At("HEAD")}, cancellable = true)
-    public void smartBobbing(float partialTicks, CallbackInfo ci) {
-        if (OldAnimationsSettings.modernBobbing && OldAnimationsSettings.INSTANCE.enabled && !overflowAnimations$mc.getRenderViewEntity().onGround)
-            ci.cancel();
+    @Redirect(method = "setupViewBobbing", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GlStateManager;rotate(FFFF)V", ordinal = 2))
+    public void modernBobbing(float angle, float x, float y, float z) {
+        if (!OldAnimationsSettings.modernBobbing || !OldAnimationsSettings.INSTANCE.enabled) {
+            GlStateManager.rotate(angle, x, y, z);
+        }
     }
 
 }

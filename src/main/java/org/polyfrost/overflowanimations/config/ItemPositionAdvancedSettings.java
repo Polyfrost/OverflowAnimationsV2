@@ -483,15 +483,15 @@ public class ItemPositionAdvancedSettings {
     public float fishingLinePositionZ = 0.35f;
 
     @Button(
-            name = "Reset Fireball Projectile Transformations",
+            name = "Reset Fishing Rod Line Transformations",
             text = "Reset",
             category = "Customize Item Positions", subcategory = "Fishing Rod Line Position"
     )
     Runnable resetFishingLine = (() -> {
         Minecraft.getMinecraft().displayGuiScreen(null);
-        fishingLinePositionX = -0.36f;
+        fishingLinePositionX = OldAnimationsSettings.fishingRodPosition ? -0.5f : -0.36f;
         fishingLinePositionY = 0.03f;
-        fishingLinePositionZ = 0.35f;
+        fishingLinePositionZ = OldAnimationsSettings.fishingRodPosition ? 0.8f : 0.35f;
         OldAnimationsSettings.INSTANCE.save();
         OldAnimationsSettings.INSTANCE.openGui();
     });
