@@ -277,14 +277,14 @@ public class OldAnimationsSettings extends Config {
             description = "Shows the Bow Pullback / Fishing Cast textures animating in GUIs.",
             category = "Misc", subcategory = "Modern"
     )
-    public static boolean rodBowGuiFix = false;
+    public static boolean rodBowGuiFix = true;
 
     @Switch(
             name = "1.15+ Backwards Walk Animation",
             description = "Back-ports the 1.15 walking animation.",
             category = "Misc", subcategory = "Modern"
     )
-    public static boolean modernMovement = false;
+    public static boolean modernMovement = true;
 
     @Switch(
             name = "1.14+ View Bobbing",
