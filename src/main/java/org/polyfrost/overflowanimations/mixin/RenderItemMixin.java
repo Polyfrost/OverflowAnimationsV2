@@ -61,7 +61,7 @@ public class RenderItemMixin {
         if (OldAnimationsSettings.INSTANCE.enabled && !oldanimations$model.isGui3d()) {
             if (OldAnimationsSettings.itemSprites && OldAnimationsSettings.itemSpritesColor && TransformTypeHook.shouldNotHaveGlint()) {
                 instance.putNormal(x, z, y);
-            } else if (OldAnimationsSettings.oldItemLighting && !TransformTypeHook.isRenderingInGUI()) {
+            } else if (OldAnimationsSettings.oldItemLighting && !TransformTypeHook.shouldBeSprite()) {
                 boolean isBlocking = oldanimations$entityLivingBase instanceof AbstractClientPlayer &&
                         ((AbstractClientPlayer) oldanimations$entityLivingBase).isBlocking();
                 instance.putNormal(-x, isBlocking ? -y : y, z);
