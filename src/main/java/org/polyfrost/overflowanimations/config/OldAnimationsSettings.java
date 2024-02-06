@@ -266,18 +266,25 @@ public class OldAnimationsSettings extends Config {
 
     // Miscellaneous
     @Switch(
+            name = "1.20+ Potion Colors",
+            description = "Back-ports the 1.20 potion overlay colors.",
+            category = "Misc", subcategory = "Modern"
+    )
+    public static boolean modernPotColors = true;
+
+    @Switch(
             name = "1.15+ Armor Enchantment Glint",
             description = "Back-ports the 1.15 armor glint rendering.",
             category = "Misc", subcategory = "Modern"
     )
     public static boolean enchantmentGlintNew = true;
 
-    @Switch(
-            name = "1.9+ Bow Pullback / Fishing Cast GUI Animation",
-            description = "Shows the Bow Pullback / Fishing Cast textures animating in GUIs.",
-            category = "Misc", subcategory = "Modern"
-    )
-    public static boolean rodBowGuiFix = true;
+//    @Switch(
+//            name = "1.9+ Bow Pullback / Fishing Cast GUI Animation",
+//            description = "Shows the Bow Pullback / Fishing Cast textures animating in GUIs.",
+//            category = "Misc", subcategory = "Modern"
+//    )
+//    public static boolean rodBowGuiFix = true;
 
     @Switch(
             name = "1.15+ Backwards Walk Animation",
@@ -349,6 +356,20 @@ public class OldAnimationsSettings extends Config {
         category = "Misc", subcategory = "Fixes, QOL, and Tweaks"
     )
     public static boolean headYawFix = true;
+
+    @Switch(
+            name = "Classic Held Item Rotations",
+            description = "Disables held item rotations while the player turns their head.",
+            category = "Misc", subcategory = "Fixes, QOL, and Tweaks"
+    )
+    public static boolean oldItemRotations = false;
+
+    @Switch(
+            name = "Disable Potion Enchantment Glint",
+            description = "Disables the enchantment glint from rendering on potions.",
+            category = "Misc", subcategory = "Fixes, QOL, and Tweaks"
+    )
+    public static boolean potionGlint= false;
 
     @Switch(
             name = "Disable Entity/Mob Third-Person Item Transformations",

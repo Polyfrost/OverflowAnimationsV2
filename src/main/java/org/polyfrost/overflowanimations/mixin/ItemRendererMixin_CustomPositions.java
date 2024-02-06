@@ -95,6 +95,18 @@ public class ItemRendererMixin_CustomPositions {
         }
     }
 
+    @Inject(method = "doBlockTransformations", at = @At("HEAD"))
+    public void lunarTransform(CallbackInfo ci) {
+        OldAnimationsSettings settings = OldAnimationsSettings.INSTANCE;
+        if (OldAnimationsSettings.lunarBlockhit && !OldAnimationsSettings.globalPositions && settings.enabled) {
+            GlStateManager.translate(-0.55F, 0.2F, 0.1F);
+            GlStateManager.scale(0.85F, 0.85F, 0.85F);
+            GlStateManager.rotate(1.0F, 0.0F, 0.0F, -1.0F);
+            GlStateManager.rotate(1.0F, 0.25F, 0.0F, 0.0F);
+            GlStateManager.rotate(2.0F, 0.0F, 2.0F, 0.0F);
+        }
+    }
+
     @ModifyArg(method = "renderItemInFirstPerson", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/ItemRenderer;transformFirstPersonItem(FF)V", ordinal = 2), index = 0)
     private float modifyBlockEquip(float original) {
         return OldAnimationsSettings.lunarBlockhit && OldAnimationsSettings.INSTANCE.enabled ? 0.2F : original;

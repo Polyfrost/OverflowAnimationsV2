@@ -2,6 +2,7 @@ package org.polyfrost.overflowanimations.mixin;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.entity.RenderItem;
@@ -16,7 +17,7 @@ import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ItemRenderer.class)
-public class ItemRendererMixin {
+public abstract class ItemRendererMixin {
 
     @Shadow
     private ItemStack itemToRender;
@@ -29,6 +30,8 @@ public class ItemRendererMixin {
     @Shadow private int equippedItemSlot;
 
     @Shadow private float equippedProgress;
+
+    @Shadow protected abstract void rotateWithPlayerRotations(EntityPlayerSP entityplayerspIn, float partialTicks);
 
     @ModifyConstant(method = "renderItemInFirstPerson", constant = @Constant(floatValue = 0.0f))
     public float fixAnimation(float original, float partialTicks) {
@@ -64,6 +67,13 @@ public class ItemRendererMixin {
             } else if (OldAnimationsSettings.firstTransformations && !(itemToRender.getItem() instanceof ItemSword && OldAnimationsSettings.lunarBlockhit)) {
                 overflowanimations$itemTransforms();
             }
+        }
+    }
+
+    @Redirect(method = "renderItemInFirstPerson", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/ItemRenderer;rotateWithPlayerRotations(Lnet/minecraft/client/entity/EntityPlayerSP;F)V"))
+    private void removeRotations(ItemRenderer instance, EntityPlayerSP entityPlayerSP, float v) {
+        if (!OldAnimationsSettings.oldItemRotations || !OldAnimationsSettings.INSTANCE.enabled) {
+            rotateWithPlayerRotations(entityPlayerSP, v);
         }
     }
 
