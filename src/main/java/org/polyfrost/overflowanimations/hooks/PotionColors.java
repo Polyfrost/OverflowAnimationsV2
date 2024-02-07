@@ -7,6 +7,12 @@ public class PotionColors {
 
     public static final Map<Integer, Integer> POTION_COLORS;
 
+    public static boolean shouldReload;
+
+    public static void reloadColor() {
+        shouldReload = true;
+    }
+
     static {
         POTION_COLORS = new HashMap<Integer, Integer>() {{
             put(1, 3402751);

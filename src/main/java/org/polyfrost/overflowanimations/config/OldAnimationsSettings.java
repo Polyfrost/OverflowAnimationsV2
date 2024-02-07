@@ -10,6 +10,7 @@ import cc.polyfrost.oneconfig.config.migration.VigilanceName;
 import net.minecraft.client.Minecraft;
 import org.polyfrost.overflowanimations.OverflowAnimations;
 import org.polyfrost.overflowanimations.hooks.AnimationExportUtils;
+import org.polyfrost.overflowanimations.hooks.PotionColors;
 
 @SuppressWarnings("unused")
 public class OldAnimationsSettings extends Config {
@@ -693,8 +694,7 @@ public class OldAnimationsSettings extends Config {
         super(new Mod(OverflowAnimations.NAME, ModType.PVP, "/overflowanimations_dark.svg", new VigilanceMigrator("./config/sk1eroldanimations.toml")), "overflowanimations.json");
         initialize();
 
-        Runnable reloadResources = () -> Minecraft.getMinecraft().refreshResources();
-        addListener("modernPotColors", reloadResources);
+        addListener("modernPotColors", PotionColors::reloadColor);
 
         // Sprites
         addDependency("rotationFix", "itemSprites");
