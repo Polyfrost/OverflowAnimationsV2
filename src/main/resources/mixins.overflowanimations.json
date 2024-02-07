@@ -17,6 +17,7 @@
     "GuiPlayerTabOverlayInvoker",
     "GuiPlayerTabOverlayMixin",
     "ItemMixin",
+    "ItemPotionMixin",
     "ItemRendererMixin",
     "ItemRendererMixin_CustomPositions",
     "ItemStackMixin",

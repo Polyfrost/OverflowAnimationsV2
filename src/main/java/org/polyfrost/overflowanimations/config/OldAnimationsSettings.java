@@ -370,7 +370,14 @@ public class OldAnimationsSettings extends Config {
             description = "Disables the enchantment glint from rendering on potions.",
             category = "Misc", subcategory = "Fixes, QOL, and Tweaks"
     )
-    public static boolean potionGlint= false;
+    public static boolean potionGlint = false;
+
+    @Switch(
+            name = "Colored Potion Bottles",
+            description = "Uses the potion overlay color as the color of the potion bottle.",
+            category = "Misc", subcategory = "Fixes, QOL, and Tweaks"
+    )
+    public static boolean coloredBottles = false;
 
     @Switch(
             name = "Disable Entity/Mob Third-Person Item Transformations",

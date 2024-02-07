@@ -36,7 +36,7 @@ public class PotionHelperMixin {
         if (PotionColors.shouldReload) {
             PotionColors.shouldReload = false;
             DATAVALUE_COLORS.clear();
-            for (int i = 0; i <= 23; i++) {
+            for (int i : PotionColors.POTION_COLORS.values()) {
                 int color = calcPotionLiquidColor(getPotionEffects(i, false));
                 Integer integer = IntegerCache.getInteger(i);
                 DATAVALUE_COLORS.put(integer, color);
