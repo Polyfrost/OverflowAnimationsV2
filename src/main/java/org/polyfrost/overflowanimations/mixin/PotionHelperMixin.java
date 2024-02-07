@@ -16,7 +16,7 @@ public class PotionHelperMixin {
 
     @Redirect(method = "calcPotionLiquidColor", at = @At(value = "INVOKE", target = "Lnet/minecraft/potion/Potion;getLiquidColor()I"))
     private static int recolorPotions(Potion instance, Collection<PotionEffect> collection) {
-        if (OldAnimationsSettings.potionGlint && OldAnimationsSettings.INSTANCE.enabled) {
+        if (OldAnimationsSettings.modernPotColors && OldAnimationsSettings.INSTANCE.enabled) {
             for (PotionEffect potionEffect : collection) {
                 return PotionColors.POTION_COLORS.get(potionEffect.getPotionID());
             }

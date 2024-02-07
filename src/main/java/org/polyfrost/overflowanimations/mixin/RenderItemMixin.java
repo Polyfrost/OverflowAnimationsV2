@@ -16,7 +16,6 @@ import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.*;
-import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumFacing;
 import org.polyfrost.overflowanimations.config.OldAnimationsSettings;
 import org.polyfrost.overflowanimations.hooks.TransformTypeHook;
@@ -131,53 +130,33 @@ public class RenderItemMixin {
         }
     }
 
-//    @Redirect(method = "renderItemIntoGUI", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/ItemModelMesher;getItemModel(Lnet/minecraft/item/ItemStack;)Lnet/minecraft/client/resources/model/IBakedModel;"))
-//    public IBakedModel rodBowModelTexture(ItemModelMesher instance, ItemStack stack) {
-//        if (OldAnimationsSettings.rodBowGuiFix && OldAnimationsSettings.INSTANCE.enabled) {
-//            IBakedModel ibakedmodel = instance.getItemModel(stack);
-//            EntityPlayer entityplayer = Minecraft.getMinecraft().thePlayer;
-//            Item item = stack.getItem();
-//
-//            if (stack == entityplayer.getHeldItem()) {
-//                ModelResourceLocation modelresourcelocation = null;
-//                if (stack.getItem() instanceof ItemBow) {
-//                    int i = stack.getMaxItemUseDuration() - entityplayer.getItemInUseCount();
-//                    if (i >= 18) {
-//                        modelresourcelocation = new ModelResourceLocation("bow_pulling_2", "inventory");
-//                    } else if (i > 13) {
-//                        modelresourcelocation = new ModelResourceLocation("bow_pulling_1", "inventory");
-//                    } else if (i > 0) {
-//                        modelresourcelocation = new ModelResourceLocation("bow_pulling_0", "inventory");
-//                    }
-//                } else if (stack.getItem() instanceof ItemFishingRod && entityplayer.fishEntity != null) {
-//                    modelresourcelocation = new ModelResourceLocation("fishing_rod_cast", "inventory");
-//                }
-//            }
-//
-//            if (entityplayer != null && item != null && (item.getItemUseAction(stack) != EnumAction.DRINK
-//                    || item.getItemUseAction(stack) != EnumAction.EAT) && !entityplayer.isBlocking()) {
-//                ModelResourceLocation modelresourcelocation = null;
-//                if (item instanceof ItemFishingRod && entityplayer.fishEntity != null) {
-//                    modelresourcelocation = new ModelResourceLocation("fishing_rod_cast", "inventory");
-//                } else if (item instanceof ItemBow && entityplayer.getItemInUse() != null) {
-//                    int i = stack.getMaxItemUseDuration() - entityplayer.getItemInUseCount();
-//                    if (i >= 18) {
-//                        modelresourcelocation = new ModelResourceLocation("bow_pulling_2", "inventory");
-//                    } else if (i > 13) {
-//                        modelresourcelocation = new ModelResourceLocation("bow_pulling_1", "inventory");
-//                    } else if (i > 0) {
-//                        modelresourcelocation = new ModelResourceLocation("bow_pulling_0", "inventory");
-//                    }
-//                } else {
-//                    modelresourcelocation = item.getModel(stack, entityplayer, entityplayer.getItemInUseCount());
-//                }
-//                if (modelresourcelocation != null) {
-//                    ibakedmodel = instance.getModelManager().getModel(modelresourcelocation);
-//                }
-//            }
-//            return ibakedmodel;
-//        }
-//        return instance.getItemModel(stack);
-//    }
+    @Redirect(method = "renderItemIntoGUI", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/ItemModelMesher;getItemModel(Lnet/minecraft/item/ItemStack;)Lnet/minecraft/client/resources/model/IBakedModel;"))
+    public IBakedModel rodBowModelTexture(ItemModelMesher instance, ItemStack stack) {
+        if (OldAnimationsSettings.rodBowGuiFix && OldAnimationsSettings.INSTANCE.enabled) {
+            EntityPlayer entityplayer = Minecraft.getMinecraft().thePlayer;
+            Item item = stack.getItem();
+            String inventory = "inventory";
+            if (stack == entityplayer.getHeldItem()) {
+                ModelResourceLocation modelresourcelocation = null;
+                if (item instanceof ItemBow && entityplayer.getItemInUse() != null) {
+                    int i = stack.getMaxItemUseDuration() - entityplayer.getItemInUseCount();
+                    if (i >= 18) {
+                        modelresourcelocation = new ModelResourceLocation("bow_pulling_2", inventory);
+                    } else if (i > 13) {
+                        modelresourcelocation = new ModelResourceLocation("bow_pulling_1", inventory);
+                    } else if (i > 0) {
+                        modelresourcelocation = new ModelResourceLocation("bow_pulling_0", inventory);
+                    }
+                } else if (item instanceof ItemFishingRod && entityplayer.fishEntity != null) {
+                    modelresourcelocation = new ModelResourceLocation("fishing_rod_cast", inventory);
+                } else {
+                    modelresourcelocation = item.getModel(stack, entityplayer, entityplayer.getItemInUseCount());
+                } if (modelresourcelocation != null) {
+                    return instance.getModelManager().getModel(modelresourcelocation);
+                }
+            }
+        }
+        return instance.getItemModel(stack);
+    }
 
 }

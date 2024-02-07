@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 public class EntityMixin {
 
     @Redirect(method = "moveEntity", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/Entity;noClip:Z"))
-    private boolean simplified$moveEntity(Entity instance) {
+    private boolean enableNoClip(Entity instance) {
         if (OldAnimationsSettings.particleNoClip && OldAnimationsSettings.INSTANCE.enabled && instance instanceof EntityFX) {
             return true;
         }

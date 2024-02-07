@@ -27,7 +27,7 @@ public class EntityRendererMixin {
     private float overflow$previousHeight;
 
     @Inject(method = "setupCameraTransform", at = @At("HEAD"))
-    protected void simplified$setupCameraTransform(float partialTicks, int pass, CallbackInfo ci) {
+    protected void getInterpolatedEyeHeight(float partialTicks, int pass, CallbackInfo ci) {
         TransformTypeHook.sneakingHeight = overflow$previousHeight + (overflow$height - overflow$previousHeight) * partialTicks;
     }
 

@@ -279,12 +279,12 @@ public class OldAnimationsSettings extends Config {
     )
     public static boolean enchantmentGlintNew = true;
 
-//    @Switch(
-//            name = "1.9+ Bow Pullback / Fishing Cast GUI Animation",
-//            description = "Shows the Bow Pullback / Fishing Cast textures animating in GUIs.",
-//            category = "Misc", subcategory = "Modern"
-//    )
-//    public static boolean rodBowGuiFix = true;
+    @Switch(
+            name = "1.9+ Bow Pullback / Fishing Cast GUI Animation",
+            description = "Shows the Bow Pullback / Fishing Cast textures animating in GUIs.",
+            category = "Misc", subcategory = "Modern"
+    )
+    public static boolean rodBowGuiFix = true;
 
     @Switch(
             name = "1.15+ Backwards Walk Animation",
@@ -692,6 +692,9 @@ public class OldAnimationsSettings extends Config {
     public OldAnimationsSettings() {
         super(new Mod(OverflowAnimations.NAME, ModType.PVP, "/overflowanimations_dark.svg", new VigilanceMigrator("./config/sk1eroldanimations.toml")), "overflowanimations.json");
         initialize();
+
+        Runnable reloadResources = () -> Minecraft.getMinecraft().refreshResources();
+        addListener("modernPotColors", reloadResources);
 
         // Sprites
         addDependency("rotationFix", "itemSprites");

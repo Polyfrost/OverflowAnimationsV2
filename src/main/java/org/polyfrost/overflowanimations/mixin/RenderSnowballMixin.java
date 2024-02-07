@@ -31,7 +31,7 @@ public abstract class RenderSnowballMixin<T extends Entity> extends Render<T> {
     }
 
     @Inject(method = "doRender", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/entity/RenderItem;renderItem(Lnet/minecraft/item/ItemStack;Lnet/minecraft/client/renderer/block/model/ItemCameraTransforms$TransformType;)V"))
-    public void simplified$doRender4(T entity, double x, double y, double z, float entityYaw, float partialTicks, CallbackInfo ci) {
+    public void shiftProjectile(T entity, double x, double y, double z, float entityYaw, float partialTicks, CallbackInfo ci) {
         if (OldAnimationsSettings.oldProjectiles && OldAnimationsSettings.INSTANCE.enabled) {
             GlStateManager.translate(0.0F, 0.25F, 0.0F);
         }
