@@ -132,7 +132,7 @@ public class RenderItemMixin {
 
     @Redirect(method = "renderItemIntoGUI", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/ItemModelMesher;getItemModel(Lnet/minecraft/item/ItemStack;)Lnet/minecraft/client/resources/model/IBakedModel;"))
     public IBakedModel rodBowModelTexture(ItemModelMesher instance, ItemStack stack) {
-        if (OldAnimationsSettings.rodBowGuiFix && OldAnimationsSettings.INSTANCE.enabled) {
+        if (Minecraft.getMinecraft().thePlayer != null && OldAnimationsSettings.rodBowGuiFix && OldAnimationsSettings.INSTANCE.enabled) {
             EntityPlayer entityplayer = Minecraft.getMinecraft().thePlayer;
             Item item = stack.getItem();
             String inventory = "inventory";
