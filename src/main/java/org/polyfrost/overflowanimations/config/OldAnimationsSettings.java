@@ -373,13 +373,6 @@ public class OldAnimationsSettings extends Config {
     public static boolean potionGlint = false;
 
     @Switch(
-            name = "Classic Swing Speed",
-            description = "Allows the swing speed to scale according to how fast you click.",
-            category = "Misc", subcategory = "Fixes, QOL, and Tweaks"
-    )
-    public static boolean classicSwing = false;
-
-    @Switch(
             name = "Colored Potion Bottles",
             description = "Uses the potion overlay color as the color of the potion bottle.",
             category = "Misc", subcategory = "Fixes, QOL, and Tweaks"
@@ -434,6 +427,13 @@ public class OldAnimationsSettings extends Config {
             category = "Misc", subcategory = "Fun"
     )
     public static boolean dinnerBoneMode = false;
+
+    @Switch(
+            name = "Classic Swing Speed",
+            description = "Allows the swing speed to scale according to how fast you click.",
+            category = "Misc", subcategory = "Fixes, QOL, and Tweaks"
+    )
+    public static boolean classicSwing = false;
 
     @Switch(
             name = "Alpha/Indev Wavy Arms",
