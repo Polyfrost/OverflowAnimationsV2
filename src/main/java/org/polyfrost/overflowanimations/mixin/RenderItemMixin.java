@@ -10,6 +10,7 @@ import net.minecraft.client.renderer.ItemModelMesher;
 import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
+import net.minecraft.client.renderer.block.model.ItemTransformVec3f;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.resources.model.IBakedModel;
 import net.minecraft.client.resources.model.ModelResourceLocation;
@@ -20,6 +21,7 @@ import net.minecraft.util.EnumFacing;
 import org.polyfrost.overflowanimations.config.OldAnimationsSettings;
 import org.polyfrost.overflowanimations.hooks.TransformTypeHook;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -31,7 +33,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Mixin(RenderItem.class)
-public class RenderItemMixin {
+public abstract class RenderItemMixin {
+
+    @Shadow protected abstract boolean isThereOneNegativeScale(ItemTransformVec3f itemTranformVec);
 
     @Unique
     public IBakedModel oldanimations$model;
@@ -157,6 +161,13 @@ public class RenderItemMixin {
             }
         }
         return instance.getItemModel(stack);
+    }
+
+    @Inject(method = "renderItemModelTransform", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/entity/RenderItem;renderItem(Lnet/minecraft/item/ItemStack;Lnet/minecraft/client/resources/model/IBakedModel;)V"))
+    private void fixCullFace(ItemStack stack, IBakedModel model, ItemCameraTransforms.TransformType cameraTransformType, CallbackInfo ci) {
+        if (OldAnimationsSettings.INSTANCE.enabled && isThereOneNegativeScale(model.getItemCameraTransforms().getTransform(cameraTransformType))) {
+            GlStateManager.cullFace(1028);
+        }
     }
 
 }
