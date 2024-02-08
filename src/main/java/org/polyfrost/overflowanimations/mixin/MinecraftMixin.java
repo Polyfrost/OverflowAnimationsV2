@@ -8,9 +8,11 @@ import net.minecraft.client.particle.EffectRenderer;
 import net.minecraft.client.settings.GameSettings;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.network.play.server.S0BPacketAnimation;
 import net.minecraft.potion.Potion;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.world.WorldServer;
 import org.polyfrost.overflowanimations.config.OldAnimationsSettings;
 import org.polyfrost.overflowanimations.hooks.SwingHook;
 import org.spongepowered.asm.mixin.Mixin;
@@ -83,6 +85,19 @@ public abstract class MinecraftMixin {
             while (gameSettings.keyBindAttack.isPressed()) {
                 SwingHook.swingItem();
             }
+        }
+    }
+
+    @Redirect(method = "clickMouse", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/entity/EntityPlayerSP;swingItem()V"))
+    public void removeCheck(EntityPlayerSP instance) {
+        if (OldAnimationsSettings.classicSwing && OldAnimationsSettings.INSTANCE.enabled) {
+            instance.swingProgressInt = -1;
+            instance.isSwingInProgress = true;
+            if (instance.worldObj instanceof WorldServer) {
+                ((WorldServer)instance.worldObj).getEntityTracker().sendToAllTrackingEntity(instance, new S0BPacketAnimation(instance, 0));
+            }
+        } else {
+            instance.swingItem();
         }
     }
 

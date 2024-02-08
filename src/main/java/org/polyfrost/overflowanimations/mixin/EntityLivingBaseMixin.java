@@ -6,7 +6,6 @@ import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
-import org.polyfrost.overflowanimations.config.ItemPositionAdvancedSettings;
 import org.polyfrost.overflowanimations.config.OldAnimationsSettings;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -26,19 +25,11 @@ public abstract class EntityLivingBaseMixin extends Entity {
 
     @Shadow public abstract boolean isPotionActive(Potion potionIn);
     @Shadow public abstract PotionEffect getActivePotionEffect(Potion potionIn);
-
     @Shadow public float swingProgress;
-
     @Shadow public float renderYawOffset;
-
-    @Shadow
-    public float rotationYawHead;
-
-    @Unique
-    protected float overflowAnimations$newHeadYaw;
-
-    @Unique
-    protected int overflowAnimations$headYawLerpWeight;
+    @Shadow public float rotationYawHead;
+    @Unique protected float overflowAnimations$newHeadYaw;
+    @Unique protected int overflowAnimations$headYawLerpWeight;
 
 
     @Inject(method = "setRotationYawHead", at = @At("HEAD"), cancellable = true)
@@ -61,7 +52,6 @@ public abstract class EntityLivingBaseMixin extends Entity {
     @Inject(method = "getArmSwingAnimationEnd()I", at = @At("HEAD"), cancellable = true)
     public void modifySwingSpeed(CallbackInfoReturnable<Integer> cir) {
         OldAnimationsSettings settings = OldAnimationsSettings.INSTANCE;
-        ItemPositionAdvancedSettings advanced = OldAnimationsSettings.advancedSettings;
         if (OldAnimationsSettings.globalPositions && settings.enabled) {
             if (isPotionActive(Potion.digSpeed) && !OldAnimationsSettings.ignoreHaste) {
                 cir.setReturnValue(
