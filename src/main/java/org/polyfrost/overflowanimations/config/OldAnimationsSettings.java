@@ -428,12 +428,12 @@ public class OldAnimationsSettings extends Config {
     )
     public static boolean dinnerBoneMode = false;
 
-    @Switch(
-            name = "Classic Swing Speed",
-            description = "Allows the swing speed to scale according to how fast you click.",
-            category = "Misc", subcategory = "Fixes, QOL, and Tweaks"
-    )
-    public static boolean classicSwing = false;
+//    @Switch(
+//            name = "Classic Swing Speed",
+//            description = "Allows the swing speed to scale according to how fast you click.",
+//            category = "Misc", subcategory = "Fixes, QOL, and Tweaks"
+//    )
+//    public static boolean classicSwing = false;
 
     @Switch(
             name = "Alpha/Indev Wavy Arms",

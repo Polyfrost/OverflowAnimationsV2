@@ -4,10 +4,13 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.multiplayer.PlayerControllerMP;
 import net.minecraft.client.multiplayer.WorldClient;
+import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.client.particle.EffectRenderer;
 import net.minecraft.client.settings.GameSettings;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.item.ItemStack;
+import net.minecraft.network.play.client.C0APacketAnimation;
 import net.minecraft.network.play.server.S0BPacketAnimation;
 import net.minecraft.potion.Potion;
 import net.minecraft.util.BlockPos;
@@ -37,6 +40,8 @@ public abstract class MinecraftMixin {
     private int leftClickCounter;
 
     @Shadow public GameSettings gameSettings;
+
+    @Shadow public abstract NetHandlerPlayClient getNetHandler();
 
     @Inject(method = "sendClickBlockToController", at = @At("HEAD"))
     public void blockHitAnimation(boolean leftClick, CallbackInfo ci) {
@@ -85,19 +90,6 @@ public abstract class MinecraftMixin {
             while (gameSettings.keyBindAttack.isPressed()) {
                 SwingHook.swingItem();
             }
-        }
-    }
-
-    @Redirect(method = "clickMouse", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/entity/EntityPlayerSP;swingItem()V"))
-    public void removeCheck(EntityPlayerSP instance) {
-        if (OldAnimationsSettings.classicSwing && OldAnimationsSettings.INSTANCE.enabled) {
-            instance.swingProgressInt = -1;
-            instance.isSwingInProgress = true;
-            if (instance.worldObj instanceof WorldServer) {
-                ((WorldServer)instance.worldObj).getEntityTracker().sendToAllTrackingEntity(instance, new S0BPacketAnimation(instance, 0));
-            }
-        } else {
-            instance.swingItem();
         }
     }
 
