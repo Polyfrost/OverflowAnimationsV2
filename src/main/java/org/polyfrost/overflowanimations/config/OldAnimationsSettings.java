@@ -317,6 +317,21 @@ public class OldAnimationsSettings extends Config {
     public float reequipSpeed = 0.4F;
 
     @Switch(
+            name = "Disable Item Pickup Animation",
+            description = "Removes the animation played when picking up items.",
+            category = "Misc", subcategory = "Pickup Animation"
+    )
+    public static boolean disablePickup = false;
+
+    @Slider(
+            name = "Dropped Item Y Position",
+            min = -1.5F, max = 2.5F,
+            category = "Misc", subcategory = "Pickup Animation",
+            instant = true
+    )
+    public float pickupPosition = oldPickup ? 1.0F : -0.5F;
+
+    @Switch(
             name = "Only Allow Re-equip Animation Upon Switching Slots",
             description = "Fixes the re-equip animation to only play when items slots are switched.",
             category = "Misc", subcategory = "Re-quip Animation"
@@ -378,13 +393,6 @@ public class OldAnimationsSettings extends Config {
             category = "Misc", subcategory = "Fixes, QOL, and Tweaks"
     )
     public static boolean coloredBottles = false;
-
-    @Switch(
-            name = "Disable Item Pickup Animation",
-            description = "Removes the animation played when picking up items.",
-            category = "Misc", subcategory = "Fixes, QOL, and Tweaks"
-    )
-    public static boolean disablePickup = false;
 
     @Switch(
             name = "Disable Entity/Mob Third-Person Item Transformations",

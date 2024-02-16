@@ -16,7 +16,7 @@ public abstract class NetHandlerPlayClientMixin {
 
     @ModifyConstant(method = "handleCollectItem", constant = @Constant(floatValue = 0.5f))
     private float oldItemPickup(float original) {
-        return OldAnimationsSettings.oldPickup && OldAnimationsSettings.INSTANCE.enabled ? 0.9f : original;
+        return OldAnimationsSettings.INSTANCE.enabled ? OldAnimationsSettings.INSTANCE.pickupPosition : original;
     }
 
 }
