@@ -110,4 +110,9 @@ public abstract class ItemRendererMixin {
         return OldAnimationsSettings.INSTANCE.enabled ? OldAnimationsSettings.INSTANCE.reequipSpeed : original;
     }
 
+    @Inject(method = "rotateWithPlayerRotations", at = @At(value = "HEAD"), cancellable = true)
+    private void removeHandSway(EntityPlayerSP entityplayerspIn, float partialTicks, CallbackInfo ci) {
+        if (OldAnimationsSettings.noHandViewSway) ci.cancel();
+    }
+
 }

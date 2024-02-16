@@ -123,7 +123,8 @@ public class OldAnimationsSettings extends Config {
     @Switch(
             name = "1.7 Punching During Usage",
             description = "Purely visual feature. Re-enables the ability to consume food or block a sword whilst punching a block.",
-            subcategory = "Interaction")
+            subcategory = "Interaction"
+    )
     @VigilanceName(
             name = "Punching During Usage",
             category = "Animations",
@@ -413,6 +414,13 @@ public class OldAnimationsSettings extends Config {
             category = "Misc", subcategory = "Fixes, QOL, and Tweaks"
     )
     public static boolean noHurtCam = false;
+
+    @Switch(
+            name = "Disable Hand View Sway",
+            description = "Disables your arm/held item from drifting across the screen when moving your mouse.",
+            category = "Misc", subcategory = "Fixes, QOL, and Tweaks"
+    )
+    public static boolean noHandViewSway = false;
 
     @Switch(
             name = "Old Lunar/CheatBreaker Block-Hit Position",
