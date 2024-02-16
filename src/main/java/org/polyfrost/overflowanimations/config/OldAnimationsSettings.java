@@ -359,8 +359,8 @@ public class OldAnimationsSettings extends Config {
     public static boolean headYawFix = true;
 
     @Switch(
-            name = "Classic Held Item Rotations",
-            description = "Disables held item rotations while the player turns their head.",
+            name = "Disable Hand View Sway",
+            description = "Disables held item rotations/swaying while the player turns their head.",
             category = "Misc", subcategory = "Fixes, QOL, and Tweaks"
     )
     public static boolean oldItemRotations = false;
@@ -378,6 +378,13 @@ public class OldAnimationsSettings extends Config {
             category = "Misc", subcategory = "Fixes, QOL, and Tweaks"
     )
     public static boolean coloredBottles = false;
+
+    @Switch(
+            name = "Disable Item Pickup Animation",
+            description = "Removes the animation played when picking up items.",
+            category = "Misc", subcategory = "Fixes, QOL, and Tweaks"
+    )
+    public static boolean disablePickup = false;
 
     @Switch(
             name = "Disable Entity/Mob Third-Person Item Transformations",
@@ -427,13 +434,6 @@ public class OldAnimationsSettings extends Config {
             category = "Misc", subcategory = "Fun"
     )
     public static boolean dinnerBoneMode = false;
-
-//    @Switch(
-//            name = "Classic Swing Speed",
-//            description = "Allows the swing speed to scale according to how fast you click.",
-//            category = "Misc", subcategory = "Fixes, QOL, and Tweaks"
-//    )
-//    public static boolean classicSwing = false;
 
     @Switch(
             name = "Alpha/Indev Wavy Arms",

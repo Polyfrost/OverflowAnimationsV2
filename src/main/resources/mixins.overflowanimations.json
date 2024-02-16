@@ -9,6 +9,7 @@
     "EntityLivingBaseMixin",
     "EntityMixin",
     "EntityOtherPlayerMPMixin",
+    "EntityPickupFXMixin",
     "EntityRendererMixin",
     "ForgeHooksClientMixin",
     "GuiIngameForgeMixin",
