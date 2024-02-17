@@ -74,7 +74,7 @@ public class OldAnimationsSettings extends Config {
             description = "Smoothens the player model while sneaking to replicate the same behavior in 1.7. Disable if incompatible with cosmetic mods",
             subcategory = "Smooth Sneaking"
     )
-    public static boolean smoothModelSneak = true;
+    public static boolean smoothModelSneak = false;
 
     // Interaction
     @Switch(
