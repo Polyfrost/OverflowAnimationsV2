@@ -13,7 +13,10 @@ public class ItemStackMixin {
 
     @Redirect(method = "hasEffect", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/Item;hasEffect(Lnet/minecraft/item/ItemStack;)Z"))
     public boolean disablePotionGlint(Item instance, ItemStack stack) {
-        return (!OldAnimationsSettings.potionGlint || !OldAnimationsSettings.INSTANCE.enabled || !(stack.getItem() instanceof ItemPotion)) && instance.hasEffect(stack);
+        if (OldAnimationsSettings.potionGlint && OldAnimationsSettings.INSTANCE.enabled && stack.getItem() instanceof ItemPotion) {
+            return false;
+        }
+        return instance.hasEffect(stack);
     }
 
 }
