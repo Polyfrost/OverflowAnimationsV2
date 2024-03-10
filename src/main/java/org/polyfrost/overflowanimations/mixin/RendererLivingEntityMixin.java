@@ -10,6 +10,7 @@ import net.minecraft.entity.EntityLivingBase;
 import org.polyfrost.overflowanimations.config.OldAnimationsSettings;
 import org.polyfrost.overflowanimations.hooks.TransformTypeHook;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -36,10 +37,19 @@ public abstract class RendererLivingEntityMixin<T extends EntityLivingBase> exte
     @Inject(method = "rotateCorpse", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GlStateManager;rotate(FFFF)V", shift = At.Shift.AFTER))
     public void rotateCorpse(T bat, float p_77043_2_, float p_77043_3_, float partialTicks, CallbackInfo ci) {
         boolean player = bat.getName().equals(Minecraft.getMinecraft().thePlayer.getName());
-        if (OldAnimationsSettings.dinnerBoneMode && OldAnimationsSettings.INSTANCE.enabled && player) {
-            GlStateManager.translate(0.0f, bat.height + 0.1f, 0.0f);
-            GlStateManager.rotate(180.0f, 0.0f, 0.0f, 1.0f);
+        if (OldAnimationsSettings.INSTANCE.enabled) {
+            if (OldAnimationsSettings.dinnerBoneMode && player) {
+                overflowAnimations$dinnerBoneRotation(bat);
+            } else if (OldAnimationsSettings.dinnerBoneModeEntities && !player) {
+                overflowAnimations$dinnerBoneRotation(bat);
+            }
         }
+    }
+
+    @Unique
+    private static void overflowAnimations$dinnerBoneRotation(EntityLivingBase entity) {
+        GlStateManager.translate(0.0f, entity.height + 0.1f, 0.0f);
+        GlStateManager.rotate(180.0f, 0.0f, 0.0f, 1.0f);
     }
 
 }

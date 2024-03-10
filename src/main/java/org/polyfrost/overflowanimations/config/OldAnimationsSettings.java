@@ -461,11 +461,18 @@ public class OldAnimationsSettings extends Config {
     public static boolean lunarBlockhit = false;
 
     @Switch(
-            name = "Dinnerbone Mode",
-            description = "LETS BE UPSIDE DOWN!!!",
+            name = "Dinnerbone Mode Player-Only",
+            description = "Allows the player to be completely upside down, just like Dinnerbone.",
             category = "Misc", subcategory = "Fun"
     )
     public static boolean dinnerBoneMode = false;
+
+    @Switch(
+            name = "Dinnerbone Mode All Entities",
+            description = "Makes all entities be upside down, just like Dinnerbone.",
+            category = "Misc", subcategory = "Fun"
+    )
+    public static boolean dinnerBoneModeEntities = false;
 
     @Switch(
             name = "Alpha/Indev Wavy Arms",
