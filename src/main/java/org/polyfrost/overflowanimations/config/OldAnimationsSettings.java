@@ -2,11 +2,13 @@ package org.polyfrost.overflowanimations.config;
 
 import cc.polyfrost.oneconfig.config.Config;
 import cc.polyfrost.oneconfig.config.annotations.*;
+import cc.polyfrost.oneconfig.config.core.OneColor;
 import cc.polyfrost.oneconfig.config.data.Mod;
 import cc.polyfrost.oneconfig.config.data.ModType;
 import cc.polyfrost.oneconfig.config.data.PageLocation;
 import cc.polyfrost.oneconfig.config.migration.VigilanceMigrator;
 import cc.polyfrost.oneconfig.config.migration.VigilanceName;
+import cc.polyfrost.oneconfig.config.annotations.Color;
 import net.minecraft.client.Minecraft;
 import org.polyfrost.overflowanimations.OverflowAnimations;
 import org.polyfrost.overflowanimations.hooks.AnimationExportUtils;
@@ -302,6 +304,13 @@ public class OldAnimationsSettings extends Config {
     public static boolean modernBobbing = true;
 
     @Switch(
+            name = "1.15+ Drop Item Arm Swing",
+            description = "Adds an arm swinging animation upon dropping items.",
+            category = "Misc", subcategory = "Modern"
+    )
+    public static boolean modernDropSwing = true;
+
+    @Switch(
             name = "Disable Item Re-equip Animation",
             description = "Completely removed the the item re-equip animation.",
             category = "Misc", subcategory = "Re-quip Animation"
@@ -315,6 +324,13 @@ public class OldAnimationsSettings extends Config {
             instant = true
     )
     public float reequipSpeed = 0.4F;
+
+    @Switch(
+            name = "Only Allow Re-equip Animation Upon Switching Slots",
+            description = "Fixes the re-equip animation to only play when items slots are switched.",
+            category = "Misc", subcategory = "Re-quip Animation"
+    )
+    public static boolean fixReequip = true;
 
     @Switch(
             name = "Disable Item Pickup Animation",
@@ -332,11 +348,26 @@ public class OldAnimationsSettings extends Config {
     public float pickupPosition = oldPickup ? 1.0F : -0.5F;
 
     @Switch(
-            name = "Only Allow Re-equip Animation Upon Switching Slots",
-            description = "Fixes the re-equip animation to only play when items slots are switched.",
-            category = "Misc", subcategory = "Re-quip Animation"
+            name = "Rod Line Position Based on FOV",
+            description = "Includes the player's FOV when calculating the fishing rod cast line position.",
+            category = "Misc", subcategory = "Fishing Rod Line"
     )
-    public static boolean fixReequip = true;
+    public static boolean fixRod = true;
+
+    @Switch(
+            name = "Rod Line Thickness",
+            description = "Enable to customize the rod line's thickness",
+            category = "Misc", subcategory = "Fishing Rod Line"
+    )
+    public static boolean rodThickBool = true;
+
+    @Slider(
+            name = "Rod Line Thickness Slider",
+            min = -100.0F, max = 100.0F,
+            category = "Misc", subcategory = "Fishing Rod Line",
+            instant = true
+    )
+    public float rodThickness = 0.0F;
 
     @Switch(
             name = "Allow Particles to No-Clip",
@@ -351,13 +382,6 @@ public class OldAnimationsSettings extends Config {
             category = "Misc", subcategory = "Fixes, QOL, and Tweaks"
     )
     public static boolean fireballModel = false;
-
-    @Switch(
-            name = "Rod Line Position Based on FOV",
-            description = "Includes the player's FOV when calculating the fishing rod cast line position.",
-            category = "Misc", subcategory = "Fixes, QOL, and Tweaks"
-    )
-    public static boolean fixRod = true;
 
     @Switch(
             name = "Block Breaking Fixes",

@@ -22,7 +22,7 @@ public abstract class RenderSnowballMixin<T extends Entity> extends Render<T> {
     @ModifyArg(method = "doRender", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GlStateManager;rotate(FFFF)V", ordinal = 0), index = 0)
     private float fixRotationY(float original) {
         return (OldAnimationsSettings.itemSprites || OldAnimationsSettings.oldProjectiles) && OldAnimationsSettings.INSTANCE.enabled ?
-                180.0f - Minecraft.getMinecraft().getRenderManager().playerViewY : original;
+                180.0f - renderManager.playerViewY : original;
     }
 
     @ModifyArg(method = "doRender", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GlStateManager;rotate(FFFF)V", ordinal = 1), index = 0)

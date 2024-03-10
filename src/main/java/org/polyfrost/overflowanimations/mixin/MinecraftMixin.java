@@ -4,18 +4,13 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.multiplayer.PlayerControllerMP;
 import net.minecraft.client.multiplayer.WorldClient;
-import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.client.particle.EffectRenderer;
 import net.minecraft.client.settings.GameSettings;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.play.client.C0APacketAnimation;
-import net.minecraft.network.play.server.S0BPacketAnimation;
 import net.minecraft.potion.Potion;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.world.WorldServer;
 import org.polyfrost.overflowanimations.config.OldAnimationsSettings;
 import org.polyfrost.overflowanimations.hooks.SwingHook;
 import org.spongepowered.asm.mixin.Mixin;
@@ -40,8 +35,6 @@ public abstract class MinecraftMixin {
     private int leftClickCounter;
 
     @Shadow public GameSettings gameSettings;
-
-    @Shadow public abstract NetHandlerPlayClient getNetHandler();
 
     @Inject(method = "sendClickBlockToController", at = @At("HEAD"))
     public void blockHitAnimation(boolean leftClick, CallbackInfo ci) {
@@ -90,6 +83,13 @@ public abstract class MinecraftMixin {
             while (gameSettings.keyBindAttack.isPressed()) {
                 SwingHook.swingItem();
             }
+        }
+    }
+
+    @Inject(method = "runTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/entity/EntityPlayerSP;dropOneItem(Z)Lnet/minecraft/entity/item/EntityItem;", shift = At.Shift.AFTER))
+    public void dropItemSwing(CallbackInfo ci) {
+        if (OldAnimationsSettings.modernDropSwing && OldAnimationsSettings.INSTANCE.enabled) {
+            SwingHook.swingItem();
         }
     }
 
