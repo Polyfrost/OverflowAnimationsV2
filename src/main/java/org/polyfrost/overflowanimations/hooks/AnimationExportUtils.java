@@ -3,9 +3,11 @@ package org.polyfrost.overflowanimations.hooks;
 import cc.polyfrost.oneconfig.config.core.ConfigUtils;
 import cc.polyfrost.oneconfig.utils.Notifications;
 import com.google.gson.Gson;
+import dulkirmod.config.Config;
 import dulkirmod.config.DulkirConfig;
 import org.apache.commons.io.Charsets;
 import org.apache.commons.io.FileUtils;
+import org.polyfrost.overflowanimations.OverflowAnimations;
 import org.polyfrost.overflowanimations.config.ItemPositionAdvancedSettings;
 import org.polyfrost.overflowanimations.config.OldAnimationsSettings;
 
@@ -137,19 +139,36 @@ public class AnimationExportUtils {
     }
 
     private static void importDulkirConfig() {
-        DulkirConfigData data = new DulkirConfigData(
-                DulkirConfig.INSTANCE.getCustomSize(),
-                DulkirConfig.INSTANCE.getDoesScaleSwing(),
-                DulkirConfig.INSTANCE.getCustomX(),
-                DulkirConfig.INSTANCE.getCustomY(),
-                DulkirConfig.INSTANCE.getCustomZ(),
-                DulkirConfig.INSTANCE.getCustomYaw(),
-                DulkirConfig.INSTANCE.getCustomPitch(),
-                DulkirConfig.INSTANCE.getCustomRoll(),
-                DulkirConfig.INSTANCE.getCustomSpeed(),
-                DulkirConfig.INSTANCE.getIgnoreHaste(),
-                DulkirConfig.INSTANCE.getDrinkingSelector()
-        );
+        DulkirConfigData data;
+        if (!OverflowAnimations.oldDulkirMod) {
+            data = new DulkirConfigData(
+                    DulkirConfig.INSTANCE.getCustomSize(),
+                    DulkirConfig.INSTANCE.getDoesScaleSwing(),
+                    DulkirConfig.INSTANCE.getCustomX(),
+                    DulkirConfig.INSTANCE.getCustomY(),
+                    DulkirConfig.INSTANCE.getCustomZ(),
+                    DulkirConfig.INSTANCE.getCustomYaw(),
+                    DulkirConfig.INSTANCE.getCustomPitch(),
+                    DulkirConfig.INSTANCE.getCustomRoll(),
+                    DulkirConfig.INSTANCE.getCustomSpeed(),
+                    DulkirConfig.INSTANCE.getIgnoreHaste(),
+                    DulkirConfig.INSTANCE.getDrinkingSelector()
+            );
+        } else {
+            data = new DulkirConfigData(
+                    Config.INSTANCE.getCustomSize(),
+                    Config.INSTANCE.getDoesScaleSwing(),
+                    Config.INSTANCE.getCustomX(),
+                    Config.INSTANCE.getCustomY(),
+                    Config.INSTANCE.getCustomZ(),
+                    Config.INSTANCE.getCustomYaw(),
+                    Config.INSTANCE.getCustomPitch(),
+                    Config.INSTANCE.getCustomRoll(),
+                    Config.INSTANCE.getCustomSpeed(),
+                    Config.INSTANCE.getIgnoreHaste(),
+                    Config.INSTANCE.getDrinkingSelector()
+            );
+        }
         AnimationExportUtils.importDulkir(data);
         DulkirConfig.INSTANCE.setCustomAnimations(false);
         Notifications.INSTANCE.send("OverflowAnimations", "Successfully imported DulkirMod config!");

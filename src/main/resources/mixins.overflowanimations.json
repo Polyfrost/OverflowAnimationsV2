@@ -10,6 +10,7 @@
     "EntityMixin",
     "EntityOtherPlayerMPMixin",
     "EntityPickupFXMixin",
+    "EntityPlayerMixin",
     "EntityRendererMixin",
     "ForgeHooksClientMixin",
     "GuiIngameForgeMixin",
@@ -40,8 +41,5 @@
     "RenderItemMixin",
     "RenderSnowballMixin",
     "RenderSnowballMixin_CustomPositions"
-  ],
-  "mixins": [
-    "EntityPlayerMixin"
   ]
 }

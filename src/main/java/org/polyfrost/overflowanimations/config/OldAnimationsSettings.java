@@ -391,7 +391,7 @@ public class OldAnimationsSettings extends Config {
     public static boolean breakFix = false;
 
     @Switch(
-        name = "Head Yaw Fixes",
+        name = "1.15+ Head Yaw Fix",
         description = "Smooths the rotation of mobs' heads when turning left or right.",
         category = "Misc", subcategory = "Fixes, QOL, and Tweaks"
     )
@@ -773,5 +773,8 @@ public class OldAnimationsSettings extends Config {
         addDependency("firstPersonCarpetPosition", "itemTransformations");
         addDependency("fixRod", "itemTransformations");
         addDependency("entityTransforms", "thirdTransformations");
+        // Sneaking
+        addDependency("longerUnsneak", "smoothSneaking");
+        addDependency("smoothModelSneak", "smoothSneaking");
     }
 }

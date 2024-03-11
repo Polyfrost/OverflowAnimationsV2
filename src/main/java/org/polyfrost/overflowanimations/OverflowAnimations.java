@@ -6,6 +6,7 @@ import cc.polyfrost.oneconfig.events.event.Stage;
 import cc.polyfrost.oneconfig.libs.eventbus.Subscribe;
 import cc.polyfrost.oneconfig.utils.commands.CommandManager;
 import cc.polyfrost.oneconfig.utils.gui.GuiUtils;
+import dulkirmod.config.Config;
 import dulkirmod.config.DulkirConfig;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.common.Loader;
@@ -24,6 +25,7 @@ public class OverflowAnimations {
     public static final String VERSION = "@VER@";
 
     private static boolean doTheFunnyDulkirThing = false;
+    public static boolean oldDulkirMod = false;
 
     @EventHandler
     public void init(FMLInitializationEvent event) {
@@ -42,10 +44,20 @@ public class OverflowAnimations {
     @Subscribe
     private void onTick(RenderEvent event) {
         if (event.stage == Stage.START && Minecraft.getMinecraft().currentScreen == null && Minecraft.getMinecraft().theWorld != null && Minecraft.getMinecraft().thePlayer != null && doTheFunnyDulkirThing && !OldAnimationsSettings.didTheFunnyDulkirThingElectricBoogaloo) {
-            if (DulkirConfig.INSTANCE.getCustomAnimations()) {
-                GuiUtils.displayScreen(new PleaseMigrateDulkirModGui());
-                doTheFunnyDulkirThing = false;
-                OldAnimationsSettings.didTheFunnyDulkirThingElectricBoogaloo = true;
+            try {
+                Class.forName("dulkirmod.config.DulkirConfig");
+                if (DulkirConfig.INSTANCE.getCustomAnimations()) {
+                    GuiUtils.displayScreen(new PleaseMigrateDulkirModGui());
+                    doTheFunnyDulkirThing = false;
+                    OldAnimationsSettings.didTheFunnyDulkirThingElectricBoogaloo = true;
+                }
+            } catch (ClassNotFoundException e) {
+                oldDulkirMod = true;
+                if (Config.INSTANCE.getCustomAnimations()) {
+                    GuiUtils.displayScreen(new PleaseMigrateDulkirModGui());
+                    doTheFunnyDulkirThing = false;
+                    OldAnimationsSettings.didTheFunnyDulkirThingElectricBoogaloo = true;
+                }
             }
         }
     }
