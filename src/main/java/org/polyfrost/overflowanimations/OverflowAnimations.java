@@ -24,6 +24,7 @@ public class OverflowAnimations {
     public static final String NAME = "@NAME@";
     public static final String VERSION = "@VER@";
 
+    public static boolean isPatcherPresent = false;
     private static boolean doTheFunnyDulkirThing = false;
     public static boolean oldDulkirMod = false;
 
@@ -39,6 +40,7 @@ public class OverflowAnimations {
         if (Loader.isModLoaded("dulkirmod")) {
             doTheFunnyDulkirThing = true;
         }
+        isPatcherPresent = Loader.isModLoaded("patcher");
     }
 
     @Subscribe
@@ -47,18 +49,21 @@ public class OverflowAnimations {
             try {
                 Class.forName("dulkirmod.config.DulkirConfig");
                 if (DulkirConfig.INSTANCE.getCustomAnimations()) {
-                    GuiUtils.displayScreen(new PleaseMigrateDulkirModGui());
-                    doTheFunnyDulkirThing = false;
-                    OldAnimationsSettings.didTheFunnyDulkirThingElectricBoogaloo = true;
+                    dulkirTrollage();
                 }
             } catch (ClassNotFoundException e) {
                 oldDulkirMod = true;
                 if (Config.INSTANCE.getCustomAnimations()) {
-                    GuiUtils.displayScreen(new PleaseMigrateDulkirModGui());
-                    doTheFunnyDulkirThing = false;
-                    OldAnimationsSettings.didTheFunnyDulkirThingElectricBoogaloo = true;
+                    dulkirTrollage();
                 }
             }
         }
     }
+
+    private void dulkirTrollage() {
+        GuiUtils.displayScreen(new PleaseMigrateDulkirModGui());
+        doTheFunnyDulkirThing = false;
+        OldAnimationsSettings.didTheFunnyDulkirThingElectricBoogaloo = true;
+    }
+
 }

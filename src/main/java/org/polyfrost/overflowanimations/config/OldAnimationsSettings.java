@@ -2,13 +2,11 @@ package org.polyfrost.overflowanimations.config;
 
 import cc.polyfrost.oneconfig.config.Config;
 import cc.polyfrost.oneconfig.config.annotations.*;
-import cc.polyfrost.oneconfig.config.core.OneColor;
 import cc.polyfrost.oneconfig.config.data.Mod;
 import cc.polyfrost.oneconfig.config.data.ModType;
 import cc.polyfrost.oneconfig.config.data.PageLocation;
 import cc.polyfrost.oneconfig.config.migration.VigilanceMigrator;
 import cc.polyfrost.oneconfig.config.migration.VigilanceName;
-import cc.polyfrost.oneconfig.config.annotations.Color;
 import net.minecraft.client.Minecraft;
 import org.polyfrost.overflowanimations.OverflowAnimations;
 import org.polyfrost.overflowanimations.hooks.AnimationExportUtils;
@@ -311,6 +309,13 @@ public class OldAnimationsSettings extends Config {
     public static boolean modernDropSwing = true;
 
     @Switch(
+            name = "1.15+ Head Yaw Fix",
+            description = "Smooths the rotation of mobs' heads when turning left or right.",
+            category = "Misc", subcategory = "Modern"
+    )
+    public static boolean headYawFix = true;
+
+    @Switch(
             name = "Disable Item Re-equip Animation",
             description = "Completely removed the the item re-equip animation.",
             category = "Misc", subcategory = "Re-quip Animation"
@@ -389,13 +394,6 @@ public class OldAnimationsSettings extends Config {
             category = "Misc", subcategory = "Fixes, QOL, and Tweaks"
     )
     public static boolean breakFix = false;
-
-    @Switch(
-        name = "1.15+ Head Yaw Fix",
-        description = "Smooths the rotation of mobs' heads when turning left or right.",
-        category = "Misc", subcategory = "Fixes, QOL, and Tweaks"
-    )
-    public static boolean headYawFix = true;
 
     @Switch(
             name = "Disable Hand View Sway",

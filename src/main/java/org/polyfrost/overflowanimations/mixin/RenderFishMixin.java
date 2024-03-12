@@ -1,11 +1,13 @@
 package org.polyfrost.overflowanimations.mixin;
 
+import club.sk1er.patcher.config.PatcherConfig;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.RenderFish;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityFishHook;
 import net.minecraft.util.Vec3;
 import org.lwjgl.opengl.GL11;
+import org.polyfrost.overflowanimations.OverflowAnimations;
 import org.polyfrost.overflowanimations.config.ItemPositionAdvancedSettings;
 import org.polyfrost.overflowanimations.config.OldAnimationsSettings;
 import org.polyfrost.overflowanimations.hooks.TransformTypeHook;
@@ -20,13 +22,18 @@ public class RenderFishMixin {
         ItemPositionAdvancedSettings advanced = OldAnimationsSettings.advancedSettings;
         double fov = Minecraft.getMinecraft().gameSettings.fovSetting;
         double decimalFov = fov / 110;
+        boolean isParallaxOffset = OverflowAnimations.isPatcherPresent && PatcherConfig.parallaxFix;
         if (OldAnimationsSettings.INSTANCE.enabled) {
-            if (ItemPositionAdvancedSettings.customRodLine)
-                return new Vec3(advanced.fishingLinePositionX, advanced.fishingLinePositionY, advanced.fishingLinePositionZ);
+            Vec3 fishingRod = new Vec3(x, y, z);
             if (OldAnimationsSettings.fishingRodPosition && !OldAnimationsSettings.fixRod) {
-                return new Vec3(-0.5D, 0.03D, 0.8D);
-            } else if (OldAnimationsSettings.fixRod)
-                return new Vec3(((-decimalFov + (decimalFov / 2.5)) - (decimalFov / 8)) + 0.16, 0, 0.4D);
+                fishingRod = new Vec3(-0.5D + (isParallaxOffset ? -0.1D : 0.0D), 0.03D, 0.8D);
+            } else if (OldAnimationsSettings.fixRod) {
+                fishingRod = new Vec3(((-decimalFov + (decimalFov / 2.5)) - (decimalFov / 8)) + 0.16 + (isParallaxOffset ? 0.15D : 0.0D), 0, 0.4D);
+            }
+            if (ItemPositionAdvancedSettings.customRodLine) {
+                fishingRod = new Vec3(advanced.fishingLinePositionX, advanced.fishingLinePositionY, advanced.fishingLinePositionZ);
+            }
+            return fishingRod;
         }
         return new Vec3(x, y, z);
 
