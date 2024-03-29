@@ -88,7 +88,7 @@ public abstract class MinecraftMixin {
 
     @Inject(method = "runTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/entity/EntityPlayerSP;dropOneItem(Z)Lnet/minecraft/entity/item/EntityItem;", shift = At.Shift.AFTER))
     public void dropItemSwing(CallbackInfo ci) {
-        if (OldAnimationsSettings.modernDropSwing && OldAnimationsSettings.INSTANCE.enabled) {
+        if (OldAnimationsSettings.modernDropSwing && OldAnimationsSettings.INSTANCE.enabled && thePlayer.getHeldItem() != null) {
             SwingHook.swingItem();
         }
     }
