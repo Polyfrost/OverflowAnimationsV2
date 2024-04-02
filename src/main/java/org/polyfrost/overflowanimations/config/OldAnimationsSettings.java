@@ -375,13 +375,6 @@ public class OldAnimationsSettings extends Config {
     public float rodThickness = 0.0F;
 
     @Switch(
-            name = "Allow Particles to No-Clip",
-            description = "Allows particles to no clip through blocks by simply not checking for collisions.",
-            category = "Misc", subcategory = "Fixes, QOL, and Tweaks"
-    )
-    public static boolean particleNoClip = false;
-
-    @Switch(
             name = "Render Fireball Projectile as a Model",
             description = "Renders the thrown fireball projectiles as models rather than as sprites.",
             category = "Misc", subcategory = "Fixes, QOL, and Tweaks"
