@@ -381,6 +381,8 @@ public class OldAnimationsSettings extends Config {
     )
     public static boolean fireballModel = false;
 
+    // todo: xp bottle model + move both model options to modern category
+
     @Switch(
             name = "Block Breaking Fixes",
             description = "Resets block removing while using an item or when the player is out of range of a block.",

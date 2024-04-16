@@ -35,8 +35,6 @@ import java.util.stream.Collectors;
 @Mixin(RenderItem.class)
 public abstract class RenderItemMixin {
 
-    @Shadow protected abstract boolean isThereOneNegativeScale(ItemTransformVec3f itemTranformVec);
-
     @Unique
     public IBakedModel oldanimations$model;
     @Unique
@@ -65,10 +63,6 @@ public abstract class RenderItemMixin {
         if (OldAnimationsSettings.INSTANCE.enabled && !oldanimations$model.isGui3d()) {
             if (OldAnimationsSettings.itemSprites && OldAnimationsSettings.itemSpritesColor && TransformTypeHook.shouldNotHaveGlint()) {
                 instance.putNormal(x, z, y);
-            } else if (OldAnimationsSettings.oldItemLighting && !TransformTypeHook.shouldBeSprite()) {
-                boolean isBlocking = oldanimations$entityLivingBase instanceof AbstractClientPlayer &&
-                        ((AbstractClientPlayer) oldanimations$entityLivingBase).isBlocking();
-                instance.putNormal(-x, isBlocking ? -y : y, z);
             }
         } else {
             instance.putNormal(x, y, z);
@@ -161,13 +155,6 @@ public abstract class RenderItemMixin {
             }
         }
         return instance.getItemModel(stack);
-    }
-
-    @Inject(method = "renderItemModelTransform", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/entity/RenderItem;renderItem(Lnet/minecraft/item/ItemStack;Lnet/minecraft/client/resources/model/IBakedModel;)V"))
-    private void fixCullFace(ItemStack stack, IBakedModel model, ItemCameraTransforms.TransformType cameraTransformType, CallbackInfo ci) {
-        if (OldAnimationsSettings.INSTANCE.enabled && isThereOneNegativeScale(model.getItemCameraTransforms().getTransform(cameraTransformType))) {
-            GlStateManager.cullFace(1028);
-        }
     }
 
 }

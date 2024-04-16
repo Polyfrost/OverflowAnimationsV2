@@ -112,6 +112,8 @@ public class ItemRendererMixin_CustomPositions {
         return OldAnimationsSettings.lunarBlockhit && OldAnimationsSettings.INSTANCE.enabled ? 0.2F : original;
     }
 
+    // TODO: add customization for equip / swing progress 
+
     @Inject(method = "performDrinking", at = @At("HEAD"), cancellable = true)
     public void drinkingItemTransform(AbstractClientPlayer clientPlayer, float partialTicks, CallbackInfo ci) {
         OldAnimationsSettings settings = OldAnimationsSettings.INSTANCE;
