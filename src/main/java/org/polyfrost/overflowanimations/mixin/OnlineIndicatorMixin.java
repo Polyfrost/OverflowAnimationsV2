@@ -14,7 +14,7 @@ public class OnlineIndicatorMixin {
 
     @Dynamic("Essential")
     @Inject(method = "drawTabIndicator", at = @At("HEAD"), cancellable = true, remap = false)
-    private static void removeTabIndicator(CallbackInfo ci) {
+    private static void overflowAnimations$removeTabIndicator(CallbackInfo ci) {
         if (OldAnimationsSettings.INSTANCE.tabMode == 2 && OldAnimationsSettings.INSTANCE.enabled)
             ci.cancel();
     }

@@ -50,7 +50,7 @@ public abstract class EntityLivingBaseMixin extends Entity {
     }
 
     @Inject(method = "getArmSwingAnimationEnd()I", at = @At("HEAD"), cancellable = true)
-    public void modifySwingSpeed(CallbackInfoReturnable<Integer> cir) {
+    public void overflowAnimations$modifySwingSpeed(CallbackInfoReturnable<Integer> cir) {
         OldAnimationsSettings settings = OldAnimationsSettings.INSTANCE;
         if (OldAnimationsSettings.globalPositions && settings.enabled) {
             if (isPotionActive(Potion.digSpeed) && !OldAnimationsSettings.ignoreHaste) {
@@ -67,7 +67,7 @@ public abstract class EntityLivingBaseMixin extends Entity {
     }
 
     @ModifyArg(method = "onUpdate", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/EntityLivingBase;updateDistance(FF)F"), index = 0)
-    public float modifyYaw(float p_1101461) {
+    public float overflowAnimations$modifyYaw(float p_1101461) {
         double d0 = posX - prevPosX;
         double d1 = posZ - prevPosZ;
         float f = (float)(d0 * d0 + d1 * d1);

@@ -17,7 +17,7 @@ public class GuiIngameMixin extends Gui {
     @Shadow @Final protected Minecraft mc;
 
     @Inject(method = "showCrosshair", at = @At("HEAD"), cancellable = true)
-    public void renderCrosshair(CallbackInfoReturnable<Boolean> cir) {
+    public void overflowAnimations$renderCrosshair(CallbackInfoReturnable<Boolean> cir) {
         if (OldAnimationsSettings.INSTANCE.debugCrosshairMode == 0 && OldAnimationsSettings.INSTANCE.enabled && mc.gameSettings.showDebugInfo) {
             cir.setReturnValue(true);
         }

@@ -18,7 +18,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(value = RenderFish.class, priority = 2000)
 public class RenderFishMixin {
     @Redirect(method = "doRender(Lnet/minecraft/entity/projectile/EntityFishHook;DDDFF)V", at = @At(value = "NEW", target = "(DDD)Lnet/minecraft/util/Vec3;", ordinal = 0))
-    private Vec3 oldFishingLine(double x, double y, double z) {
+    private Vec3 overflowAnimations$oldFishingLine(double x, double y, double z) {
         ItemPositionAdvancedSettings advanced = OldAnimationsSettings.advancedSettings;
         double fov = Minecraft.getMinecraft().gameSettings.fovSetting;
         double decimalFov = fov / 110;
@@ -40,22 +40,22 @@ public class RenderFishMixin {
     }
 
     @ModifyConstant(method = "doRender(Lnet/minecraft/entity/projectile/EntityFishHook;DDDFF)V", constant = @Constant(doubleValue = 0.8D, ordinal = 1))
-    public double moveLinePosition(double constant) {
+    public double overflowAnimations$moveLinePosition(double constant) {
         return OldAnimationsSettings.fishingStick && OldAnimationsSettings.INSTANCE.enabled ? 0.85D : constant;
     }
 
     @ModifyConstant(method = "doRender(Lnet/minecraft/entity/projectile/EntityFishHook;DDDFF)V", constant = @Constant(doubleValue = 0.8D, ordinal = 2))
-    public double moveLinePosition2(double constant) {
+    public double overflowAnimations$moveLinePosition2(double constant) {
         return OldAnimationsSettings.fishingStick && OldAnimationsSettings.INSTANCE.enabled ? 0.85D : constant;
     }
 
     @Redirect(method = "doRender(Lnet/minecraft/entity/projectile/EntityFishHook;DDDFF)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/EntityPlayer;getEyeHeight()F"))
-    public float modifyEyeHeight(EntityPlayer instance) {
+    public float overflowAnimations$modifyEyeHeight(EntityPlayer instance) {
         return OldAnimationsSettings.smoothSneaking && OldAnimationsSettings.INSTANCE.enabled ? TransformTypeHook.sneakingHeight : instance.getEyeHeight();
     }
 
     @Inject(method = "doRender(Lnet/minecraft/entity/projectile/EntityFishHook;DDDFF)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/WorldRenderer;begin(ILnet/minecraft/client/renderer/vertex/VertexFormat;)V", ordinal = 1))
-    private void modifyLineThickness(EntityFishHook entity, double x, double y, double z, float entityYaw, float partialTicks, CallbackInfo ci) {
+    private void overflowAnimations$modifyLineThickness(EntityFishHook entity, double x, double y, double z, float entityYaw, float partialTicks, CallbackInfo ci) {
         GL11.glLineWidth(1.0f +
                 (OldAnimationsSettings.rodThickBool && OldAnimationsSettings.INSTANCE.enabled ?
                     OldAnimationsSettings.INSTANCE.rodThickness : 0.0F));

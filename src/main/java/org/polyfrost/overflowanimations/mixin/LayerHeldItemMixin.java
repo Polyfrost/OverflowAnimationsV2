@@ -25,36 +25,36 @@ public abstract class LayerHeldItemMixin {
     public ItemStack simpliefied$itemStack;
 
     @Inject(method = "doRenderLayer", at = @At(value = "HEAD"))
-    private void hookHeldItem(EntityLivingBase entitylivingbaseIn, float f, float g, float partialTicks, float h, float i, float j, float scale, CallbackInfo ci) {
+    private void overflowAnimations$hookHeldItem(EntityLivingBase entitylivingbaseIn, float f, float g, float partialTicks, float h, float i, float j, float scale, CallbackInfo ci) {
         simpliefied$itemStack = entitylivingbaseIn.getHeldItem();
     }
 
     @Inject(method = "doRenderLayer", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/model/ModelBiped;postRenderArm(F)V"))
-    private void applyOldSneaking(EntityLivingBase entitylivingbaseIn, float f, float g, float partialTicks, float h, float i, float j, float scale, CallbackInfo ci) {
+    private void overflowAnimations$applyOldSneaking(EntityLivingBase entitylivingbaseIn, float f, float g, float partialTicks, float h, float i, float j, float scale, CallbackInfo ci) {
         if (OldAnimationsSettings.INSTANCE.enabled && entitylivingbaseIn.isSneaking()) {
             GlStateManager.translate(0.0F, 0.2F, 0.0F);
         }
     }
 
     @Redirect(method = "doRenderLayer", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/EntityLivingBase;isSneaking()Z"))
-    private boolean cancelNewSneaking(EntityLivingBase instance) {
+    private boolean overflowAnimations$cancelNewSneaking(EntityLivingBase instance) {
         return instance.isSneaking() && !OldAnimationsSettings.INSTANCE.enabled;
     }
 
     @Inject(method = "doRenderLayer", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;getItem()Lnet/minecraft/item/Item;"), locals = LocalCapture.CAPTURE_FAILHARD)
-    private void changeItemToStick(EntityLivingBase entitylivingbaseIn, float f, float g, float partialTicks, float h, float i, float j, float scale, CallbackInfo ci, ItemStack itemStack) {
+    private void overflowAnimations$changeItemToStick(EntityLivingBase entitylivingbaseIn, float f, float g, float partialTicks, float h, float i, float j, float scale, CallbackInfo ci, ItemStack itemStack) {
         if (entitylivingbaseIn instanceof EntityPlayer && ((EntityPlayer)entitylivingbaseIn).fishEntity != null) {
             simpliefied$itemStack = new ItemStack(Items.stick, 0);
         }
     }
 
     @Redirect(method = "doRenderLayer", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;getItem()Lnet/minecraft/item/Item;"))
-    private Item replaceStack(ItemStack instance) {
+    private Item overflowAnimations$replaceStack(ItemStack instance) {
         return OldAnimationsSettings.fishingStick && OldAnimationsSettings.INSTANCE.enabled ? simpliefied$itemStack.getItem() : instance.getItem();
     }
 
     @Inject(method = "doRenderLayer", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/ItemRenderer;renderItem(Lnet/minecraft/entity/EntityLivingBase;Lnet/minecraft/item/ItemStack;Lnet/minecraft/client/renderer/block/model/ItemCameraTransforms$TransformType;)V"), locals = LocalCapture.CAPTURE_FAILHARD)
-    private void thirdPersonItemPositions(EntityLivingBase entitylivingbaseIn, float f, float g, float partialTicks, float h, float i, float j, float s, CallbackInfo ci, ItemStack stack, Item item) {
+    private void overflowAnimations$thirdPersonItemPositions(EntityLivingBase entitylivingbaseIn, float f, float g, float partialTicks, float h, float i, float j, float s, CallbackInfo ci, ItemStack stack, Item item) {
         if (OldAnimationsSettings.INSTANCE.enabled) {
             if (OldAnimationsSettings.thirdPersonBlock && entitylivingbaseIn instanceof AbstractClientPlayer && ((AbstractClientPlayer) entitylivingbaseIn).isBlocking()) {
                 GlStateManager.translate(0.05F, 0.0F, -0.1F);
@@ -96,7 +96,7 @@ public abstract class LayerHeldItemMixin {
     }
 
     @ModifyArg(method = "doRenderLayer", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/ItemRenderer;renderItem(Lnet/minecraft/entity/EntityLivingBase;Lnet/minecraft/item/ItemStack;Lnet/minecraft/client/renderer/block/model/ItemCameraTransforms$TransformType;)V"))
-    private ItemStack replaceStack2(ItemStack heldStack) {
+    private ItemStack overflowAnimations$replaceStack2(ItemStack heldStack) {
         return OldAnimationsSettings.fishingStick && OldAnimationsSettings.INSTANCE.enabled ? simpliefied$itemStack : heldStack;
     }
 

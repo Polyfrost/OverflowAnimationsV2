@@ -23,7 +23,7 @@ public abstract class RendererLivingEntityMixin<T extends EntityLivingBase> exte
     }
 
     @Inject(method = "doRender(Lnet/minecraft/entity/EntityLivingBase;DDDFF)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GlStateManager;translate(FFF)V"))
-    public void movePlayerModel(T entity, double x, double y, double z, float entityYaw, float partialTicks, CallbackInfo ci) {
+    public void overflowAnimations$movePlayerModel(T entity, double x, double y, double z, float entityYaw, float partialTicks, CallbackInfo ci) {
         if (OldAnimationsSettings.smoothModelSneak && OldAnimationsSettings.INSTANCE.enabled && entity instanceof AbstractClientPlayer) {
             boolean player = entity.getName().equals(Minecraft.getMinecraft().thePlayer.getName());
             float eyeHeight = player ? TransformTypeHook.sneakingHeight : entity.getEyeHeight();
@@ -35,19 +35,19 @@ public abstract class RendererLivingEntityMixin<T extends EntityLivingBase> exte
     }
 
     @Inject(method = "rotateCorpse", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GlStateManager;rotate(FFFF)V", shift = At.Shift.AFTER))
-    public void rotateCorpse(T bat, float p_77043_2_, float p_77043_3_, float partialTicks, CallbackInfo ci) {
+    public void overflowAnimations$rotateCorpse(T bat, float p_77043_2_, float p_77043_3_, float partialTicks, CallbackInfo ci) {
         boolean player = bat.getName().equals(Minecraft.getMinecraft().thePlayer.getName());
         if (OldAnimationsSettings.INSTANCE.enabled) {
             if (OldAnimationsSettings.dinnerBoneMode && player) {
-                overflowAnimations$dinnerBoneRotation(bat);
+                overflowAnimations$dinnerboneRotation(bat);
             } else if (OldAnimationsSettings.dinnerBoneModeEntities && !player) {
-                overflowAnimations$dinnerBoneRotation(bat);
+                overflowAnimations$dinnerboneRotation(bat);
             }
         }
     }
 
     @Unique
-    private static void overflowAnimations$dinnerBoneRotation(EntityLivingBase entity) {
+    private static void overflowAnimations$dinnerboneRotation(EntityLivingBase entity) {
         GlStateManager.translate(0.0f, entity.height + 0.1f, 0.0f);
         GlStateManager.rotate(180.0f, 0.0f, 0.0f, 1.0f);
     }

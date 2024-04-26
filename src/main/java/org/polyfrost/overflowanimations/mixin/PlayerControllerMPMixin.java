@@ -16,12 +16,12 @@ public abstract class PlayerControllerMPMixin {
     @Shadow public abstract boolean getIsHittingBlock();
 
     @ModifyArg(method = {"clickBlock", "onPlayerDamageBlock"}, at = @At(value = "INVOKE", target = "Lnet/minecraft/client/multiplayer/WorldClient;sendBlockBreakProgress(ILnet/minecraft/util/BlockPos;I)V"), index = 2)
-    public int fixDelay(int par1) {
+    public int overflowAnimations$fixDelay(int par1) {
         return par1 + (OldAnimationsSettings.breakFix && OldAnimationsSettings.INSTANCE.enabled ? 1 : 0);
     }
 
     @Redirect(method = "onPlayerDamageBlock", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/multiplayer/PlayerControllerMP;isHittingPosition(Lnet/minecraft/util/BlockPos;)Z"))
-    public boolean fixLogic(PlayerControllerMP instance, BlockPos pos) {
+    public boolean overflowAnimations$fixLogic(PlayerControllerMP instance, BlockPos pos) {
         return OldAnimationsSettings.breakFix && OldAnimationsSettings.INSTANCE.enabled ? isHittingPosition(pos) && getIsHittingBlock() : isHittingPosition(pos);
     }
 

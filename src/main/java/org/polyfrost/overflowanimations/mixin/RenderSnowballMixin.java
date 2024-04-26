@@ -20,18 +20,18 @@ public abstract class RenderSnowballMixin<T extends Entity> extends Render<T> {
     }
 
     @ModifyArg(method = "doRender", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GlStateManager;rotate(FFFF)V", ordinal = 0), index = 0)
-    private float fixRotationY(float original) {
+    private float overflowAnimations$fixRotationY(float original) {
         return (OldAnimationsSettings.itemSprites || OldAnimationsSettings.oldProjectiles) && OldAnimationsSettings.INSTANCE.enabled ?
                 180.0f - renderManager.playerViewY : original;
     }
 
     @ModifyArg(method = "doRender", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GlStateManager;rotate(FFFF)V", ordinal = 1), index = 0)
-    private float fixRotationX(float original) {
+    private float overflowAnimations$fixRotationX(float original) {
         return ((OldAnimationsSettings.itemSprites || OldAnimationsSettings.oldProjectiles) && OldAnimationsSettings.INSTANCE.enabled ? -1F : 1F) * original;
     }
 
     @Inject(method = "doRender", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/entity/RenderItem;renderItem(Lnet/minecraft/item/ItemStack;Lnet/minecraft/client/renderer/block/model/ItemCameraTransforms$TransformType;)V"))
-    public void shiftProjectile(T entity, double x, double y, double z, float entityYaw, float partialTicks, CallbackInfo ci) {
+    public void overflowAnimations$shiftProjectile(T entity, double x, double y, double z, float entityYaw, float partialTicks, CallbackInfo ci) {
         if (OldAnimationsSettings.oldProjectiles && OldAnimationsSettings.INSTANCE.enabled) {
             GlStateManager.translate(0.0F, 0.25F, 0.0F);
         }

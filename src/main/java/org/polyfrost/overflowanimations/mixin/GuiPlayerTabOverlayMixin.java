@@ -23,7 +23,7 @@ public abstract class GuiPlayerTabOverlayMixin {
     private static Ordering<NetworkPlayerInfo> field_175252_a;
 
     @Inject(method = "renderPlayerlist", at = @At("HEAD"), cancellable = true)
-    public void renderOldTab(int width, Scoreboard scoreboardIn, ScoreObjective var37, CallbackInfo ci) {
+    public void overflowAnimations$renderOldTab(int width, Scoreboard scoreboardIn, ScoreObjective var37, CallbackInfo ci) {
         if (OldAnimationsSettings.INSTANCE.tabMode == 0 && OldAnimationsSettings.INSTANCE.enabled) {
             TabOverlayHook.renderOldTab(((GuiPlayerTabOverlay) (Object) this), var37, field_175252_a);
             ci.cancel();
@@ -31,7 +31,7 @@ public abstract class GuiPlayerTabOverlayMixin {
     }
 
     @ModifyVariable(method = "renderPlayerlist", at = @At("STORE"), index = 11)
-    private boolean disablePlayerHead(boolean original) {
+    private boolean overflowAnimations$disablePlayerHead(boolean original) {
         return (OldAnimationsSettings.INSTANCE.tabMode != 2 || !OldAnimationsSettings.INSTANCE.enabled) && original;
     }
 }

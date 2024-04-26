@@ -15,7 +15,7 @@ public abstract class ItemPotionMixin {
     @Shadow public abstract int getColorFromDamage(int meta);
 
     @Inject(method = "getColorFromItemStack", at = @At("HEAD"), cancellable = true)
-    public void allowPotColors(ItemStack stack, int renderPass, CallbackInfoReturnable<Integer> cir) {
+    public void overflowAnimations$allowPotColors(ItemStack stack, int renderPass, CallbackInfoReturnable<Integer> cir) {
         if (OldAnimationsSettings.coloredBottles && OldAnimationsSettings.INSTANCE.enabled) {
             cir.setReturnValue(getColorFromDamage(stack.getMetadata()));
         }

@@ -7,6 +7,7 @@ import net.minecraft.client.renderer.entity.layers.LayerArmorBase;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.entity.EntityLivingBase;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArgs;
@@ -21,7 +22,7 @@ import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 public abstract class LayerArmorBaseMixin_New<T extends ModelBase> implements LayerRenderer<EntityLivingBase> {
 
     @Inject(method = "renderGlint(Lnet/minecraft/entity/EntityLivingBase;Lnet/minecraft/client/model/ModelBase;FFFFFFF)V", at = @At(value = "INVOKE", target = "net/minecraft/client/renderer/GlStateManager.color(FFFF)V", ordinal = 0))
-    private void renderNewArmorGlintPre(EntityLivingBase entitylivingbaseIn, T modelbaseIn, float p_177183_3_, float p_177183_4_, float p_177183_5_, float p_177183_6_, float p_177183_7_, float p_177183_8_, float p_177183_9_, CallbackInfo info) {
+    private void overflowAnimations$renderNewArmorGlintPre(EntityLivingBase entitylivingbaseIn, T modelbaseIn, float p_177183_3_, float p_177183_4_, float p_177183_5_, float p_177183_6_, float p_177183_7_, float p_177183_8_, float p_177183_9_, CallbackInfo info) {
         if (OldAnimationsSettings.enchantmentGlintNew && OldAnimationsSettings.INSTANCE.enabled) {
             float light = 240.0F;
             OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, light, light);
@@ -29,7 +30,7 @@ public abstract class LayerArmorBaseMixin_New<T extends ModelBase> implements La
     }
 
     @Inject(method = "renderGlint(Lnet/minecraft/entity/EntityLivingBase;Lnet/minecraft/client/model/ModelBase;FFFFFFF)V", at = @At(value = "INVOKE", target = "net/minecraft/client/model/ModelBase.render(Lnet/minecraft/entity/Entity;FFFFFF)V"))
-    private void renderNewArmorGlintPost(EntityLivingBase entitylivingbaseIn, T modelbaseIn, float p_177183_3_, float p_177183_4_, float partialTicks, float p_177183_6_, float p_177183_7_, float p_177183_8_, float scale, CallbackInfo ci) {
+    private void overflowAnimations$renderNewArmorGlintPost(EntityLivingBase entitylivingbaseIn, T modelbaseIn, float p_177183_3_, float p_177183_4_, float partialTicks, float p_177183_6_, float p_177183_7_, float p_177183_8_, float scale, CallbackInfo ci) {
         if (OldAnimationsSettings.enchantmentGlintNew && OldAnimationsSettings.INSTANCE.enabled) {
             int i = entitylivingbaseIn.getBrightnessForRender(partialTicks);
             int j = i % 65536;
@@ -39,9 +40,9 @@ public abstract class LayerArmorBaseMixin_New<T extends ModelBase> implements La
     }
 
     @ModifyArgs(method = "renderGlint(Lnet/minecraft/entity/EntityLivingBase;Lnet/minecraft/client/model/ModelBase;FFFFFFF)V", at = @At(value = "INVOKE", target = "net/minecraft/client/renderer/GlStateManager.color(FFFF)V", ordinal = 1))
-    private void newArmorGlintColor(Args args) {
+    private void overflowAnimations$newArmorGlintColor(Args args) {
         if (OldAnimationsSettings.enchantmentGlintNew && OldAnimationsSettings.INSTANCE.enabled) {
-            int rgb = getRGB((int) (((float) args.get(0)) * 255), (int) (((float) args.get(1)) * 255), (int) (((float) args.get(2)) * 255), (int) (((float) args.get(3)) * 255));
+            int rgb = overflowAnimations$getRGB((int) (((float) args.get(0)) * 255), (int) (((float) args.get(1)) * 255), (int) (((float) args.get(2)) * 255), (int) (((float) args.get(3)) * 255));
             if (rgb == -8372020 || rgb == -10473317) {
                 args.set(0, 0.5608F);
                 args.set(1, 0.3408F);
@@ -50,8 +51,9 @@ public abstract class LayerArmorBaseMixin_New<T extends ModelBase> implements La
             }
         }
     }
-
-    private int getRGB(int r, int g, int b, int a) {
+	
+	@Unique
+    private static int overflowAnimations$getRGB(int r, int g, int b, int a) {
         return ((a & 0xFF) << 24) |
                 ((r & 0xFF) << 16) |
                 ((g & 0xFF) << 8) |
