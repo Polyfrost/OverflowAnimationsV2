@@ -39,12 +39,12 @@ public class GuiIngameForgeMixin extends GuiIngame {
                 && OldAnimationsSettings.INSTANCE.enabled);
     }
 
-    @ModifyVariable(method = "renderHealth", at = @At(value = "LOAD", opcode = Opcodes.ILOAD, ordinal = 1), index = 5, remap = false)
+    @ModifyVariable(method = "renderHealth", at = @At(value = "LOAD", ordinal = 1), index = 5, remap = false)
     private boolean cancelFlash(boolean original) {
         return (!OldAnimationsSettings.oldHealth || !OldAnimationsSettings.INSTANCE.enabled) && original;
     }
 
-    @Inject(method = "renderGameOverlay", at = @At(value = "FIELD", target = "Lnet/minecraftforge/client/GuiIngameForge;renderCrosshairs:Z"))
+    @Inject(method = "renderGameOverlay", at = @At(value = "FIELD", opcode = Opcodes.GETSTATIC, target = "Lnet/minecraftforge/client/GuiIngameForge;renderCrosshairs:Z"))
     public void renderRGBCrosshair(float partialTicks, CallbackInfo ci) {
         if (OldAnimationsSettings.INSTANCE.debugCrosshairMode == 2 &&
                 OldAnimationsSettings.INSTANCE.enabled && mc.gameSettings.showDebugInfo && !mc.thePlayer.hasReducedDebug() &&
