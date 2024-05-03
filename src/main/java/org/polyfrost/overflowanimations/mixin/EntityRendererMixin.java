@@ -27,28 +27,28 @@ public class EntityRendererMixin {
     private float overflow$previousHeight;
 
     @Inject(method = "setupCameraTransform", at = @At("HEAD"))
-    protected void getInterpolatedEyeHeight(float partialTicks, int pass, CallbackInfo ci) {
+    protected void overflowAnimations$getInterpolatedEyeHeight(float partialTicks, int pass, CallbackInfo ci) {
         TransformTypeHook.sneakingHeight = overflow$previousHeight + (overflow$height - overflow$previousHeight) * partialTicks;
     }
 
     @Redirect(method = "orientCamera", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;getEyeHeight()F"))
-    public float modifyEyeHeight(Entity entity, float partialTicks) {
+    public float overflowAnimations$modifyEyeHeight(Entity entity, float partialTicks) {
         return OldAnimationsSettings.smoothSneaking && OldAnimationsSettings.INSTANCE.enabled ? TransformTypeHook.sneakingHeight : entity.getEyeHeight();
     }
 
     @Redirect(method = "renderWorldDirections", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;getEyeHeight()F"))
-    public float syncCrossHair(Entity entity, float partialTicks) {
-        return modifyEyeHeight(entity, partialTicks);
+    public float overflowAnimations$syncCrossHair(Entity entity, float partialTicks) {
+        return overflowAnimations$modifyEyeHeight(entity, partialTicks);
     }
 
     @Inject(method = "renderWorldDirections", at = @At("HEAD"), cancellable = true)
-    public void renderCrosshair(float partialTicks, CallbackInfo ci) {
+    public void overflowAnimations$renderCrosshair(float partialTicks, CallbackInfo ci) {
         if ((OldAnimationsSettings.INSTANCE.debugCrosshairMode != 1) && OldAnimationsSettings.INSTANCE.enabled)
             ci.cancel();
     }
 
     @Inject(method = "updateRenderer", at = @At("HEAD"))
-    private void interpolateHeight(CallbackInfo ci) {
+    private void overflowAnimations$interpolateHeight(CallbackInfo ci) {
         Entity entity = overflowAnimations$mc.getRenderViewEntity();
         float eyeHeight = entity.getEyeHeight();
         overflow$previousHeight = overflow$height;
@@ -65,13 +65,13 @@ public class EntityRendererMixin {
     }
 
     @Inject(method = "hurtCameraEffect", at = @At("HEAD"), cancellable = true)
-    public void cancelHurtCamera(float partialTicks, CallbackInfo ci) {
+    public void overflowAnimations$cancelHurtCamera(float partialTicks, CallbackInfo ci) {
         if (OldAnimationsSettings.noHurtCam && OldAnimationsSettings.INSTANCE.enabled)
             ci.cancel();
     }
 
     @Redirect(method = "setupViewBobbing", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GlStateManager;rotate(FFFF)V", ordinal = 2))
-    public void modernBobbing(float angle, float x, float y, float z) {
+    public void overflowAnimations$modernBobbing(float angle, float x, float y, float z) {
         if (!OldAnimationsSettings.modernBobbing || !OldAnimationsSettings.INSTANCE.enabled) {
             GlStateManager.rotate(angle, x, y, z);
         }

@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class EntityPickupFXMixin {
 
     @Inject(method = "renderParticle", at = @At("HEAD"), cancellable = true)
-    private void disableCollectParticle(WorldRenderer worldRendererIn, Entity entityIn, float partialTicks, float rotationX, float rotationZ, float rotationYZ, float rotationXY, float rotationXZ, CallbackInfo ci) {
+    private void overflowAnimations$disableCollectParticle(WorldRenderer worldRendererIn, Entity entityIn, float partialTicks, float rotationX, float rotationZ, float rotationYZ, float rotationXY, float rotationXZ, CallbackInfo ci) {
         if (OldAnimationsSettings.disablePickup && OldAnimationsSettings.INSTANCE.enabled) {
             ci.cancel();
         }

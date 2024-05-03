@@ -25,7 +25,7 @@ public abstract class RenderFireballMixin extends Render<EntityFireball> {
     }
 
     @Inject(method = "doRender(Lnet/minecraft/entity/projectile/EntityFireball;DDDFF)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GlStateManager;scale(FFF)V", shift = At.Shift.AFTER), cancellable = true)
-    public void changeToModel(EntityFireball entity, double x, double y, double z, float entityYaw, float partialTicks, CallbackInfo ci) {
+    public void overflowAnimations$changeToModel(EntityFireball entity, double x, double y, double z, float entityYaw, float partialTicks, CallbackInfo ci) {
         OldAnimationsSettings settings = OldAnimationsSettings.INSTANCE;
         ItemPositionAdvancedSettings advanced = OldAnimationsSettings.advancedSettings;
         if (!settings.enabled) {

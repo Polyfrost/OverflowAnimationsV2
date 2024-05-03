@@ -21,13 +21,13 @@ public abstract class RenderEntityItemMixin {
     private boolean overflowanimations$isGui3d;
 
     @ModifyVariable(method = "func_177077_a", at = @At("STORE"), ordinal = 0)
-    private boolean hookGui3d(boolean isGui3d) {
+    private boolean overflowAnimations$hookGui3d(boolean isGui3d) {
         overflowanimations$isGui3d = isGui3d;
         return isGui3d;
     }
 
     @ModifyArg(method = "func_177077_a", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GlStateManager;rotate(FFFF)V"), index = 0)
-    private float apply2dItem(float angle) {
+    private float overflowAnimations$apply2dItem(float angle) {
         if (!overflowanimations$isGui3d && OldAnimationsSettings.itemSprites && OldAnimationsSettings.INSTANCE.enabled) {
             return 180.0F - (Minecraft.getMinecraft().getRenderManager()).playerViewY;
 
@@ -36,7 +36,7 @@ public abstract class RenderEntityItemMixin {
     }
 
     @Inject(method = "func_177077_a", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GlStateManager;rotate(FFFF)V", shift = At.Shift.AFTER))
-    private void fix2dRotation(EntityItem itemIn, double p_177077_2_, double p_177077_4_, double p_177077_6_, float p_177077_8_, IBakedModel p_177077_9_, CallbackInfoReturnable<Integer> cir) {
+    private void overflowAnimations$fix2dRotation(EntityItem itemIn, double p_177077_2_, double p_177077_4_, double p_177077_6_, float p_177077_8_, IBakedModel p_177077_9_, CallbackInfoReturnable<Integer> cir) {
         if (!overflowanimations$isGui3d && OldAnimationsSettings.itemSprites && OldAnimationsSettings.INSTANCE.enabled && OldAnimationsSettings.rotationFix) {
             GlStateManager.rotate(((Minecraft.getMinecraft()).gameSettings.thirdPersonView == 2) ? (Minecraft.getMinecraft().getRenderManager()).playerViewX : -(Minecraft.getMinecraft().getRenderManager()).playerViewX, 1.0F, 0.0F, 0.0F);
         }

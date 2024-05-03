@@ -12,6 +12,10 @@ pluginManagement {
     }
 }
 
+plugins {
+	id("org.gradle.toolchains.foojay-resolver-convention") version "0.8.+"
+}
+
 val mod_name: String by settings
 
 // Configures the root project Gradle name based on the value in `gradle.properties`

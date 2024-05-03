@@ -34,31 +34,31 @@ import java.util.stream.Collectors;
 public abstract class RenderItemMixin {
 
     @Unique
-    public IBakedModel oldanimations$model;
+    public IBakedModel overflowAnimations$model;
     @Unique
-    private EntityLivingBase oldanimations$entityLivingBase;
+    private EntityLivingBase overflowAnimations$entityLivingBase;
 
     @Inject(method = "renderModel(Lnet/minecraft/client/resources/model/IBakedModel;ILnet/minecraft/item/ItemStack;)V", at = @At("HEAD"))
-    private void setModel(IBakedModel model, int color, ItemStack stack, CallbackInfo ci) {
-        oldanimations$model = model;
+    private void overflowAnimations$setModel(IBakedModel model, int color, ItemStack stack, CallbackInfo ci) {
+        overflowAnimations$model = model;
     }
 
     @Inject(method = "renderItemModelForEntity", at = @At("HEAD"))
-    public void getLastEntity(ItemStack stack, EntityLivingBase entityToRenderFor, ItemCameraTransforms.TransformType cameraTransformType, CallbackInfo ci) {
-        oldanimations$entityLivingBase = entityToRenderFor;
+    public void overflowAnimations$getLastEntity(ItemStack stack, EntityLivingBase entityToRenderFor, ItemCameraTransforms.TransformType cameraTransformType, CallbackInfo ci) {
+        overflowAnimations$entityLivingBase = entityToRenderFor;
     }
 
     @ModifyArg(method = "renderModel(Lnet/minecraft/client/resources/model/IBakedModel;ILnet/minecraft/item/ItemStack;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/entity/RenderItem;renderQuads(Lnet/minecraft/client/renderer/WorldRenderer;Ljava/util/List;ILnet/minecraft/item/ItemStack;)V", ordinal = 1), index = 1)
-    private List<BakedQuad> changeToSprite(List<BakedQuad> quads) {
-        if (OldAnimationsSettings.itemSprites && OldAnimationsSettings.INSTANCE.enabled && !oldanimations$model.isGui3d() && TransformTypeHook.shouldBeSprite()) {
+    private List<BakedQuad> overflowAnimations$changeToSprite(List<BakedQuad> quads) {
+        if (OldAnimationsSettings.itemSprites && OldAnimationsSettings.INSTANCE.enabled && !overflowAnimations$model.isGui3d() && TransformTypeHook.shouldBeSprite()) {
             return quads.stream().filter(baked -> baked.getFace() == EnumFacing.SOUTH).collect(Collectors.toList());
         }
         return quads;
     }
 
     @Redirect(method = "putQuadNormal", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/WorldRenderer;putNormal(FFF)V"))
-    private void modifyNormalValue(WorldRenderer instance, float x, float y, float z, WorldRenderer renderer, BakedQuad quad) {
-        if (OldAnimationsSettings.INSTANCE.enabled && !oldanimations$model.isGui3d() && !(Minecraft.getMinecraft().currentScreen instanceof GuiFlatPresets)) {
+    private void overflowAnimations$modifyNormalValue(WorldRenderer instance, float x, float y, float z, WorldRenderer renderer, BakedQuad quad) {
+        if (OldAnimationsSettings.INSTANCE.enabled && !overflowAnimations$model.isGui3d() && !(Minecraft.getMinecraft().currentScreen instanceof GuiFlatPresets)) {
             if (OldAnimationsSettings.itemSprites && OldAnimationsSettings.itemSpritesColor && TransformTypeHook.shouldNotHaveGlint()) {
                 instance.putNormal(x, z, y);
             }
@@ -68,21 +68,21 @@ public abstract class RenderItemMixin {
     }
 
     @Inject(method = "renderEffect", at = @At(value = "HEAD"), cancellable = true)
-    public void disableGlintOnSprite(IBakedModel model, CallbackInfo ci) {
+    public void overflowAnimations$disableGlintOnSprite(IBakedModel model, CallbackInfo ci) {
         if (OldAnimationsSettings.itemSprites && OldAnimationsSettings.spritesGlint && OldAnimationsSettings.INSTANCE.enabled && TransformTypeHook.shouldNotHaveGlint()) {
             ci.cancel();
         }
     }
 
     @Inject(method = "renderItem(Lnet/minecraft/item/ItemStack;Lnet/minecraft/client/resources/model/IBakedModel;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/entity/RenderItem;renderModel(Lnet/minecraft/client/resources/model/IBakedModel;Lnet/minecraft/item/ItemStack;)V"))
-    private void translateSprite(ItemStack stack, IBakedModel model, CallbackInfo ci) {
+    private void overflowAnimations$translateSprite(ItemStack stack, IBakedModel model, CallbackInfo ci) {
         if (OldAnimationsSettings.itemSprites && OldAnimationsSettings.INSTANCE.enabled && !model.isGui3d() && TransformTypeHook.shouldNotHaveGlint()) {
             GlStateManager.translate(0.0F, 0.0F, -0.0625F);
         }
     }
 
     @Inject(method = "renderItemModelTransform", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/entity/RenderItem;renderItem(Lnet/minecraft/item/ItemStack;Lnet/minecraft/client/resources/model/IBakedModel;)V"))
-    public void modifyModelPosition(ItemStack stack, IBakedModel model, ItemCameraTransforms.TransformType cameraTransformType, CallbackInfo ci) {
+    public void overflowAnimations$modifyModelPosition(ItemStack stack, IBakedModel model, ItemCameraTransforms.TransformType cameraTransformType, CallbackInfo ci) {
         if (OldAnimationsSettings.INSTANCE.enabled && !(stack.getItem() instanceof ItemBanner)) {
                 boolean isRod = stack.getItem().shouldRotateAroundWhenRendering();
                 boolean isBlock = stack.getItem() instanceof ItemBlock;
@@ -99,7 +99,7 @@ public abstract class RenderItemMixin {
                         GlStateManager.translate(0.0F, -5.25F * 0.0625F, 0.0F);
                     }
                 } else if (OldAnimationsSettings.thirdTransformations && cameraTransformType == ItemCameraTransforms.TransformType.THIRD_PERSON
-                        && (oldanimations$entityLivingBase instanceof EntityPlayer || !OldAnimationsSettings.entityTransforms)) {
+                        && (overflowAnimations$entityLivingBase instanceof EntityPlayer || !OldAnimationsSettings.entityTransforms)) {
                     if (isRod) {
                         GlStateManager.rotate(180.0F, 0.0F, 1.0F, 0.0F);
                         GlStateManager.rotate(110.0F, 0.0F, 0.0F, 1.0F);
@@ -120,14 +120,14 @@ public abstract class RenderItemMixin {
     }
 
     @Inject(method = "renderItemAndEffectIntoGUI", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/entity/RenderItem;renderItemIntoGUI(Lnet/minecraft/item/ItemStack;II)V"))
-    public void fixGlint(ItemStack stack, int xPosition, int yPosition, CallbackInfo ci) {
+    public void overflowAnimations$fixGlint(ItemStack stack, int xPosition, int yPosition, CallbackInfo ci) {
         if (OldAnimationsSettings.INSTANCE.enabled) {
             GlStateManager.enableDepth();
         }
     }
 
     @Redirect(method = "renderItemIntoGUI", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/ItemModelMesher;getItemModel(Lnet/minecraft/item/ItemStack;)Lnet/minecraft/client/resources/model/IBakedModel;"))
-    public IBakedModel rodBowModelTexture(ItemModelMesher instance, ItemStack stack) {
+    public IBakedModel overflowAnimations$rodBowModelTexture(ItemModelMesher instance, ItemStack stack) {
         EntityPlayer entityplayer = Minecraft.getMinecraft().thePlayer;
         if (entityplayer != null && OldAnimationsSettings.rodBowGuiFix && OldAnimationsSettings.INSTANCE.enabled) {
             Item item = stack.getItem();

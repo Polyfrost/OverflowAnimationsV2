@@ -24,7 +24,7 @@ public class ItemRendererMixin_CustomPositions {
     @Shadow @Final private Minecraft mc;
 
     @Inject(method = "transformFirstPersonItem(FF)V", at = @At("HEAD"), cancellable = true)
-    public void itemTransform(float equipProgress, float swingProgress, CallbackInfo ci) {
+    public void overflowAnimations$itemTransform(float equipProgress, float swingProgress, CallbackInfo ci) {
         OldAnimationsSettings settings = OldAnimationsSettings.INSTANCE;
         if (OldAnimationsSettings.globalPositions && settings.enabled) {
             GlStateManager.translate(
@@ -49,7 +49,7 @@ public class ItemRendererMixin_CustomPositions {
     }
 
     @Inject(method = "doItemUsedTransformations", at = @At("HEAD"), cancellable = true)
-    public void swingTransformations(float swingProgress, CallbackInfo ci) {
+    public void overflowAnimations$swingTransformations(float swingProgress, CallbackInfo ci) {
         OldAnimationsSettings settings = OldAnimationsSettings.INSTANCE;
         ItemPositionAdvancedSettings advanced = OldAnimationsSettings.advancedSettings;
         if (OldAnimationsSettings.globalPositions && settings.enabled) {
@@ -67,7 +67,7 @@ public class ItemRendererMixin_CustomPositions {
     }
 
     @Inject(method = "doBlockTransformations", at = @At("HEAD"), cancellable = true)
-    public void blockedItemTransform(CallbackInfo ci) {
+    public void overflowAnimations$blockedItemTransform(CallbackInfo ci) {
         OldAnimationsSettings settings = OldAnimationsSettings.INSTANCE;
         ItemPositionAdvancedSettings advanced = OldAnimationsSettings.advancedSettings;
         if (OldAnimationsSettings.globalPositions && settings.enabled) {
@@ -96,7 +96,7 @@ public class ItemRendererMixin_CustomPositions {
     }
 
     @Inject(method = "doBlockTransformations", at = @At("HEAD"))
-    public void lunarTransform(CallbackInfo ci) {
+    public void overflowAnimations$lunarTransform(CallbackInfo ci) {
         OldAnimationsSettings settings = OldAnimationsSettings.INSTANCE;
         if (OldAnimationsSettings.lunarBlockhit && !OldAnimationsSettings.globalPositions && settings.enabled) {
             GlStateManager.translate(-0.55F, 0.2F, 0.1F);
@@ -108,14 +108,14 @@ public class ItemRendererMixin_CustomPositions {
     }
 
     @ModifyArg(method = "renderItemInFirstPerson", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/ItemRenderer;transformFirstPersonItem(FF)V", ordinal = 2), index = 0)
-    private float modifyBlockEquip(float original) {
+    private float overflowAnimations$modifyBlockEquip(float original) {
         return OldAnimationsSettings.lunarBlockhit && OldAnimationsSettings.INSTANCE.enabled ? 0.2F : original;
     }
 
     // TODO: add customization for equip / swing progress 
 
     @Inject(method = "performDrinking", at = @At("HEAD"), cancellable = true)
-    public void drinkingItemTransform(AbstractClientPlayer clientPlayer, float partialTicks, CallbackInfo ci) {
+    public void overflowAnimations$drinkingItemTransform(AbstractClientPlayer clientPlayer, float partialTicks, CallbackInfo ci) {
         OldAnimationsSettings settings = OldAnimationsSettings.INSTANCE;
         ItemPositionAdvancedSettings advanced = OldAnimationsSettings.advancedSettings;
         if (OldAnimationsSettings.globalPositions && settings.enabled) {
@@ -151,7 +151,7 @@ public class ItemRendererMixin_CustomPositions {
     }
 
     @Inject(method = "renderItemInFirstPerson", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/ItemRenderer;transformFirstPersonItem(FF)V", ordinal = 1, shift = At.Shift.AFTER))
-    public void drinkingItemScale(float partialTicks, CallbackInfo ci) {
+    public void overflowAnimations$drinkingItemScale(float partialTicks, CallbackInfo ci) {
         OldAnimationsSettings settings = OldAnimationsSettings.INSTANCE;
         if (OldAnimationsSettings.globalPositions && settings.enabled) {
             double scale = 1.0f * Math.exp(OldAnimationsSettings.advancedSettings.consumeScale);

@@ -10,12 +10,12 @@ import org.spongepowered.asm.mixin.injection.ModifyConstant;
 public abstract class NetHandlerPlayClientMixin {
 
     @ModifyConstant(method = "handleSpawnExperienceOrb", constant = @Constant(doubleValue = 32.0D))
-    private double oldXPOrbs(double original) {
+    private double overflowAnimations$oldXPOrbs(double original) {
         return OldAnimationsSettings.oldXPOrbs && OldAnimationsSettings.INSTANCE.enabled ? 1.0d : original;
     }
 
     @ModifyConstant(method = "handleCollectItem", constant = @Constant(floatValue = 0.5f))
-    private float oldItemPickup(float original) {
+    private float overflowAnimations$oldItemPickup(float original) {
         return OldAnimationsSettings.INSTANCE.enabled ? OldAnimationsSettings.INSTANCE.pickupPosition : original;
     }
 

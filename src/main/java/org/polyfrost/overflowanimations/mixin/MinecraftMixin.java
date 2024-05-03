@@ -37,7 +37,7 @@ public abstract class MinecraftMixin {
     @Shadow public GameSettings gameSettings;
 
     @Inject(method = "sendClickBlockToController", at = @At("HEAD"))
-    public void blockHitAnimation(boolean leftClick, CallbackInfo ci) {
+    public void overflowAnimations$blockHitAnimation(boolean leftClick, CallbackInfo ci) {
         if (OldAnimationsSettings.oldBlockhitting && OldAnimationsSettings.punching && OldAnimationsSettings.INSTANCE.enabled && gameSettings.keyBindUseItem.isKeyDown()) {
             if (leftClickCounter <= 0 && leftClick && objectMouseOver != null && objectMouseOver.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK
                     && (thePlayer.isUsingItem() || !OldAnimationsSettings.adventurePunching)) {
@@ -55,7 +55,7 @@ public abstract class MinecraftMixin {
     }
 
     @Inject(method = "clickMouse", at = @At(value = "TAIL"))
-    public void onHitParticles(CallbackInfo ci) {
+    public void overflowAnimations$onHitParticles(CallbackInfo ci) {
         if (OldAnimationsSettings.visualSwing && OldAnimationsSettings.INSTANCE.enabled && leftClickCounter > 0) {
             if (objectMouseOver != null && objectMouseOver.typeOfHit == MovingObjectPosition.MovingObjectType.ENTITY &&
                     !objectMouseOver.entityHit.hitByEntity(thePlayer) && objectMouseOver.entityHit instanceof EntityLivingBase) {
@@ -73,12 +73,12 @@ public abstract class MinecraftMixin {
     }
 
     @Redirect(method = "rightClickMouse", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/multiplayer/PlayerControllerMP;getIsHittingBlock()Z"))
-    public boolean enabledRightClick(PlayerControllerMP instance) {
+    public boolean overflowAnimations$enabledRightClick(PlayerControllerMP instance) {
         return (!OldAnimationsSettings.oldBlockhitting || !OldAnimationsSettings.INSTANCE.enabled) && instance.getIsHittingBlock();
     }
 
     @Inject(method = "runTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/settings/KeyBinding;isPressed()Z", ordinal = 7))
-    public void fakeBlockHit(CallbackInfo ci) {
+    public void overflowAnimations$fakeBlockHit(CallbackInfo ci) {
         if (OldAnimationsSettings.fakeBlockHit && OldAnimationsSettings.INSTANCE.enabled) {
             while (gameSettings.keyBindAttack.isPressed()) {
                 SwingHook.swingItem();
@@ -87,7 +87,7 @@ public abstract class MinecraftMixin {
     }
 
     @Inject(method = "runTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/entity/EntityPlayerSP;dropOneItem(Z)Lnet/minecraft/entity/item/EntityItem;", shift = At.Shift.AFTER))
-    public void dropItemSwing(CallbackInfo ci) {
+    public void overflowAnimations$dropItemSwing(CallbackInfo ci) {
         if (OldAnimationsSettings.modernDropSwing && OldAnimationsSettings.INSTANCE.enabled && thePlayer.getHeldItem() != null) {
             SwingHook.swingItem();
         }

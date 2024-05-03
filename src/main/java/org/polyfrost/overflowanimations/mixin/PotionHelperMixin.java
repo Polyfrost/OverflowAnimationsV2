@@ -22,7 +22,7 @@ public class PotionHelperMixin {
     private static Map<Integer, Integer> DATAVALUE_COLORS;
 
     @Redirect(method = "calcPotionLiquidColor", at = @At(value = "INVOKE", target = "Lnet/minecraft/potion/Potion;getLiquidColor()I"))
-    private static int recolorPotions(Potion instance, Collection<PotionEffect> collection) {
+    private static int overflowAnimations$recolorPotions(Potion instance, Collection<PotionEffect> collection) {
         if (OldAnimationsSettings.modernPotColors && OldAnimationsSettings.INSTANCE.enabled) {
             for (PotionEffect potionEffect : collection) {
                 return PotionColors.POTION_COLORS.get(potionEffect.getPotionID());
@@ -32,7 +32,7 @@ public class PotionHelperMixin {
     }
 
     @Inject(method = "getLiquidColor", at = @At("HEAD"))
-    private static void checkColor(int dataValue, boolean bypassCache, CallbackInfoReturnable<Integer> cir) {
+    private static void overflowAnimations$checkColor(int dataValue, boolean bypassCache, CallbackInfoReturnable<Integer> cir) {
         if (PotionColors.shouldReload) {
             PotionColors.shouldReload = false;
             DATAVALUE_COLORS.clear();

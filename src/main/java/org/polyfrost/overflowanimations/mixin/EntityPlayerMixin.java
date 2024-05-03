@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class EntityPlayerMixin {
 
     @Inject(method = "dropItem", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/EntityPlayer;getEyeHeight()F"))
-    public void dropItemSwing(ItemStack droppedItem, boolean dropAround, boolean traceItem, CallbackInfoReturnable<EntityItem> cir) {
+    public void overflowAnimations$dropItemSwing(ItemStack droppedItem, boolean dropAround, boolean traceItem, CallbackInfoReturnable<EntityItem> cir) {
         if (OldAnimationsSettings.modernDropSwing && OldAnimationsSettings.INSTANCE.enabled) {
             SwingHook.swingItem();
         }

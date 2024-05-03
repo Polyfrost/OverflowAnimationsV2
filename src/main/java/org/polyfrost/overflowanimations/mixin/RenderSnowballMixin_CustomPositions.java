@@ -20,7 +20,7 @@ public abstract class RenderSnowballMixin_CustomPositions<T extends Entity> exte
 
 
     @Inject(method = "doRender", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/entity/RenderSnowball;bindTexture(Lnet/minecraft/util/ResourceLocation;)V", shift = At.Shift.AFTER))
-    public void projectileTransforms(T entity, double x, double y, double z, float entityYaw, float partialTicks, CallbackInfo ci) {
+    public void overflowAnimations$projectileTransforms(T entity, double x, double y, double z, float entityYaw, float partialTicks, CallbackInfo ci) {
         OldAnimationsSettings settings = OldAnimationsSettings.INSTANCE;
         ItemPositionAdvancedSettings advanced = OldAnimationsSettings.advancedSettings;
         if (OldAnimationsSettings.globalPositions && settings.enabled) {

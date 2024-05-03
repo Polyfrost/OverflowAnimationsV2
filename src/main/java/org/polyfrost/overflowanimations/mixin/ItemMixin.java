@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class ItemMixin {
 
     @Inject(method = "shouldCauseReequipAnimation", at = @At("HEAD"), cancellable = true, remap = false)
-    public void modifyReequip(ItemStack oldStack, ItemStack newStack, boolean slotChanged, CallbackInfoReturnable<Boolean> ci) {
+    public void overflowAnimations$modifyReequip(ItemStack oldStack, ItemStack newStack, boolean slotChanged, CallbackInfoReturnable<Boolean> ci) {
         if (((OldAnimationsSettings.fixReequip && !slotChanged) || OldAnimationsSettings.disableReequip) && OldAnimationsSettings.INSTANCE.enabled) {
             ci.setReturnValue(false);
         }
