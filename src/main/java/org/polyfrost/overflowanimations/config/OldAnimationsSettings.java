@@ -316,6 +316,13 @@ public class OldAnimationsSettings extends Config {
     public static boolean headYawFix = true;
 
     @Switch(
+            name = "1.9+ Item Use Cooldown Animation",
+            description = "Shows the item cooldown reset animation everytime you right click similar to 1.9+.",
+            category = "Misc", subcategory = "Modern"
+    )
+    public static boolean funnyFidget = false;
+
+    @Switch(
             name = "Disable Item Re-equip Animation",
             description = "Completely removed the the item re-equip animation.",
             category = "Misc", subcategory = "Re-quip Animation"

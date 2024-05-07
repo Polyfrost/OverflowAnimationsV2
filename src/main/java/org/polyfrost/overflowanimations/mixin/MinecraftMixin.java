@@ -5,9 +5,11 @@ import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.multiplayer.PlayerControllerMP;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.particle.EffectRenderer;
+import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraft.client.settings.GameSettings;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.item.EnumAction;
 import net.minecraft.potion.Potion;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.MovingObjectPosition;
@@ -35,6 +37,8 @@ public abstract class MinecraftMixin {
     private int leftClickCounter;
 
     @Shadow public GameSettings gameSettings;
+
+    @Shadow public EntityRenderer entityRenderer;
 
     @Inject(method = "sendClickBlockToController", at = @At("HEAD"))
     public void overflowAnimations$blockHitAnimation(boolean leftClick, CallbackInfo ci) {
@@ -90,6 +94,13 @@ public abstract class MinecraftMixin {
     public void overflowAnimations$dropItemSwing(CallbackInfo ci) {
         if (OldAnimationsSettings.modernDropSwing && OldAnimationsSettings.INSTANCE.enabled && thePlayer.getHeldItem() != null) {
             SwingHook.swingItem();
+        }
+    }
+
+    @Inject(method = "rightClickMouse", at = @At(value = "HEAD"))
+    public void overflowAnimations$funnyFidgetyThing(CallbackInfo ci) {
+        if (OldAnimationsSettings.funnyFidget && OldAnimationsSettings.INSTANCE.enabled && thePlayer.getHeldItem().getItemUseAction() != EnumAction.NONE) {
+            entityRenderer.itemRenderer.resetEquippedProgress();
         }
     }
 
