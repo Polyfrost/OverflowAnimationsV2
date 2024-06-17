@@ -1,6 +1,7 @@
 # Overflow Animations V2
 
 ![Compact Powered by OneConfig](https://polyfrost.org/img/compact_vector.svg)
+![Dev Workflow Status](https://img.shields.io/github/v/release/Polyfrost/OverflowAnimationsV2.svg?style=for-the-badge&color=1452cc&label=release)
 
 ## [Download (Modrinth)](https://modrinth.com/mod/animations)
 
