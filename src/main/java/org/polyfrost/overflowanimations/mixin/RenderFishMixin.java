@@ -1,15 +1,14 @@
 package org.polyfrost.overflowanimations.mixin;
 
-import club.sk1er.patcher.config.PatcherConfig;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.RenderFish;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityFishHook;
 import net.minecraft.util.Vec3;
 import org.lwjgl.opengl.GL11;
-import org.polyfrost.overflowanimations.OverflowAnimations;
 import org.polyfrost.overflowanimations.config.ItemPositionAdvancedSettings;
 import org.polyfrost.overflowanimations.config.OldAnimationsSettings;
+import org.polyfrost.overflowanimations.hooks.PatcherConfigHook;
 import org.polyfrost.overflowanimations.hooks.TransformTypeHook;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.*;
@@ -22,7 +21,7 @@ public class RenderFishMixin {
         ItemPositionAdvancedSettings advanced = OldAnimationsSettings.advancedSettings;
         double fov = Minecraft.getMinecraft().gameSettings.fovSetting;
         double decimalFov = fov / 110;
-        boolean isParallaxOffset = OverflowAnimations.isPatcherPresent && PatcherConfig.parallaxFix;
+        boolean isParallaxOffset = PatcherConfigHook.isParallaxFixEnabled();
         if (OldAnimationsSettings.INSTANCE.enabled) {
             Vec3 fishingRod = new Vec3(x, y, z);
             if (OldAnimationsSettings.fishingRodPosition && !OldAnimationsSettings.fixRod) {
