@@ -7,7 +7,6 @@
   "client": [
     "EntityLivingBaseInvoker",
     "EntityLivingBaseMixin",
-    "EntityMixin",
     "EntityOtherPlayerMPMixin",
     "EntityPickupFXMixin",
     "EntityPlayerMixin",
