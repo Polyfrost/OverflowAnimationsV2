@@ -39,10 +39,6 @@ enum class CustomModelBakery(modelPath: String) {
 
     companion object {
 
-        fun preload() {
-
-        }
-
         init {
             MinecraftForge.EVENT_BUS.register(this)
         }
