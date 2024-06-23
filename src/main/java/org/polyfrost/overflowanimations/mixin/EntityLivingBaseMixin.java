@@ -6,6 +6,7 @@ import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
+import org.polyfrost.overflowanimations.config.MainModSettings;
 import org.polyfrost.overflowanimations.config.OldAnimationsSettings;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -16,8 +17,13 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(value = EntityLivingBase.class, priority = 980)
+@Mixin(
+        value = EntityLivingBase.class,
+        priority = 980
+)
 public abstract class EntityLivingBaseMixin extends Entity {
+
+    //todo: overflowAnimations$modifySwingSpeed and overflowAnimations$modifyYaw
 
     public EntityLivingBaseMixin(World worldIn) {
         super(worldIn);
@@ -31,43 +37,63 @@ public abstract class EntityLivingBaseMixin extends Entity {
     @Unique protected float overflowAnimations$newHeadYaw;
     @Unique protected int overflowAnimations$headYawLerpWeight;
 
-
-    @Inject(method = "setRotationYawHead", at = @At("HEAD"), cancellable = true)
+    @Inject(
+            method = "setRotationYawHead",
+            at = @At(
+                    value = "HEAD"
+            ),
+            cancellable = true
+    )
     public void overflowAnimations$setAsNewHeadYaw(float rotation, CallbackInfo ci) {
-        if (!OldAnimationsSettings.INSTANCE.enabled || !OldAnimationsSettings.headYawFix) return;
+        if (!MainModSettings.INSTANCE.getOldSettings().enabled || !MainModSettings.INSTANCE.getOldSettings().getHeadYawFix()) { return; }
         ci.cancel();
         overflowAnimations$newHeadYaw = MathHelper.wrapAngleTo180_float(rotation);
         overflowAnimations$headYawLerpWeight = 3;
     }
 
-    @Inject(method = "onLivingUpdate", at = @At("HEAD"))
+    @Inject(
+            method = "onLivingUpdate",
+            at = @At(
+                    value = "HEAD"
+            )
+    )
     public void overflowAnimations$updateHeadYaw(CallbackInfo ci) {
-        if (!OldAnimationsSettings.INSTANCE.enabled || !OldAnimationsSettings.headYawFix) return;
-        if (overflowAnimations$headYawLerpWeight <= 0) return;
+        if (!MainModSettings.INSTANCE.getOldSettings().enabled || !MainModSettings.INSTANCE.getOldSettings().getHeadYawFix()) { return; }
+        if (overflowAnimations$headYawLerpWeight <= 0) { return; }
         rotationYawHead += MathHelper.wrapAngleTo180_float(overflowAnimations$newHeadYaw - rotationYawHead) / overflowAnimations$headYawLerpWeight;
         rotationYawHead = MathHelper.wrapAngleTo180_float(rotationYawHead);
         overflowAnimations$headYawLerpWeight--;
     }
 
-    @Inject(method = "getArmSwingAnimationEnd()I", at = @At("HEAD"), cancellable = true)
+    @Inject(
+            method = "getArmSwingAnimationEnd()I",
+            at = @At(
+                    value = "HEAD"
+            ),
+            cancellable = true
+    )
     public void overflowAnimations$modifySwingSpeed(CallbackInfoReturnable<Integer> cir) {
-        OldAnimationsSettings settings = OldAnimationsSettings.INSTANCE;
-        if (OldAnimationsSettings.globalPositions && settings.enabled) {
-            if (isPotionActive(Potion.digSpeed) && !OldAnimationsSettings.ignoreHaste) {
-                cir.setReturnValue(
-                        (6 - (1 + getActivePotionEffect(Potion.digSpeed).getAmplifier())) * Math.max((int) Math.exp(-settings.itemSwingSpeedHaste), 1));
-            } else if (isPotionActive(Potion.digSlowdown) && !OldAnimationsSettings.ignoreFatigue) {
-                cir.setReturnValue(
-                        (6 + (1 + getActivePotionEffect(Potion.digSlowdown).getAmplifier())) * 2 * Math.max((int) Math.exp(-settings.itemSwingSpeedFatigue), 1));
-            } else {
-                cir.setReturnValue(
-                         6 * Math.max((int) Math.exp(-settings.itemSwingSpeed), 1));
-            }
+        OldAnimationsSettings settings = MainModSettings.INSTANCE.getOldSettings();
+        if (!settings.getGlobalPositions() || !settings.enabled) { return; }
+        if (isPotionActive(Potion.digSpeed) && !settings.getIgnoreHaste()) {
+            cir.setReturnValue((6 - (1 + getActivePotionEffect(Potion.digSpeed).getAmplifier())) * Math.max((int) Math.exp(-settings.getItemSwingSpeedHaste()), 1));
+        } else if (isPotionActive(Potion.digSlowdown) && !settings.getIgnoreFatigue()) {
+            cir.setReturnValue((6 + (1 + getActivePotionEffect(Potion.digSlowdown).getAmplifier())) * 2 * Math.max((int) Math.exp(-settings.getItemSwingSpeedFatigue()), 1));
+        } else {
+            cir.setReturnValue(6 * Math.max((int) Math.exp(-settings.getItemSwingSpeed()), 1));
         }
     }
 
-    @ModifyArg(method = "onUpdate", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/EntityLivingBase;updateDistance(FF)F"), index = 0)
+    @ModifyArg(
+            method = "onUpdate",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/entity/EntityLivingBase;updateDistance(FF)F"
+            ),
+            index = 0
+    )
     public float overflowAnimations$modifyYaw(float p_1101461) {
+        if (!MainModSettings.INSTANCE.getOldSettings().getModernMovement()) { return p_1101461; }
         double d0 = posX - prevPosX;
         double d1 = posZ - prevPosZ;
         float f = (float)(d0 * d0 + d1 * d1);
@@ -80,7 +106,7 @@ public abstract class EntityLivingBaseMixin extends Entity {
         if (swingProgress > 0.0F) {
             h = rotationYaw;
         }
-        return OldAnimationsSettings.modernMovement ? h : p_1101461;
+        return h;
     }
 
 }

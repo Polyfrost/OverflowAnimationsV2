@@ -1,59 +1,86 @@
 package org.polyfrost.overflowanimations.mixin;
 
-import net.minecraft.client.renderer.GlStateManager;
-import org.polyfrost.overflowanimations.config.OldAnimationsSettings;
+import org.polyfrost.overflowanimations.config.MainModSettings;
 import org.polyfrost.overflowanimations.hooks.DebugOverlayHook;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraft.entity.Entity;
-import org.polyfrost.overflowanimations.hooks.TransformTypeHook;
-import org.spongepowered.asm.mixin.Final;
+import org.polyfrost.overflowanimations.hooks.SneakHook;
+import org.polyfrost.overflowanimations.util.MathUtils;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(EntityRenderer.class)
 public class EntityRendererMixin {
 
-    @Unique
-    @Final
-    private final Minecraft overflowAnimations$mc = Minecraft.getMinecraft();
-    @Unique
-    private float overflow$height;
-    @Unique
-    private float overflow$previousHeight;
+    //todo: use sneak hook
 
-    @Inject(method = "setupCameraTransform", at = @At("HEAD"))
+    @Shadow private Minecraft mc;
+    @Unique private float overflow$height;
+    @Unique private float overflow$previousHeight;
+
+    @Inject(
+            method = "setupCameraTransform",
+            at = @At(
+                    value = "HEAD"
+            )
+    )
     protected void overflowAnimations$getInterpolatedEyeHeight(float partialTicks, int pass, CallbackInfo ci) {
-        TransformTypeHook.sneakingHeight = overflow$previousHeight + (overflow$height - overflow$previousHeight) * partialTicks;
+        if (!MainModSettings.INSTANCE.getOldSettings().enabled) { return; }
+        SneakHook.INSTANCE.setSneakingHeight(MathUtils.INSTANCE.interpolate(overflow$previousHeight, overflow$height, partialTicks));
     }
 
-    @Redirect(method = "orientCamera", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;getEyeHeight()F"))
-    public float overflowAnimations$modifyEyeHeight(Entity entity, float partialTicks) {
-        return OldAnimationsSettings.smoothSneaking && OldAnimationsSettings.INSTANCE.enabled ? TransformTypeHook.sneakingHeight : entity.getEyeHeight();
+    @ModifyVariable(
+            method = "orientCamera",
+            at = @At(
+                    value = "STORE",
+                    ordinal = 0
+            ),
+            index = 3
+    )
+    public float overflowAnimations$modifyEyeHeight(float eyeHeight) {
+        return SneakHook.INSTANCE.getSmoothSneak();
     }
 
-    @Redirect(method = "renderWorldDirections", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;getEyeHeight()F"))
-    public float overflowAnimations$syncCrossHair(Entity entity, float partialTicks) {
-        return overflowAnimations$modifyEyeHeight(entity, partialTicks);
+    @ModifyArg(
+            method = "renderWorldDirections",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/client/renderer/GlStateManager;translate(FFF)V"
+            ),
+            index = 1
+    )
+    public float overflowAnimations$syncCrossHair(float x) {
+        return SneakHook.INSTANCE.getSmoothSneak();
     }
 
-    @Inject(method = "renderWorldDirections", at = @At("HEAD"), cancellable = true)
+    @Inject(
+            method = "renderWorldDirections",
+            at = @At(
+                    value = "HEAD"
+            ),
+            cancellable = true
+    )
     public void overflowAnimations$renderCrosshair(float partialTicks, CallbackInfo ci) {
-        if ((OldAnimationsSettings.INSTANCE.debugCrosshairMode != 1) && OldAnimationsSettings.INSTANCE.enabled)
-            ci.cancel();
+        if (MainModSettings.INSTANCE.getOldSettings().getDebugCrosshairMode() == 1 || !MainModSettings.INSTANCE.getOldSettings().enabled) { return; }
+        ci.cancel();
     }
 
-    @Inject(method = "updateRenderer", at = @At("HEAD"))
+    @Inject(
+            method = "updateRenderer",
+            at = @At(
+                    value = "HEAD"
+            )
+    )
     private void overflowAnimations$interpolateHeight(CallbackInfo ci) {
-        Entity entity = overflowAnimations$mc.getRenderViewEntity();
+        if (!MainModSettings.INSTANCE.getOldSettings().enabled) { return; }
+        Entity entity = mc.getRenderViewEntity();
         float eyeHeight = entity.getEyeHeight();
         overflow$previousHeight = overflow$height;
-
-        if (OldAnimationsSettings.longerUnsneak) {
+        if (MainModSettings.INSTANCE.getOldSettings().getLongerUnsneak()) {
             if (eyeHeight < overflow$height)
                 overflow$height = eyeHeight;
             else
@@ -64,17 +91,32 @@ public class EntityRendererMixin {
         DebugOverlayHook.setOverflowEyeHeight(overflow$height);
     }
 
-    @Inject(method = "hurtCameraEffect", at = @At("HEAD"), cancellable = true)
+    @Inject(
+            method = "hurtCameraEffect",
+            at = @At(
+                    value = "HEAD"
+            ),
+            cancellable = true
+    )
     public void overflowAnimations$cancelHurtCamera(float partialTicks, CallbackInfo ci) {
-        if (OldAnimationsSettings.noHurtCam && OldAnimationsSettings.INSTANCE.enabled)
-            ci.cancel();
+        if (!MainModSettings.INSTANCE.getOldSettings().getNoHurtCam() || !MainModSettings.INSTANCE.getOldSettings().enabled) { return; }
+        ci.cancel();
     }
 
-    @Redirect(method = "setupViewBobbing", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GlStateManager;rotate(FFFF)V", ordinal = 2))
-    public void overflowAnimations$modernBobbing(float angle, float x, float y, float z) {
-        if (!OldAnimationsSettings.modernBobbing || !OldAnimationsSettings.INSTANCE.enabled) {
-            GlStateManager.rotate(angle, x, y, z);
+    @ModifyArg(
+            method = "setupViewBobbing",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/client/renderer/GlStateManager;rotate(FFFF)V",
+                    ordinal = 2
+            ),
+            index = 0
+    )
+    public float overflowAnimations$modernBobbing(float angle, float x, float y, float z) {
+        if (!MainModSettings.INSTANCE.getOldSettings().getModernBobbing() || !MainModSettings.INSTANCE.getOldSettings().enabled) {
+            return angle;
         }
+        return 0.0F;
     }
 
 }

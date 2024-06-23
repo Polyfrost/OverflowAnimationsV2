@@ -2,7 +2,7 @@ package org.polyfrost.overflowanimations.mixin;
 
 import net.minecraft.potion.*;
 import net.minecraft.util.IntegerCache;
-import org.polyfrost.overflowanimations.config.OldAnimationsSettings;
+import org.polyfrost.overflowanimations.config.MainModSettings;
 import org.polyfrost.overflowanimations.hooks.PotionColors;
 import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.*;
@@ -17,13 +17,17 @@ import static net.minecraft.potion.PotionHelper.getPotionEffects;
 @Mixin(value = PotionHelper.class)
 public class PotionHelperMixin {
 
-    @Shadow
-    @Final
-    private static Map<Integer, Integer> DATAVALUE_COLORS;
+    @Shadow @Final private static Map<Integer, Integer> DATAVALUE_COLORS;
 
-    @Redirect(method = "calcPotionLiquidColor", at = @At(value = "INVOKE", target = "Lnet/minecraft/potion/Potion;getLiquidColor()I"))
+    @Redirect(
+            method = "calcPotionLiquidColor",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/potion/Potion;getLiquidColor()I"
+
+            ))
     private static int overflowAnimations$recolorPotions(Potion instance, Collection<PotionEffect> collection) {
-        if (OldAnimationsSettings.modernPotColors && OldAnimationsSettings.INSTANCE.enabled) {
+        if (MainModSettings.INSTANCE.getOldSettings().getModernPotColors() && MainModSettings.INSTANCE.getOldSettings().enabled) {
             for (PotionEffect potionEffect : collection) {
                 return PotionColors.POTION_COLORS.get(potionEffect.getPotionID());
             }
@@ -31,7 +35,12 @@ public class PotionHelperMixin {
         return instance.getLiquidColor();
     }
 
-    @Inject(method = "getLiquidColor", at = @At("HEAD"))
+    @Inject(
+            method = "getLiquidColor",
+            at = @At(
+                    value = "HEAD"
+            )
+    )
     private static void overflowAnimations$checkColor(int dataValue, boolean bypassCache, CallbackInfoReturnable<Integer> cir) {
         if (PotionColors.shouldReload) {
             PotionColors.shouldReload = false;

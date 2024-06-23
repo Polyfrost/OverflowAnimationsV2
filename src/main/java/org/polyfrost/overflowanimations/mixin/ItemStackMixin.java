@@ -3,7 +3,7 @@ package org.polyfrost.overflowanimations.mixin;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemPotion;
 import net.minecraft.item.ItemStack;
-import org.polyfrost.overflowanimations.config.OldAnimationsSettings;
+import org.polyfrost.overflowanimations.config.MainModSettings;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
@@ -11,9 +11,17 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 @Mixin(value = ItemStack.class)
 public class ItemStackMixin {
 
-    @Redirect(method = "hasEffect", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/Item;hasEffect(Lnet/minecraft/item/ItemStack;)Z"))
+    //todo: consider different method
+
+    @Redirect(
+            method = "hasEffect",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/item/Item;hasEffect(Lnet/minecraft/item/ItemStack;)Z"
+            )
+    )
     public boolean disablePotionGlint(Item instance, ItemStack stack) {
-        if (OldAnimationsSettings.potionGlint && OldAnimationsSettings.INSTANCE.enabled && stack.getItem() instanceof ItemPotion) {
+        if (MainModSettings.INSTANCE.getOldSettings().getPotionGlint() && MainModSettings.INSTANCE.getOldSettings().enabled && stack.getItem() instanceof ItemPotion) {
             return false;
         }
         return instance.hasEffect(stack);

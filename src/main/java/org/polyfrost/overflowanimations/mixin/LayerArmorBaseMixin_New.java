@@ -1,6 +1,6 @@
 package org.polyfrost.overflowanimations.mixin;
 
-import org.polyfrost.overflowanimations.config.OldAnimationsSettings;
+import org.polyfrost.overflowanimations.config.MainModSettings;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.entity.layers.LayerArmorBase;
@@ -21,42 +21,64 @@ import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 @Mixin(LayerArmorBase.class)
 public abstract class LayerArmorBaseMixin_New<T extends ModelBase> implements LayerRenderer<EntityLivingBase> {
 
-    @Inject(method = "renderGlint(Lnet/minecraft/entity/EntityLivingBase;Lnet/minecraft/client/model/ModelBase;FFFFFFF)V", at = @At(value = "INVOKE", target = "net/minecraft/client/renderer/GlStateManager.color(FFFF)V", ordinal = 0))
+    //todo: move setting to general glint settings i think
+
+    @Inject(
+            method = "renderGlint(Lnet/minecraft/entity/EntityLivingBase;Lnet/minecraft/client/model/ModelBase;FFFFFFF)V",
+            at = @At(
+                    value = "INVOKE",
+                    target = "net/minecraft/client/renderer/GlStateManager.color(FFFF)V",
+                    ordinal = 0
+            )
+    )
     private void overflowAnimations$renderNewArmorGlintPre(EntityLivingBase entitylivingbaseIn, T modelbaseIn, float p_177183_3_, float p_177183_4_, float p_177183_5_, float p_177183_6_, float p_177183_7_, float p_177183_8_, float p_177183_9_, CallbackInfo info) {
-        if (OldAnimationsSettings.enchantmentGlintNew && OldAnimationsSettings.INSTANCE.enabled) {
-            float light = 240.0F;
-            OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, light, light);
-        }
+        if (!MainModSettings.INSTANCE.getOldSettings().getEnchantmentGlintNew() || !MainModSettings.INSTANCE.getOldSettings().enabled) { return; }
+        float light = 240.0F;
+        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, light, light);
     }
 
-    @Inject(method = "renderGlint(Lnet/minecraft/entity/EntityLivingBase;Lnet/minecraft/client/model/ModelBase;FFFFFFF)V", at = @At(value = "INVOKE", target = "net/minecraft/client/model/ModelBase.render(Lnet/minecraft/entity/Entity;FFFFFF)V"))
+    @Inject(
+            method = "renderGlint(Lnet/minecraft/entity/EntityLivingBase;Lnet/minecraft/client/model/ModelBase;FFFFFFF)V",
+            at = @At(
+                    value = "INVOKE",
+                    target = "net/minecraft/client/model/ModelBase.render(Lnet/minecraft/entity/Entity;FFFFFF)V"
+            )
+    )
     private void overflowAnimations$renderNewArmorGlintPost(EntityLivingBase entitylivingbaseIn, T modelbaseIn, float p_177183_3_, float p_177183_4_, float partialTicks, float p_177183_6_, float p_177183_7_, float p_177183_8_, float scale, CallbackInfo ci) {
-        if (OldAnimationsSettings.enchantmentGlintNew && OldAnimationsSettings.INSTANCE.enabled) {
-            int i = entitylivingbaseIn.getBrightnessForRender(partialTicks);
-            int j = i % 65536;
-            int k = i / 65536;
-            OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, j, k);
-        }
+        if (!MainModSettings.INSTANCE.getOldSettings().getEnchantmentGlintNew() || !MainModSettings.INSTANCE.getOldSettings().enabled) { return; }
+        int i = entitylivingbaseIn.getBrightnessForRender(partialTicks);
+        int j = i % 65536;
+        int k = i / 65536;
+        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, j, k);
     }
 
-    @ModifyArgs(method = "renderGlint(Lnet/minecraft/entity/EntityLivingBase;Lnet/minecraft/client/model/ModelBase;FFFFFFF)V", at = @At(value = "INVOKE", target = "net/minecraft/client/renderer/GlStateManager.color(FFFF)V", ordinal = 1))
+    @ModifyArgs(
+            method = "renderGlint(Lnet/minecraft/entity/EntityLivingBase;Lnet/minecraft/client/model/ModelBase;FFFFFFF)V",
+            at = @At(
+                    value = "INVOKE",
+                    target = "net/minecraft/client/renderer/GlStateManager.color(FFFF)V",
+                    ordinal = 1
+            )
+    )
     private void overflowAnimations$newArmorGlintColor(Args args) {
-        if (OldAnimationsSettings.enchantmentGlintNew && OldAnimationsSettings.INSTANCE.enabled) {
-            int rgb = overflowAnimations$getRGB((int) (((float) args.get(0)) * 255), (int) (((float) args.get(1)) * 255), (int) (((float) args.get(2)) * 255), (int) (((float) args.get(3)) * 255));
-            if (rgb == -8372020 || rgb == -10473317) {
-                args.set(0, 0.5608F);
-                args.set(1, 0.3408F);
-                args.set(2, 0.8608F);
-                args.set(3, 1.0F);
-            }
+        if (!MainModSettings.INSTANCE.getOldSettings().getEnchantmentGlintNew() || !MainModSettings.INSTANCE.getOldSettings().enabled) { return; }
+        int rgb = overflowAnimations$getRGB(
+                (int) (((float) args.get(0)) * 255),
+                (int) (((float) args.get(1)) * 255),
+                (int) (((float) args.get(2)) * 255),
+                (int) (((float) args.get(3)) * 255)
+        );
+        if (rgb == -8372020 || rgb == -10473317) {
+            args.set(0, 0.5608F);
+            args.set(1, 0.3408F);
+            args.set(2, 0.8608F);
+            args.set(3, 1.0F);
         }
     }
 	
 	@Unique
     private static int overflowAnimations$getRGB(int r, int g, int b, int a) {
-        return ((a & 0xFF) << 24) |
-                ((r & 0xFF) << 16) |
-                ((g & 0xFF) << 8) |
-                ((b & 0xFF));
+        return ((a & 0xFF) << 24) | ((r & 0xFF) << 16) | ((g & 0xFF) << 8) | ((b & 0xFF));
     }
+
 }
