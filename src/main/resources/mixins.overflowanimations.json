@@ -5,6 +5,7 @@
   "refmap": "mixins.${id}.refmap.json",
   "verbose": true,
   "client": [
+    "BlockRendererDispatcherMixin",
     "EntityLivingBaseMixin",
     "EntityOtherPlayerMPMixin",
     "EntityPickupFXMixin",
