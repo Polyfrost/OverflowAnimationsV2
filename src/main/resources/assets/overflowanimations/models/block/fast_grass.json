@@ -1,5 +1,5 @@
 {
-    "parent": "overflowanimations:block/layerless_grass",
+    "parent": "mixcesanimations:block/layerless_grass",
     "textures": {
         "particle": "blocks/dirt",
         "bottom": "blocks/dirt",

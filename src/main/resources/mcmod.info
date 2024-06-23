@@ -2,7 +2,7 @@
   {
     "modid": "${id}",
     "name": "${name}",
-    "description": "More than an old animations mod!",
+    "description": "Replaces animations & visuals removed in 1.8 with their old 1.7 visuals while also offering a plethora of extra features!",
     "version": "${version}",
     "mcversion": "${mcVersionStr}",
     "url": "",
