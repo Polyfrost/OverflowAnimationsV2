@@ -109,7 +109,6 @@ public abstract class MinecraftMixin {
         }
     }
 
-    //todo: investigate bug
     @Inject(
             method = "runTick",
             at = @At(
@@ -124,10 +123,9 @@ public abstract class MinecraftMixin {
         }
     }
 
-    //todo: apparently this shit npe 's
     @Inject(method = "rightClickMouse", at = @At(value = "HEAD"))
     public void overflowAnimations$funnyFidgetyThing(CallbackInfo ci) {
-        if (MainModSettings.INSTANCE.getOldSettings().getFunnyFidget() && MainModSettings.INSTANCE.getOldSettings().enabled && thePlayer.getHeldItem().getItemUseAction() != EnumAction.NONE) {
+        if (MainModSettings.INSTANCE.getOldSettings().getFunnyFidget() && MainModSettings.INSTANCE.getOldSettings().enabled && thePlayer != null && thePlayer.getHeldItem() != null && thePlayer.getHeldItem().getItemUseAction() != EnumAction.NONE) {
             entityRenderer.itemRenderer.resetEquippedProgress();
         }
     }
