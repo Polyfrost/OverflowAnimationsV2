@@ -1,6 +1,6 @@
 package org.polyfrost.overflowanimations.hooks;
 
-import org.polyfrost.overflowanimations.config.MainModSettings;
+import org.polyfrost.overflowanimations.config.OldAnimationsSettings;
 import com.google.common.collect.Lists;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.chunk.RenderChunk;
@@ -27,27 +27,7 @@ public class DebugOverlayHook {
         EnumFacing enumfacing = entity.getHorizontalFacing();
         Chunk chunk = mc.theWorld.getChunkFromBlockCoords(blockpos);
 
-        List<String> list = Lists.newArrayList(
-                "Minecraft 1.8.9 (" + Minecraft.getDebugFPS() + " fps" + ", " + RenderChunk.renderChunksUpdated +
-                        " chunk updates)", mc.renderGlobal.getDebugInfoRenders(), mc.renderGlobal.getDebugInfoEntities(),
-                "P: " + mc.effectRenderer.getStatistics() + ". T: " + mc.theWorld.getDebugLoadedEntities(),
-                mc.theWorld.getProviderName(), "", String.format("x: %.5f (%d) // c: %d (%d)", mc.thePlayer.posX,
-                        MathHelper.floor_double(mc.thePlayer.posX), MathHelper.floor_double(mc.thePlayer.posX) >> 4,
-                        MathHelper.floor_double(mc.thePlayer.posX) & 15), String.format("y: %.3f (feet pos, %.3f eyes pos)",
-                        mc.thePlayer.getEntityBoundingBox().minY, mc.thePlayer.posY +
-                                (MainModSettings.INSTANCE.getOldSettings().getSmoothSneaking() && MainModSettings.INSTANCE.getOldSettings().enabled ?
-                                        overflowEyeHeight : mc.thePlayer.getEyeHeight())),
-                String.format("z: %.5f (%d) // c: %d (%d)", mc.thePlayer.posZ, MathHelper.floor_double(mc.thePlayer.posZ),
-                        MathHelper.floor_double(mc.thePlayer.posZ) >> 4, MathHelper.floor_double(mc.thePlayer.posZ) & 15),
-                "f: " + (MathHelper.floor_double((double) (mc.thePlayer.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3) +
-                        " (" + enumfacing.toString().toUpperCase() + ") / " +
-                        MathHelper.wrapAngleTo180_float(mc.thePlayer.rotationYaw),
-                String.format("ws: %.3f, fs: %.3f, g: %b, fl: %.0f", mc.thePlayer.capabilities.getWalkSpeed(),
-                        mc.thePlayer.capabilities.getFlySpeed(), mc.thePlayer.onGround, mc.thePlayer.posY),
-                String.format("lc: " + chunk.getLightSubtracted(blockpos, 0) + " b: " +
-                        chunk.getBiome(blockpos, mc.theWorld.getWorldChunkManager()).biomeName) + " bl: " +
-                        chunk.getLightFor(EnumSkyBlock.BLOCK, blockpos) + " sl: " + chunk.getLightFor(EnumSkyBlock.SKY, blockpos) +
-                        " rl: " + chunk.getLightSubtracted(blockpos, 0));
+        List<String> list = Lists.newArrayList("Minecraft 1.8.9 (" + Minecraft.getDebugFPS() + " fps" + ", " + RenderChunk.renderChunksUpdated + " chunk updates)", mc.renderGlobal.getDebugInfoRenders(), mc.renderGlobal.getDebugInfoEntities(), "P: " + mc.effectRenderer.getStatistics() + ". T: " + mc.theWorld.getDebugLoadedEntities(), mc.theWorld.getProviderName(), "", String.format("x: %.5f (%d) // c: %d (%d)", mc.thePlayer.posX, MathHelper.floor_double(mc.thePlayer.posX), MathHelper.floor_double(mc.thePlayer.posX) >> 4, MathHelper.floor_double(mc.thePlayer.posX) & 15), String.format("y: %.3f (feet pos, %.3f eyes pos)", mc.thePlayer.getEntityBoundingBox().minY, mc.thePlayer.posY + (OldAnimationsSettings.smoothSneaking && OldAnimationsSettings.INSTANCE.enabled ? overflowEyeHeight : mc.thePlayer.getEyeHeight())), String.format("z: %.5f (%d) // c: %d (%d)", mc.thePlayer.posZ, MathHelper.floor_double(mc.thePlayer.posZ), MathHelper.floor_double(mc.thePlayer.posZ) >> 4, MathHelper.floor_double(mc.thePlayer.posZ) & 15), "f: " + (MathHelper.floor_double((double) (mc.thePlayer.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3) + " (" + enumfacing.toString().toUpperCase() + ") / " + MathHelper.wrapAngleTo180_float(mc.thePlayer.rotationYaw), String.format("ws: %.3f, fs: %.3f, g: %b, fl: %.0f", mc.thePlayer.capabilities.getWalkSpeed(), mc.thePlayer.capabilities.getFlySpeed(), mc.thePlayer.onGround, mc.thePlayer.posY), String.format("lc: " + chunk.getLightSubtracted(blockpos, 0) + " b: " + chunk.getBiome(blockpos, mc.theWorld.getWorldChunkManager()).biomeName) + " bl: " + chunk.getLightFor(EnumSkyBlock.BLOCK, blockpos) + " sl: " + chunk.getLightFor(EnumSkyBlock.SKY, blockpos) + " rl: " + chunk.getLightSubtracted(blockpos, 0));
 
         if (mc.entityRenderer != null && mc.entityRenderer.isShaderActive()) {
             list.add("shader: " + mc.entityRenderer.getShaderGroup().getShaderGroupName());

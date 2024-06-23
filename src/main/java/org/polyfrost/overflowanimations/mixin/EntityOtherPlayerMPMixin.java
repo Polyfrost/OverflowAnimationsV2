@@ -3,7 +3,7 @@ package org.polyfrost.overflowanimations.mixin;
 import net.minecraft.client.entity.EntityOtherPlayerMP;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
-import org.polyfrost.overflowanimations.config.MainModSettings;
+import org.polyfrost.overflowanimations.config.OldAnimationsSettings;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -15,18 +15,12 @@ public abstract class EntityOtherPlayerMPMixin extends EntityLivingBaseMixin {
         super(worldIn);
     }
 
-    @Inject(
-            method = "onLivingUpdate",
-            at = @At(
-                    value = "HEAD"
-            )
-    )
+    @Inject(method = "onLivingUpdate", at = @At("HEAD"))
     public void overflowAnimations$updateHeadYaw(CallbackInfo ci) {
-        if (!MainModSettings.INSTANCE.getOldSettings().enabled || !MainModSettings.INSTANCE.getOldSettings().getHeadYawFix()) { return; }
+        if (!OldAnimationsSettings.INSTANCE.enabled || !OldAnimationsSettings.headYawFix) return;
         if (overflowAnimations$headYawLerpWeight <= 0) return;
         rotationYawHead += MathHelper.wrapAngleTo180_float(overflowAnimations$newHeadYaw - rotationYawHead) / overflowAnimations$headYawLerpWeight;
         rotationYawHead = MathHelper.wrapAngleTo180_float(rotationYawHead);
         overflowAnimations$headYawLerpWeight--;
     }
-
 }

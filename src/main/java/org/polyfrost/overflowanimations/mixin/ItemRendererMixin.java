@@ -7,8 +7,8 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.item.ItemStack;
-import org.polyfrost.overflowanimations.config.MainModSettings;
-import org.polyfrost.overflowanimations.hooks.ItemPositionsHook;
+import net.minecraft.item.ItemSword;
+import org.polyfrost.overflowanimations.config.OldAnimationsSettings;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -19,117 +19,78 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(ItemRenderer.class)
 public abstract class ItemRendererMixin {
 
-    //todo: rewrite lunar feature
+    @Shadow
+    private ItemStack itemToRender;
+    @Shadow
+    @Final
+    private Minecraft mc;
 
-    @Shadow private ItemStack itemToRender;
-    @Shadow @Final private Minecraft mc;
     @Shadow @Final private RenderItem itemRenderer;
+
     @Shadow private int equippedItemSlot;
+
     @Shadow private float equippedProgress;
+
     @Shadow protected abstract void rotateWithPlayerRotations(EntityPlayerSP entityplayerspIn, float partialTicks);
-    @Unique private static final ThreadLocal<Float> overflowAnimations$f1 = ThreadLocal.withInitial(() -> 0.0F);
 
-    @ModifyVariable(
-            method = "renderItemInFirstPerson",
-            at = @At(
-                    value = "STORE"
-            ),
-            index = 4
-    )
-    private float overflowAnimations$captureF1(float f1) {
-        overflowAnimations$f1.set(f1);
-        return f1;
+    @ModifyConstant(method = "renderItemInFirstPerson", constant = @Constant(floatValue = 0.0f))
+    public float overflowAnimations$fixAnimation(float original, float partialTicks) {
+        AbstractClientPlayer abstractclientplayer = mc.thePlayer;
+        return OldAnimationsSettings.oldBlockhitting && OldAnimationsSettings.INSTANCE.enabled ?
+                abstractclientplayer.getSwingProgress(partialTicks) : original;
     }
 
-    @ModifyArg(
-            method = "renderItemInFirstPerson",
-            at = @At(
-                    value = "INVOKE",
-                    target = "Lnet/minecraft/client/renderer/ItemRenderer;transformFirstPersonItem(FF)V"
-            ),
-            slice = @Slice(
-                    from = @At(
-                            value = "INVOKE",
-                            target = "Lnet/minecraft/client/renderer/ItemRenderer;performDrinking(Lnet/minecraft/client/entity/AbstractClientPlayer;F)V"
-                    ),
-                    to = @At(
-                            value = "INVOKE",
-                            target = "Lnet/minecraft/client/renderer/ItemRenderer;doBowTransformations(FLnet/minecraft/client/entity/AbstractClientPlayer;)V"
-                    )
-            ),
-            index = 1
-    )
-    private float overflowAnimations$useF1(float swingProgress) {
-        if (MainModSettings.INSTANCE.getOldSettings().getOldBlockhitting() && MainModSettings.INSTANCE.getOldSettings().enabled) {
-            return overflowAnimations$f1.get();
-        }
-        return swingProgress;
-    }
-
-    @Inject(
-            method = "doBowTransformations",
-            at = @At(
-                    value = "INVOKE",
-                    target = "Lnet/minecraft/client/renderer/GlStateManager;scale(FFF)V"
-            )
-    )
+    @Inject(method = "doBowTransformations", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GlStateManager;scale(FFF)V"))
     private void overflowAnimations$preBowTransform(float partialTicks, AbstractClientPlayer clientPlayer, CallbackInfo ci) {
-        if (!MainModSettings.INSTANCE.getOldSettings().getFirstTransformations() || !MainModSettings.INSTANCE.getOldSettings().enabled) { return; }
-        GlStateManager.rotate(-335.0F, 0.0F, 0.0F, 1.0F);
-        GlStateManager.rotate(-50.0F, 0.0F, 1.0F, 0.0F);
-        GlStateManager.translate(0.0F, 0.5F, 0.0F);
+        if (OldAnimationsSettings.firstTransformations && OldAnimationsSettings.INSTANCE.enabled) {
+            GlStateManager.rotate(-335.0F, 0.0F, 0.0F, 1.0F);
+            GlStateManager.rotate(-50.0F, 0.0F, 1.0F, 0.0F);
+            GlStateManager.translate(0.0F, 0.5F, 0.0F);
+        }
     }
 
-    @Inject(
-            method = "doBowTransformations",
-            at = @At(
-                    value = "TAIL"
-
-            ))
+    @Inject(method = "doBowTransformations", at = @At(value = "TAIL"))
     private void overflowAnimations$postBowTransform(float partialTicks, AbstractClientPlayer clientPlayer, CallbackInfo ci) {
-        if (!MainModSettings.INSTANCE.getOldSettings().getFirstTransformations() || !MainModSettings.INSTANCE.getOldSettings().enabled) { return; }
-        GlStateManager.translate(0.0F, -0.5F, 0.0F);
-        GlStateManager.rotate(50.0F, 0.0F, 1.0F, 0.0F);
-        GlStateManager.rotate(335.0F, 0.0F, 0.0F, 1.0F);
+        if (OldAnimationsSettings.firstTransformations && OldAnimationsSettings.INSTANCE.enabled) {
+            GlStateManager.translate(0.0F, -0.5F, 0.0F);
+            GlStateManager.rotate(50.0F, 0.0F, 1.0F, 0.0F);
+            GlStateManager.rotate(335.0F, 0.0F, 0.0F, 1.0F);
+        }
     }
 
-    @Inject(
-            method = "renderItemInFirstPerson",
-            at = @At(
-                    value = "INVOKE",
-                    target = "Lnet/minecraft/client/renderer/ItemRenderer;renderItem(Lnet/minecraft/entity/EntityLivingBase;Lnet/minecraft/item/ItemStack;Lnet/minecraft/client/renderer/block/model/ItemCameraTransforms$TransformType;)V"
-            )
-    )
-    private void overflowAnimations$firstPersonItemPos(float partialTicks, CallbackInfo ci) {
-        ItemPositionsHook.INSTANCE.firstPersonItemTransforms(itemToRender, itemRenderer);
+    @Inject(method = "renderItemInFirstPerson", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/ItemRenderer;renderItem(Lnet/minecraft/entity/EntityLivingBase;Lnet/minecraft/item/ItemStack;Lnet/minecraft/client/renderer/block/model/ItemCameraTransforms$TransformType;)V"))
+    private void overflowAnimations$firstPersonItemPositions(float partialTicks, CallbackInfo ci) {
+        if (OldAnimationsSettings.INSTANCE.enabled && !itemRenderer.shouldRenderItemIn3D(itemToRender)) {
+            if ((OldAnimationsSettings.fishingRodPosition && itemToRender.getItem().shouldRotateAroundWhenRendering())) {
+                GlStateManager.rotate(180.0F, 0.0F, 1.0F, 0.0F);
+                overflowAnimations$itemTransforms();
+            } else if (OldAnimationsSettings.firstTransformations && !(itemToRender.getItem() instanceof ItemSword && OldAnimationsSettings.lunarBlockhit)) {
+                overflowAnimations$itemTransforms();
+            }
+        }
     }
 
-    @Redirect(
-            method = "renderItemInFirstPerson",
-            at = @At(
-                    value = "INVOKE",
-                    target = "Lnet/minecraft/client/renderer/ItemRenderer;rotateWithPlayerRotations(Lnet/minecraft/client/entity/EntityPlayerSP;F)V"
-            )
-    )
+    @Redirect(method = "renderItemInFirstPerson", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/ItemRenderer;rotateWithPlayerRotations(Lnet/minecraft/client/entity/EntityPlayerSP;F)V"))
     private void overflowAnimations$removeRotations(ItemRenderer instance, EntityPlayerSP entityPlayerSP, float v) {
-        if (MainModSettings.INSTANCE.getOldSettings().getOldItemRotations() && MainModSettings.INSTANCE.getOldSettings().enabled) { return; }
-        rotateWithPlayerRotations(entityPlayerSP, v);
+        if (!OldAnimationsSettings.oldItemRotations || !OldAnimationsSettings.INSTANCE.enabled) {
+            rotateWithPlayerRotations(entityPlayerSP, v);
+        }
     }
 
-    // todo: re-write re-equip
-    @ModifyArg(
-            method = "updateEquippedItem",
-            at = @At(
-                    value = "INVOKE",
-                    target = "Lnet/minecraft/util/MathHelper;clamp_float(FFF)F"
-            ),
-            index = 0
-    )
+    @Unique
+    private static void overflowAnimations$itemTransforms() {
+        float scale = 1.5F / 1.7F;
+        GlStateManager.scale(scale, scale, scale);
+        GlStateManager.rotate(5.0F, 0.0F, 1.0F, 0.0F);
+        GlStateManager.translate(-0.29F, 0.149F, -0.0328F);
+    }
+
+    @ModifyArg(method = "updateEquippedItem", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/MathHelper;clamp_float(FFF)F"), index = 0)
     private float overflowAnimations$oldItemSwitch(float num) {
-        if (MainModSettings.INSTANCE.getOldSettings().getFixReequip() || MainModSettings.INSTANCE.getOldSettings().getDisableReequip()) {
+        if (OldAnimationsSettings.fixReequip || OldAnimationsSettings.disableReequip) {
             return num;
         }
-        if (MainModSettings.INSTANCE.getOldSettings().getItemSwitch() && MainModSettings.INSTANCE.getOldSettings().enabled) {
+        if (OldAnimationsSettings.itemSwitch && OldAnimationsSettings.INSTANCE.enabled) {
             ItemStack itemstack = mc.thePlayer.inventory.getCurrentItem();
             boolean flag = equippedItemSlot == mc.thePlayer.inventory.currentItem && itemstack == itemToRender;
             if (itemToRender == null && itemstack == null) {
@@ -144,10 +105,9 @@ public abstract class ItemRendererMixin {
         return num;
     }
 
-    // todo: make modify variable
     @ModifyConstant(method = "updateEquippedItem", constant = @Constant(floatValue = 0.4F))
     private float overflowAnimations$changeEquipSpeed(float original) {
-        return MainModSettings.INSTANCE.getOldSettings().enabled ? MainModSettings.INSTANCE.getOldSettings().getReequipSpeed() : original;
+        return OldAnimationsSettings.INSTANCE.enabled ? OldAnimationsSettings.INSTANCE.reequipSpeed : original;
     }
 
 }

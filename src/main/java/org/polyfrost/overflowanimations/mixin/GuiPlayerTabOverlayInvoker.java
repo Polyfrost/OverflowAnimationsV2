@@ -1,4 +1,4 @@
-package org.polyfrost.overflowanimations.mixin.interfaces;
+package org.polyfrost.overflowanimations.mixin;
 
 import net.minecraft.client.gui.GuiPlayerTabOverlay;
 import net.minecraft.client.network.NetworkPlayerInfo;
