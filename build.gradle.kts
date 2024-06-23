@@ -6,6 +6,7 @@ import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 // Adds support for kotlin, and adds the Polyfrost Gradle Toolkit
 // which we use to prepare the environment.
 plugins {
+    kotlin("jvm")
     id("org.polyfrost.multi-version")
     id("org.polyfrost.defaults.repo")
     id("org.polyfrost.defaults.java")

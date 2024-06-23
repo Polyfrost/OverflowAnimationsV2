@@ -15,17 +15,21 @@ import net.minecraft.client.resources.model.IBakedModel;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
 import net.minecraft.item.*;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
 import org.polyfrost.overflowanimations.config.OldAnimationsSettings;
+import org.polyfrost.overflowanimations.hooks.GlintModelHook;
 import org.polyfrost.overflowanimations.hooks.TransformTypeHook;
+import org.polyfrost.overflowanimations.init.CustomModelBakery;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.ModifyArg;
-import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -153,6 +157,142 @@ public abstract class RenderItemMixin {
             }
         }
         return instance.getItemModel(stack);
+    }
+
+    @Shadow
+    public abstract void renderItem(ItemStack stack, IBakedModel model);
+    @Shadow @Final
+    private static ResourceLocation RES_ITEM_GLINT;
+    @Unique private static final ThreadLocal<ItemStack> mixcesAnimations$stack = ThreadLocal.withInitial(() -> null);
+
+    @Inject(
+            method = "renderEffect",
+            at = @At(
+                    value = "HEAD"
+            ),
+            cancellable = true
+    )
+    public void abc(CallbackInfo ci) {
+        if (GlintModelHook.INSTANCE.getTransformType() != ItemCameraTransforms.TransformType.GUI) return;
+//        if (!MixcesAnimationsConfig.INSTANCE.enabled) return;
+        ci.cancel();
+    }
+
+    @Inject(
+            method = "renderItemIntoGUI",
+            at = @At(
+                    value = "TAIL"
+            )
+    )
+    public void offGUI(ItemStack stack, int x, int y, CallbackInfo ci) {
+        if (!stack.hasEffect()) return;
+        GlintModelHook.INSTANCE.renderGlintGui(x, y, RES_ITEM_GLINT);
+    }
+
+    @ModifyArg(
+            method = "renderEffect",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/client/renderer/entity/RenderItem;renderModel(Lnet/minecraft/client/resources/model/IBakedModel;I)V"
+            ),
+            index = 0
+    )
+    public IBakedModel mixcesAnimations$replaceModel(IBakedModel model) {
+//        if (MixcesAnimationsConfig.INSTANCE.getOldGlint() && MixcesAnimationsConfig.INSTANCE.enabled) {
+        return GlintModelHook.INSTANCE.getGlint(model);
+//        }
+//        return model;
+    }
+
+    @ModifyVariable(
+            method = "renderEffect",
+            at = @At(
+                    value = "STORE"
+            ),
+            index = 2
+    )
+    private float mixcesAnimations$modifyF(float f) {
+//        if (MixcesAnimationsConfig.INSTANCE.getOldGlint() && MixcesAnimationsConfig.INSTANCE.enabled) {
+        return f * 64.0F;
+//        }
+//        return f;
+    }
+
+    @ModifyVariable(
+            method = "renderEffect",
+            at = @At(
+                    value = "STORE"
+            ),
+            index = 3
+    )
+    private float mixcesAnimations$modifyF1(float f1) {
+//        if (MixcesAnimationsConfig.INSTANCE.getOldGlint() && MixcesAnimationsConfig.INSTANCE.enabled) {
+        return f1 * 64.0F;
+//        }
+//        return f1;
+    }
+
+    @ModifyArgs(
+            method = "renderEffect",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/client/renderer/GlStateManager;scale(FFF)V"
+            )
+    )
+    public void mixcesAnimations$modifyScale(Args args) {
+//        if (!MixcesAnimationsConfig.INSTANCE.getOldGlint() || !MixcesAnimationsConfig.INSTANCE.enabled) { return; }
+        for (int i : new int[]{0, 1, 2}) {
+            args.set(i, 1 / (float) args.get(i));
+        }
+    }
+
+    @ModifyVariable(
+            method = "renderItemModelTransform",
+            at = @At(
+                    value = "HEAD",
+                    ordinal = 0
+            ),
+            index = 1,
+            argsOnly = true
+    )
+    private ItemStack mixcesAnimations$captureStack(ItemStack stack) {
+        mixcesAnimations$stack.set(stack);
+        return stack;
+    }
+
+    @ModifyArg(
+            method = "renderItemModelTransform",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/client/renderer/entity/RenderItem;renderItem(Lnet/minecraft/item/ItemStack;Lnet/minecraft/client/resources/model/IBakedModel;)V"
+            ),
+            index = 1
+    )
+    private IBakedModel mixcesAnimations$swapToCustomModel(IBakedModel model) {
+        if (mixcesAnimations$stack.get().getItem() instanceof ItemPotion) {
+            return CustomModelBakery.BOTTLE_OVERLAY.getBakedModel();
+        }
+        return model;
+    }
+
+    @Inject(
+            method = "renderItemModelTransform",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/client/renderer/entity/RenderItem;renderItem(Lnet/minecraft/item/ItemStack;Lnet/minecraft/client/resources/model/IBakedModel;)V",
+                    shift = At.Shift.AFTER
+            )
+    )
+    private void mixcesAnimations$renderCustomBottle(ItemStack stack, IBakedModel model, ItemCameraTransforms.TransformType cameraTransformType, CallbackInfo ci) {
+//        if (!MixcesAnimationsConfig.INSTANCE.getOldPotion() || !MixcesAnimationsConfig.INSTANCE.enabled) { return; }
+        if (stack.getItem() instanceof ItemPotion) {
+            renderItem(new ItemStack(Items.glass_bottle), mixcesAnimations$getBottleModel(stack));
+        }
+    }
+
+    @Unique
+    private IBakedModel mixcesAnimations$getBottleModel(ItemStack stack) {
+        return ItemPotion.isSplash(stack.getMetadata()) ? CustomModelBakery.BOTTLE_SPLASH_EMPTY.getBakedModel() : CustomModelBakery.BOTTLE_DRINKABLE_EMPTY.getBakedModel();
     }
 
 }

@@ -5,6 +5,7 @@
   "refmap": "mixins.${id}.refmap.json",
   "verbose": true,
   "client": [
+    "BlockRendererDispatcherMixin",
     "EntityLivingBaseInvoker",
     "EntityLivingBaseMixin",
     "EntityMixin",
@@ -19,6 +20,7 @@
     "GuiPlayerTabOverlayInvoker",
     "GuiPlayerTabOverlayMixin",
     "ItemMixin",
+    "ItemModelMesherMixin",
     "ItemPotionMixin",
     "ItemRendererMixin",
     "ItemRendererMixin_CustomPositions",
@@ -38,6 +40,7 @@
     "RendererLivingEntityMixin",
     "RenderFireballMixin",
     "RenderFishMixin",
+    "RenderItemInvoker",
     "RenderItemMixin",
     "RenderSnowballMixin",
     "RenderSnowballMixin_CustomPositions"
