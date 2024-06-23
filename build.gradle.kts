@@ -78,6 +78,7 @@ sourceSets {
     val dummy by creating
     main {
         compileClasspath += dummy.output
+        output.setResourcesDir(java.classesDirectory)
     }
 }
 

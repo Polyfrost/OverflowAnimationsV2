@@ -12,7 +12,6 @@ import org.polyfrost.overflowanimations.OverflowAnimations;
 import org.polyfrost.overflowanimations.hooks.AnimationExportUtils;
 import org.polyfrost.overflowanimations.hooks.PotionColors;
 
-@SuppressWarnings("unused")
 public class OldAnimationsSettings extends Config {
 
     // 2D Items
@@ -214,12 +213,32 @@ public class OldAnimationsSettings extends Config {
     public static boolean oldPickup = true;
 
     // Item Changes
+
     @Switch(
-            name = "1.7 Held Item Lighting",
-            description = "Modifies the held item lighting to resemble 1.7.",
+            name = "1.7 Enchantment Glint",
+            description = "Brings back the old enchantment glint from 1.7.",
             subcategory = "Item Changes"
     )
-    public static boolean oldItemLighting = true;
+    @VigilanceName(
+            name = "Cleaner Enchantment Glint",
+            category = "General",
+            subcategory = ""
+    )
+    public static boolean enchantmentGlint = true;
+
+    @Switch(
+            name = "1.7 Skulls",
+            description = "Displays skulls as a 2D sprite rather than a 3D model, like in 1.7.",
+            subcategory = "Item Changes"
+    )
+    public static boolean oldSkulls = false;
+
+    @Switch(
+            name = "1.7 Potion Models",
+            description = "Use the old potion models from 1.7, making the enchantment glint appear only on the colored part of the potion.",
+            subcategory = "Item Changes"
+    )
+    public static boolean oldPotions = false;
 
     @Switch(
             name = "1.7 Third-Person Fishing Rod Cast Texture",
@@ -229,6 +248,7 @@ public class OldAnimationsSettings extends Config {
     public static boolean fishingStick = false;
 
     // HUD
+
     @Switch(
             name = "1.7 Health Bar Flashing",
             description = "Disables the heart flashing texture while taking damage similar to 1.7.",

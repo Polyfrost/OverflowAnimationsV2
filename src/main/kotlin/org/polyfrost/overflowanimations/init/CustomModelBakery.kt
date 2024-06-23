@@ -22,8 +22,7 @@ enum class CustomModelBakery(modelPath: String) {
     SKULL_CREEPER("item/skull_creeper"),
     SKULL_SKELETON("item/skull_skeleton"),
     SKULL_WITHER("item/skull_wither"),
-    SKULL_ZOMBIE("item/skull_zombie"),
-    LAYERLESS_GRASS("block/fast_grass");
+    SKULL_ZOMBIE("item/skull_zombie");
 
     private val resourceLocation = ResourceLocation(OverflowAnimations.MODID, modelPath)
     private lateinit var loadedModel: IModel

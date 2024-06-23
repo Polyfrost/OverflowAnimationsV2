@@ -173,8 +173,8 @@ public abstract class RenderItemMixin {
             cancellable = true
     )
     public void abc(CallbackInfo ci) {
+        if (!OldAnimationsSettings.enchantmentGlint || !OldAnimationsSettings.INSTANCE.enabled) return;
         if (GlintModelHook.INSTANCE.getTransformType() != ItemCameraTransforms.TransformType.GUI) return;
-//        if (!MixcesAnimationsConfig.INSTANCE.enabled) return;
         ci.cancel();
     }
 
@@ -185,6 +185,7 @@ public abstract class RenderItemMixin {
             )
     )
     public void offGUI(ItemStack stack, int x, int y, CallbackInfo ci) {
+        if (!OldAnimationsSettings.enchantmentGlint || !OldAnimationsSettings.INSTANCE.enabled) return;
         if (!stack.hasEffect()) return;
         GlintModelHook.INSTANCE.renderGlintGui(x, y, RES_ITEM_GLINT);
     }
@@ -198,10 +199,8 @@ public abstract class RenderItemMixin {
             index = 0
     )
     public IBakedModel mixcesAnimations$replaceModel(IBakedModel model) {
-//        if (MixcesAnimationsConfig.INSTANCE.getOldGlint() && MixcesAnimationsConfig.INSTANCE.enabled) {
+        if (!OldAnimationsSettings.enchantmentGlint || !OldAnimationsSettings.INSTANCE.enabled) return model;
         return GlintModelHook.INSTANCE.getGlint(model);
-//        }
-//        return model;
     }
 
     @ModifyVariable(
@@ -212,10 +211,8 @@ public abstract class RenderItemMixin {
             index = 2
     )
     private float mixcesAnimations$modifyF(float f) {
-//        if (MixcesAnimationsConfig.INSTANCE.getOldGlint() && MixcesAnimationsConfig.INSTANCE.enabled) {
+        if (!OldAnimationsSettings.enchantmentGlint || !OldAnimationsSettings.INSTANCE.enabled) return f;
         return f * 64.0F;
-//        }
-//        return f;
     }
 
     @ModifyVariable(
@@ -226,10 +223,8 @@ public abstract class RenderItemMixin {
             index = 3
     )
     private float mixcesAnimations$modifyF1(float f1) {
-//        if (MixcesAnimationsConfig.INSTANCE.getOldGlint() && MixcesAnimationsConfig.INSTANCE.enabled) {
+        if (!OldAnimationsSettings.enchantmentGlint || !OldAnimationsSettings.INSTANCE.enabled) return f1;
         return f1 * 64.0F;
-//        }
-//        return f1;
     }
 
     @ModifyArgs(
@@ -240,7 +235,7 @@ public abstract class RenderItemMixin {
             )
     )
     public void mixcesAnimations$modifyScale(Args args) {
-//        if (!MixcesAnimationsConfig.INSTANCE.getOldGlint() || !MixcesAnimationsConfig.INSTANCE.enabled) { return; }
+        if (!OldAnimationsSettings.enchantmentGlint || !OldAnimationsSettings.INSTANCE.enabled) return;
         for (int i : new int[]{0, 1, 2}) {
             args.set(i, 1 / (float) args.get(i));
         }
@@ -256,6 +251,7 @@ public abstract class RenderItemMixin {
             argsOnly = true
     )
     private ItemStack mixcesAnimations$captureStack(ItemStack stack) {
+        if (!OldAnimationsSettings.INSTANCE.enabled || !OldAnimationsSettings.oldPotions) return stack;
         mixcesAnimations$stack.set(stack);
         return stack;
     }
@@ -269,6 +265,7 @@ public abstract class RenderItemMixin {
             index = 1
     )
     private IBakedModel mixcesAnimations$swapToCustomModel(IBakedModel model) {
+        if (!OldAnimationsSettings.INSTANCE.enabled || !OldAnimationsSettings.oldPotions) return model;
         if (mixcesAnimations$stack.get().getItem() instanceof ItemPotion) {
             return CustomModelBakery.BOTTLE_OVERLAY.getBakedModel();
         }
@@ -284,7 +281,8 @@ public abstract class RenderItemMixin {
             )
     )
     private void mixcesAnimations$renderCustomBottle(ItemStack stack, IBakedModel model, ItemCameraTransforms.TransformType cameraTransformType, CallbackInfo ci) {
-//        if (!MixcesAnimationsConfig.INSTANCE.getOldPotion() || !MixcesAnimationsConfig.INSTANCE.enabled) { return; }
+        if (!OldAnimationsSettings.INSTANCE.enabled || !OldAnimationsSettings.oldPotions) return;
+
         if (stack.getItem() instanceof ItemPotion) {
             renderItem(new ItemStack(Items.glass_bottle), mixcesAnimations$getBottleModel(stack));
         }
