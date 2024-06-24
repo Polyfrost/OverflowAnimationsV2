@@ -73,7 +73,7 @@ public class OldAnimationsSettings extends Config {
             description = "Synchronizes the player model's sneaking behavior to the eye height to replicate the same behavior in 1.7. Disable if incompatible with cosmetic mods",
             subcategory = "Smooth Sneaking"
     )
-    public static boolean smoothModelSneak = false;
+    public static boolean smoothModelSneak = true;
 
     // Interaction
     @Switch(
@@ -821,5 +821,6 @@ public class OldAnimationsSettings extends Config {
         addDependency("entityTransforms", "thirdTransformations");
         // Sneaking
         addDependency("longerUnsneak", "smoothSneaking");
+        addDependency("smoothModelSneak", "smoothSneaking");
     }
 }
