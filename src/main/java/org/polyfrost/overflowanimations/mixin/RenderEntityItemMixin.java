@@ -4,23 +4,35 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderEntityItem;
+import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.resources.model.IBakedModel;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemPotion;
+import net.minecraft.item.ItemStack;
 import org.polyfrost.overflowanimations.config.OldAnimationsSettings;
+import org.polyfrost.overflowanimations.init.CustomModelBakery;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(RenderEntityItem.class)
 public abstract class RenderEntityItemMixin extends Render<EntityItem> {
 
+    @Shadow @Final private RenderItem itemRenderer;
     @Unique
     private boolean overflowanimations$isGui3d;
+
+    @Unique
+    private ItemStack overflowanimations$stack = null;
 
     protected RenderEntityItemMixin(RenderManager renderManager) {
         super(renderManager);
@@ -46,6 +58,54 @@ public abstract class RenderEntityItemMixin extends Render<EntityItem> {
         if (!overflowanimations$isGui3d && OldAnimationsSettings.itemSprites && OldAnimationsSettings.INSTANCE.enabled && OldAnimationsSettings.rotationFix) {
             GlStateManager.rotate((Minecraft.getMinecraft().gameSettings.thirdPersonView == 2 ? 1.0f : -1.0f) * renderManager.playerViewX, 1.0F, 0.0F, 0.0F);
         }
+    }
+
+    @ModifyVariable(
+            method = "doRender(Lnet/minecraft/entity/item/EntityItem;DDDFF)V",
+            at = @At(
+                    value = "STORE"
+            ),
+            index = 10
+    )
+    private ItemStack overflowAnimations$captureStack(ItemStack stack) {
+        overflowanimations$stack = stack;
+        return stack;
+    }
+
+    @ModifyArg(
+            method = "doRender(Lnet/minecraft/entity/item/EntityItem;DDDFF)V",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/client/renderer/entity/RenderItem;renderItem(Lnet/minecraft/item/ItemStack;Lnet/minecraft/client/resources/model/IBakedModel;)V"
+            ),
+            index = 1
+    )
+    private IBakedModel overflowAnimations$swapToCustomModel(IBakedModel model) {
+        if (!OldAnimationsSettings.INSTANCE.enabled || !OldAnimationsSettings.oldPotionsDropped) return model;
+        if (overflowanimations$stack.getItem() instanceof ItemPotion) {
+            return CustomModelBakery.BOTTLE_OVERLAY.getBakedModel();
+        }
+        return model;
+    }
+
+    @Inject(
+            method = "doRender(Lnet/minecraft/entity/item/EntityItem;DDDFF)V",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/client/renderer/entity/RenderItem;renderItem(Lnet/minecraft/item/ItemStack;Lnet/minecraft/client/resources/model/IBakedModel;)V",
+                    shift = At.Shift.AFTER
+            )
+    )
+    private void overflowAnimations$renderCustomBottle(EntityItem entity, double x, double y, double z, float entityYaw, float partialTicks, CallbackInfo ci) {
+        if (!OldAnimationsSettings.INSTANCE.enabled || !OldAnimationsSettings.oldPotionsDropped) return;
+        if (entity.getEntityItem().getItem() instanceof ItemPotion) {
+            itemRenderer.renderItem(new ItemStack(Items.glass_bottle), overflowAnimations$getBottleModel(entity.getEntityItem()));
+        }
+    }
+
+    @Unique
+    private IBakedModel overflowAnimations$getBottleModel(ItemStack stack) {
+        return ItemPotion.isSplash(stack.getMetadata()) ? CustomModelBakery.BOTTLE_SPLASH_EMPTY.getBakedModel() : CustomModelBakery.BOTTLE_DRINKABLE_EMPTY.getBakedModel();
     }
 
 }

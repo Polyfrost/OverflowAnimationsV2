@@ -21,7 +21,7 @@ public class ItemModelMesherMixin {
             ),
             cancellable = true
     )
-    private void mixcesAnimations$useCustomBlockModel(ItemStack stack, CallbackInfoReturnable<IBakedModel> cir) {
+    private void overflowanimations$useCustomBlockModel(ItemStack stack, CallbackInfoReturnable<IBakedModel> cir) {
         if (stack == null) return;
         if (!OldAnimationsSettings.oldSkulls || !OldAnimationsSettings.INSTANCE.enabled) return;
         if (stack.getItem() instanceof ItemSkull) {

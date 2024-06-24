@@ -88,19 +88,6 @@ public class OldAnimationsSettings extends Config {
     )
     public static boolean oldBlockhitting = true;
 
-//    @Switch(
-//            name = "1.7 Armor Damage Tint",
-//            description = "Allows the armor to also have the damage tint applied to it.",
-//            subcategory = "Interaction"
-//    )
-//    @VigilanceName(
-//            name = "Red Armor",
-//            category = "Animations",
-//            subcategory = "Interaction"
-//    )
-//    public static boolean redArmor = true;
-
-
     @Dropdown(
             name = "Armor Damage Tint Style",
             description = "Applies a damage tint to armor. " +
@@ -110,6 +97,11 @@ public class OldAnimationsSettings extends Config {
                     "\"1.8 (Without Glint)\" will use the 1.8 formula AND NOT account for the enchantment glint. ",
             options = {"None", "1.7", "1.8 (With Glint)", "1.8 (Without Glint)"},
             subcategory = "HUD"
+    )
+    @VigilanceName(
+            name = "Red Armor",
+            category = "Animations",
+            subcategory = "Interaction"
     )
     public int redArmor = 3;
 
@@ -225,12 +217,12 @@ public class OldAnimationsSettings extends Config {
     )
     public static boolean oldPickup = true;
 
-    // Item Changes
+    // Enchantment Glint
 
     @Switch(
             name = "1.7 Enchantment Glint",
             description = "Brings back the old enchantment glint from 1.7.",
-            subcategory = "Item Changes"
+            subcategory = "Enchantment Glint"
     )
     @VigilanceName(
             name = "Cleaner Enchantment Glint",
@@ -240,18 +232,41 @@ public class OldAnimationsSettings extends Config {
     public static boolean enchantmentGlint = true;
 
     @Switch(
+            name = "1.7 GUI Enchantment Glint",
+            description = "Brings back the old GUI enchantment glint from 1.7.",
+            subcategory = "Enchantment Glint"
+    )
+    public static boolean enchantmentGlintGui = false;
+
+    @Switch(
+            name = "1.7 Potion Models (Held)",
+            description = "Use the old potion models from 1.7, making the enchantment glint appear only on the colored part of the potion.",
+            subcategory = "Enchantment Glint"
+    )
+    public static boolean oldPotions = true;
+
+    @Switch(
+            name = "1.7 Potion Models (Dropped)",
+            description = "Use the old potion models from 1.7, making the enchantment glint appear only on the colored part of the potion for dropped items as well.",
+            subcategory = "Enchantment Glint"
+    )
+    public static boolean oldPotionsDropped = false;
+
+    @Switch(
+            name = "1.7 Potion Models (GUI)",
+            description = "Use the old potion models from 1.7, making the enchantment glint appear only on the colored part of the potion for gui items as well.",
+            subcategory = "Enchantment Glint"
+    )
+    public static boolean oldPotionsGui = false;
+
+    // Item Changes
+
+    @Switch(
             name = "1.7 Skulls",
             description = "Displays skulls as a 2D sprite rather than a 3D model, like in 1.7.",
             subcategory = "Item Changes"
     )
     public static boolean oldSkulls = false;
-
-    @Switch(
-            name = "1.7 Potion Models",
-            description = "Use the old potion models from 1.7, making the enchantment glint appear only on the colored part of the potion.",
-            subcategory = "Item Changes"
-    )
-    public static boolean oldPotions = false;
 
     @Switch(
             name = "1.7 Third-Person Fishing Rod Cast Texture",

@@ -7,7 +7,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiFlatPresets;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.ItemModelMesher;
-import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.entity.RenderItem;
@@ -37,6 +36,14 @@ import java.util.stream.Collectors;
 @Mixin(RenderItem.class)
 public abstract class RenderItemMixin {
 
+
+    @Shadow
+    public abstract void renderItem(ItemStack stack, IBakedModel model);
+    @Shadow @Final
+    private static ResourceLocation RES_ITEM_GLINT;
+    @Unique private ItemStack overflowanimations$stackGui = null;
+    @Unique private ItemStack overflowanimations$stackHeld = null;
+    @Unique private ItemStack overflowanimations$stack = null;
     @Unique
     public IBakedModel overflowAnimations$model;
     @Unique
@@ -60,21 +67,27 @@ public abstract class RenderItemMixin {
         return quads;
     }
 
-    @Redirect(method = "putQuadNormal", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/WorldRenderer;putNormal(FFF)V"))
-    private void overflowAnimations$modifyNormalValue(WorldRenderer instance, float x, float y, float z, WorldRenderer renderer, BakedQuad quad) {
-        if (OldAnimationsSettings.INSTANCE.enabled && !overflowAnimations$model.isGui3d() && !(Minecraft.getMinecraft().currentScreen instanceof GuiFlatPresets)) {
-            if (OldAnimationsSettings.itemSprites && OldAnimationsSettings.itemSpritesColor && TransformTypeHook.shouldNotHaveGlint()) {
-                instance.putNormal(x, z, y);
-            }
-        } else {
-            instance.putNormal(x, y, z);
+    @ModifyArgs(method = "putQuadNormal", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/WorldRenderer;putNormal(FFF)V"))
+    private void overflowAnimations$modifyNormalValue(Args args) {
+        if (OldAnimationsSettings.itemSprites && OldAnimationsSettings.itemSpritesColor && OldAnimationsSettings.INSTANCE.enabled &&
+                !overflowAnimations$model.isGui3d() && !(Minecraft.getMinecraft().currentScreen instanceof GuiFlatPresets) && TransformTypeHook.shouldNotHaveGlint() ) {
+            args.setAll(args.get(0), args.get(2), args.get(1));
         }
     }
 
     @Inject(method = "renderEffect", at = @At(value = "HEAD"), cancellable = true)
-    public void overflowAnimations$disableGlintOnSprite(IBakedModel model, CallbackInfo ci) {
-        if (OldAnimationsSettings.itemSprites && OldAnimationsSettings.spritesGlint && OldAnimationsSettings.INSTANCE.enabled && TransformTypeHook.shouldNotHaveGlint()) {
-            ci.cancel();
+    public void overflowAnimations$disableGlint(IBakedModel model, CallbackInfo ci) {
+        if (OldAnimationsSettings.INSTANCE.enabled) {
+            if (OldAnimationsSettings.potionGlint && overflowanimations$stack.getItem() instanceof ItemPotion) {
+                ci.cancel();
+            }
+            if (OldAnimationsSettings.itemSprites && OldAnimationsSettings.spritesGlint && TransformTypeHook.shouldNotHaveGlint()) {
+                ci.cancel();
+            }
+            if (OldAnimationsSettings.enchantmentGlintGui && TransformTypeHook.isRenderingInGUI()) {
+                if (OldAnimationsSettings.oldPotionsGui && overflowanimations$stackGui.getItem() instanceof ItemPotion) { return; }
+                ci.cancel();
+            }
         }
     }
 
@@ -88,45 +101,38 @@ public abstract class RenderItemMixin {
     @Inject(method = "renderItemModelTransform", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/entity/RenderItem;renderItem(Lnet/minecraft/item/ItemStack;Lnet/minecraft/client/resources/model/IBakedModel;)V"))
     public void overflowAnimations$modifyModelPosition(ItemStack stack, IBakedModel model, ItemCameraTransforms.TransformType cameraTransformType, CallbackInfo ci) {
         if (OldAnimationsSettings.INSTANCE.enabled && !(stack.getItem() instanceof ItemBanner)) {
-                boolean isRod = stack.getItem().shouldRotateAroundWhenRendering();
-                boolean isBlock = stack.getItem() instanceof ItemBlock;
-                boolean isCarpet = false;
-                if (isBlock) {
-                    Block block = ((ItemBlock) stack.getItem()).getBlock();
-                    isCarpet = block instanceof BlockCarpet || block instanceof BlockSnow;
+            boolean isRod = stack.getItem().shouldRotateAroundWhenRendering();
+            boolean isBlock = stack.getItem() instanceof ItemBlock;
+            boolean isCarpet = false;
+            if (isBlock) {
+                Block block = ((ItemBlock) stack.getItem()).getBlock();
+                isCarpet = block instanceof BlockCarpet || block instanceof BlockSnow;
+            }
+            if (cameraTransformType == ItemCameraTransforms.TransformType.FIRST_PERSON) {
+                if (OldAnimationsSettings.fishingRodPosition && isRod) {
+                    GlStateManager.rotate(180.0F, 0.0F, 1.0F, 0.0F);
+                    GlStateManager.rotate(50.0F, 0.0F, 0.0F, 1.0F);
+                } else if (OldAnimationsSettings.firstTransformations &&  OldAnimationsSettings.firstPersonCarpetPosition && isCarpet) {
+                    GlStateManager.translate(0.0F, -5.25F * 0.0625F, 0.0F);
                 }
-                if (cameraTransformType == ItemCameraTransforms.TransformType.FIRST_PERSON) {
-                    if (OldAnimationsSettings.fishingRodPosition && isRod) {
-                        GlStateManager.rotate(180.0F, 0.0F, 1.0F, 0.0F);
-                        GlStateManager.rotate(50.0F, 0.0F, 0.0F, 1.0F);
-                    } else if (OldAnimationsSettings.firstTransformations &&  OldAnimationsSettings.firstPersonCarpetPosition && isCarpet) {
-                        GlStateManager.translate(0.0F, -5.25F * 0.0625F, 0.0F);
+            } else if (OldAnimationsSettings.thirdTransformations && cameraTransformType == ItemCameraTransforms.TransformType.THIRD_PERSON
+                    && (overflowAnimations$entityLivingBase instanceof EntityPlayer || !OldAnimationsSettings.entityTransforms)) {
+                if (isRod) {
+                    GlStateManager.rotate(180.0F, 0.0F, 1.0F, 0.0F);
+                    GlStateManager.rotate(110.0F, 0.0F, 0.0F, 1.0F);
+                    GlStateManager.translate(0.002F, 0.037F, -0.003F);
+                } else if (OldAnimationsSettings.thirdPersonCarpetPosition && isCarpet) {
+                    GlStateManager.translate(0.0F, -0.25F, 0.0F);
+                }
+                if (isBlock) {
+                    if (Block.getBlockFromItem(stack.getItem()).getRenderType() != 2) {
+                        GlStateManager.translate(-0.0285F, -0.0375F, 0.0285F);
+                        GlStateManager.rotate(-5.0f, 1.0f, 0.0f, 0.0f);
+                        GlStateManager.rotate(-5.0f, 0.0f, 0.0f, 1.0f);
                     }
-                } else if (OldAnimationsSettings.thirdTransformations && cameraTransformType == ItemCameraTransforms.TransformType.THIRD_PERSON
-                        && (overflowAnimations$entityLivingBase instanceof EntityPlayer || !OldAnimationsSettings.entityTransforms)) {
-                    if (isRod) {
-                        GlStateManager.rotate(180.0F, 0.0F, 1.0F, 0.0F);
-                        GlStateManager.rotate(110.0F, 0.0F, 0.0F, 1.0F);
-                        GlStateManager.translate(0.002F, 0.037F, -0.003F);
-                    } else if (OldAnimationsSettings.thirdPersonCarpetPosition && isCarpet) {
-                        GlStateManager.translate(0.0F, -0.25F, 0.0F);
-                    }
-                    if (isBlock) {
-                        if (Block.getBlockFromItem(stack.getItem()).getRenderType() != 2) {
-                            GlStateManager.translate(-0.0285F, -0.0375F, 0.0285F);
-                            GlStateManager.rotate(-5.0f, 1.0f, 0.0f, 0.0f);
-                            GlStateManager.rotate(-5.0f, 0.0f, 0.0f, 1.0f);
-                        }
-                        GlStateManager.scale(-1.0F, 1.0F, -1.0F);
-                    }
+                    GlStateManager.scale(-1.0F, 1.0F, -1.0F);
                 }
             }
-    }
-
-    @Inject(method = "renderItemAndEffectIntoGUI", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/entity/RenderItem;renderItemIntoGUI(Lnet/minecraft/item/ItemStack;II)V"))
-    public void overflowAnimations$fixGlint(ItemStack stack, int xPosition, int yPosition, CallbackInfo ci) {
-        if (OldAnimationsSettings.INSTANCE.enabled) {
-            GlStateManager.enableDepth();
         }
     }
 
@@ -159,35 +165,18 @@ public abstract class RenderItemMixin {
         return instance.getItemModel(stack);
     }
 
-    @Shadow
-    public abstract void renderItem(ItemStack stack, IBakedModel model);
-    @Shadow @Final
-    private static ResourceLocation RES_ITEM_GLINT;
-    @Unique private static final ThreadLocal<ItemStack> mixcesAnimations$stack = ThreadLocal.withInitial(() -> null);
-
-    @Inject(
-            method = "renderEffect",
-            at = @At(
-                    value = "HEAD"
-            ),
-            cancellable = true
-    )
-    public void abc(CallbackInfo ci) {
-        if (!OldAnimationsSettings.enchantmentGlint || !OldAnimationsSettings.INSTANCE.enabled) return;
-        if (GlintModelHook.INSTANCE.getTransformType() != ItemCameraTransforms.TransformType.GUI) return;
-        ci.cancel();
-    }
-
     @Inject(
             method = "renderItemIntoGUI",
             at = @At(
                     value = "TAIL"
             )
     )
-    public void offGUI(ItemStack stack, int x, int y, CallbackInfo ci) {
-        if (!OldAnimationsSettings.enchantmentGlint || !OldAnimationsSettings.INSTANCE.enabled) return;
-        if (!stack.hasEffect()) return;
-        GlintModelHook.INSTANCE.renderGlintGui(x, y, RES_ITEM_GLINT);
+    public void overflowAnimations$renderGuiGlint(ItemStack stack, int x, int y, CallbackInfo ci) {
+        if (OldAnimationsSettings.potionGlint && stack.getItem() instanceof ItemPotion) return;
+        if (OldAnimationsSettings.oldPotionsGui && stack.getItem() instanceof ItemPotion) return;
+        if (OldAnimationsSettings.enchantmentGlintGui && OldAnimationsSettings.INSTANCE.enabled && stack.hasEffect()) {
+            GlintModelHook.INSTANCE.renderGlintGui(x, y, RES_ITEM_GLINT);
+        }
     }
 
     @ModifyArg(
@@ -198,7 +187,7 @@ public abstract class RenderItemMixin {
             ),
             index = 0
     )
-    public IBakedModel mixcesAnimations$replaceModel(IBakedModel model) {
+    public IBakedModel overflowAnimations$replaceModel(IBakedModel model) {
         if (!OldAnimationsSettings.enchantmentGlint || !OldAnimationsSettings.INSTANCE.enabled) return model;
         return GlintModelHook.INSTANCE.getGlint(model);
     }
@@ -210,7 +199,7 @@ public abstract class RenderItemMixin {
             ),
             index = 2
     )
-    private float mixcesAnimations$modifyF(float f) {
+    private float overflowAnimations$modifyF(float f) {
         if (!OldAnimationsSettings.enchantmentGlint || !OldAnimationsSettings.INSTANCE.enabled) return f;
         return f * 64.0F;
     }
@@ -222,7 +211,7 @@ public abstract class RenderItemMixin {
             ),
             index = 3
     )
-    private float mixcesAnimations$modifyF1(float f1) {
+    private float overflowAnimations$modifyF1(float f1) {
         if (!OldAnimationsSettings.enchantmentGlint || !OldAnimationsSettings.INSTANCE.enabled) return f1;
         return f1 * 64.0F;
     }
@@ -234,11 +223,25 @@ public abstract class RenderItemMixin {
                     target = "Lnet/minecraft/client/renderer/GlStateManager;scale(FFF)V"
             )
     )
-    public void mixcesAnimations$modifyScale(Args args) {
+    public void overflowAnimations$modifyScale(Args args) {
         if (!OldAnimationsSettings.enchantmentGlint || !OldAnimationsSettings.INSTANCE.enabled) return;
         for (int i : new int[]{0, 1, 2}) {
             args.set(i, 1 / (float) args.get(i));
         }
+    }
+
+    @ModifyVariable(
+            method = "renderItem(Lnet/minecraft/item/ItemStack;Lnet/minecraft/client/resources/model/IBakedModel;)V",
+            at = @At(
+                    value = "HEAD",
+                    ordinal = 0
+            ),
+            index = 1,
+            argsOnly = true
+    )
+    private ItemStack overflowAnimations$captureStack(ItemStack stack) {
+        overflowanimations$stack = stack;
+        return stack;
     }
 
     @ModifyVariable(
@@ -250,9 +253,8 @@ public abstract class RenderItemMixin {
             index = 1,
             argsOnly = true
     )
-    private ItemStack mixcesAnimations$captureStack(ItemStack stack) {
-        if (!OldAnimationsSettings.INSTANCE.enabled || !OldAnimationsSettings.oldPotions) return stack;
-        mixcesAnimations$stack.set(stack);
+    private ItemStack overflowAnimations$captureHeldStack(ItemStack stack) {
+        overflowanimations$stackHeld = stack;
         return stack;
     }
 
@@ -264,9 +266,9 @@ public abstract class RenderItemMixin {
             ),
             index = 1
     )
-    private IBakedModel mixcesAnimations$swapToCustomModel(IBakedModel model) {
+    private IBakedModel overflowAnimations$swapToCustomModel(IBakedModel model) {
         if (!OldAnimationsSettings.INSTANCE.enabled || !OldAnimationsSettings.oldPotions) return model;
-        if (mixcesAnimations$stack.get().getItem() instanceof ItemPotion) {
+        if (overflowanimations$stackHeld.getItem() instanceof ItemPotion) {
             return CustomModelBakery.BOTTLE_OVERLAY.getBakedModel();
         }
         return model;
@@ -280,16 +282,62 @@ public abstract class RenderItemMixin {
                     shift = At.Shift.AFTER
             )
     )
-    private void mixcesAnimations$renderCustomBottle(ItemStack stack, IBakedModel model, ItemCameraTransforms.TransformType cameraTransformType, CallbackInfo ci) {
+    private void overflowAnimations$renderCustomBottle(ItemStack stack, IBakedModel model, ItemCameraTransforms.TransformType cameraTransformType, CallbackInfo ci) {
         if (!OldAnimationsSettings.INSTANCE.enabled || !OldAnimationsSettings.oldPotions) return;
 
         if (stack.getItem() instanceof ItemPotion) {
-            renderItem(new ItemStack(Items.glass_bottle), mixcesAnimations$getBottleModel(stack));
+            renderItem(new ItemStack(Items.glass_bottle), overflowAnimations$getBottleModel(stack));
+        }
+    }
+
+    @ModifyVariable(
+            method = "renderItemIntoGUI",
+            at = @At(
+                    value = "HEAD",
+                    ordinal = 0
+            ),
+            index = 1,
+            argsOnly = true
+    )
+    private ItemStack overflowAnimations$captureGuiStack(ItemStack stack) {
+        overflowanimations$stackGui = stack;
+        return stack;
+    }
+
+    @ModifyArg(
+            method = "renderItemIntoGUI",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/client/renderer/entity/RenderItem;renderItem(Lnet/minecraft/item/ItemStack;Lnet/minecraft/client/resources/model/IBakedModel;)V"
+            ),
+            index = 1
+    )
+    private IBakedModel overflowAnimations$swapToCustomModel2(IBakedModel model) {
+        if (!OldAnimationsSettings.INSTANCE.enabled || !OldAnimationsSettings.oldPotionsGui) return model;
+        if (overflowanimations$stackGui.getItem() instanceof ItemPotion) {
+            return CustomModelBakery.BOTTLE_OVERLAY.getBakedModel();
+        }
+        return model;
+    }
+
+    @Inject(
+            method = "renderItemIntoGUI",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/client/renderer/entity/RenderItem;renderItem(Lnet/minecraft/item/ItemStack;Lnet/minecraft/client/resources/model/IBakedModel;)V",
+                    shift = At.Shift.AFTER
+            )
+    )
+    private void overflowAnimations$renderCustomBottle2(ItemStack stack, int x, int y, CallbackInfo ci) {
+        if (!OldAnimationsSettings.INSTANCE.enabled || !OldAnimationsSettings.oldPotionsGui) return;
+
+        if (stack.getItem() instanceof ItemPotion) {
+            renderItem(new ItemStack(Items.glass_bottle), overflowAnimations$getBottleModel(stack));
         }
     }
 
     @Unique
-    private IBakedModel mixcesAnimations$getBottleModel(ItemStack stack) {
+    private IBakedModel overflowAnimations$getBottleModel(ItemStack stack) {
         return ItemPotion.isSplash(stack.getMetadata()) ? CustomModelBakery.BOTTLE_SPLASH_EMPTY.getBakedModel() : CustomModelBakery.BOTTLE_DRINKABLE_EMPTY.getBakedModel();
     }
 

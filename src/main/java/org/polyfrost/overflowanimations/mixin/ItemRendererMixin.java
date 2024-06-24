@@ -107,7 +107,8 @@ public abstract class ItemRendererMixin {
 
     @ModifyArg(method = "updateEquippedItem", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/MathHelper;clamp_float(FFF)F"), index = 0)
     private float overflowAnimations$oldItemSwitch(float num) {
-        if (OldAnimationsSettings.fixReequip || OldAnimationsSettings.disableReequip) {
+        // this.itemToRender.getItem().shouldCauseReequipAnimation(this.itemToRender, itemstack, this.equippedItemSlot != entityplayer.inventory.currentItem
+        if (OldAnimationsSettings.disableReequip) {
             return num;
         }
         if (OldAnimationsSettings.itemSwitch && OldAnimationsSettings.INSTANCE.enabled) {
@@ -117,8 +118,8 @@ public abstract class ItemRendererMixin {
                 flag = true;
             }
             if (itemstack != null && itemToRender != null && itemstack != itemToRender && itemstack.getItem() == itemToRender.getItem() && itemstack.getItemDamage() == itemToRender.getItemDamage()) {
-                itemToRender = itemstack;
-                flag = true;
+                    itemToRender = itemstack;
+                    flag = true;
             }
             return (flag ? 1.0f : 0.0f) - equippedProgress;
         }
@@ -129,5 +130,14 @@ public abstract class ItemRendererMixin {
     private float overflowAnimations$changeEquipSpeed(float original) {
         return OldAnimationsSettings.INSTANCE.enabled ? OldAnimationsSettings.INSTANCE.reequipSpeed : original;
     }
+
+    @Unique
+    private boolean overflowAnimations$shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
+        if (!slotChanged) {
+            return false;
+        }
+        return !ItemStack.areItemStacksEqual(oldStack, newStack);
+    }
+
 
 }

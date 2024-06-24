@@ -36,8 +36,6 @@ object GlintModelHook {
         override fun getInterpolatedV(v: Double) = v.toFloat() / 16f
     }
 
-    var transformType: ItemCameraTransforms.TransformType? = null
-
     fun renderGlintGui(x: Int, y: Int, glintTexture: ResourceLocation) {
         val red = 128 / 255f
         val green = 64 / 255f
