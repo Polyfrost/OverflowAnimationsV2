@@ -2,7 +2,9 @@ package org.polyfrost.overflowanimations.mixin;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderEntityItem;
+import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.resources.model.IBakedModel;
 import net.minecraft.entity.item.EntityItem;
 import org.polyfrost.overflowanimations.config.OldAnimationsSettings;
@@ -15,10 +17,14 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(RenderEntityItem.class)
-public abstract class RenderEntityItemMixin {
+public abstract class RenderEntityItemMixin extends Render<EntityItem> {
 
     @Unique
     private boolean overflowanimations$isGui3d;
+
+    protected RenderEntityItemMixin(RenderManager renderManager) {
+        super(renderManager);
+    }
 
     @ModifyVariable(method = "func_177077_a", at = @At("STORE"), ordinal = 0)
     private boolean overflowAnimations$hookGui3d(boolean isGui3d) {
@@ -29,7 +35,7 @@ public abstract class RenderEntityItemMixin {
     @ModifyArg(method = "func_177077_a", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GlStateManager;rotate(FFFF)V"), index = 0)
     private float overflowAnimations$apply2dItem(float angle) {
         if (!overflowanimations$isGui3d && OldAnimationsSettings.itemSprites && OldAnimationsSettings.INSTANCE.enabled) {
-            return 180.0F - (Minecraft.getMinecraft().getRenderManager()).playerViewY;
+            return 180.0F - renderManager.playerViewY;
 
         }
         return angle;
@@ -38,7 +44,7 @@ public abstract class RenderEntityItemMixin {
     @Inject(method = "func_177077_a", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GlStateManager;rotate(FFFF)V", shift = At.Shift.AFTER))
     private void overflowAnimations$fix2dRotation(EntityItem itemIn, double p_177077_2_, double p_177077_4_, double p_177077_6_, float p_177077_8_, IBakedModel p_177077_9_, CallbackInfoReturnable<Integer> cir) {
         if (!overflowanimations$isGui3d && OldAnimationsSettings.itemSprites && OldAnimationsSettings.INSTANCE.enabled && OldAnimationsSettings.rotationFix) {
-            GlStateManager.rotate(((Minecraft.getMinecraft()).gameSettings.thirdPersonView == 2) ? (Minecraft.getMinecraft().getRenderManager()).playerViewX : -(Minecraft.getMinecraft().getRenderManager()).playerViewX, 1.0F, 0.0F, 0.0F);
+            GlStateManager.rotate((Minecraft.getMinecraft().gameSettings.thirdPersonView == 2 ? 1.0f : -1.0f) * renderManager.playerViewX, 1.0F, 0.0F, 0.0F);
         }
     }
 

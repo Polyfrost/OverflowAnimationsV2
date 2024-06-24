@@ -14,7 +14,7 @@ import net.minecraft.client.resources.model.SimpleBakedModel
 import net.minecraft.util.EnumFacing
 import net.minecraft.util.ResourceLocation
 import org.lwjgl.opengl.GL11
-import org.polyfrost.overflowanimations.mixin.RenderItemInvoker
+import org.polyfrost.overflowanimations.mixin.interfaces.RenderItemInvoker
 
 object GlintModelHook {
 

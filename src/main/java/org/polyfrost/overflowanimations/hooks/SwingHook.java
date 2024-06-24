@@ -1,6 +1,6 @@
 package org.polyfrost.overflowanimations.hooks;
 
-import org.polyfrost.overflowanimations.mixin.EntityLivingBaseInvoker;
+import org.polyfrost.overflowanimations.mixin.interfaces.EntityLivingBaseInvoker;
 import net.minecraft.client.Minecraft;
 
 public class SwingHook {

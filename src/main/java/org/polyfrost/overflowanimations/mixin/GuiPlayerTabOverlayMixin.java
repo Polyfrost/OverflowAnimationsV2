@@ -25,8 +25,8 @@ public abstract class GuiPlayerTabOverlayMixin {
     @Inject(method = "renderPlayerlist", at = @At("HEAD"), cancellable = true)
     public void overflowAnimations$renderOldTab(int width, Scoreboard scoreboardIn, ScoreObjective var37, CallbackInfo ci) {
         if (OldAnimationsSettings.INSTANCE.tabMode == 0 && OldAnimationsSettings.INSTANCE.enabled) {
-            TabOverlayHook.renderOldTab(((GuiPlayerTabOverlay) (Object) this), var37, field_175252_a);
             ci.cancel();
+            TabOverlayHook.renderOldTab(((GuiPlayerTabOverlay) (Object) this), var37, field_175252_a);
         }
     }
 

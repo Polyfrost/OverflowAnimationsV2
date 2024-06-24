@@ -8,7 +8,7 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.entity.RendererLivingEntity;
 import net.minecraft.entity.EntityLivingBase;
 import org.polyfrost.overflowanimations.config.OldAnimationsSettings;
-import org.polyfrost.overflowanimations.hooks.TransformTypeHook;
+import org.polyfrost.overflowanimations.hooks.SmoothSneakHook;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -26,7 +26,7 @@ public abstract class RendererLivingEntityMixin<T extends EntityLivingBase> exte
     public void overflowAnimations$movePlayerModel(T entity, double x, double y, double z, float entityYaw, float partialTicks, CallbackInfo ci) {
         if (OldAnimationsSettings.smoothModelSneak && OldAnimationsSettings.INSTANCE.enabled && entity instanceof AbstractClientPlayer) {
             boolean player = entity.getName().equals(Minecraft.getMinecraft().thePlayer.getName());
-            float eyeHeight = player ? TransformTypeHook.sneakingHeight : entity.getEyeHeight();
+            float eyeHeight = player ? SmoothSneakHook.getSmoothSneak() : entity.getEyeHeight();
             if (entity.isSneaking()) {
                 GlStateManager.translate(0.0F, -0.2F, 0.0F);
             }

@@ -11,12 +11,7 @@ public abstract class NetHandlerPlayClientMixin {
 
     @ModifyConstant(method = "handleSpawnExperienceOrb", constant = @Constant(doubleValue = 32.0D))
     private double overflowAnimations$oldXPOrbs(double original) {
-        return OldAnimationsSettings.oldXPOrbs && OldAnimationsSettings.INSTANCE.enabled ? 1.0d : original;
-    }
-
-    @ModifyConstant(method = "handleCollectItem", constant = @Constant(floatValue = 0.5f))
-    private float overflowAnimations$oldItemPickup(float original) {
-        return OldAnimationsSettings.INSTANCE.enabled ? OldAnimationsSettings.INSTANCE.pickupPosition : original;
+        return OldAnimationsSettings.oldXPOrbs && OldAnimationsSettings.INSTANCE.enabled ? original / 32.0D : original;
     }
 
 }

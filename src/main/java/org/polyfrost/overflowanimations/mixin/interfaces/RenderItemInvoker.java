@@ -1,4 +1,4 @@
-package org.polyfrost.overflowanimations.mixin;
+package org.polyfrost.overflowanimations.mixin.interfaces;
 
 import net.minecraft.client.renderer.entity.RenderItem;
 import org.spongepowered.asm.mixin.Mixin;

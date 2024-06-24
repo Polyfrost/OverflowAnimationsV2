@@ -17,9 +17,17 @@ public class ModelBipedMixin {
     @Shadow public ModelRenderer bipedRightArm;
     @Shadow public ModelRenderer bipedLeftArm;
 
-    @ModifyConstant(method = "setRotationAngles", constant = @Constant(floatValue = -0.5235988F))
-    private float overflowAnimations$cancelRotation(float original) {
-        return OldAnimationsSettings.oldArmPosition && OldAnimationsSettings.INSTANCE.enabled ? 0.0f : original;
+    @Inject(
+            method = "setRotationAngles",
+            at = @At(value = "FIELD", opcode = Opcodes.PUTFIELD, target = "Lnet/minecraft/client/model/ModelRenderer;rotateAngleY:F", shift = At.Shift.AFTER),
+            slice = @Slice(
+                    from = @At(value = "FIELD", opcode = Opcodes.GETFIELD, target = "Lnet/minecraft/client/model/ModelBiped;heldItemRight:I", ordinal = 0),
+                    to = @At(value = "FIELD", opcode = Opcodes.GETFIELD, target = "Lnet/minecraft/client/model/ModelBiped;heldItemRight:I", ordinal = 2)
+            )
+    )
+    private void overflowAnimations$reAssignArmPosition(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Entity entityIn, CallbackInfo ci) {
+        if (!OldAnimationsSettings.oldArmPosition || !OldAnimationsSettings.INSTANCE.enabled) { return; }
+        bipedRightArm.rotateAngleY = 0.0f;
     }
 
     @Redirect(method = "setRotationAngles", at = @At(value = "FIELD", opcode = Opcodes.PUTFIELD, target = "Lnet/minecraft/client/model/ModelRenderer;rotateAngleZ:F", ordinal = 0))

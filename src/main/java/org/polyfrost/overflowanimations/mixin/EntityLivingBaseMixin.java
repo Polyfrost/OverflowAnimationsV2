@@ -31,7 +31,6 @@ public abstract class EntityLivingBaseMixin extends Entity {
     @Unique protected float overflowAnimations$newHeadYaw;
     @Unique protected int overflowAnimations$headYawLerpWeight;
 
-
     @Inject(method = "setRotationYawHead", at = @At("HEAD"), cancellable = true)
     public void overflowAnimations$setAsNewHeadYaw(float rotation, CallbackInfo ci) {
         if (!OldAnimationsSettings.INSTANCE.enabled || !OldAnimationsSettings.headYawFix) return;
@@ -49,23 +48,22 @@ public abstract class EntityLivingBaseMixin extends Entity {
         overflowAnimations$headYawLerpWeight--;
     }
 
+    //todo: hook swing speed
     @Inject(method = "getArmSwingAnimationEnd()I", at = @At("HEAD"), cancellable = true)
     public void overflowAnimations$modifySwingSpeed(CallbackInfoReturnable<Integer> cir) {
         OldAnimationsSettings settings = OldAnimationsSettings.INSTANCE;
         if (OldAnimationsSettings.globalPositions && settings.enabled) {
             if (isPotionActive(Potion.digSpeed) && !OldAnimationsSettings.ignoreHaste) {
-                cir.setReturnValue(
-                        (6 - (1 + getActivePotionEffect(Potion.digSpeed).getAmplifier())) * Math.max((int) Math.exp(-settings.itemSwingSpeedHaste), 1));
+                cir.setReturnValue((6 - (1 + getActivePotionEffect(Potion.digSpeed).getAmplifier())) * Math.max((int) Math.exp(-settings.itemSwingSpeedHaste), 1));
             } else if (isPotionActive(Potion.digSlowdown) && !OldAnimationsSettings.ignoreFatigue) {
-                cir.setReturnValue(
-                        (6 + (1 + getActivePotionEffect(Potion.digSlowdown).getAmplifier())) * 2 * Math.max((int) Math.exp(-settings.itemSwingSpeedFatigue), 1));
+                cir.setReturnValue((6 + (1 + getActivePotionEffect(Potion.digSlowdown).getAmplifier())) * 2 * Math.max((int) Math.exp(-settings.itemSwingSpeedFatigue), 1));
             } else {
-                cir.setReturnValue(
-                         6 * Math.max((int) Math.exp(-settings.itemSwingSpeed), 1));
+                cir.setReturnValue(6 * Math.max((int) Math.exp(-settings.itemSwingSpeed), 1));
             }
         }
     }
 
+    //todo: see if i can write this better
     @ModifyArg(method = "onUpdate", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/EntityLivingBase;updateDistance(FF)F"), index = 0)
     public float overflowAnimations$modifyYaw(float p_1101461) {
         double d0 = posX - prevPosX;

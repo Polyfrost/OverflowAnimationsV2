@@ -1,6 +1,6 @@
 package org.polyfrost.overflowanimations.hooks;
 
-import org.polyfrost.overflowanimations.mixin.GuiPlayerTabOverlayInvoker;
+import org.polyfrost.overflowanimations.mixin.interfaces.GuiPlayerTabOverlayInvoker;
 import com.google.common.collect.Ordering;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;

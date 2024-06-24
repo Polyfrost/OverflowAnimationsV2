@@ -17,7 +17,7 @@ public abstract class PlayerControllerMPMixin {
 
     @ModifyArg(method = {"clickBlock", "onPlayerDamageBlock"}, at = @At(value = "INVOKE", target = "Lnet/minecraft/client/multiplayer/WorldClient;sendBlockBreakProgress(ILnet/minecraft/util/BlockPos;I)V"), index = 2)
     public int overflowAnimations$fixDelay(int par1) {
-        return par1 + (OldAnimationsSettings.breakFix && OldAnimationsSettings.INSTANCE.enabled ? 1 : 0);
+        return par1 + (OldAnimationsSettings.modernBreak && OldAnimationsSettings.INSTANCE.enabled ? 1 : 0);
     }
 
     @Redirect(method = "onPlayerDamageBlock", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/multiplayer/PlayerControllerMP;isHittingPosition(Lnet/minecraft/util/BlockPos;)Z"))

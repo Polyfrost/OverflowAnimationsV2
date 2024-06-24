@@ -33,11 +33,31 @@ public abstract class ItemRendererMixin {
 
     @Shadow protected abstract void rotateWithPlayerRotations(EntityPlayerSP entityplayerspIn, float partialTicks);
 
-    @ModifyConstant(method = "renderItemInFirstPerson", constant = @Constant(floatValue = 0.0f))
-    public float overflowAnimations$fixAnimation(float original, float partialTicks) {
-        AbstractClientPlayer abstractclientplayer = mc.thePlayer;
-        return OldAnimationsSettings.oldBlockhitting && OldAnimationsSettings.INSTANCE.enabled ?
-                abstractclientplayer.getSwingProgress(partialTicks) : original;
+    @Unique private static float overflowAnimations$f1 = 0.0F;
+
+    @ModifyVariable(
+            method = "renderItemInFirstPerson",
+            at = @At(
+                    value = "STORE"
+            ),
+            index = 4
+    )
+    private float overflowAnimations$captureF1(float f1) {
+        overflowAnimations$f1 = f1;
+        return f1;
+    }
+
+    @ModifyArg(method = "renderItemInFirstPerson", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/ItemRenderer;transformFirstPersonItem(FF)V"),
+            slice = @Slice(
+                    from = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/ItemRenderer;performDrinking(Lnet/minecraft/client/entity/AbstractClientPlayer;F)V"),
+                    to = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/ItemRenderer;doBowTransformations(FLnet/minecraft/client/entity/AbstractClientPlayer;)V")
+            ), index = 1
+    )
+    private float overflowAnimations$useF1(float swingProgress) {
+        if (OldAnimationsSettings.oldBlockhitting && OldAnimationsSettings.INSTANCE.enabled) {
+            return overflowAnimations$f1;
+        }
+        return swingProgress;
     }
 
     @Inject(method = "doBowTransformations", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GlStateManager;scale(FFF)V"))

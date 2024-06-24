@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(value = ForgeHooksClient.class, remap = false)
 public class ForgeHooksClientMixin {
 
-    @Inject(method = "handleCameraTransforms", at = @At("RETURN"))
+    @Inject(method = "handleCameraTransforms", at = @At("HEAD"))
     private static void overflowAnimations$getCameraPerspective(IBakedModel model, ItemCameraTransforms.TransformType cameraTransformType, CallbackInfoReturnable<IBakedModel> cir) {
         TransformTypeHook.transform = cameraTransformType;
     }

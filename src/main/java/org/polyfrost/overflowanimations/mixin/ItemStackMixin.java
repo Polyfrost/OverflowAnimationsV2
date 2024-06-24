@@ -11,6 +11,8 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 @Mixin(value = ItemStack.class)
 public class ItemStackMixin {
 
+    //todo: there is a better way
+
     @Redirect(method = "hasEffect", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/Item;hasEffect(Lnet/minecraft/item/ItemStack;)Z"))
     public boolean disablePotionGlint(Item instance, ItemStack stack) {
         if (OldAnimationsSettings.potionGlint && OldAnimationsSettings.INSTANCE.enabled && stack.getItem() instanceof ItemPotion) {

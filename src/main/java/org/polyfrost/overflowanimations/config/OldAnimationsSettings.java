@@ -69,8 +69,8 @@ public class OldAnimationsSettings extends Config {
     public static boolean longerUnsneak = true;
 
     @Switch(
-            name = "1.7 Third Person Smooth Sneaking",
-            description = "Smoothens the player model while sneaking to replicate the same behavior in 1.7. Disable if incompatible with cosmetic mods",
+            name = "1.7 Third Person Sneaking",
+            description = "Synchronizes the player model's sneaking behavior to the eye height to replicate the same behavior in 1.7. Disable if incompatible with cosmetic mods",
             subcategory = "Smooth Sneaking"
     )
     public static boolean smoothModelSneak = false;
@@ -343,6 +343,20 @@ public class OldAnimationsSettings extends Config {
     public static boolean funnyFidget = false;
 
     @Switch(
+            name = "1.19+ Block Breaking Animation",
+            description = "Renders the block breaking animation as soon as you start mining similar to 1.19+.",
+            category = "Misc", subcategory = "Modern"
+    )
+    public static boolean modernBreak = true;
+
+    @Switch(
+            name = "1.14+ Fireball Model",
+            description = "Renders the thrown fireball projectiles as models rather than as sprites similar to 1.14+.",
+            category = "Misc", subcategory = "Modern"
+    )
+    public static boolean fireballModel = false;
+
+    @Switch(
             name = "Disable Item Re-equip Animation",
             description = "Completely removed the the item re-equip animation.",
             category = "Misc", subcategory = "Re-quip Animation"
@@ -377,7 +391,7 @@ public class OldAnimationsSettings extends Config {
             category = "Misc", subcategory = "Pickup Animation",
             instant = true
     )
-    public float pickupPosition = oldPickup ? 1.0F : -0.5F;
+    public float pickupPosition = 0.0F;
 
     @Switch(
             name = "Rod Line Position Based on FOV",
@@ -386,13 +400,6 @@ public class OldAnimationsSettings extends Config {
     )
     public static boolean fixRod = true;
 
-    @Switch(
-            name = "Rod Line Thickness",
-            description = "Enable to customize the rod line's thickness",
-            category = "Misc", subcategory = "Fishing Rod Line"
-    )
-    public static boolean rodThickBool = true;
-
     @Slider(
             name = "Rod Line Thickness Slider",
             min = -100.0F, max = 100.0F,
@@ -400,15 +407,6 @@ public class OldAnimationsSettings extends Config {
             instant = true
     )
     public float rodThickness = 0.0F;
-
-    @Switch(
-            name = "Render Fireball Projectile as a Model",
-            description = "Renders the thrown fireball projectiles as models rather than as sprites.",
-            category = "Misc", subcategory = "Fixes, QOL, and Tweaks"
-    )
-    public static boolean fireballModel = false;
-
-    // todo: xp bottle model + move both model options to modern category
 
     @Switch(
             name = "Block Breaking Fixes",
@@ -795,6 +793,5 @@ public class OldAnimationsSettings extends Config {
         addDependency("entityTransforms", "thirdTransformations");
         // Sneaking
         addDependency("longerUnsneak", "smoothSneaking");
-        addDependency("smoothModelSneak", "smoothSneaking");
     }
 }

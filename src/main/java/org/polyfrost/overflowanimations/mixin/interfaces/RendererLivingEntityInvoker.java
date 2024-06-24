@@ -1,6 +1,5 @@
-package org.polyfrost.overflowanimations.mixin;
+package org.polyfrost.overflowanimations.mixin.interfaces;
 
-import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RendererLivingEntity;
 import net.minecraft.entity.EntityLivingBase;
 import org.spongepowered.asm.mixin.Mixin;
