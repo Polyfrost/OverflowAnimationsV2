@@ -103,7 +103,7 @@ public class OldAnimationsSettings extends Config {
             category = "Animations",
             subcategory = "Interaction"
     )
-    public int redArmor = 3;
+    public int armorDamageTintStyle = 3;
 
     @Switch(
             name = "1.7 Item Switching Animation",

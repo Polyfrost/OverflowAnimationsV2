@@ -29,17 +29,17 @@ public abstract class RendererLivingEntityMixin<T extends EntityLivingBase> exte
 
     @Redirect(method = "doRender(Lnet/minecraft/entity/EntityLivingBase;DDDFF)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/entity/RendererLivingEntity;setDoRenderBrightness(Lnet/minecraft/entity/EntityLivingBase;F)Z"))
     public boolean overflowAnimations$disableBrightness(RendererLivingEntity<?> instance, T entityLivingBaseIn, float partialTicks) {
-        return (OldAnimationsSettings.INSTANCE.redArmor != 1 || !OldAnimationsSettings.INSTANCE.enabled) && setDoRenderBrightness(entityLivingBaseIn, partialTicks);
+        return (OldAnimationsSettings.INSTANCE.armorDamageTintStyle != 1 || !OldAnimationsSettings.INSTANCE.enabled) && setDoRenderBrightness(entityLivingBaseIn, partialTicks);
     }
 
     @Redirect(method = "renderLayers", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/entity/RendererLivingEntity;setBrightness(Lnet/minecraft/entity/EntityLivingBase;FZ)Z"))
     public boolean overflowAnimations$disableLayerBrightness(RendererLivingEntity<?> instance, T f2, float f3, boolean f4) {
-        return (OldAnimationsSettings.INSTANCE.redArmor != 1 || !OldAnimationsSettings.INSTANCE.enabled) && setBrightness(f2, f3, f4);
+        return (OldAnimationsSettings.INSTANCE.armorDamageTintStyle != 1 || !OldAnimationsSettings.INSTANCE.enabled) && setBrightness(f2, f3, f4);
     }
 
     @Inject(method = "doRender(Lnet/minecraft/entity/EntityLivingBase;DDDFF)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GlStateManager;depthMask(Z)V"))
     public void overflowAnimations$renderHitColor(T entity, double x, double y, double z, float entityYaw, float partialTicks, CallbackInfo ci) {
-        if (OldAnimationsSettings.INSTANCE.redArmor == 1 && OldAnimationsSettings.INSTANCE.enabled) {
+        if (OldAnimationsSettings.INSTANCE.armorDamageTintStyle == 1 && OldAnimationsSettings.INSTANCE.enabled) {
             float f = interpolateRotation(entity.prevRenderYawOffset, entity.renderYawOffset, partialTicks);
             float f1 = interpolateRotation(entity.prevRotationYawHead, entity.rotationYawHead, partialTicks);
             float f2 = f1 - f;

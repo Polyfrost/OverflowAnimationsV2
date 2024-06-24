@@ -36,7 +36,7 @@ public abstract class LayerArmorBaseMixin<T extends ModelBase> implements LayerR
 
     @Inject(method = "renderLayer", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/model/ModelBase;render(Lnet/minecraft/entity/Entity;FFFFFF)V", shift = At.Shift.AFTER))
     public void overflowAnimations$addRender(EntityLivingBase entitylivingbaseIn, float p_177182_2_, float p_177182_3_, float partialTicks, float p_177182_5_, float p_177182_6_, float p_177182_7_, float scale, int armorSlot, CallbackInfo ci) {
-        if (OldAnimationsSettings.INSTANCE.redArmor == 3 && OldAnimationsSettings.INSTANCE.enabled && ((RendererLivingEntityInvoker) renderer).invokeSetDoRenderBrightness(entitylivingbaseIn, partialTicks)) {
+        if (OldAnimationsSettings.INSTANCE.armorDamageTintStyle == 3 && OldAnimationsSettings.INSTANCE.enabled && ((RendererLivingEntityInvoker) renderer).invokeSetDoRenderBrightness(entitylivingbaseIn, partialTicks)) {
             overflowAnimations$t.render(entitylivingbaseIn, p_177182_2_, p_177182_3_, p_177182_5_, p_177182_6_, p_177182_7_, scale);
             ((RendererLivingEntityInvoker) renderer).invokeUnsetBrightness();
         }
@@ -44,7 +44,7 @@ public abstract class LayerArmorBaseMixin<T extends ModelBase> implements LayerR
 
     @Inject(method = "shouldCombineTextures", at = @At(value = "HEAD"), cancellable = true)
     public void overflowAnimations$allowCombine(CallbackInfoReturnable<Boolean> cir) {
-        cir.setReturnValue(OldAnimationsSettings.INSTANCE.redArmor == 2 && OldAnimationsSettings.INSTANCE.enabled);
+        cir.setReturnValue(OldAnimationsSettings.INSTANCE.armorDamageTintStyle == 2 && OldAnimationsSettings.INSTANCE.enabled);
     }
 
 }
