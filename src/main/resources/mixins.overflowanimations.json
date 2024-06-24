@@ -5,7 +5,6 @@
   "refmap": "mixins.${id}.refmap.json",
   "verbose": true,
   "client": [
-    "interfaces.EntityLivingBaseInvoker",
     "EntityLivingBaseMixin",
     "EntityOtherPlayerMPMixin",
     "EntityPickupFXMixin",
@@ -15,7 +14,6 @@
     "GuiIngameForgeMixin",
     "GuiIngameMixin",
     "GuiOverlayDebugMixin",
-    "interfaces.GuiPlayerTabOverlayInvoker",
     "GuiPlayerTabOverlayMixin",
     "ItemMixin",
     "ItemModelMesherMixin",
@@ -34,13 +32,24 @@
     "PotionHelperMixin",
     "RenderEntityItemMixin",
     "RenderEntityItemMixin_CustomPositions",
-    "interfaces.RendererLivingEntityInvoker",
     "RendererLivingEntityMixin",
     "RenderFireballMixin",
     "RenderFishMixin",
-    "interfaces.RenderItemInvoker",
     "RenderItemMixin",
     "RenderSnowballMixin",
-    "RenderSnowballMixin_CustomPositions"
+    "RenderSnowballMixin_CustomPositions",
+    "interfaces.EntityLivingBaseInvoker",
+    "interfaces.GuiPlayerTabOverlayInvoker",
+    "interfaces.RendererLivingEntityInvoker",
+    "interfaces.RenderItemInvoker",
+    "layers.LayerArmorBaseMixin",
+    "layers.LayerEnderDragonEyesMixin",
+    "layers.LayerEndermanEyesMixin",
+    "layers.LayerSaddleMixin",
+    "layers.LayerSheepWoolMixin",
+    "layers.LayerSlimeGelMixin",
+    "layers.LayerSpiderEyesMixin",
+    "layers.LayerWolfCollarMixin",
+    "layers.RendererLivingEntityMixin"
   ]
 }

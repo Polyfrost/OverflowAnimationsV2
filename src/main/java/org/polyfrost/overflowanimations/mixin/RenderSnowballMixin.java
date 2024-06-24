@@ -1,6 +1,5 @@
 package org.polyfrost.overflowanimations.mixin;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
@@ -22,7 +21,7 @@ public abstract class RenderSnowballMixin<T extends Entity> extends Render<T> {
     @ModifyArg(method = "doRender", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GlStateManager;rotate(FFFF)V", ordinal = 0), index = 0)
     private float overflowAnimations$fixRotationY(float original) {
         return (OldAnimationsSettings.itemSprites || OldAnimationsSettings.oldProjectiles) && OldAnimationsSettings.INSTANCE.enabled ?
-                180.0f - renderManager.playerViewY : original;
+                180.0F + original : original;
     }
 
     @ModifyArg(method = "doRender", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GlStateManager;rotate(FFFF)V", ordinal = 1), index = 0)

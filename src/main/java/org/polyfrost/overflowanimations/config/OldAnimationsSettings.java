@@ -88,17 +88,30 @@ public class OldAnimationsSettings extends Config {
     )
     public static boolean oldBlockhitting = true;
 
-    @Switch(
-            name = "1.7 Armor Damage Tint",
-            description = "Allows the armor to also have the damage tint applied to it.",
-            subcategory = "Interaction"
+//    @Switch(
+//            name = "1.7 Armor Damage Tint",
+//            description = "Allows the armor to also have the damage tint applied to it.",
+//            subcategory = "Interaction"
+//    )
+//    @VigilanceName(
+//            name = "Red Armor",
+//            category = "Animations",
+//            subcategory = "Interaction"
+//    )
+//    public static boolean redArmor = true;
+
+
+    @Dropdown(
+            name = "Armor Damage Tint Style",
+            description = "Applies a damage tint to armor. " +
+                    "\"None\" will disable the effect on armor. " +
+                    "\"1.7\" will apply the damage color using the 1.7 formula. " +
+                    "\"1.8 (With Glint)\" will use the 1.8 formula AND account for the enchantment glint. " +
+                    "\"1.8 (Without Glint)\" will use the 1.8 formula AND NOT account for the enchantment glint. ",
+            options = {"None", "1.7", "1.8 (With Glint)", "1.8 (Without Glint)"},
+            subcategory = "HUD"
     )
-    @VigilanceName(
-            name = "Red Armor",
-            category = "Animations",
-            subcategory = "Interaction"
-    )
-    public static boolean redArmor = true;
+    public int redArmor = 3;
 
     @Switch(
             name = "1.7 Item Switching Animation",
