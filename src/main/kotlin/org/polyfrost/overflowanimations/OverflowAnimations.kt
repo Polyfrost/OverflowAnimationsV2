@@ -4,6 +4,8 @@ import cc.polyfrost.oneconfig.events.EventManager
 import cc.polyfrost.oneconfig.events.event.RenderEvent
 import cc.polyfrost.oneconfig.events.event.Stage
 import cc.polyfrost.oneconfig.libs.eventbus.Subscribe
+import cc.polyfrost.oneconfig.libs.universal.UDesktop
+import cc.polyfrost.oneconfig.utils.Notifications
 import cc.polyfrost.oneconfig.utils.commands.CommandManager
 import cc.polyfrost.oneconfig.utils.gui.GuiUtils
 import dulkirmod.config.Config
@@ -12,12 +14,14 @@ import net.minecraft.client.Minecraft
 import net.minecraftforge.fml.common.Loader
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.common.event.FMLInitializationEvent
+import net.minecraftforge.fml.common.event.FMLLoadCompleteEvent
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent
 import org.polyfrost.overflowanimations.command.OldAnimationsCommand
 import org.polyfrost.overflowanimations.config.OldAnimationsSettings
 import org.polyfrost.overflowanimations.gui.PleaseMigrateDulkirModGui
 import org.polyfrost.overflowanimations.init.CustomModelBakery
+import java.net.URI
 
 @Mod(
     modid = OverflowAnimations.MODID,
@@ -36,6 +40,7 @@ object OverflowAnimations {
     private var doTheFunnyDulkirThing = false
     @JvmField
     var oldDulkirMod: Boolean = false
+    private var customCrosshair = false
 
     @Mod.EventHandler
     fun preInit(event: FMLPreInitializationEvent) {
@@ -55,6 +60,18 @@ object OverflowAnimations {
             doTheFunnyDulkirThing = true
         }
         isPatcherPresent = Loader.isModLoaded("patcher")
+        customCrosshair = Loader.isModLoaded("custom-crosshair-mod")
+    }
+
+    @Mod.EventHandler
+    fun onLoad(event: FMLLoadCompleteEvent) {
+        if (customCrosshair) {
+            OldAnimationsSettings.smoothModelSneak = false
+            OldAnimationsSettings.INSTANCE.save()
+            Notifications.INSTANCE.send("OverflowAnimations", "Custom Crosshair Mod has been detected, which is written poorly and causes major issues with OverflowAnimations. Disabling Smooth Model Sneak. If you want a better crosshair mod, please click here to use PolyCrosshair instead.", 5000f, Runnable {
+                UDesktop.browse(URI("https://modrinth.com/mod/crosshair"))
+            })
+        }
     }
 
     @Subscribe
