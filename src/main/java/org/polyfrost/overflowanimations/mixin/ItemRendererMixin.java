@@ -131,13 +131,4 @@ public abstract class ItemRendererMixin {
         return OldAnimationsSettings.INSTANCE.enabled ? OldAnimationsSettings.INSTANCE.reequipSpeed : original;
     }
 
-    @Unique
-    private boolean overflowAnimations$shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
-        if (!slotChanged) {
-            return false;
-        }
-        return !ItemStack.areItemStacksEqual(oldStack, newStack);
-    }
-
-
 }
