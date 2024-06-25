@@ -821,6 +821,5 @@ public class OldAnimationsSettings extends Config {
         addDependency("entityTransforms", "thirdTransformations");
         // Sneaking
         addDependency("longerUnsneak", "smoothSneaking");
-        addDependency("smoothModelSneak", "smoothSneaking");
     }
 }

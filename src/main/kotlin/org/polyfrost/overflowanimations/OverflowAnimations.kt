@@ -41,6 +41,8 @@ object OverflowAnimations {
     @JvmField
     var oldDulkirMod: Boolean = false
     private var customCrosshair = false
+    @JvmField
+    var isDamageTintPresent: Boolean = false
 
     @Mod.EventHandler
     fun preInit(event: FMLPreInitializationEvent) {
@@ -61,6 +63,7 @@ object OverflowAnimations {
         }
         isPatcherPresent = Loader.isModLoaded("patcher")
         customCrosshair = Loader.isModLoaded("custom-crosshair-mod")
+        isDamageTintPresent = Loader.isModLoaded("damagetint")
     }
 
     @Mod.EventHandler
