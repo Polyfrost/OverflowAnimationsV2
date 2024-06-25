@@ -36,6 +36,8 @@ object OverflowAnimations {
     private var doTheFunnyDulkirThing = false
     @JvmField
     var oldDulkirMod: Boolean = false
+    @JvmField
+    var isDamageTintPresent: Boolean = false
 
     @Mod.EventHandler
     fun preInit(event: FMLPreInitializationEvent) {
@@ -55,6 +57,7 @@ object OverflowAnimations {
             doTheFunnyDulkirThing = true
         }
         isPatcherPresent = Loader.isModLoaded("patcher")
+        isDamageTintPresent = Loader.isModLoaded("damagetint")
     }
 
     @Subscribe

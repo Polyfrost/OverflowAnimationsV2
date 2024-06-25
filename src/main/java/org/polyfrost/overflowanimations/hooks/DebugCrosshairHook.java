@@ -11,6 +11,8 @@ import org.lwjgl.opengl.GL11;
 
 public class DebugCrosshairHook {
 
+    //todo: use lerp func + hud caching compat
+
     public static void renderDirections(float partialTicks, float zLevel, ScaledResolution res, Minecraft mc) {
         GlStateManager.pushMatrix();
         GlStateManager.translate((float)(res.getScaledWidth() / 2), (float)(res.getScaledHeight() / 2), zLevel);

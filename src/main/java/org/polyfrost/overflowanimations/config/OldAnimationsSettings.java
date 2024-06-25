@@ -387,14 +387,14 @@ public class OldAnimationsSettings extends Config {
     @Switch(
             name = "Disable Item Re-equip Animation",
             description = "Completely removed the the item re-equip animation.",
-            category = "Misc", subcategory = "Re-quip Animation"
+            category = "Misc", subcategory = "Re-equip Animation"
     )
     public static boolean disableReequip = false;
 
     @Slider(
             name = "Item Re-equip Animation Speed",
             min = 0.1F, max = 1.0F,
-            category = "Misc", subcategory = "Re-quip Animation",
+            category = "Misc", subcategory = "Re-equip Animation",
             instant = true
     )
     public float reequipSpeed = 0.4F;
@@ -402,7 +402,7 @@ public class OldAnimationsSettings extends Config {
     @Switch(
             name = "Only Allow Re-equip Animation Upon Switching Slots",
             description = "Fixes the re-equip animation to only play when items slots are switched.",
-            category = "Misc", subcategory = "Re-quip Animation"
+            category = "Misc", subcategory = "Re-equip Animation"
     )
     public static boolean fixReequip = true;
 
