@@ -2,6 +2,7 @@ package org.polyfrost.overflowanimations.mixin;
 
 import net.minecraft.client.renderer.GlStateManager;
 import org.polyfrost.overflowanimations.config.OldAnimationsSettings;
+import org.polyfrost.overflowanimations.hooks.DebugCrosshairHook;
 import org.polyfrost.overflowanimations.hooks.DebugOverlayHook;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.EntityRenderer;
@@ -10,12 +11,17 @@ import org.polyfrost.overflowanimations.hooks.SmoothSneakHook;
 import org.polyfrost.overflowanimations.util.MathUtils;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(EntityRenderer.class)
-public class EntityRendererMixin {
+public abstract class EntityRendererMixin {
+
+    @Shadow private Minecraft mc;
+
+    @Shadow public abstract void setupOverlayRendering();
 
     @Unique
     @Final
@@ -76,6 +82,16 @@ public class EntityRendererMixin {
     public void overflowAnimations$modernBobbing(float angle, float x, float y, float z) {
         if (!OldAnimationsSettings.modernBobbing || !OldAnimationsSettings.INSTANCE.enabled) {
             GlStateManager.rotate(angle, x, y, z);
+        }
+    }
+
+    @Inject(method = "updateCameraAndRender", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiIngame;renderGameOverlay(F)V"))
+    private void draw(float partialTicks, long nanoTime, CallbackInfo ci) {
+        if (OldAnimationsSettings.INSTANCE.debugCrosshairMode == 2 &&
+                OldAnimationsSettings.INSTANCE.enabled && mc.gameSettings.showDebugInfo && !mc.thePlayer.hasReducedDebug() &&
+                !mc.gameSettings.reducedDebugInfo) {
+            setupOverlayRendering();
+            DebugCrosshairHook.renderDirections(partialTicks, mc);
         }
     }
 

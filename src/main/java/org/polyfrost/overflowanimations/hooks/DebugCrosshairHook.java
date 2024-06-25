@@ -1,7 +1,7 @@
 package org.polyfrost.overflowanimations.hooks;
 
+import cc.polyfrost.oneconfig.libs.universal.UResolution;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
@@ -11,11 +11,9 @@ import org.lwjgl.opengl.GL11;
 
 public class DebugCrosshairHook {
 
-    //todo: use lerp func + hud caching compat
-
-    public static void renderDirections(float partialTicks, float zLevel, ScaledResolution res, Minecraft mc) {
+    public static void renderDirections(float partialTicks, Minecraft mc) {
         GlStateManager.pushMatrix();
-        GlStateManager.translate((float)(res.getScaledWidth() / 2), (float)(res.getScaledHeight() / 2), zLevel);
+        GlStateManager.translate((float)(UResolution.getScaledWidth() / 2), (float)(UResolution.getScaledHeight() / 2), 100);
         Entity entity = mc.getRenderViewEntity();
         GlStateManager.rotate(entity.prevRotationPitch + (entity.rotationPitch - entity.prevRotationPitch) * partialTicks, -1.0F, 0.0F, 0.0F);
         GlStateManager.rotate(entity.prevRotationYaw + (entity.rotationYaw - entity.prevRotationYaw) * partialTicks, 0.0F, 1.0F, 0.0F);
