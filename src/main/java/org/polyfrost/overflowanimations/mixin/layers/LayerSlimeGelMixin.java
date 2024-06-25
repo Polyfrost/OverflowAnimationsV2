@@ -19,7 +19,7 @@ public abstract class LayerSlimeGelMixin {
 
     @Inject(method = "doRenderLayer(Lnet/minecraft/entity/monster/EntitySlime;FFFFFFF)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/model/ModelBase;render(Lnet/minecraft/entity/Entity;FFFFFF)V", shift = At.Shift.AFTER), cancellable = true)
     public void overflowAnimations$renderHitColor(EntitySlime var1, float f, float g, float partialTicks, float h, float i, float j, float scale, CallbackInfo ci) {
-        if (OldAnimationsSettings.INSTANCE.redArmor == 1 && OldAnimationsSettings.INSTANCE.enabled) {
+        if (OldAnimationsSettings.INSTANCE.armorDamageTintStyle == 1 && OldAnimationsSettings.INSTANCE.enabled) {
             boolean bl = var1.hurtTime > 0 || var1.deathTime > 0;
             HitColorHook.renderHitColorPre(var1, bl, partialTicks);
             if (bl) {

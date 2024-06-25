@@ -19,7 +19,7 @@ public abstract class LayerSaddleMixin {
 
     @Inject(method = "doRenderLayer(Lnet/minecraft/entity/passive/EntityPig;FFFFFFF)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/model/ModelPig;render(Lnet/minecraft/entity/Entity;FFFFFF)V", shift = At.Shift.AFTER))
     public void overflowAnimations$renderHitColor(EntityPig var1, float var2, float var3, float var4, float var5, float var6, float var7, float var8, CallbackInfo ci) {
-        if (OldAnimationsSettings.INSTANCE.redArmor == 1 && OldAnimationsSettings.INSTANCE.enabled) {
+        if (OldAnimationsSettings.INSTANCE.armorDamageTintStyle == 1 && OldAnimationsSettings.INSTANCE.enabled) {
             boolean bl = var1.hurtTime > 0 || var1.deathTime > 0;
             HitColorHook.renderHitColorPre(var1, bl, var4);
             if (bl) {

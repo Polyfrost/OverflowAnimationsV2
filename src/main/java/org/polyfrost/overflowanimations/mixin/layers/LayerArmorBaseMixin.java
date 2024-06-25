@@ -19,7 +19,7 @@ public abstract class LayerArmorBaseMixin<T extends ModelBase> implements LayerR
 
     @Inject(method = "renderLayer", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/model/ModelBase;render(Lnet/minecraft/entity/Entity;FFFFFF)V", ordinal = 1, shift = At.Shift.AFTER))
     public void overflowAnimations$renderHitColor(EntityLivingBase entitylivingbaseIn, float p_177182_2_, float p_177182_3_, float partialTicks, float p_177182_5_, float p_177182_6_, float p_177182_7_, float scale, int armorSlot, CallbackInfo ci) {
-        if (OldAnimationsSettings.INSTANCE.redArmor == 1 && OldAnimationsSettings.INSTANCE.enabled) {
+        if (OldAnimationsSettings.INSTANCE.armorDamageTintStyle == 1 && OldAnimationsSettings.INSTANCE.enabled) {
             T t = this.getArmorModel(armorSlot);
             boolean bl = entitylivingbaseIn.hurtTime > 0 || entitylivingbaseIn.deathTime > 0;
             HitColorHook.renderHitColorPre(entitylivingbaseIn, bl, partialTicks);
