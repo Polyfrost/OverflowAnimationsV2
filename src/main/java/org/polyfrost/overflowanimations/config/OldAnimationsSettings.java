@@ -464,13 +464,6 @@ public class OldAnimationsSettings extends Config {
     )
     public static boolean coloredBottles = false;
 
-    @Checkbox(
-            name = "Disable Drop Item Arm Swing in Chests",
-            description = "Disables the arm swinging animation upon dropping items while in Chests.",
-            category = "Misc", subcategory = "Fixes, QOL, and Tweaks"
-    )
-    public static boolean modernDropSwingFix = true;
-
     @Switch(
             name = "Disable Entity/Mob Third-Person Item Transformations",
             description = "Allows/Disallows mobs or entities to have third person item positions applied to them.",
@@ -512,13 +505,6 @@ public class OldAnimationsSettings extends Config {
             category = "Misc", subcategory = "Fun"
     )
     public static boolean lunarBlockhit = false;
-
-    @Switch(
-            name = "Old Lunar/CheatBreaker Item Positions",
-            description = "Brings back the item positions from older versions of Lunar Client or CheatBreaker!",
-            category = "Misc", subcategory = "Fun"
-    )
-    public static boolean lunarPositions = false;
 
     @Switch(
             name = "Dinnerbone Mode Player-Only",
