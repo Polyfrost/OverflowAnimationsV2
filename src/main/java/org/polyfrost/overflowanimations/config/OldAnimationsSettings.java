@@ -238,35 +238,35 @@ public class OldAnimationsSettings extends Config {
     )
     public static boolean enchantmentGlintGui = false;
 
-    @Switch(
-            name = "1.7 Potion Models (Held)",
-            description = "Use the old potion models from 1.7, making the enchantment glint appear only on the colored part of the potion.",
-            subcategory = "Enchantment Glint"
-    )
-    public static boolean oldPotions = true;
-
-    @Switch(
-            name = "1.7 Potion Models (Dropped)",
-            description = "Use the old potion models from 1.7, making the enchantment glint appear only on the colored part of the potion for dropped items as well.",
-            subcategory = "Enchantment Glint"
-    )
-    public static boolean oldPotionsDropped = false;
-
-    @Switch(
-            name = "1.7 Potion Models (GUI)",
-            description = "Use the old potion models from 1.7, making the enchantment glint appear only on the colored part of the potion for gui items as well.",
-            subcategory = "Enchantment Glint"
-    )
-    public static boolean oldPotionsGui = false;
+//    @Switch(
+//            name = "1.7 Potion Models (Held)",
+//            description = "Use the old potion models from 1.7, making the enchantment glint appear only on the colored part of the potion.",
+//            subcategory = "Enchantment Glint"
+//    )
+//    public static boolean oldPotions = true;
+//
+//    @Switch(
+//            name = "1.7 Potion Models (Dropped)",
+//            description = "Use the old potion models from 1.7, making the enchantment glint appear only on the colored part of the potion for dropped items as well.",
+//            subcategory = "Enchantment Glint"
+//    )
+//    public static boolean oldPotionsDropped = false;
+//
+//    @Switch(
+//            name = "1.7 Potion Models (GUI)",
+//            description = "Use the old potion models from 1.7, making the enchantment glint appear only on the colored part of the potion for gui items as well.",
+//            subcategory = "Enchantment Glint"
+//    )
+//    public static boolean oldPotionsGui = false;
 
     // Item Changes
 
-    @Switch(
-            name = "1.7 Skulls",
-            description = "Displays skulls as a 2D sprite rather than a 3D model, like in 1.7.",
-            subcategory = "Item Changes"
-    )
-    public static boolean oldSkulls = false;
+//    @Switch(
+//            name = "1.7 Skulls",
+//            description = "Displays skulls as a 2D sprite rather than a 3D model, like in 1.7.",
+//            subcategory = "Item Changes"
+//    )
+//    public static boolean oldSkulls = false;
 
     @Switch(
             name = "1.7 Third-Person Fishing Rod Cast Texture",
@@ -463,6 +463,13 @@ public class OldAnimationsSettings extends Config {
             category = "Misc", subcategory = "Fixes, QOL, and Tweaks"
     )
     public static boolean coloredBottles = false;
+
+    @Checkbox(
+            name = "Disable Drop Item Arm Swing in Chests",
+            description = "Disables the arm swinging animation upon dropping items while in Chests.",
+            category = "Misc", subcategory = "Fixes, QOL, and Tweaks"
+    )
+    public static boolean modernDropSwingFix = true;
 
     @Switch(
             name = "Disable Entity/Mob Third-Person Item Transformations",

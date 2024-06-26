@@ -44,10 +44,10 @@ object OverflowAnimations {
     @JvmField
     var isDamageTintPresent: Boolean = false
 
-    @Mod.EventHandler
-    fun preInit(event: FMLPreInitializationEvent) {
-        CustomModelBakery
-    }
+//    @Mod.EventHandler
+//    fun preInit(event: FMLPreInitializationEvent) {
+//        CustomModelBakery
+//    }
 
     @Mod.EventHandler
     fun init(event: FMLInitializationEvent) {

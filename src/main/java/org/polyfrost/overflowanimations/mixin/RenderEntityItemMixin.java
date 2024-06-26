@@ -60,52 +60,52 @@ public abstract class RenderEntityItemMixin extends Render<EntityItem> {
         }
     }
 
-    @ModifyVariable(
-            method = "doRender(Lnet/minecraft/entity/item/EntityItem;DDDFF)V",
-            at = @At(
-                    value = "STORE"
-            ),
-            index = 10
-    )
-    private ItemStack overflowAnimations$captureStack(ItemStack stack) {
-        overflowanimations$stack = stack;
-        return stack;
-    }
-
-    @ModifyArg(
-            method = "doRender(Lnet/minecraft/entity/item/EntityItem;DDDFF)V",
-            at = @At(
-                    value = "INVOKE",
-                    target = "Lnet/minecraft/client/renderer/entity/RenderItem;renderItem(Lnet/minecraft/item/ItemStack;Lnet/minecraft/client/resources/model/IBakedModel;)V"
-            ),
-            index = 1
-    )
-    private IBakedModel overflowAnimations$swapToCustomModel(IBakedModel model) {
-        if (!OldAnimationsSettings.INSTANCE.enabled || !OldAnimationsSettings.oldPotionsDropped) return model;
-        if (overflowanimations$stack.getItem() instanceof ItemPotion) {
-            return CustomModelBakery.BOTTLE_OVERLAY.getBakedModel();
-        }
-        return model;
-    }
-
-    @Inject(
-            method = "doRender(Lnet/minecraft/entity/item/EntityItem;DDDFF)V",
-            at = @At(
-                    value = "INVOKE",
-                    target = "Lnet/minecraft/client/renderer/entity/RenderItem;renderItem(Lnet/minecraft/item/ItemStack;Lnet/minecraft/client/resources/model/IBakedModel;)V",
-                    shift = At.Shift.AFTER
-            )
-    )
-    private void overflowAnimations$renderCustomBottle(EntityItem entity, double x, double y, double z, float entityYaw, float partialTicks, CallbackInfo ci) {
-        if (!OldAnimationsSettings.INSTANCE.enabled || !OldAnimationsSettings.oldPotionsDropped) return;
-        if (entity.getEntityItem().getItem() instanceof ItemPotion) {
-            itemRenderer.renderItem(new ItemStack(Items.glass_bottle), overflowAnimations$getBottleModel(entity.getEntityItem()));
-        }
-    }
-
-    @Unique
-    private IBakedModel overflowAnimations$getBottleModel(ItemStack stack) {
-        return ItemPotion.isSplash(stack.getMetadata()) ? CustomModelBakery.BOTTLE_SPLASH_EMPTY.getBakedModel() : CustomModelBakery.BOTTLE_DRINKABLE_EMPTY.getBakedModel();
-    }
+//    @ModifyVariable(
+//            method = "doRender(Lnet/minecraft/entity/item/EntityItem;DDDFF)V",
+//            at = @At(
+//                    value = "STORE"
+//            ),
+//            index = 10
+//    )
+//    private ItemStack overflowAnimations$captureStack(ItemStack stack) {
+//        overflowanimations$stack = stack;
+//        return stack;
+//    }
+//
+//    @ModifyArg(
+//            method = "doRender(Lnet/minecraft/entity/item/EntityItem;DDDFF)V",
+//            at = @At(
+//                    value = "INVOKE",
+//                    target = "Lnet/minecraft/client/renderer/entity/RenderItem;renderItem(Lnet/minecraft/item/ItemStack;Lnet/minecraft/client/resources/model/IBakedModel;)V"
+//            ),
+//            index = 1
+//    )
+//    private IBakedModel overflowAnimations$swapToCustomModel(IBakedModel model) {
+//        if (!OldAnimationsSettings.INSTANCE.enabled || !OldAnimationsSettings.oldPotionsDropped) return model;
+//        if (overflowanimations$stack.getItem() instanceof ItemPotion) {
+//            return CustomModelBakery.BOTTLE_OVERLAY.getBakedModel();
+//        }
+//        return model;
+//    }
+//
+//    @Inject(
+//            method = "doRender(Lnet/minecraft/entity/item/EntityItem;DDDFF)V",
+//            at = @At(
+//                    value = "INVOKE",
+//                    target = "Lnet/minecraft/client/renderer/entity/RenderItem;renderItem(Lnet/minecraft/item/ItemStack;Lnet/minecraft/client/resources/model/IBakedModel;)V",
+//                    shift = At.Shift.AFTER
+//            )
+//    )
+//    private void overflowAnimations$renderCustomBottle(EntityItem entity, double x, double y, double z, float entityYaw, float partialTicks, CallbackInfo ci) {
+//        if (!OldAnimationsSettings.INSTANCE.enabled || !OldAnimationsSettings.oldPotionsDropped) return;
+//        if (entity.getEntityItem().getItem() instanceof ItemPotion) {
+//            itemRenderer.renderItem(new ItemStack(Items.glass_bottle), overflowAnimations$getBottleModel(entity.getEntityItem()));
+//        }
+//    }
+//
+//    @Unique
+//    private IBakedModel overflowAnimations$getBottleModel(ItemStack stack) {
+//        return ItemPotion.isSplash(stack.getMetadata()) ? CustomModelBakery.BOTTLE_SPLASH_EMPTY.getBakedModel() : CustomModelBakery.BOTTLE_DRINKABLE_EMPTY.getBakedModel();
+//    }
 
 }

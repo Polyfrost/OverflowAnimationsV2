@@ -14,19 +14,19 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(ItemModelMesher.class)
 public class ItemModelMesherMixin {
 
-    @Inject(
-            method = "getItemModel(Lnet/minecraft/item/ItemStack;)Lnet/minecraft/client/resources/model/IBakedModel;",
-            at = @At(
-                    value = "HEAD"
-            ),
-            cancellable = true
-    )
-    private void overflowanimations$useCustomBlockModel(ItemStack stack, CallbackInfoReturnable<IBakedModel> cir) {
-        if (stack == null) return;
-        if (!OldAnimationsSettings.oldSkulls || !OldAnimationsSettings.INSTANCE.enabled) return;
-        if (stack.getItem() instanceof ItemSkull) {
-            cir.setReturnValue(SkullModelHook.INSTANCE.getSkullModel(stack));
-        }
-    }
+//    @Inject(
+//            method = "getItemModel(Lnet/minecraft/item/ItemStack;)Lnet/minecraft/client/resources/model/IBakedModel;",
+//            at = @At(
+//                    value = "HEAD"
+//            ),
+//            cancellable = true
+//    )
+//    private void overflowanimations$useCustomBlockModel(ItemStack stack, CallbackInfoReturnable<IBakedModel> cir) {
+//        if (stack == null) return;
+//        if (!OldAnimationsSettings.oldSkulls || !OldAnimationsSettings.INSTANCE.enabled) return;
+//        if (stack.getItem() instanceof ItemSkull) {
+//            cir.setReturnValue(SkullModelHook.INSTANCE.getSkullModel(stack));
+//        }
+//    }
 
 }
