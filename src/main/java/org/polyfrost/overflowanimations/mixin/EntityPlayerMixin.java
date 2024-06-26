@@ -18,8 +18,8 @@ public class EntityPlayerMixin {
 
     @Inject(method = "dropItem", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/EntityPlayer;getEyeHeight()F"))
     public void overflowAnimations$dropItemSwing(ItemStack droppedItem, boolean dropAround, boolean traceItem, CallbackInfoReturnable<EntityItem> cir) {
-        if (OldAnimationsSettings.modernDropSwing && OldAnimationsSettings.INSTANCE.enabled &&
-                Minecraft.getMinecraft().theWorld.isRemote && Minecraft.getMinecraft().currentScreen instanceof GuiInventory) {
+        if (OldAnimationsSettings.modernDropSwing && OldAnimationsSettings.INSTANCE.enabled && Minecraft.getMinecraft().theWorld.isRemote) {
+            if (OldAnimationsSettings.modernDropSwingFix && Minecraft.getMinecraft().currentScreen instanceof GuiInventory) { return; }
             SwingHook.swingItem();
         }
     }

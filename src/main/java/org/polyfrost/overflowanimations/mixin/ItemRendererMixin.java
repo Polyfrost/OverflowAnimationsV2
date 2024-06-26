@@ -1,13 +1,15 @@
 package org.polyfrost.overflowanimations.mixin;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockCarpet;
+import net.minecraft.block.BlockSnow;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.entity.RenderItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemSword;
+import net.minecraft.item.*;
 import org.polyfrost.overflowanimations.config.OldAnimationsSettings;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -62,7 +64,7 @@ public abstract class ItemRendererMixin {
 
     @Inject(method = "doBowTransformations", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GlStateManager;scale(FFF)V"))
     private void overflowAnimations$preBowTransform(float partialTicks, AbstractClientPlayer clientPlayer, CallbackInfo ci) {
-        if (OldAnimationsSettings.firstTransformations && OldAnimationsSettings.INSTANCE.enabled) {
+        if (OldAnimationsSettings.firstTransformations && !OldAnimationsSettings.lunarPositions && OldAnimationsSettings.INSTANCE.enabled) {
             GlStateManager.rotate(-335.0F, 0.0F, 0.0F, 1.0F);
             GlStateManager.rotate(-50.0F, 0.0F, 1.0F, 0.0F);
             GlStateManager.translate(0.0F, 0.5F, 0.0F);
@@ -71,7 +73,7 @@ public abstract class ItemRendererMixin {
 
     @Inject(method = "doBowTransformations", at = @At(value = "TAIL"))
     private void overflowAnimations$postBowTransform(float partialTicks, AbstractClientPlayer clientPlayer, CallbackInfo ci) {
-        if (OldAnimationsSettings.firstTransformations && OldAnimationsSettings.INSTANCE.enabled) {
+        if (OldAnimationsSettings.firstTransformations && !OldAnimationsSettings.lunarPositions && OldAnimationsSettings.INSTANCE.enabled) {
             GlStateManager.translate(0.0F, -0.5F, 0.0F);
             GlStateManager.rotate(50.0F, 0.0F, 1.0F, 0.0F);
             GlStateManager.rotate(335.0F, 0.0F, 0.0F, 1.0F);
@@ -80,7 +82,7 @@ public abstract class ItemRendererMixin {
 
     @Inject(method = "renderItemInFirstPerson", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/ItemRenderer;renderItem(Lnet/minecraft/entity/EntityLivingBase;Lnet/minecraft/item/ItemStack;Lnet/minecraft/client/renderer/block/model/ItemCameraTransforms$TransformType;)V"))
     private void overflowAnimations$firstPersonItemPositions(float partialTicks, CallbackInfo ci) {
-        if (OldAnimationsSettings.INSTANCE.enabled && !itemRenderer.shouldRenderItemIn3D(itemToRender)) {
+        if (OldAnimationsSettings.INSTANCE.enabled && !OldAnimationsSettings.lunarPositions && !itemRenderer.shouldRenderItemIn3D(itemToRender)) {
             if ((OldAnimationsSettings.fishingRodPosition && itemToRender.getItem().shouldRotateAroundWhenRendering())) {
                 GlStateManager.rotate(180.0F, 0.0F, 1.0F, 0.0F);
                 overflowAnimations$itemTransforms();

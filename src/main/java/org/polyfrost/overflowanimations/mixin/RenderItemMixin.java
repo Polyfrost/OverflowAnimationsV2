@@ -18,6 +18,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.*;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
+import org.polyfrost.overflowanimations.OverflowAnimations;
 import org.polyfrost.overflowanimations.config.OldAnimationsSettings;
 import org.polyfrost.overflowanimations.hooks.GlintModelHook;
 import org.polyfrost.overflowanimations.hooks.TransformTypeHook;
@@ -84,7 +85,7 @@ public abstract class RenderItemMixin {
             if (OldAnimationsSettings.itemSprites && OldAnimationsSettings.spritesGlint && TransformTypeHook.shouldNotHaveGlint()) {
                 ci.cancel();
             }
-            if (OldAnimationsSettings.enchantmentGlintGui && TransformTypeHook.isRenderingInGUI()) {
+            if (OldAnimationsSettings.enchantmentGlintGui && !OverflowAnimations.isNEUPresent && TransformTypeHook.isRenderingInGUI()) {
                 if (OldAnimationsSettings.oldPotionsGui && overflowanimations$stackGui.getItem() instanceof ItemPotion) { return; }
                 ci.cancel();
             }
@@ -108,7 +109,7 @@ public abstract class RenderItemMixin {
                 Block block = ((ItemBlock) stack.getItem()).getBlock();
                 isCarpet = block instanceof BlockCarpet || block instanceof BlockSnow;
             }
-            if (cameraTransformType == ItemCameraTransforms.TransformType.FIRST_PERSON) {
+            if (cameraTransformType == ItemCameraTransforms.TransformType.FIRST_PERSON && !OldAnimationsSettings.lunarPositions) {
                 if (OldAnimationsSettings.fishingRodPosition && isRod) {
                     GlStateManager.rotate(180.0F, 0.0F, 1.0F, 0.0F);
                     GlStateManager.rotate(50.0F, 0.0F, 0.0F, 1.0F);
@@ -174,16 +175,17 @@ public abstract class RenderItemMixin {
     public void overflowAnimations$renderGuiGlint(ItemStack stack, int x, int y, CallbackInfo ci) {
         if (OldAnimationsSettings.potionGlint && stack.getItem() instanceof ItemPotion) return;
         if (OldAnimationsSettings.oldPotionsGui && stack.getItem() instanceof ItemPotion) return;
+        if (OverflowAnimations.isNEUPresent) return;
         if (OldAnimationsSettings.enchantmentGlintGui && OldAnimationsSettings.INSTANCE.enabled && stack.hasEffect()) {
             GlintModelHook.INSTANCE.renderGlintGui(x, y, RES_ITEM_GLINT);
         }
     }
 
     @ModifyArg(
-            method = "renderEffect",
+            method = "renderItem(Lnet/minecraft/item/ItemStack;Lnet/minecraft/client/resources/model/IBakedModel;)V",
             at = @At(
                     value = "INVOKE",
-                    target = "Lnet/minecraft/client/renderer/entity/RenderItem;renderModel(Lnet/minecraft/client/resources/model/IBakedModel;I)V"
+                    target = "Lnet/minecraft/client/renderer/entity/RenderItem;renderEffect(Lnet/minecraft/client/resources/model/IBakedModel;)V"
             ),
             index = 0
     )
@@ -192,28 +194,19 @@ public abstract class RenderItemMixin {
         return GlintModelHook.INSTANCE.getGlint(model);
     }
 
-    @ModifyVariable(
+    @ModifyArg(
             method = "renderEffect",
             at = @At(
-                    value = "STORE"
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/client/renderer/GlStateManager;translate(FFF)V"
             ),
-            index = 2
+            index = 0
     )
-    private float overflowAnimations$modifyF(float f) {
-        if (!OldAnimationsSettings.enchantmentGlint || !OldAnimationsSettings.INSTANCE.enabled) return f;
-        return f * 64.0F;
-    }
-
-    @ModifyVariable(
-            method = "renderEffect",
-            at = @At(
-                    value = "STORE"
-            ),
-            index = 3
-    )
-    private float overflowAnimations$modifyF1(float f1) {
-        if (!OldAnimationsSettings.enchantmentGlint || !OldAnimationsSettings.INSTANCE.enabled) return f1;
-        return f1 * 64.0F;
+    private float overflowAnimations$modifySpeed(float x) {
+        if (OldAnimationsSettings.enchantmentGlint && OldAnimationsSettings.INSTANCE.enabled) {
+            x *= 64.0F;
+        }
+        return x;
     }
 
     @ModifyArgs(

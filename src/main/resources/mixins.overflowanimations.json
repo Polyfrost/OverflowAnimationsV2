@@ -20,7 +20,6 @@
     "ItemPotionMixin",
     "ItemRendererMixin",
     "ItemRendererMixin_CustomPositions",
-    "ItemStackMixin",
     "LayerArmorBaseMixin",
     "LayerArmorBaseMixin_New",
     "LayerHeldItemMixin",
@@ -51,5 +50,8 @@
     "layers.LayerSpiderEyesMixin",
     "layers.LayerWolfCollarMixin",
     "layers.RendererLivingEntityMixin"
+  ],
+  "mixins": [
+    "compat.ItemCustomizeManagerMixin"
   ]
 }
