@@ -44,8 +44,6 @@ public class ItemPositionAdvancedSettings {
         itemSwingPositionX = 0.0F;
         itemSwingPositionY = 0.0F;
         itemSwingPositionZ = 0.0F;
-        OldAnimationsSettings.INSTANCE.save();
-        OldAnimationsSettings.INSTANCE.openGui();
     });
 
     // Eating/Drinking Position
@@ -138,8 +136,6 @@ public class ItemPositionAdvancedSettings {
         consumeIntensity = 0.0F;
         consumeSpeed = 0.0F;
         shouldScaleEat = false;
-        OldAnimationsSettings.INSTANCE.save();
-        OldAnimationsSettings.INSTANCE.openGui();
     });
 
     @Checkbox(
@@ -220,8 +216,6 @@ public class ItemPositionAdvancedSettings {
         blockedRotationPitch = 0.0F;
         blockedRotationRoll = 0.0F;
         blockedScale = 0.0F;
-        OldAnimationsSettings.INSTANCE.save();
-        OldAnimationsSettings.INSTANCE.openGui();
     });
 
     // Dropped Item Position
@@ -295,8 +289,6 @@ public class ItemPositionAdvancedSettings {
         droppedRotationPitch = 0.0F;
         droppedRotationRoll = 0.0F;
         droppedScale = 0.0F;
-        OldAnimationsSettings.INSTANCE.save();
-        OldAnimationsSettings.INSTANCE.openGui();
     });
 
     // Projectiles Position
@@ -370,8 +362,6 @@ public class ItemPositionAdvancedSettings {
         projectileRotationPitch = 0.0F;
         projectileRotationRoll = 0.0F;
         projectileScale = 0.0F;
-        OldAnimationsSettings.INSTANCE.save();
-        OldAnimationsSettings.INSTANCE.openGui();
     });
 
     // Fireball Position
@@ -445,8 +435,6 @@ public class ItemPositionAdvancedSettings {
         fireballRotationPitch = 0.0F;
         fireballRotationRoll = 0.0F;
         fireballScale = 0.0F;
-        OldAnimationsSettings.INSTANCE.save();
-        OldAnimationsSettings.INSTANCE.openGui();
     });
 
     // Fishing Line Position
@@ -492,8 +480,6 @@ public class ItemPositionAdvancedSettings {
         fishingLinePositionX = OldAnimationsSettings.fishingRodPosition ? -0.5f : -0.36f;
         fishingLinePositionY = 0.03f;
         fishingLinePositionZ = OldAnimationsSettings.fishingRodPosition ? 0.8f : 0.35f;
-        OldAnimationsSettings.INSTANCE.save();
-        OldAnimationsSettings.INSTANCE.openGui();
     });
 
 }

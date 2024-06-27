@@ -614,8 +614,6 @@ public class OldAnimationsSettings extends Config {
         advancedSettings.fireballRotationPitch = 0.0F;
         advancedSettings.fireballRotationRoll = 0.0F;
         advancedSettings.fireballScale = 0.0F;
-        save();
-        openGui();
     });
 
     @Button(
@@ -637,7 +635,6 @@ public class OldAnimationsSettings extends Config {
     public void importItemPositions() {
         Minecraft.getMinecraft().displayGuiScreen(null);
         AnimationExportUtils.importItemPositions();
-        openGui();
     }
 
     @Button(
@@ -649,7 +646,6 @@ public class OldAnimationsSettings extends Config {
     public void transferDulkirItemPositions() {
         Minecraft.getMinecraft().displayGuiScreen(null);
         AnimationExportUtils.transferDulkirConfig();
-        openGui();
     }
 
 
@@ -755,8 +751,6 @@ public class OldAnimationsSettings extends Config {
         swingSetting = 0;
         ignoreHaste = false;
         ignoreFatigue = false;
-        OldAnimationsSettings.INSTANCE.save();
-        OldAnimationsSettings.INSTANCE.openGui();
     });
 
     @Checkbox(
@@ -787,8 +781,6 @@ public class OldAnimationsSettings extends Config {
         itemRotationPitch = 0.0F;
         itemRotationRoll = 0.0F;
         itemScale = 0.0F;
-        save();
-        openGui();
     });
 
     @Page(
