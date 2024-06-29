@@ -14,14 +14,12 @@ import net.minecraft.client.resources.model.IBakedModel;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
 import net.minecraft.item.*;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import org.polyfrost.overflowanimations.config.OldAnimationsSettings;
 import org.polyfrost.overflowanimations.hooks.GlintModelHook;
 import org.polyfrost.overflowanimations.hooks.TransformTypeHook;
-import org.polyfrost.overflowanimations.init.CustomModelBakery;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -84,10 +82,10 @@ public abstract class RenderItemMixin {
             if (OldAnimationsSettings.itemSprites && OldAnimationsSettings.spritesGlint && TransformTypeHook.shouldNotHaveGlint()) {
                 ci.cancel();
             }
-//            if (OldAnimationsSettings.enchantmentGlintGui && TransformTypeHook.isRenderingInGUI()) {
+            if (OldAnimationsSettings.enchantmentGlintGui && TransformTypeHook.isRenderingInGUI()) {
 //                if (OldAnimationsSettings.oldPotionsGui && overflowanimations$stackGui.getItem() instanceof ItemPotion) { return; }
-//                ci.cancel();
-//            }
+                ci.cancel();
+            }
         }
     }
 

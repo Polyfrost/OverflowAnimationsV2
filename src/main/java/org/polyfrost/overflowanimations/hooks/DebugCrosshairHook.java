@@ -8,6 +8,7 @@ import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import org.lwjgl.opengl.GL11;
+import org.polyfrost.overflowanimations.util.MathUtils;
 
 public class DebugCrosshairHook {
 
@@ -15,8 +16,8 @@ public class DebugCrosshairHook {
         GlStateManager.pushMatrix();
         GlStateManager.translate((float)(UResolution.getScaledWidth() / 2), (float)(UResolution.getScaledHeight() / 2), 100);
         Entity entity = mc.getRenderViewEntity();
-        GlStateManager.rotate(entity.prevRotationPitch + (entity.rotationPitch - entity.prevRotationPitch) * partialTicks, -1.0F, 0.0F, 0.0F);
-        GlStateManager.rotate(entity.prevRotationYaw + (entity.rotationYaw - entity.prevRotationYaw) * partialTicks, 0.0F, 1.0F, 0.0F);
+        GlStateManager.rotate(MathUtils.interp(entity.prevRotationPitch, entity.rotationPitch, partialTicks), -1.0F, 0.0F, 0.0F);
+        GlStateManager.rotate(MathUtils.interp(entity.prevRotationYaw , entity.rotationYaw, partialTicks), 0.0F, 1.0F, 0.0F);
         GlStateManager.scale(-1.0F, -1.0F, -1.0F);
         GlStateManager.disableTexture2D();
         GlStateManager.depthMask(false);

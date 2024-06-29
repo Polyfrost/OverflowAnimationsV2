@@ -4,35 +4,27 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderEntityItem;
-import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.resources.model.IBakedModel;
 import net.minecraft.entity.item.EntityItem;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemPotion;
-import net.minecraft.item.ItemStack;
 import org.polyfrost.overflowanimations.config.OldAnimationsSettings;
-import org.polyfrost.overflowanimations.init.CustomModelBakery;
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(RenderEntityItem.class)
 public abstract class RenderEntityItemMixin extends Render<EntityItem> {
 
-    @Shadow @Final private RenderItem itemRenderer;
+//    @Shadow @Final private RenderItem itemRenderer;
     @Unique
     private boolean overflowanimations$isGui3d;
 
-    @Unique
-    private ItemStack overflowanimations$stack = null;
+//    @Unique
+//    private ItemStack overflowanimations$stack = null;
 
     protected RenderEntityItemMixin(RenderManager renderManager) {
         super(renderManager);
