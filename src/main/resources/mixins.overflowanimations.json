@@ -50,5 +50,10 @@
     "layers.LayerSpiderEyesMixin",
     "layers.LayerWolfCollarMixin",
     "layers.RendererLivingEntityMixin"
+  ],
+  "mixins": [
+    "EntityMixin",
+    "EntityPlayerMPMixin",
+    "WorldServerMixin"
   ]
 }

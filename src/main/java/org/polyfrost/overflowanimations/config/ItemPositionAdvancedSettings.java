@@ -40,7 +40,6 @@ public class ItemPositionAdvancedSettings {
             category = "Customize Item Positions", subcategory = "Item Swing Position"
     )
     Runnable resetSwing = (() -> {
-        Minecraft.getMinecraft().displayGuiScreen(null);
         itemSwingPositionX = 0.0F;
         itemSwingPositionY = 0.0F;
         itemSwingPositionZ = 0.0F;
@@ -125,7 +124,6 @@ public class ItemPositionAdvancedSettings {
             category = "Customize Item Positions", subcategory = "Eating/Drinking Position"
     )
     Runnable resetConsume = (() -> {
-        Minecraft.getMinecraft().displayGuiScreen(null);
         consumePositionX = 0.0F;
         consumePositionY = 0.0F;
         consumePositionZ = 0.0F;
@@ -208,7 +206,6 @@ public class ItemPositionAdvancedSettings {
             category = "Customize Item Positions", subcategory = "Sword Block Position"
     )
     Runnable resetBlockItem = (() -> {
-        Minecraft.getMinecraft().displayGuiScreen(null);
         blockedPositionX = 0.0F;
         blockedPositionY = 0.0F;
         blockedPositionZ = 0.0F;
@@ -281,7 +278,6 @@ public class ItemPositionAdvancedSettings {
             category = "Customize Item Positions", subcategory = "Dropped Item Position"
     )
     Runnable resetDropped = (() -> {
-        Minecraft.getMinecraft().displayGuiScreen(null);
         droppedPositionX = 0.0F;
         droppedPositionY = 0.0F;
         droppedPositionZ = 0.0F;
@@ -354,7 +350,6 @@ public class ItemPositionAdvancedSettings {
             category = "Customize Item Positions", subcategory = "Thrown Projectile Position"
     )
     Runnable resetProjectile = (() -> {
-        Minecraft.getMinecraft().displayGuiScreen(null);
         projectilePositionX = 0.0F;
         projectilePositionY = 0.0F;
         projectilePositionZ = 0.0F;
@@ -427,7 +422,6 @@ public class ItemPositionAdvancedSettings {
             category = "Customize Item Positions", subcategory = "Fireball Projectile Position"
     )
     Runnable resetFireball = (() -> {
-        Minecraft.getMinecraft().displayGuiScreen(null);
         fireballPositionX = 0.0F;
         fireballPositionY = 0.0F;
         fireballPositionZ = 0.0F;
@@ -476,7 +470,6 @@ public class ItemPositionAdvancedSettings {
             category = "Customize Item Positions", subcategory = "Fishing Rod Line Position"
     )
     Runnable resetFishingLine = (() -> {
-        Minecraft.getMinecraft().displayGuiScreen(null);
         fishingLinePositionX = OldAnimationsSettings.fishingRodPosition ? -0.5f : -0.36f;
         fishingLinePositionY = 0.03f;
         fishingLinePositionZ = OldAnimationsSettings.fishingRodPosition ? 0.8f : 0.35f;

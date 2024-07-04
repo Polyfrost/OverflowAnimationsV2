@@ -385,6 +385,13 @@ public class OldAnimationsSettings extends Config {
     public static boolean fireballModel = false;
 
     @Switch(
+            name = "1.19.4+ Damage Tilt",
+            description = "Makes hurt camera shake directional.",
+            category = "Misc", subcategory = "Modern"
+    )
+    public static boolean damageTilt = false;
+
+    @Switch(
             name = "Disable Item Re-equip Animation",
             description = "Completely removed the the item re-equip animation.",
             category = "Misc", subcategory = "Re-equip Animation"
@@ -554,7 +561,6 @@ public class OldAnimationsSettings extends Config {
             category = "Customize Item Positions"
     )
     Runnable resetGlobally = (() -> {
-        Minecraft.getMinecraft().displayGuiScreen(null);
         itemPositionX = 0.0F;
         itemPositionY = 0.0F;
         itemPositionZ = 0.0F;
@@ -633,7 +639,6 @@ public class OldAnimationsSettings extends Config {
             category = "Customize Item Positions"
     )
     public void importItemPositions() {
-        Minecraft.getMinecraft().displayGuiScreen(null);
         AnimationExportUtils.importItemPositions();
     }
 
@@ -644,7 +649,6 @@ public class OldAnimationsSettings extends Config {
             category = "Customize Item Positions"
     )
     public void transferDulkirItemPositions() {
-        Minecraft.getMinecraft().displayGuiScreen(null);
         AnimationExportUtils.transferDulkirConfig();
     }
 
@@ -744,7 +748,6 @@ public class OldAnimationsSettings extends Config {
             category = "Customize Item Positions", subcategory = "Item Swing"
     )
     Runnable resetSpeed = (() -> {
-        Minecraft.getMinecraft().displayGuiScreen(null);
         itemSwingSpeed = 0.0F;
         itemSwingSpeedHaste = 0.0F;
         itemSwingSpeedFatigue = 0.0F;
@@ -773,7 +776,6 @@ public class OldAnimationsSettings extends Config {
             category = "Customize Item Positions", subcategory = "Item Position"
     )
     Runnable resetItem = (() -> {
-        Minecraft.getMinecraft().displayGuiScreen(null);
         itemPositionX = 0.0F;
         itemPositionY = 0.0F;
         itemPositionZ = 0.0F;
