@@ -18,6 +18,7 @@ import net.minecraft.item.*;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import org.polyfrost.overflowanimations.config.OldAnimationsSettings;
+import org.polyfrost.overflowanimations.hooks.DroppedItemHook;
 import org.polyfrost.overflowanimations.hooks.GlintModelHook;
 import org.polyfrost.overflowanimations.hooks.TransformTypeHook;
 import org.spongepowered.asm.mixin.Final;
@@ -60,7 +61,7 @@ public abstract class RenderItemMixin {
     @ModifyArg(method = "renderModel(Lnet/minecraft/client/resources/model/IBakedModel;ILnet/minecraft/item/ItemStack;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/entity/RenderItem;renderQuads(Lnet/minecraft/client/renderer/WorldRenderer;Ljava/util/List;ILnet/minecraft/item/ItemStack;)V", ordinal = 1), index = 1)
     private List<BakedQuad> overflowAnimations$changeToSprite(List<BakedQuad> quads) {
         if (OldAnimationsSettings.itemSprites && OldAnimationsSettings.INSTANCE.enabled && !overflowAnimations$model.isGui3d() && TransformTypeHook.shouldBeSprite()) {
-            return quads.stream().filter(baked -> baked.getFace() == EnumFacing.SOUTH).collect(Collectors.toList());
+            return quads.stream().filter(baked -> baked.getFace() == (DroppedItemHook.isItemPhysicsAndEntityDropped() ? EnumFacing.NORTH : EnumFacing.SOUTH)).collect(Collectors.toList());
         }
         return quads;
     }
@@ -92,7 +93,8 @@ public abstract class RenderItemMixin {
     @Inject(method = "renderItem(Lnet/minecraft/item/ItemStack;Lnet/minecraft/client/resources/model/IBakedModel;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/entity/RenderItem;renderModel(Lnet/minecraft/client/resources/model/IBakedModel;Lnet/minecraft/item/ItemStack;)V"))
     private void overflowAnimations$translateSprite(ItemStack stack, IBakedModel model, CallbackInfo ci) {
         if (OldAnimationsSettings.itemSprites && OldAnimationsSettings.INSTANCE.enabled && !model.isGui3d() && TransformTypeHook.shouldNotHaveGlint()) {
-            GlStateManager.translate(0.0F, 0.0F, -0.0625F);
+            int displacement = DroppedItemHook.isItemPhysicsAndEntityDropped() ? -1 : 1;
+            GlStateManager.translate(0.0F, 0.0F, displacement * -0.0625F);
         }
     }
 
