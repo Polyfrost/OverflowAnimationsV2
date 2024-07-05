@@ -23,25 +23,48 @@ public class ItemRendererMixin_CustomPositions {
     @Inject(method = "transformFirstPersonItem(FF)V", at = @At("HEAD"), cancellable = true)
     public void overflowAnimations$itemTransform(float equipProgress, float swingProgress, CallbackInfo ci) {
         OldAnimationsSettings settings = OldAnimationsSettings.INSTANCE;
-        if (OldAnimationsSettings.globalPositions && settings.enabled) {
-            GlStateManager.translate(
-                    0.56f * (1.0F + settings.itemPositionX),
-                    -0.52f * (1.0F - settings.itemPositionY),
-                    -0.72f * (1.0F + settings.itemPositionZ)
-            );
-            GlStateManager.translate(0.0f, equipProgress * -0.6f, 0.0f);
-            GlStateManager.rotate(settings.itemRotationPitch, 1.0f, 0.0f, 0.0f);
-            GlStateManager.rotate(settings.itemRotationYaw, 0.0f, 1.0f, 0.0f);
-            GlStateManager.rotate(settings.itemRotationRoll, 0.0f, 0.0f, 1.0f);
-            GlStateManager.rotate(45.0f, 0.0f, 1.0f, 0.0f);
-            float f = MathHelper.sin(swingProgress * swingProgress * (float) Math.PI);
-            float f1 = MathHelper.sin(MathHelper.sqrt_float(swingProgress) * (float) Math.PI);
-            GlStateManager.rotate(f * -20.0f, 0.0f, 1.0f, 0.0f);
-            GlStateManager.rotate(f1 * -20.0f, 0.0f, 0.0f, 1.0f);
-            GlStateManager.rotate(f1 * -80.0f, 1.0f, 0.0f, 0.0f);
-            double scale = 0.4f * Math.exp(settings.itemScale);
-            GlStateManager.scale(scale, scale, scale);
-            ci.cancel();
+        if (settings.enabled) {
+            Item item = itemToRender.getItem();
+            if (OldAnimationsSettings.lunarPositions && OldAnimationsSettings.INSTANCE.enabled && item != null) {
+                if (item instanceof ItemSword) {
+                    GlStateManager.translate(0.0F, 0.0F, -0.02F);
+                    GlStateManager.rotate(1.0F, 0.0F, 0.0F, -0.1F);
+                } else if (item instanceof ItemPotion) {
+                    GlStateManager.translate(-0.0225F, -0.02F, 0.0F);
+                    GlStateManager.rotate(1.0F, 0.0F, 0.0F, 0.1F);
+                } else if (item instanceof ItemFishingRod || item instanceof ItemCarrotOnAStick) {
+                    GlStateManager.translate(0.08F, -0.0275F, -0.33F);
+                    GlStateManager.scale(0.949999988079071D, 1.0D, 1.0D);
+                } else if (item instanceof ItemBow) {
+                    GlStateManager.translate(0.0F, 0.0F, 0.0F);
+                    GlStateManager.rotate(0.9F, 0.0F, 0.001F, 0.0F);
+                } else if (item instanceof ItemBlock) {
+                    Block block = ((ItemBlock) item).getBlock();
+                    if (block instanceof BlockCarpet || block instanceof BlockSnow) {
+                        GlStateManager.translate(0.0F, -0.25F, 0.0F);
+                    }
+                }
+            }
+            if (OldAnimationsSettings.globalPositions) {
+                GlStateManager.translate(
+                        0.56f * (1.0F + settings.itemPositionX),
+                        -0.52f * (1.0F - settings.itemPositionY),
+                        -0.72f * (1.0F + settings.itemPositionZ)
+                );
+                GlStateManager.translate(0.0f, equipProgress * -0.6f, 0.0f);
+                GlStateManager.rotate(settings.itemRotationPitch, 1.0f, 0.0f, 0.0f);
+                GlStateManager.rotate(settings.itemRotationYaw, 0.0f, 1.0f, 0.0f);
+                GlStateManager.rotate(settings.itemRotationRoll, 0.0f, 0.0f, 1.0f);
+                GlStateManager.rotate(45.0f, 0.0f, 1.0f, 0.0f);
+                float f = MathHelper.sin(swingProgress * swingProgress * (float) Math.PI);
+                float f1 = MathHelper.sin(MathHelper.sqrt_float(swingProgress) * (float) Math.PI);
+                GlStateManager.rotate(f * -20.0f, 0.0f, 1.0f, 0.0f);
+                GlStateManager.rotate(f1 * -20.0f, 0.0f, 0.0f, 1.0f);
+                GlStateManager.rotate(f1 * -80.0f, 1.0f, 0.0f, 0.0f);
+                double scale = 0.4f * Math.exp(settings.itemScale);
+                GlStateManager.scale(scale, scale, scale);
+                ci.cancel();
+            }
         }
     }
 
@@ -176,31 +199,6 @@ public class ItemRendererMixin_CustomPositions {
         if (OldAnimationsSettings.lunarPositions && OldAnimationsSettings.INSTANCE.enabled) {
             GlStateManager.translate(-0.2D, 0.0D, -0.175D);
             GlStateManager.rotate(1.0F, 0.0F, 0.0F, -1.25F);
-        }
-    }
-
-    @Inject(method = "transformFirstPersonItem", at = @At("HEAD"))
-    private void overflowAnimations$lunarItemPositions(float equipProgress, float swingProgress, CallbackInfo ci) {
-        Item item = itemToRender.getItem();
-        if (OldAnimationsSettings.lunarPositions && OldAnimationsSettings.INSTANCE.enabled && item != null) {
-            if (item instanceof ItemSword) {
-                GlStateManager.translate(0.0F, 0.0F, -0.02F);
-                GlStateManager.rotate(1.0F, 0.0F, 0.0F, -0.1F);
-            } else if (item instanceof ItemPotion) {
-                GlStateManager.translate(-0.0225F, -0.02F, 0.0F);
-                GlStateManager.rotate(1.0F, 0.0F, 0.0F, 0.1F);
-            } else if (item instanceof ItemFishingRod || item instanceof ItemCarrotOnAStick) {
-                GlStateManager.translate(0.08F, -0.0275F, -0.33F);
-                GlStateManager.scale(0.949999988079071D, 1.0D, 1.0D);
-            } else if (item instanceof ItemBow) {
-                GlStateManager.translate(0.0F, 0.0F, 0.0F);
-                GlStateManager.rotate(0.9F, 0.0F, 0.001F, 0.0F);
-            } else if (item instanceof ItemBlock) {
-                Block block = ((ItemBlock) item).getBlock();
-                if (block instanceof BlockCarpet || block instanceof BlockSnow) {
-                    GlStateManager.translate(0.0F, -0.25F, 0.0F);
-                }
-            }
         }
     }
 
