@@ -35,8 +35,8 @@ import java.util.stream.Collectors;
 public abstract class RenderItemMixin {
 
 
-    @Shadow
-    public abstract void renderItem(ItemStack stack, IBakedModel model);
+//    @Shadow
+//    public abstract void renderItem(ItemStack stack, IBakedModel model);
     @Shadow @Final
     private static ResourceLocation RES_ITEM_GLINT;
 //    @Unique private ItemStack overflowanimations$stackGui = null;
@@ -106,7 +106,7 @@ public abstract class RenderItemMixin {
                 Block block = ((ItemBlock) stack.getItem()).getBlock();
                 isCarpet = block instanceof BlockCarpet || block instanceof BlockSnow;
             }
-            if (cameraTransformType == ItemCameraTransforms.TransformType.FIRST_PERSON) {
+            if (cameraTransformType == ItemCameraTransforms.TransformType.FIRST_PERSON && !OldAnimationsSettings.lunarPositions) {
                 if (OldAnimationsSettings.fishingRodPosition && isRod) {
                     GlStateManager.rotate(180.0F, 0.0F, 1.0F, 0.0F);
                     GlStateManager.rotate(50.0F, 0.0F, 0.0F, 1.0F);
@@ -178,40 +178,30 @@ public abstract class RenderItemMixin {
     }
 
     @ModifyArg(
-            method = "renderEffect",
+            method = "renderItem(Lnet/minecraft/item/ItemStack;Lnet/minecraft/client/resources/model/IBakedModel;)V",
             at = @At(
                     value = "INVOKE",
-                    target = "Lnet/minecraft/client/renderer/entity/RenderItem;renderModel(Lnet/minecraft/client/resources/model/IBakedModel;I)V"
-            ),
-            index = 0
+                    target = "Lnet/minecraft/client/renderer/entity/RenderItem;renderEffect(Lnet/minecraft/client/resources/model/IBakedModel;)V"
+            )
     )
     public IBakedModel overflowAnimations$replaceModel(IBakedModel model) {
         if (!OldAnimationsSettings.enchantmentGlint || !OldAnimationsSettings.INSTANCE.enabled) return model;
         return GlintModelHook.INSTANCE.getGlint(model);
     }
 
-    @ModifyVariable(
+    @ModifyArg(
             method = "renderEffect",
             at = @At(
-                    value = "STORE"
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/client/renderer/GlStateManager;translate(FFF)V"
             ),
-            index = 2
+            index = 0
     )
-    private float overflowAnimations$modifyF(float f) {
-        if (!OldAnimationsSettings.enchantmentGlint || !OldAnimationsSettings.INSTANCE.enabled) return f;
-        return f * 64.0F;
-    }
-
-    @ModifyVariable(
-            method = "renderEffect",
-            at = @At(
-                    value = "STORE"
-            ),
-            index = 3
-    )
-    private float overflowAnimations$modifyF1(float f1) {
-        if (!OldAnimationsSettings.enchantmentGlint || !OldAnimationsSettings.INSTANCE.enabled) return f1;
-        return f1 * 64.0F;
+    private float overflowAnimations$modifySpeed(float x) {
+        if (OldAnimationsSettings.enchantmentGlint && OldAnimationsSettings.INSTANCE.enabled) {
+            x *= 64.0F;
+        }
+        return x;
     }
 
     @ModifyArgs(

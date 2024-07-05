@@ -46,10 +46,6 @@ public class RenderFishMixin {
     }
 
     @ModifyConstant(method = "doRender(Lnet/minecraft/entity/projectile/EntityFishHook;DDDFF)V",
-            slice = @Slice(
-                    from = @At(value = "INVOKE", target = "Lnet/minecraft/util/MathHelper;cos(F)F"),
-                    to = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/EntityPlayer;isSneaking()Z")
-            ),
             constant = @Constant(doubleValue = 0.8D)
     )
     public double overflowAnimations$moveLinePosition(double constant) {

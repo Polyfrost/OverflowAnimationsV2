@@ -23,10 +23,6 @@ public abstract class LayerArmorBaseMixin<T extends ModelBase> implements LayerR
 
     @ModifyVariable(
             method = "renderLayer", at = @At(value = "STORE"),
-            slice = @Slice(
-                    from = @At(value = "INVOKE", target = "Lnet/minecraft/client/model/ModelBase;setLivingAnimations(Lnet/minecraft/entity/EntityLivingBase;FFF)V"),
-                    to = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/entity/layers/LayerArmorBase;setModelPartVisible(Lnet/minecraft/client/model/ModelBase;I)V")
-            ),
             index = 12
     )
     private T overflowAnimations$captureT(T t) {

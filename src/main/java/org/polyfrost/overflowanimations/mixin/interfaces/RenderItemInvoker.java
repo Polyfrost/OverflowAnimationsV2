@@ -2,6 +2,7 @@ package org.polyfrost.overflowanimations.mixin.interfaces;
 
 import net.minecraft.client.renderer.entity.RenderItem;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.gen.Accessor;
 import org.spongepowered.asm.mixin.gen.Invoker;
 
 @Mixin(RenderItem.class)

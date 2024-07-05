@@ -1,7 +1,7 @@
 package org.polyfrost.overflowanimations.mixin;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.AbstractClientPlayer;
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
@@ -24,13 +24,12 @@ public abstract class RendererLivingEntityMixin<T extends EntityLivingBase> exte
 
     @Inject(method = "doRender(Lnet/minecraft/entity/EntityLivingBase;DDDFF)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GlStateManager;translate(FFF)V"))
     public void overflowAnimations$movePlayerModel(T entity, double x, double y, double z, float entityYaw, float partialTicks, CallbackInfo ci) {
-        if (OldAnimationsSettings.smoothModelSneak && OldAnimationsSettings.INSTANCE.enabled && entity instanceof AbstractClientPlayer) {
-            boolean player = entity.getName().equals(Minecraft.getMinecraft().thePlayer.getName());
-            float eyeHeight = player ? SmoothSneakHook.getSmoothSneak() : entity.getEyeHeight();
+        if (OldAnimationsSettings.smoothModelSneak && OldAnimationsSettings.INSTANCE.enabled &&
+                entity instanceof EntityPlayerSP && entity.getName().equals(Minecraft.getMinecraft().thePlayer.getName())) {
             if (entity.isSneaking()) {
                 GlStateManager.translate(0.0F, -0.2F, 0.0F);
             }
-            GlStateManager.translate(0.0F, 1.62F - eyeHeight, 0.0F);
+            GlStateManager.translate(0.0F, 1.62F - SmoothSneakHook.getSmoothSneak(), 0.0F);
         }
     }
 

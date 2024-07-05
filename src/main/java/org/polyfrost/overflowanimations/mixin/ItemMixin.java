@@ -11,12 +11,16 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(Item.class)
 public class ItemMixin {
 
-    //todo: redo re-equip logic to work with features
-
     @Inject(method = "shouldCauseReequipAnimation", at = @At("HEAD"), cancellable = true, remap = false)
-    public void overflowAnimations$modifyReequip(ItemStack oldStack, ItemStack newStack, boolean slotChanged, CallbackInfoReturnable<Boolean> ci) {
-        if (((OldAnimationsSettings.fixReequip && !slotChanged) || OldAnimationsSettings.disableReequip) && OldAnimationsSettings.INSTANCE.enabled) {
-            ci.setReturnValue(false);
+    public void overflowAnimations$modifyReequip(ItemStack oldStack, ItemStack newStack, boolean slotChanged, CallbackInfoReturnable<Boolean> cir) {
+        if (OldAnimationsSettings.INSTANCE.enabled) {
+            if (OldAnimationsSettings.INSTANCE.itemSwitch == 0) {
+                cir.setReturnValue(false);
+            } else if (OldAnimationsSettings.fixReequip && OldAnimationsSettings.INSTANCE.itemSwitch != 1 && !slotChanged) {
+                cir.setReturnValue(false);
+            } else if (OldAnimationsSettings.INSTANCE.itemSwitch == 1) {
+                cir.setReturnValue(!OldAnimationsSettings.fixReequip || slotChanged);
+            }
         }
     }
 

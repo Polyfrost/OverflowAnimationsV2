@@ -94,9 +94,9 @@ public class OldAnimationsSettings extends Config {
                     "\"None\" will disable the effect on armor. " +
                     "\"1.7\" will apply the damage color using the 1.7 formula. " +
                     "\"1.8 (With Glint)\" will use the 1.8 formula AND account for the enchantment glint. " +
-                    "\"1.8 (Without Glint)\" will use the 1.8 formula AND NOT account for the enchantment glint. ",
+                    "\"1.8 (Without Glint)\" will use the 1.8 formula AND NOT account for the enchantment glint.",
             options = {"None", "1.7", "1.8 (With Glint)", "1.8 (Without Glint)"},
-            subcategory = "HUD"
+            subcategory = "Interaction"
     )
     @VigilanceName(
             name = "Red Armor",
@@ -105,9 +105,13 @@ public class OldAnimationsSettings extends Config {
     )
     public int armorDamageTintStyle = 3;
 
-    @Switch(
+    @Dropdown(
             name = "1.7 Item Switching Animation",
-            description = "Re-enables the item switch animation from 1.7.",
+            description = "Applies a damage tint to armor. " +
+                    "\"None\" will disable the re-equip animation completely. " +
+                    "\"1.7\" will use the 1.7 logic to display the re-equip animation. " +
+                    "\"1.8\" will use the 1.8 logic to display the re-equip animation.",
+            options = {"Disabled", "1.7", "1.8"},
             subcategory = "Interaction"
     )
     @VigilanceName(
@@ -115,7 +119,7 @@ public class OldAnimationsSettings extends Config {
             category = "Animations",
             subcategory = "Interaction"
     )
-    public static boolean itemSwitch = true;
+    public int itemSwitch = 1;
 
     @Switch(
             name = "1.7 Miss Penalty Swing Animation",
@@ -384,13 +388,6 @@ public class OldAnimationsSettings extends Config {
     )
     public static boolean fireballModel = false;
 
-    @Switch(
-            name = "Disable Item Re-equip Animation",
-            description = "Completely removed the the item re-equip animation.",
-            category = "Misc", subcategory = "Re-equip Animation"
-    )
-    public static boolean disableReequip = false;
-
     @Slider(
             name = "Item Re-equip Animation Speed",
             min = 0.1F, max = 1.0F,
@@ -512,6 +509,13 @@ public class OldAnimationsSettings extends Config {
             category = "Misc", subcategory = "Fun"
     )
     public static boolean lunarBlockhit = false;
+
+    @Switch(
+            name = "Old Lunar/CheatBreaker Item Positions",
+            description = "Brings back the item positions from older versions of Lunar Client or CheatBreaker!",
+            category = "Misc", subcategory = "Fun"
+    )
+    public static boolean lunarPositions = false;
 
     @Switch(
             name = "Dinnerbone Mode Player-Only",
