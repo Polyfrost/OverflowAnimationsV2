@@ -115,7 +115,7 @@ public class ItemRendererMixin_CustomPositions {
         }
     }
 
-    @Inject(method = "doBlockTransformations", at = @At("HEAD"))
+    @Inject(method = "doBlockTransformations", at = @At("TAIL"))
     public void overflowAnimations$lunarTransform(CallbackInfo ci) {
         OldAnimationsSettings settings = OldAnimationsSettings.INSTANCE;
         if (OldAnimationsSettings.lunarBlockhit && !OldAnimationsSettings.globalPositions && settings.enabled) {
