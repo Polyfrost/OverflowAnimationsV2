@@ -43,6 +43,8 @@ object OverflowAnimations {
     var isDamageTintPresent: Boolean = false
     @JvmField
     var isItemPhysics: Boolean = false
+    @JvmField
+    var isNEUPresent: Boolean = false;
 
 //    @Mod.EventHandler
 //    fun preInit(event: FMLPreInitializationEvent) {
@@ -65,6 +67,7 @@ object OverflowAnimations {
         customCrosshair = Loader.isModLoaded("custom-crosshair-mod")
         isDamageTintPresent = Loader.isModLoaded("damagetint")
         isItemPhysics = Loader.isModLoaded("itemphysic")
+        isNEUPresent = Loader.isModLoaded("notenoughupdates")
     }
 
     @Mod.EventHandler

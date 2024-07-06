@@ -5,7 +5,9 @@
   "refmap": "mixins.${id}.refmap.json",
   "verbose": true,
   "client": [
+    "compat.ItemCustomizeManagerMixin",
     "EntityLivingBaseMixin",
+    "EntityMixin",
     "EntityOtherPlayerMPMixin",
     "EntityPickupFXMixin",
     "EntityPlayerMixin",
@@ -15,12 +17,12 @@
     "GuiIngameMixin",
     "GuiOverlayDebugMixin",
     "GuiPlayerTabOverlayMixin",
-    "ItemStackMixin",
     "ItemMixin",
     "ItemModelMesherMixin",
     "ItemPotionMixin",
     "ItemRendererMixin",
     "ItemRendererMixin_CustomPositions",
+    "ItemStackMixin",
     "LayerArmorBaseMixin",
     "LayerArmorBaseMixin_New",
     "LayerHeldItemMixin",
@@ -52,10 +54,5 @@
     "layers.LayerSpiderEyesMixin",
     "layers.LayerWolfCollarMixin",
     "layers.RendererLivingEntityMixin"
-  ],
-  "mixins": [
-    "EntityMixin",
-    "EntityPlayerMPMixin",
-    "WorldServerMixin"
   ]
 }

@@ -17,6 +17,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.*;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
+import org.polyfrost.overflowanimations.OverflowAnimations;
 import org.polyfrost.overflowanimations.config.OldAnimationsSettings;
 import org.polyfrost.overflowanimations.hooks.DroppedItemHook;
 import org.polyfrost.overflowanimations.hooks.GlintModelHook;
@@ -83,7 +84,7 @@ public abstract class RenderItemMixin {
             if (OldAnimationsSettings.itemSprites && OldAnimationsSettings.spritesGlint && TransformTypeHook.shouldNotHaveGlint()) {
                 ci.cancel();
             }
-            if (OldAnimationsSettings.enchantmentGlintGui && TransformTypeHook.isRenderingInGUI()) {
+            if (OldAnimationsSettings.enchantmentGlintGui && TransformTypeHook.isRenderingInGUI() && !OverflowAnimations.isNEUPresent) {
 //                if (OldAnimationsSettings.oldPotionsGui && overflowanimations$stackGui.getItem() instanceof ItemPotion) { return; }
                 ci.cancel();
             }
@@ -174,6 +175,7 @@ public abstract class RenderItemMixin {
     public void overflowAnimations$renderGuiGlint(ItemStack stack, int x, int y, CallbackInfo ci) {
         if (OldAnimationsSettings.potionGlint && stack.getItem() instanceof ItemPotion) return;
 //        if (OldAnimationsSettings.oldPotionsGui && stack.getItem() instanceof ItemPotion) return;
+        if (OverflowAnimations.isNEUPresent) return;
         if (OldAnimationsSettings.enchantmentGlintGui && OldAnimationsSettings.INSTANCE.enabled && stack.hasEffect()) {
             GlintModelHook.INSTANCE.renderGlintGui(x, y, RES_ITEM_GLINT);
         }
