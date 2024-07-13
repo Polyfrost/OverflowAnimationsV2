@@ -1,5 +1,7 @@
 package org.polyfrost.overflowanimations.mixin;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import org.polyfrost.overflowanimations.config.OldAnimationsSettings;
@@ -19,7 +21,7 @@ public class ItemMixin {
             } else if (OldAnimationsSettings.fixReequip && OldAnimationsSettings.INSTANCE.itemSwitch != 1 && !slotChanged) {
                 cir.setReturnValue(false);
             } else if (OldAnimationsSettings.INSTANCE.itemSwitch == 1) {
-                cir.setReturnValue(!OldAnimationsSettings.fixReequip || slotChanged);
+                cir.setReturnValue(!OldAnimationsSettings.fixReequip || slotChanged || Minecraft.getMinecraft().currentScreen instanceof GuiContainer);
             }
         }
     }
