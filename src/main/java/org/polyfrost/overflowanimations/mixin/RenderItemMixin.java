@@ -101,6 +101,8 @@ public abstract class RenderItemMixin {
 
     @Inject(method = "renderItemModelTransform", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/entity/RenderItem;renderItem(Lnet/minecraft/item/ItemStack;Lnet/minecraft/client/resources/model/IBakedModel;)V"))
     public void overflowAnimations$modifyModelPosition(ItemStack stack, IBakedModel model, ItemCameraTransforms.TransformType cameraTransformType, CallbackInfo ci) {
+        if (stack == null) return;
+        if (stack.getItem() == null) return;
         if (OldAnimationsSettings.INSTANCE.enabled && !(stack.getItem() instanceof ItemBanner)) {
             boolean isRod = stack.getItem().shouldRotateAroundWhenRendering();
             boolean isBlock = stack.getItem() instanceof ItemBlock;
