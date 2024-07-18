@@ -118,7 +118,7 @@ public class OldAnimationsSettings extends Config {
             category = "Animations",
             subcategory = "Interaction"
     )
-    public int itemSwitch = 1;
+    public int itemSwitchMode = 1;
 
     @Switch(
             name = "1.7 Miss Penalty Swing Animation",

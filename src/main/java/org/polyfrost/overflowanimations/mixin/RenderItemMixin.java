@@ -19,6 +19,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import org.polyfrost.overflowanimations.OverflowAnimations;
 import org.polyfrost.overflowanimations.config.OldAnimationsSettings;
+import org.polyfrost.overflowanimations.hooks.DroppedItemHook;
 import org.polyfrost.overflowanimations.hooks.GlintModelHook;
 import org.polyfrost.overflowanimations.hooks.TransformTypeHook;
 import org.spongepowered.asm.mixin.Final;
@@ -60,7 +61,7 @@ public abstract class RenderItemMixin {
 
     @ModifyArg(method = "renderModel(Lnet/minecraft/client/resources/model/IBakedModel;ILnet/minecraft/item/ItemStack;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/entity/RenderItem;renderQuads(Lnet/minecraft/client/renderer/WorldRenderer;Ljava/util/List;ILnet/minecraft/item/ItemStack;)V", ordinal = 1), index = 1)
     private List<BakedQuad> overflowAnimations$changeToSprite(List<BakedQuad> quads) {
-        if (OldAnimationsSettings.itemSprites && OldAnimationsSettings.INSTANCE.enabled && !overflowAnimations$model.isGui3d() && TransformTypeHook.shouldBeSprite()) {
+        if (OldAnimationsSettings.itemSprites && OldAnimationsSettings.INSTANCE.enabled && !overflowAnimations$model.isGui3d() && TransformTypeHook.shouldBeSprite() && !DroppedItemHook.isItemPhysicsAndEntityDropped()) {
             return quads.stream().filter(baked -> baked.getFace() == EnumFacing.SOUTH).collect(Collectors.toList());
         }
         return quads;
@@ -69,7 +70,7 @@ public abstract class RenderItemMixin {
     @ModifyArgs(method = "putQuadNormal", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/WorldRenderer;putNormal(FFF)V"))
     private void overflowAnimations$modifyNormalValue(Args args) {
         if (OldAnimationsSettings.itemSprites && OldAnimationsSettings.itemSpritesColor && OldAnimationsSettings.INSTANCE.enabled &&
-                !overflowAnimations$model.isGui3d() && !(Minecraft.getMinecraft().currentScreen instanceof GuiFlatPresets) && TransformTypeHook.shouldNotHaveGlint() ) {
+                !overflowAnimations$model.isGui3d() && !(Minecraft.getMinecraft().currentScreen instanceof GuiFlatPresets) && TransformTypeHook.shouldNotHaveGlint() && !DroppedItemHook.isItemPhysicsAndEntityDropped()) {
             args.setAll(args.get(0), args.get(2), args.get(1));
         }
     }
@@ -80,7 +81,7 @@ public abstract class RenderItemMixin {
             if (OldAnimationsSettings.potionGlint && overflowanimations$stack.getItem() instanceof ItemPotion) {
                 ci.cancel();
             }
-            if (OldAnimationsSettings.itemSprites && OldAnimationsSettings.spritesGlint && TransformTypeHook.shouldNotHaveGlint()) {
+            if (OldAnimationsSettings.itemSprites && OldAnimationsSettings.spritesGlint && TransformTypeHook.shouldNotHaveGlint() && !DroppedItemHook.isItemPhysicsAndEntityDropped()) {
                 ci.cancel();
             }
             if (OldAnimationsSettings.enchantmentGlintGui && TransformTypeHook.isRenderingInGUI() && !OverflowAnimations.isNEUPresent) {
@@ -133,6 +134,8 @@ public abstract class RenderItemMixin {
                     }
                     GlStateManager.scale(-1.0F, 1.0F, -1.0F);
                 }
+            } else if (cameraTransformType == ItemCameraTransforms.TransformType.GUI) {
+                //todo: add gui item rotations
             }
         }
     }

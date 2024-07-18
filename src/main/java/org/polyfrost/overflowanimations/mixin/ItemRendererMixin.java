@@ -101,14 +101,14 @@ public abstract class ItemRendererMixin {
 
     @Inject(method = "resetEquippedProgress", at = @At(value = "HEAD"), cancellable = true)
     private void overflowAnimations$disableReEquip1(CallbackInfo ci) {
-        if (OldAnimationsSettings.INSTANCE.itemSwitch == 0 && OldAnimationsSettings.INSTANCE.enabled) {
+        if (OldAnimationsSettings.INSTANCE.itemSwitchMode == 0 && OldAnimationsSettings.INSTANCE.enabled) {
             ci.cancel();
         }
     }
 
     @Inject(method = "resetEquippedProgress2", at = @At(value = "HEAD"), cancellable = true)
     private void overflowAnimations$disableReEquip2(CallbackInfo ci) {
-        if (OldAnimationsSettings.INSTANCE.itemSwitch == 0 && OldAnimationsSettings.INSTANCE.enabled) {
+        if (OldAnimationsSettings.INSTANCE.itemSwitchMode == 0 && OldAnimationsSettings.INSTANCE.enabled) {
             ci.cancel();
         }
     }
@@ -122,7 +122,7 @@ public abstract class ItemRendererMixin {
             index = 3
     )
     public boolean overflowAnimations$disableReEquip(boolean flag) {
-        if (OldAnimationsSettings.INSTANCE.itemSwitch == 0 && OldAnimationsSettings.INSTANCE.enabled) {
+        if (OldAnimationsSettings.INSTANCE.itemSwitchMode == 0 && OldAnimationsSettings.INSTANCE.enabled) {
             EntityPlayer entityplayer = this.mc.thePlayer;
             this.itemToRender = entityplayer.inventory.getCurrentItem();
             this.equippedItemSlot = entityplayer.inventory.currentItem;
