@@ -71,7 +71,7 @@ public abstract class RenderEntityItemMixin extends Render<EntityItem> {
     @Inject(method = "func_177077_a", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GlStateManager;rotate(FFFF)V", shift = At.Shift.AFTER))
     private void overflowAnimations$fix2dRotation(EntityItem itemIn, double p_177077_2_, double p_177077_4_, double p_177077_6_, float p_177077_8_, IBakedModel p_177077_9_, CallbackInfoReturnable<Integer> cir) {
         if (!overflowanimations$isGui3d && OldAnimationsSettings.itemSprites && OldAnimationsSettings.INSTANCE.enabled && OldAnimationsSettings.rotationFix && !OverflowAnimations.isItemPhysics) {
-            GlStateManager.rotate((Minecraft.getMinecraft().gameSettings.thirdPersonView == 2 ? 1.0f : -1.0f) * renderManager.playerViewX, 1.0F, 0.0F, 0.0F);
+            GlStateManager.rotate(-renderManager.playerViewX, 1.0F, 0.0F, 0.0F);
         }
     }
 
