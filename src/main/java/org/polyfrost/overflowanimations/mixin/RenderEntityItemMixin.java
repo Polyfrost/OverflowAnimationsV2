@@ -7,6 +7,7 @@ import net.minecraft.client.renderer.entity.RenderEntityItem;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.resources.model.IBakedModel;
 import net.minecraft.entity.item.EntityItem;
+import org.polyfrost.overflowanimations.OverflowAnimations;
 import org.polyfrost.overflowanimations.config.OldAnimationsSettings;
 import org.polyfrost.overflowanimations.hooks.DroppedItemHook;
 import org.spongepowered.asm.mixin.Mixin;
@@ -60,7 +61,7 @@ public abstract class RenderEntityItemMixin extends Render<EntityItem> {
 
     @ModifyArg(method = "func_177077_a", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GlStateManager;rotate(FFFF)V"), index = 0)
     private float overflowAnimations$apply2dItem(float angle) {
-        if (!overflowanimations$isGui3d && OldAnimationsSettings.itemSprites && OldAnimationsSettings.INSTANCE.enabled && !DroppedItemHook.isItemDropped) {
+        if (!overflowanimations$isGui3d && OldAnimationsSettings.itemSprites && OldAnimationsSettings.INSTANCE.enabled && !OverflowAnimations.isItemPhysics) {
             return 180.0F - renderManager.playerViewY;
 
         }
@@ -69,7 +70,7 @@ public abstract class RenderEntityItemMixin extends Render<EntityItem> {
 
     @Inject(method = "func_177077_a", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GlStateManager;rotate(FFFF)V", shift = At.Shift.AFTER))
     private void overflowAnimations$fix2dRotation(EntityItem itemIn, double p_177077_2_, double p_177077_4_, double p_177077_6_, float p_177077_8_, IBakedModel p_177077_9_, CallbackInfoReturnable<Integer> cir) {
-        if (!overflowanimations$isGui3d && OldAnimationsSettings.itemSprites && OldAnimationsSettings.INSTANCE.enabled && OldAnimationsSettings.rotationFix && !DroppedItemHook.isItemDropped) {
+        if (!overflowanimations$isGui3d && OldAnimationsSettings.itemSprites && OldAnimationsSettings.INSTANCE.enabled && OldAnimationsSettings.rotationFix && !OverflowAnimations.isItemPhysics) {
             GlStateManager.rotate((Minecraft.getMinecraft().gameSettings.thirdPersonView == 2 ? 1.0f : -1.0f) * renderManager.playerViewX, 1.0F, 0.0F, 0.0F);
         }
     }
