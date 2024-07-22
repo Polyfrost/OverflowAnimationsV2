@@ -467,6 +467,20 @@ public class OldAnimationsSettings extends Config {
     )
     public static boolean coloredBottles = false;
 
+    @Switch(
+            name = "Apply Damage Tint to Held Items",
+            description = "Applies the damage tint to entity held items.",
+            category = "Misc", subcategory = "Fixes, QOL, and Tweaks"
+    )
+    public static boolean damageHeldItems = false;
+
+    @Switch(
+            name = "Apply Damage Tint to Capes",
+            description = "Applies the damage tint to capes.",
+            category = "Misc", subcategory = "Fixes, QOL, and Tweaks"
+    )
+    public static boolean damageCape = false;
+
     @Checkbox(
             name = "Disable Drop Item Arm Swing in Chests",
             description = "Disables the arm swinging animation upon dropping items while in Chests.",

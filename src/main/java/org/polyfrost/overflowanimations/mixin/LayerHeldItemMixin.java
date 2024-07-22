@@ -16,6 +16,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 @Mixin(LayerHeldItem.class)
@@ -98,6 +99,11 @@ public abstract class LayerHeldItemMixin {
     @ModifyArg(method = "doRenderLayer", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/ItemRenderer;renderItem(Lnet/minecraft/entity/EntityLivingBase;Lnet/minecraft/item/ItemStack;Lnet/minecraft/client/renderer/block/model/ItemCameraTransforms$TransformType;)V"))
     private ItemStack overflowAnimations$replaceStack2(ItemStack heldStack) {
         return OldAnimationsSettings.fishingStick && OldAnimationsSettings.INSTANCE.enabled ? simpliefied$itemStack : heldStack;
+    }
+
+    @Inject(method = "shouldCombineTextures", at = @At(value = "HEAD"), cancellable = true)
+    public void overflowAnimations$allowCombine(CallbackInfoReturnable<Boolean> cir) {
+        cir.setReturnValue(OldAnimationsSettings.damageHeldItems && OldAnimationsSettings.INSTANCE.enabled);
     }
 
 }
