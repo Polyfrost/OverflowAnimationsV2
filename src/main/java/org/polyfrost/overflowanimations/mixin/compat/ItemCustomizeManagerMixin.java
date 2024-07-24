@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.injection.ModifyArgs;
 import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 
 @Pseudo
-@Mixin(targets = "io.github.moulberry.notenoughupdates.miscfeatures.ItemCustomizeManager")
+@Mixin(targets = "io.github.moulberry.notenoughupdates.miscgui.itemcustomization.ItemCustomizeManager")
 public class ItemCustomizeManagerMixin {
 
     @Dynamic
