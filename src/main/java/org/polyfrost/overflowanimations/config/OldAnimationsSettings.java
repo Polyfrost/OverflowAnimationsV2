@@ -1,12 +1,7 @@
 package org.polyfrost.overflowanimations.config;
 
-import cc.polyfrost.oneconfig.config.Config;
-import cc.polyfrost.oneconfig.config.annotations.*;
-import cc.polyfrost.oneconfig.config.data.Mod;
-import cc.polyfrost.oneconfig.config.data.ModType;
-import cc.polyfrost.oneconfig.config.data.PageLocation;
-import cc.polyfrost.oneconfig.config.migration.VigilanceMigrator;
-import cc.polyfrost.oneconfig.config.migration.VigilanceName;
+import org.polyfrost.oneconfig.api.config.v1.Config;
+import org.polyfrost.oneconfig.api.config.v1.annotations.*;
 import org.polyfrost.overflowanimations.OverflowAnimations;
 import org.polyfrost.overflowanimations.hooks.AnimationExportUtils;
 import org.polyfrost.overflowanimations.hooks.PotionColors;
@@ -15,27 +10,27 @@ public class OldAnimationsSettings extends Config {
 
     // 2D Items
     @Switch(
-            name = "2D Dropped Items",
+            title = "2D Dropped Items",
             description = "Renders items as sprites rather than as models.",
             subcategory = "2D Dropped Items"
     )
     public static boolean itemSprites = false;
 
-    @Checkbox(name = "1.7 Item Sprite Colors",
+    @Checkbox(title = "1.7 Item Sprite Colors",
             description = "Changes the colors of the dropped item sprites to be brighter just like in 1.7.",
             subcategory = "2D Dropped Items"
     )
     public static boolean itemSpritesColor = false;
 
     @Checkbox(
-            name = "Remove Glint From Sprites",
+            title = "Remove Glint From Sprites",
             description = "This will disable the enchantment glint for both dropped items and projectiles. Only works with 2D items enabled.",
             subcategory = "2D Dropped Items"
     )
     public static boolean spritesGlint = false;
 
     @Switch(
-            name = "Rotation Fix",
+            title = "Rotation Fix",
             description = "Allows dropped items to face the player properly without being stuck on the Y-Axis.",
             subcategory = "2D Dropped Items"
     )
@@ -44,31 +39,30 @@ public class OldAnimationsSettings extends Config {
     // Smooth Sneaking
 
     @Switch(
-            name = "1.7 Smoother Sneaking",
+            title = "1.7 Smoother Sneaking",
             description = "Smoothens the player camera to appear just like the 1.7 smoother sneaking camera.",
             subcategory = "Smooth Sneaking"
     )
-    @VigilanceName(
-            name = "Smooth Sneaking",
-            category = "Animations",
-            subcategory = "Interaction"
+    @PreviousNames(
+            value = {"Smooth Sneaking.Animations.Interaction"}
+
     )
     public static boolean smoothSneaking = true;
 
     @Switch(
-            name = "1.7 Longer Unsneak",
+            title = "1.7 Longer Unsneak",
             description = "Lengthens the player camera's speed to appear just like the 1.7 smoother sneaking camera.",
             subcategory = "Smooth Sneaking"
     )
-    @VigilanceName(
-            name = "Longer Unsneak",
+    @PreviousNames(
+            title = "Longer Unsneak",
             category = "Animations",
             subcategory = "Interaction"
     )
     public static boolean longerUnsneak = true;
 
     @Switch(
-            name = "1.7 Third Person Sneaking",
+            title = "1.7 Third Person Sneaking",
             description = "Synchronizes the player model's sneaking behavior to the eye height to replicate the same behavior in 1.7. Disable if incompatible with cosmetic mods",
             subcategory = "Smooth Sneaking"
     )
@@ -76,19 +70,19 @@ public class OldAnimationsSettings extends Config {
 
     // Interaction
     @Switch(
-            name = "1.7 Block-Hitting Animation",
+            title = "1.7 Block-Hitting Animation",
             description = "Re-enables the block-hitting animations.",
             subcategory = "Interaction"
     )
-    @VigilanceName(
-            name = "Block-Hitting Animation",
+    @PreviousNames(
+            title = "Block-Hitting Animation",
             category = "Animations",
             subcategory = "Interaction"
     )
     public static boolean oldBlockhitting = true;
 
     @Dropdown(
-            name = "Armor Damage Tint Style",
+            title = "Armor Damage Tint Style",
             description = "Applies a damage tint to armor. " +
                     "\"None\" will disable the effect on armor. " +
                     "\"1.7\" will apply the damage color using the 1.7 formula. " +
@@ -97,15 +91,15 @@ public class OldAnimationsSettings extends Config {
             options = {"None", "1.7", "1.8 (With Glint)", "1.8 (Without Glint)"},
             subcategory = "HUD"
     )
-    @VigilanceName(
-            name = "Red Armor",
+    @PreviousNames(
+            title = "Red Armor",
             category = "Animations",
             subcategory = "Interaction"
     )
     public int armorDamageTintStyle = 3;
 
     @Dropdown(
-            name = "1.7 Item Switching Animation",
+            title = "1.7 Item Switching Animation",
             description = "Applies a damage tint to armor. " +
                     "\"None\" will disable the re-equip animation completely. " +
                     "\"1.7\" will use the 1.7 logic to display the re-equip animation. " +
@@ -113,33 +107,33 @@ public class OldAnimationsSettings extends Config {
             options = {"Disabled", "1.7", "1.8"},
             subcategory = "Interaction"
     )
-    @VigilanceName(
-            name = "Item Switching Animation",
+    @PreviousNames(
+            title = "Item Switching Animation",
             category = "Animations",
             subcategory = "Interaction"
     )
     public int itemSwitchMode = 1;
 
     @Switch(
-            name = "1.7 Miss Penalty Swing Animation",
+            title = "1.7 Miss Penalty Swing Animation",
             description = "This option is purely visual. During the miss penalty, the player's arm will still swing and show particles just like in 1.7.",
             subcategory = "Interaction"
     )
     public static boolean visualSwing = true;
 
     @Switch(
-            name = "1.7 Punching During Usage",
+            title = "1.7 Punching During Usage",
             description = "Purely visual feature. Re-enables the ability to consume food or block a sword whilst punching a block.",
             subcategory = "Interaction")
-    @VigilanceName(
-            name = "Punching During Usage",
+    @PreviousNames(
+            title = "Punching During Usage",
             category = "Animations",
             subcategory = "Interaction"
     )
     public static boolean punching = true;
 
     @Checkbox(
-            name = "1.7 Punch-During-Usage Particles",
+            title = "1.7 Punch-During-Usage Particles",
             description = "Spawns Particles whilst Punching During Usage",
             subcategory = "Interaction"
     )
@@ -147,74 +141,74 @@ public class OldAnimationsSettings extends Config {
 
     // Positions
     @Switch(
-            name = "1.7 First-Person Item Transformations",
+            title = "1.7 First-Person Item Transformations",
             description = "Brings back the old item positions from 1.7.",
             subcategory = "Position"
     )
     public static boolean firstTransformations = true;
 
     @Switch(
-            name = "1.7 Third-Person Item Transformations",
+            title = "1.7 Third-Person Item Transformations",
             description = "Brings back the old item positions from 1.7.",
             subcategory = "Position"
     )
     public static boolean thirdTransformations = true;
 
     @Checkbox(
-            name = "1.7 First-Person Fishing Rod Position",
+            title = "1.7 First-Person Fishing Rod Position",
             description = "Brings back the old fishing rod position from 1.7.",
             subcategory = "Position"
     )
     public static boolean fishingRodPosition = true;
 
     @Checkbox(
-            name = "1.7 First-Person Carpet Position",
+            title = "1.7 First-Person Carpet Position",
             description = "Brings back the old carpet position from 1.7.",
             subcategory = "Position"
     )
     public static boolean firstPersonCarpetPosition = true;
 
     @Checkbox(
-            name = "1.7 Third-Person Carpet Position",
+            title = "1.7 Third-Person Carpet Position",
             description = "Brings back the old carpet position from 1.7.",
             subcategory = "Position"
     )
     public static boolean thirdPersonCarpetPosition = true;
 
     @Switch(
-            name = "1.7 Projectiles Transformations",
+            title = "1.7 Projectiles Transformations",
             description = "Mirrors and transforms projectiles so that they're facing the correct direction and in the same position as 1.7 or 1.9+.",
             subcategory = "Position"
     )
     public static boolean oldProjectiles = true;
 
     @Switch(
-            name = "1.7 Third-Person Arm Block Position",
+            title = "1.7 Third-Person Arm Block Position",
             description = "Brings back the old arm rotation while blocking from 1.7.",
             subcategory = "Position")
     public static boolean oldArmPosition = true;
 
     @Switch(
-            name = "1.7 Third-Person Sword Block Position",
+            title = "1.7 Third-Person Sword Block Position",
             description = "Brings back the old sword rotation while blocking from 1.7.",
             subcategory = "Position"
     )
-    @VigilanceName(
-            name = "1.7 3rd Person Block Animation",
+    @PreviousNames(
+            title = "1.7 3rd Person Block Animation",
             category = "Animations",
             subcategory = "Position"
     )
     public static boolean thirdPersonBlock = true;
 
     @Switch(
-            name = "1.7 XP Orbs Position",
+            title = "1.7 XP Orbs Position",
             description = "Brings back the old XP Orbs position from 1.7.",
             subcategory = "Position"
     )
     public static boolean oldXPOrbs = true;
 
     @Switch(
-            name = "1.7 Pickup Animation Position",
+            title = "1.7 Pickup Animation Position",
             description = "Brings back the old item pickup position from 1.7.",
             subcategory = "Position"
     )
@@ -223,40 +217,40 @@ public class OldAnimationsSettings extends Config {
     // Enchantment Glint
 
     @Switch(
-            name = "1.7 Enchantment Glint",
+            title = "1.7 Enchantment Glint",
             description = "Brings back the old enchantment glint from 1.7.",
             subcategory = "Enchantment Glint"
     )
-    @VigilanceName(
-            name = "Cleaner Enchantment Glint",
+    @PreviousNames(
+            title = "Cleaner Enchantment Glint",
             category = "General",
             subcategory = ""
     )
     public static boolean enchantmentGlint = true;
 
     @Switch(
-            name = "1.7 GUI Enchantment Glint",
+            title = "1.7 GUI Enchantment Glint",
             description = "Brings back the old GUI enchantment glint from 1.7.",
             subcategory = "Enchantment Glint"
     )
     public static boolean enchantmentGlintGui = false;
 
 //    @Switch(
-//            name = "1.7 Potion Models (Held)",
+//            title = "1.7 Potion Models (Held)",
 //            description = "Use the old potion models from 1.7, making the enchantment glint appear only on the colored part of the potion.",
 //            subcategory = "Enchantment Glint"
 //    )
 //    public static boolean oldPotions = true;
 //
 //    @Switch(
-//            name = "1.7 Potion Models (Dropped)",
+//            title = "1.7 Potion Models (Dropped)",
 //            description = "Use the old potion models from 1.7, making the enchantment glint appear only on the colored part of the potion for dropped items as well.",
 //            subcategory = "Enchantment Glint"
 //    )
 //    public static boolean oldPotionsDropped = false;
 //
 //    @Switch(
-//            name = "1.7 Potion Models (GUI)",
+//            title = "1.7 Potion Models (GUI)",
 //            description = "Use the old potion models from 1.7, making the enchantment glint appear only on the colored part of the potion for gui items as well.",
 //            subcategory = "Enchantment Glint"
 //    )
@@ -265,14 +259,14 @@ public class OldAnimationsSettings extends Config {
     // Item Changes
 
 //    @Switch(
-//            name = "1.7 Skulls",
+//            title = "1.7 Skulls",
 //            description = "Displays skulls as a 2D sprite rather than a 3D model, like in 1.7.",
 //            subcategory = "Item Changes"
 //    )
 //    public static boolean oldSkulls = false;
 
     @Switch(
-            name = "1.7 Third-Person Fishing Rod Cast Texture",
+            title = "1.7 Third-Person Fishing Rod Cast Texture",
             description = "For some reason, in 1.7, when a fishing rod is cast, the third person texture becomes a stick rather than the fishing rod texture. This feature brings back that questionable feature.",
             subcategory = "Item Changes"
     )
@@ -281,19 +275,19 @@ public class OldAnimationsSettings extends Config {
     // HUD
 
     @Switch(
-            name = "1.7 Health Bar Flashing",
+            title = "1.7 Health Bar Flashing",
             description = "Disables the heart flashing texture while taking damage similar to 1.7.",
             subcategory = "HUD"
     )
-    @VigilanceName(
-            name = "Remove Health Bar Flashing",
+    @PreviousNames(
+            title = "Remove Health Bar Flashing",
             category = "Animations",
             subcategory = "HUD"
     )
     public static boolean oldHealth = true;
 
     @Dropdown(
-            name = "Debug Menu Crosshair Style",
+            title = "Debug Menu Crosshair Style",
             description = "Allows you to choose between the 1.7, the vanilla 1.8, and the 1.12+ debug screen crosshair. 1.12+ Debug Screen Crosshair fixes Patcher's Parallax Fix Feature!",
             subcategory = "HUD",
             options = {"1.7", "1.8", "1.12+"}
@@ -301,7 +295,7 @@ public class OldAnimationsSettings extends Config {
     public int debugCrosshairMode = 2;
 
     @Dropdown(
-            name = "Debug Menu Style",
+            title = "Debug Menu Style",
             description = "Reverts the debug menu to be aesthetically similar to 1.7",
             options = {"1.7", "1.8", "Disable Background"},
             subcategory = "HUD"
@@ -309,7 +303,7 @@ public class OldAnimationsSettings extends Config {
     public int debugScreenMode = 1;
 
     @Dropdown(
-            name = "Tab Menu Style",
+            title = "Tab Menu Style",
             description = "Allows you to choose between the 1.7 tab menu, the 1.8 tab menu, and disabling the player heads in the tab menu.",
             options = {"1.7", "1.8", "Disable Heads"},
             subcategory = "HUD"
@@ -318,262 +312,259 @@ public class OldAnimationsSettings extends Config {
 
     // Miscellaneous
     @Switch(
-            name = "1.20+ Potion Colors",
+            title = "1.20+ Potion Colors",
             description = "Back-ports the 1.20 potion overlay colors.",
             category = "Misc", subcategory = "Modern"
     )
     public static boolean modernPotColors = true;
 
     @Switch(
-            name = "1.15+ Armor Enchantment Glint",
+            title = "1.15+ Armor Enchantment Glint",
             description = "Back-ports the 1.15 armor glint rendering.",
             category = "Misc", subcategory = "Modern"
     )
     public static boolean enchantmentGlintNew = true;
 
     @Switch(
-            name = "1.9+ Bow Pullback / Fishing Cast GUI Animation",
+            title = "1.9+ Bow Pullback / Fishing Cast GUI Animation",
             description = "Shows the Bow Pullback / Fishing Cast textures animating in GUIs.",
             category = "Misc", subcategory = "Modern"
     )
     public static boolean rodBowGuiFix = true;
 
     @Switch(
-            name = "1.15+ Backwards Walk Animation",
+            title = "1.15+ Backwards Walk Animation",
             description = "Back-ports the 1.15 walking animation.",
             category = "Misc", subcategory = "Modern"
     )
     public static boolean modernMovement = true;
 
     @Switch(
-            name = "1.14+ View Bobbing",
+            title = "1.14+ View Bobbing",
             description = "Disables view bobbing when the player is falling.",
             category = "Misc", subcategory = "Modern"
     )
     public static boolean modernBobbing = true;
 
     @Switch(
-            name = "1.15+ Drop Item Arm Swing",
+            title = "1.15+ Drop Item Arm Swing",
             description = "Adds an arm swinging animation upon dropping items.",
             category = "Misc", subcategory = "Modern"
     )
     public static boolean modernDropSwing = true;
 
     @Switch(
-            name = "1.15+ Head Yaw Fix",
+            title = "1.15+ Head Yaw Fix",
             description = "Smooths the rotation of mobs' heads when turning left or right.",
             category = "Misc", subcategory = "Modern"
     )
     public static boolean headYawFix = true;
 
     @Switch(
-            name = "1.9+ Item Use Cooldown Animation",
+            title = "1.9+ Item Use Cooldown Animation",
             description = "Shows the item cooldown reset animation everytime you right click similar to 1.9+.",
             category = "Misc", subcategory = "Modern"
     )
     public static boolean funnyFidget = false;
 
     @Switch(
-            name = "1.19+ Block Breaking Animation",
+            title = "1.19+ Block Breaking Animation",
             description = "Renders the block breaking animation as soon as you start mining similar to 1.19+.",
             category = "Misc", subcategory = "Modern"
     )
     public static boolean modernBreak = true;
 
     @Switch(
-            name = "1.14+ Fireball Model",
+            title = "1.14+ Fireball Model",
             description = "Renders the thrown fireball projectiles as models rather than as sprites similar to 1.14+.",
             category = "Misc", subcategory = "Modern"
     )
     public static boolean fireballModel = false;
 
     @Switch(
-            name = "1.19.4+ Damage Tilt",
+            title = "1.19.4+ Damage Tilt",
             description = "Makes hurt camera shake directional.",
             category = "Misc", subcategory = "Modern"
     )
     public static boolean damageTilt = false;
 
     @Slider(
-            name = "Item Re-equip Animation Speed",
+            title = "Item Re-equip Animation Speed",
             min = 0.1F, max = 1.0F,
-            category = "Misc", subcategory = "Re-equip Animation",
-            instant = true
+            category = "Misc", subcategory = "Re-equip Animation"
     )
     public float reequipSpeed = 0.4F;
 
     @Switch(
-            name = "Only Allow Re-equip Animation Upon Switching Slots",
+            title = "Only Allow Re-equip Animation Upon Switching Slots",
             description = "Fixes the re-equip animation to only play when items slots are switched.",
             category = "Misc", subcategory = "Re-equip Animation"
     )
     public static boolean fixReequip = true;
 
     @Switch(
-            name = "Disable Item Pickup Animation",
+            title = "Disable Item Pickup Animation",
             description = "Removes the animation played when picking up items.",
             category = "Misc", subcategory = "Pickup Animation"
     )
     public static boolean disablePickup = false;
 
     @Slider(
-            name = "Dropped Item Y Position",
+            title = "Dropped Item Y Position",
             min = -1.5F, max = 2.5F,
-            category = "Misc", subcategory = "Pickup Animation",
-            instant = true
+            category = "Misc", subcategory = "Pickup Animation"
     )
     public float pickupPosition = 0.0F;
 
     @Switch(
-            name = "Rod Line Position Based on FOV",
+            title = "Rod Line Position Based on FOV",
             description = "Includes the player's FOV when calculating the fishing rod cast line position.",
             category = "Misc", subcategory = "Fishing Rod Line"
     )
     public static boolean fixRod = true;
 
     @Slider(
-            name = "Rod Line Thickness Slider",
-            min = -100.0F, max = 100.0F,
-            category = "Misc", subcategory = "Fishing Rod Line",
-            instant = true
+            title = "Rod Line Thickness Slider",
+            min = -100.0F,
+            category = "Misc", subcategory = "Fishing Rod Line"
     )
     public float rodThickness = 0.0F;
 
     @Switch(
-            name = "Block Breaking Fixes",
+            title = "Block Breaking Fixes",
             description = "Resets block removing while using an item or when the player is out of range of a block.",
             category = "Misc", subcategory = "Fixes, QOL, and Tweaks"
     )
     public static boolean breakFix = false;
 
     @Switch(
-            name = "Disable Hand View Sway",
+            title = "Disable Hand View Sway",
             description = "Disables held item rotations/swaying while the player turns their head.",
             category = "Misc", subcategory = "Fixes, QOL, and Tweaks"
     )
     public static boolean oldItemRotations = false;
 
     @Switch(
-            name = "Disable Potion Enchantment Glint",
+            title = "Disable Potion Enchantment Glint",
             description = "Disables the enchantment glint from rendering on potions.",
             category = "Misc", subcategory = "Fixes, QOL, and Tweaks"
     )
     public static boolean potionGlint = false;
 
     @Switch(
-            name = "Colored Potion Bottles",
+            title = "Colored Potion Bottles",
             description = "Uses the potion overlay color as the color of the potion bottle.",
             category = "Misc", subcategory = "Fixes, QOL, and Tweaks"
     )
     public static boolean coloredBottles = false;
 
     @Switch(
-            name = "Apply Damage Tint to Held Items",
+            title = "Apply Damage Tint to Held Items",
             description = "Applies the damage tint to entity held items.",
             category = "Misc", subcategory = "Fixes, QOL, and Tweaks"
     )
     public static boolean damageHeldItems = false;
 
     @Switch(
-            name = "Apply Damage Tint to Capes",
+            title = "Apply Damage Tint to Capes",
             description = "Applies the damage tint to capes.",
             category = "Misc", subcategory = "Fixes, QOL, and Tweaks"
     )
     public static boolean damageCape = false;
 
     @Checkbox(
-            name = "Disable Drop Item Arm Swing in Chests",
+            title = "Disable Drop Item Arm Swing in Chests",
             description = "Disables the arm swinging animation upon dropping items while in Chests.",
             category = "Misc", subcategory = "Fixes, QOL, and Tweaks"
     )
     public static boolean modernDropSwingFix = true;
 
     @Switch(
-            name = "Disable Entity/Mob Third-Person Item Transformations",
+            title = "Disable Entity/Mob Third-Person Item Transformations",
             description = "Allows/Disallows mobs or entities to have third person item positions applied to them.",
             category = "Misc", subcategory = "Fixes, QOL, and Tweaks"
     )
     public static boolean entityTransforms = true;
 
     @Switch(
-            name = "Disable swinging at the ground in Adventure Mode",
+            title = "Disable swinging at the ground in Adventure Mode",
             description = "Allows/Disallows swinging at the ground in Adventure Mode.",
             category = "Misc", subcategory = "Fixes, QOL, and Tweaks"
     )
     public static boolean adventurePunching = false;
 
     @Switch(
-            name = "Disable Punching During Usage in Adventure Mode",
+            title = "Disable Punching During Usage in Adventure Mode",
             description = "Allows/Disallows the punching during usage feature in Adventure Mode.",
             category = "Misc", subcategory = "Fixes, QOL, and Tweaks"
     )
     public static boolean adventureBlockHit = false;
 
     @Checkbox(
-            name = "Disable Punch-During-Usage Particles in Adventure Mode",
+            title = "Disable Punch-During-Usage Particles in Adventure Mode",
             description = "Allows/Disallows the particles played while punching during usage to appear while in Adventure Mode.",
             category = "Misc", subcategory = "Fixes, QOL, and Tweaks"
     )
     public static boolean adventureParticles = true;
 
     @Switch(
-            name = "Disable Hurt Camera Shake",
+            title = "Disable Hurt Camera Shake",
             description = "Disables the camera damage shake.",
             category = "Misc", subcategory = "Fixes, QOL, and Tweaks"
     )
     public static boolean noHurtCam = false;
 
     @Switch(
-            name = "Old Lunar/CheatBreaker Block-Hit Position",
+            title = "Old Lunar/CheatBreaker Block-Hit Position",
             description = "Brings back the weird block-hitting position from older versions of Lunar Client or CheatBreaker!",
             category = "Misc", subcategory = "Fun"
     )
     public static boolean lunarBlockhit = false;
 
     @Switch(
-            name = "Old Lunar/CheatBreaker Item Positions",
+            title = "Old Lunar/CheatBreaker Item Positions",
             description = "Brings back the item positions from older versions of Lunar Client or CheatBreaker!",
             category = "Misc", subcategory = "Fun"
     )
     public static boolean lunarPositions = false;
 
     @Switch(
-            name = "Dinnerbone Mode Player-Only",
+            title = "Dinnerbone Mode Player-Only",
             description = "Allows the player to be completely upside down, just like Dinnerbone.",
             category = "Misc", subcategory = "Fun"
     )
     public static boolean dinnerBoneMode = false;
 
     @Switch(
-            name = "Dinnerbone Mode All Entities",
+            title = "Dinnerbone Mode All Entities",
             description = "Makes all entities be upside down, just like Dinnerbone.",
             category = "Misc", subcategory = "Fun"
     )
     public static boolean dinnerBoneModeEntities = false;
 
     @Switch(
-            name = "Alpha/Indev Wavy Arms",
+            title = "Alpha/Indev Wavy Arms",
             description = "Brings back the wavy arms from Indev.",
             category = "Misc", subcategory = "Fun"
     )
     public static boolean wackyArms = false;
 
     @Switch(
-            name = "Allow Clicking While Using an Item",
+            title = "Allow Clicking While Using an Item",
             description = "This option is purely visual. Allows the player to swing while clicking and using an item.",
             category = "Misc", subcategory = "Fun"
     )
     public static boolean fakeBlockHit = false;
 
     @Switch(
-            name = "Global Toggle",
+            title = "Global Toggle",
             description = "This option globally enables/disables custom item transformations",
             category = "Customize Item Positions"
     )
     public static boolean globalPositions = true;
 
     @Button(
-            name = "Globally Reset ALL Item Transformations",
+            title = "Globally Reset ALL Item Transformations",
             text = "Reset",
             category = "Customize Item Positions"
     )
@@ -640,7 +631,7 @@ public class OldAnimationsSettings extends Config {
     });
 
     @Button(
-            name = "Copy / Export Item Positions As String",
+            title = "Copy / Export Item Positions As String",
             text = "Export",
             description = "Exports the item positions as a Base64 string. Will be copied to your clipboard.",
             category = "Customize Item Positions"
@@ -650,7 +641,7 @@ public class OldAnimationsSettings extends Config {
     }
 
     @Button(
-            name = "Import Overflow / Dulkir Item Positions As String",
+            title = "Import Overflow / Dulkir Item Positions As String",
             text = "Import",
             description = "Exports the item positions as a Base64 string. Will be copied to your clipboard.",
             category = "Customize Item Positions"
@@ -660,7 +651,7 @@ public class OldAnimationsSettings extends Config {
     }
 
     @Button(
-            name = "Transfer Dulkir Item Positions",
+            title = "Transfer Dulkir Item Positions",
             text = "Transfer",
             description = "Transfers your DulkirMod item positions to OverflowAnimations.",
             category = "Customize Item Positions"
@@ -672,87 +663,77 @@ public class OldAnimationsSettings extends Config {
 
     // Item Positions Customization
     @Slider(
-            name = "Item X Position",
+            title = "Item X Position",
             min = -1.5F, max = 1.5F,
-            category = "Customize Item Positions", subcategory = "Item Position",
-            instant = true
+            category = "Customize Item Positions", subcategory = "Item Position"
     )
     public float itemPositionX = 0.0F;
 
     @Slider(
-            name = "Item Y Position",
+            title = "Item Y Position",
             min = -1.5F, max = 1.5F,
-            category = "Customize Item Positions", subcategory = "Item Position",
-            instant = true
+            category = "Customize Item Positions", subcategory = "Item Position"
     )
     public float itemPositionY = 0.0F;
 
     @Slider(
-            name = "Item Z Position",
+            title = "Item Z Position",
             min = -1.5F, max = 1.5F,
-            category = "Customize Item Positions", subcategory = "Item Position",
-            instant = true
+            category = "Customize Item Positions", subcategory = "Item Position"
     )
     public float itemPositionZ = 0.0F;
 
     @Slider(
-            name = "Item Rotation Yaw",
+            title = "Item Rotation Yaw",
             min = -180f, max = 180f, step = 1,
-            category = "Customize Item Positions", subcategory = "Item Position",
-            instant = true
+            category = "Customize Item Positions", subcategory = "Item Position"
     )
     public float itemRotationYaw = 0.0F;
 
     @Slider(
-            name = "Item Rotation Pitch",
+            title = "Item Rotation Pitch",
             min = -180f, max = 180f, step = 1,
-            category = "Customize Item Positions", subcategory = "Item Position",
-            instant = true
+            category = "Customize Item Positions", subcategory = "Item Position"
     )
     public float itemRotationPitch = 0.0F;
 
     @Slider(
-            name = "Item Rotation Roll",
+            title = "Item Rotation Roll",
             min = -180f, max = 180f, step = 1,
-            category = "Customize Item Positions", subcategory = "Item Position",
-            instant = true
+            category = "Customize Item Positions", subcategory = "Item Position"
     )
     public float itemRotationRoll = 0.0F;
 
     @Slider(
-            name = "Item Scale",
+            title = "Item Scale",
             min = -1.5f, max = 1.5f,
-            category = "Customize Item Positions", subcategory = "Item Position",
-            instant = true
+            category = "Customize Item Positions", subcategory = "Item Position"
     )
     public float itemScale = 0.0F;
 
     @Slider(
-            name = "Item Swing Speed",
+            title = "Item Swing Speed",
             min = -2.0F, max = 1.0F,
-            category = "Customize Item Positions", subcategory = "Item Swing",
-            instant = true
+            category = "Customize Item Positions", subcategory = "Item Swing"
     )
     public float itemSwingSpeed = 0.0F;
 
     @Slider(
-            name = "Haste Swing Speed",
+            title = "Haste Swing Speed",
             min = -2.0F, max = 1.0F,
-            category = "Customize Item Positions", subcategory = "Item Swing",
-            instant = true
+            category = "Customize Item Positions", subcategory = "Item Swing"
     )
     public float itemSwingSpeedHaste = 0.0F;
 
     @Slider(
-            name = "Mining Fatigue Swing Speed",
+            title = "Mining Fatigue Swing Speed",
             min = -2.0F, max = 1.0F,
-            category = "Customize Item Positions", subcategory = "Item Swing",
-            instant = true
+            category = "Customize Item Positions", subcategory = "Item Swing"
     )
     public float itemSwingSpeedFatigue = 0.0F;
 
     @Dropdown(
-            name = "Swing Behavior",
+            title = "Swing Behavior",
             description = "Allows you to choose between the regular swing behavior, scaled swing behavior, and no swing translation!",
             category = "Customize Item Positions", subcategory = "Item Swing",
             options = {"Default", "Smart Item Swing Scaling", "Disable Swing Translation"}
@@ -760,7 +741,7 @@ public class OldAnimationsSettings extends Config {
     public int swingSetting = 0;
 
     @Button(
-            name = "Reset Item Swing Speed",
+            title = "Reset Item Swing Speed",
             text = "Reset",
             category = "Customize Item Positions", subcategory = "Item Swing"
     )
@@ -774,21 +755,21 @@ public class OldAnimationsSettings extends Config {
     });
 
     @Checkbox(
-            name = "Ignore Haste Speed",
+            title = "Ignore Haste Speed",
             description = "Ignores the haste speed when setting a custom item swing speed.",
             category = "Customize Item Positions", subcategory = "Item Swing"
     )
     public static boolean ignoreHaste = false;
 
     @Checkbox(
-            name = "Ignore Mining Fatigue Speed",
+            title = "Ignore Mining Fatigue Speed",
             description = "Ignores the mining fatigue speed when setting a custom item swing speed.",
             category = "Customize Item Positions", subcategory = "Item Swing"
     )
     public static boolean ignoreFatigue = false;
 
     @Button(
-            name = "Reset Item Transformations",
+            title = "Reset Item Transformations",
             text = "Reset",
             category = "Customize Item Positions", subcategory = "Item Position"
     )
@@ -803,7 +784,7 @@ public class OldAnimationsSettings extends Config {
     });
 
     @Page(
-            name = "Advanced Item Customization Settings",
+            title = "Advanced Item Customization Settings",
             description = "Customize all sorts of item positions!",
             location = PageLocation.BOTTOM,
             category = "Customize Item Positions", subcategory = "Advanced Settings"
@@ -815,10 +796,10 @@ public class OldAnimationsSettings extends Config {
     @Exclude public static final OldAnimationsSettings INSTANCE = new OldAnimationsSettings();
 
     public OldAnimationsSettings() {
-        super(new Mod(OverflowAnimations.NAME, ModType.PVP, "/overflowanimations_dark.svg", new VigilanceMigrator("./config/sk1eroldanimations.toml")), "overflowanimations.json");
+        super(new Mod(OverflowAnimations.title, ModType.PVP, "/overflowanimations_dark.svg", new VigilanceMigrator("./config/sk1eroldanimations.toml")), "overflowanimations.json");
         initialize();
 
-        addListener("modernPotColors", PotionColors::reloadColor);
+        addCallback("modernPotColors", PotionColors::reloadColor);
 
         // Sprites
         addDependency("rotationFix", "itemSprites");
