@@ -1,7 +1,5 @@
 package org.polyfrost.overflowanimations.command;
 
-import cc.polyfrost.oneconfig.utils.commands.annotations.Command;
-import cc.polyfrost.oneconfig.utils.commands.annotations.Main;
 import org.polyfrost.oneconfig.api.commands.v1.factories.annotated.Command;
 import org.polyfrost.overflowanimations.config.OldAnimationsSettings;
 
@@ -9,6 +7,7 @@ import org.polyfrost.overflowanimations.config.OldAnimationsSettings;
 public class OldAnimationsCommand {
     @Command
     public void handle() {
-        OldAnimationsSettings.INSTANCE.openGui();
+        //todo: wyvest help
+//        OldAnimationsSettings.INSTANCE.openGui();
     }
 }

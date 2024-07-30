@@ -1,6 +1,5 @@
 package org.polyfrost.overflowanimations.hooks
 
-import cc.polyfrost.oneconfig.utils.dsl.mc
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.GlStateManager
 import net.minecraft.client.renderer.Tessellator
@@ -53,7 +52,7 @@ object GlintModelHook {
         GlStateManager.depthFunc(GL11.GL_GEQUAL)
         GlStateManager.disableLighting()
         GlStateManager.depthMask(false)
-        mc.textureManager.bindTexture(glintTexture)
+        Minecraft.getMinecraft().textureManager.bindTexture(glintTexture)
         GlStateManager.enableAlpha()
         GlStateManager.alphaFunc(516, 0.1f)
         GlStateManager.enableBlend()
@@ -62,7 +61,7 @@ object GlintModelHook {
 
         GlStateManager.pushMatrix()
 
-        (mc.renderItem as RenderItemInvoker).invokeSetupGuiTransform(x, y, false)
+        (Minecraft.getMinecraft().renderItem as RenderItemInvoker).invokeSetupGuiTransform(x, y, false)
 
         GlStateManager.scale(0.5f, 0.5f, 0.5f)
         GlStateManager.translate(-0.5f, -0.5f, -0.5f)
@@ -81,7 +80,7 @@ object GlintModelHook {
         GlStateManager.disableAlpha()
         GlStateManager.disableRescaleNormal()
         GlStateManager.disableLighting()
-        mc.textureManager.bindTexture(TextureMap.locationBlocksTexture)
+        Minecraft.getMinecraft().textureManager.bindTexture(TextureMap.locationBlocksTexture)
     }
 
     private fun drawVertices(worldrenderer: WorldRenderer, uOffset: Double, twentyPixels: Double) {

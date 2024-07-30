@@ -1,41 +1,37 @@
 package org.polyfrost.overflowanimations.config;
 
-import cc.polyfrost.oneconfig.config.annotations.Button;
-import cc.polyfrost.oneconfig.config.annotations.Checkbox;
-import cc.polyfrost.oneconfig.config.annotations.Slider;
-import cc.polyfrost.oneconfig.config.annotations.Switch;
-import net.minecraft.client.Minecraft;
+import org.polyfrost.oneconfig.api.config.v1.annotations.Button;
+import org.polyfrost.oneconfig.api.config.v1.annotations.Checkbox;
+import org.polyfrost.oneconfig.api.config.v1.annotations.Slider;
+import org.polyfrost.oneconfig.api.config.v1.annotations.Switch;
 
 @SuppressWarnings("unused")
 public class ItemPositionAdvancedSettings {
 
     // Swing Position Customization
     @Slider(
-            name = "Item Swing X Position",
+            title = "Item Swing X Position",
             min = -1.5F, max = 1.5F,
-            category = "Customize Item Positions", subcategory = "Item Swing Position",
-            instant = true
+            category = "Customize Item Positions", subcategory = "Item Swing Position"
     )
     public float itemSwingPositionX = 0.0F;
 
     @Slider(
-            name = "Item Swing Y Position",
+            title = "Item Swing Y Position",
             min = -1.5F, max = 1.5F,
-            category = "Customize Item Positions", subcategory = "Item Swing Position",
-            instant = true
+            category = "Customize Item Positions", subcategory = "Item Swing Position"
     )
     public float itemSwingPositionY = 0.0F;
 
     @Slider(
-            name = "Item Swing Z Position",
+            title = "Item Swing Z Position",
             min = -1.5F, max = 1.5F,
-            category = "Customize Item Positions", subcategory = "Item Swing Position",
-            instant = true
+            category = "Customize Item Positions", subcategory = "Item Swing Position"
     )
     public float itemSwingPositionZ = 0.0F;
 
     @Button(
-            name = "Reset Item Swing Transformations",
+            title = "Reset Item Swing Transformations",
             text = "Reset",
             category = "Customize Item Positions", subcategory = "Item Swing Position"
     )
@@ -47,79 +43,70 @@ public class ItemPositionAdvancedSettings {
 
     // Eating/Drinking Position
     @Slider(
-            name = "Eating/Drinking X Position",
+            title = "Eating/Drinking X Position",
             min = -1.5F, max = 1.5F,
-            category = "Customize Item Positions", subcategory = "Eating/Drinking Position",
-            instant = true
+            category = "Customize Item Positions", subcategory = "Eating/Drinking Position"
     )
     public float consumePositionX = 0.0F;
 
     @Slider(
-            name = "Eating/Drinking Y Position",
+            title = "Eating/Drinking Y Position",
             min = -1.5F, max = 1.5F,
-            category = "Customize Item Positions", subcategory = "Eating/Drinking Position",
-            instant = true
+            category = "Customize Item Positions", subcategory = "Eating/Drinking Position"
     )
     public float consumePositionY = 0.0F;
 
     @Slider(
-            name = "Eating/Drinking Z Position",
+            title = "Eating/Drinking Z Position",
             min = -1.5F, max = 1.5F,
-            category = "Customize Item Positions", subcategory = "Eating/Drinking Position",
-            instant = true
+            category = "Customize Item Positions", subcategory = "Eating/Drinking Position"
     )
     public float consumePositionZ = 0.0F;
 
     @Slider(
-            name = "Eating/Drinking Rotation Yaw",
+            title = "Eating/Drinking Rotation Yaw",
             min = -180f, max = 180f, step = 1,
-            category = "Customize Item Positions", subcategory = "Eating/Drinking Position",
-            instant = true
+            category = "Customize Item Positions", subcategory = "Eating/Drinking Position"
     )
     public float consumeRotationYaw = 0.0F;
 
     @Slider(
-            name = "Eating/Drinking Rotation Pitch",
+            title = "Eating/Drinking Rotation Pitch",
             min = -180f, max = 180f, step = 1,
-            category = "Customize Item Positions", subcategory = "Eating/Drinking Position",
-            instant = true
+            category = "Customize Item Positions", subcategory = "Eating/Drinking Position"
     )
     public float consumeRotationPitch = 0.0F;
 
     @Slider(
-            name = "Eating/Drinking Rotation Roll",
+            title = "Eating/Drinking Rotation Roll",
             min = -180f, max = 180f, step = 1,
-            category = "Customize Item Positions", subcategory = "Eating/Drinking Position",
-            instant = true
+            category = "Customize Item Positions", subcategory = "Eating/Drinking Position"
     )
     public float consumeRotationRoll = 0.0F;
 
     @Slider(
-            name = "Eating/Drinking Scale",
+            title = "Eating/Drinking Scale",
             min = -1.5f, max = 1.5f,
-            category = "Customize Item Positions", subcategory = "Eating/Drinking Position",
-            instant = true
+            category = "Customize Item Positions", subcategory = "Eating/Drinking Position"
     )
     public float consumeScale = 0.0F;
 
     @Slider(
-            name = "Eating/Drinking Intensity Animation",
+            title = "Eating/Drinking Intensity Animation",
             min = -6.5F, max = 6.5F,
-            category = "Customize Item Positions", subcategory = "Eating/Drinking Position",
-            instant = true
+            category = "Customize Item Positions", subcategory = "Eating/Drinking Position"
     )
     public float consumeIntensity = 0.0F;
 
     @Slider(
-            name = "Eating/Drinking Rotation Speed",
+            title = "Eating/Drinking Rotation Speed",
             min = -1.0F, max = 1.0F,
-            category = "Customize Item Positions", subcategory = "Eating/Drinking Position",
-            instant = true
+            category = "Customize Item Positions", subcategory = "Eating/Drinking Position"
     )
     public float consumeSpeed = 0.0F;
 
     @Button(
-            name = "Reset Eating/Drinking Transformations",
+            title = "Reset Eating/Drinking Transformations",
             text = "Reset",
             category = "Customize Item Positions", subcategory = "Eating/Drinking Position"
     )
@@ -137,7 +124,7 @@ public class ItemPositionAdvancedSettings {
     });
 
     @Checkbox(
-            name = "Scale Eating/Drinking Based on Item Position",
+            title = "Scale Eating/Drinking Based on Item Position",
             description = "Scales the Eating/Drinking animation based on the position of the item.",
             category = "Customize Item Positions", subcategory = "Eating/Drinking Position"
     )
@@ -145,63 +132,56 @@ public class ItemPositionAdvancedSettings {
 
     // Sword Block Position
     @Slider(
-            name = "Sword Block X Position",
+            title = "Sword Block X Position",
             min = -1.5F, max = 1.5F,
-            category = "Customize Item Positions", subcategory = "Sword Block Position",
-            instant = true
+            category = "Customize Item Positions", subcategory = "Sword Block Position"
     )
     public float blockedPositionX = 0.0F;
 
     @Slider(
-            name = "Sword Block Y Position",
+            title = "Sword Block Y Position",
             min = -1.5F, max = 1.5F,
-            category = "Customize Item Positions", subcategory = "Sword Block Position",
-            instant = true
+            category = "Customize Item Positions", subcategory = "Sword Block Position"
     )
     public float blockedPositionY = 0.0F;
 
     @Slider(
-            name = "Sword Block Z Position",
+            title = "Sword Block Z Position",
             min = -1.5F, max = 1.5F,
-            category = "Customize Item Positions", subcategory = "Sword Block Position",
-            instant = true
+            category = "Customize Item Positions", subcategory = "Sword Block Position"
     )
     public float blockedPositionZ = 0.0F;
 
     @Slider(
-            name = "Sword Block Rotation Yaw",
+            title = "Sword Block Rotation Yaw",
             min = -180f, max = 180f, step = 1,
-            category = "Customize Item Positions", subcategory = "Sword Block Position",
-            instant = true
+            category = "Customize Item Positions", subcategory = "Sword Block Position"
     )
     public float blockedRotationYaw = 0.0F;
 
     @Slider(
-            name = "Sword Block Rotation Pitch",
+            title = "Sword Block Rotation Pitch",
             min = -180f, max = 180f, step = 1,
-            category = "Customize Item Positions", subcategory = "Sword Block Position",
-            instant = true
+            category = "Customize Item Positions", subcategory = "Sword Block Position"
     )
     public float blockedRotationPitch = 0.0F;
 
     @Slider(
-            name = "Sword Block Rotation Roll",
+            title = "Sword Block Rotation Roll",
             min = -180f, max = 180f, step = 1,
-            category = "Customize Item Positions", subcategory = "Sword Block Position",
-            instant = true
+            category = "Customize Item Positions", subcategory = "Sword Block Position"
     )
     public float blockedRotationRoll = 0.0F;
 
     @Slider(
-            name = "Sword Block Scale",
+            title = "Sword Block Scale",
             min = -1.5f, max = 1.5f,
-            category = "Customize Item Positions", subcategory = "Sword Block Position",
-            instant = true
+            category = "Customize Item Positions", subcategory = "Sword Block Position"
     )
     public float blockedScale = 0.0F;
 
     @Button(
-            name = "Reset Sword Block Transformations",
+            title = "Reset Sword Block Transformations",
             text = "Reset",
             category = "Customize Item Positions", subcategory = "Sword Block Position"
     )
@@ -217,63 +197,56 @@ public class ItemPositionAdvancedSettings {
 
     // Dropped Item Position
     @Slider(
-            name = "Dropped Item X Position",
+            title = "Dropped Item X Position",
             min = -1.5F, max = 1.5F,
-            category = "Customize Item Positions", subcategory = "Dropped Item Position",
-            instant = true
+            category = "Customize Item Positions", subcategory = "Dropped Item Position"
     )
     public float droppedPositionX = 0.0F;
 
     @Slider(
-            name = "Dropped Item Y Position",
+            title = "Dropped Item Y Position",
             min = -1.5F, max = 1.5F,
-            category = "Customize Item Positions", subcategory = "Dropped Item Position",
-            instant = true
+            category = "Customize Item Positions", subcategory = "Dropped Item Position"
     )
     public float droppedPositionY = 0.0F;
 
     @Slider(
-            name = "Dropped Item Z Position",
+            title = "Dropped Item Z Position",
             min = -1.5F, max = 1.5F,
-            category = "Customize Item Positions", subcategory = "Dropped Item Position",
-            instant = true
+            category = "Customize Item Positions", subcategory = "Dropped Item Position"
     )
     public float droppedPositionZ = 0.0F;
 
     @Slider(
-            name = "Dropped Item Rotation Yaw",
+            title = "Dropped Item Rotation Yaw",
             min = -180f, max = 180f, step = 1,
-            category = "Customize Item Positions", subcategory = "Dropped Item Position",
-            instant = true
+            category = "Customize Item Positions", subcategory = "Dropped Item Position"
     )
     public float droppedRotationYaw = 0.0F;
 
     @Slider(
-            name = "Dropped Item Rotation Pitch",
+            title = "Dropped Item Rotation Pitch",
             min = -180f, max = 180f, step = 1,
-            category = "Customize Item Positions", subcategory = "Dropped Item Position",
-            instant = true
+            category = "Customize Item Positions", subcategory = "Dropped Item Position"
     )
     public float droppedRotationPitch = 0.0F;
 
     @Slider(
-            name = "Dropped Item Rotation Roll",
+            title = "Dropped Item Rotation Roll",
             min = -180f, max = 180f, step = 1,
-            category = "Customize Item Positions", subcategory = "Dropped Item Position",
-            instant = true
+            category = "Customize Item Positions", subcategory = "Dropped Item Position"
     )
     public float droppedRotationRoll = 0.0F;
 
     @Slider(
-            name = "Dropped Item Scale",
+            title = "Dropped Item Scale",
             min = -1.5f, max = 1.5f,
-            category = "Customize Item Positions", subcategory = "Dropped Item Position",
-            instant = true
+            category = "Customize Item Positions", subcategory = "Dropped Item Position"
     )
     public float droppedScale = 0.0F;
 
     @Button(
-            name = "Reset Dropped Item Transformations",
+            title = "Reset Dropped Item Transformations",
             text = "Reset",
             category = "Customize Item Positions", subcategory = "Dropped Item Position"
     )
@@ -289,63 +262,56 @@ public class ItemPositionAdvancedSettings {
 
     // Projectiles Position
     @Slider(
-            name = "Thrown Projectile X Position",
+            title = "Thrown Projectile X Position",
             min = -1.5F, max = 1.5F,
-            category = "Customize Item Positions", subcategory = "Thrown Projectile Position",
-            instant = true
+            category = "Customize Item Positions", subcategory = "Thrown Projectile Position"
     )
     public float projectilePositionX = 0.0F;
 
     @Slider(
-            name = "Thrown Projectile Y Position",
+            title = "Thrown Projectile Y Position",
             min = -1.5F, max = 1.5F,
-            category = "Customize Item Positions", subcategory = "Thrown Projectile Position",
-            instant = true
+            category = "Customize Item Positions", subcategory = "Thrown Projectile Position"
     )
     public float projectilePositionY = 0.0F;
 
     @Slider(
-            name = "Thrown Projectile Z Position",
+            title = "Thrown Projectile Z Position",
             min = -1.5F, max = 1.5F,
-            category = "Customize Item Positions", subcategory = "Thrown Projectile Position",
-            instant = true
+            category = "Customize Item Positions", subcategory = "Thrown Projectile Position"
     )
     public float projectilePositionZ = 0.0F;
 
     @Slider(
-            name = "Thrown Projectile Rotation Yaw",
+            title = "Thrown Projectile Rotation Yaw",
             min = -180f, max = 180f, step = 1,
-            category = "Customize Item Positions", subcategory = "Thrown Projectile Position",
-            instant = true
+            category = "Customize Item Positions", subcategory = "Thrown Projectile Position"
     )
     public float projectileRotationYaw = 0.0F;
 
     @Slider(
-            name = "Thrown Projectile Rotation Pitch",
+            title = "Thrown Projectile Rotation Pitch",
             min = -180f, max = 180f, step = 1,
-            category = "Customize Item Positions", subcategory = "Thrown Projectile Position",
-            instant = true
+            category = "Customize Item Positions", subcategory = "Thrown Projectile Position"
     )
     public float projectileRotationPitch = 0.0F;
 
     @Slider(
-            name = "Thrown Projectile Rotation Roll",
+            title = "Thrown Projectile Rotation Roll",
             min = -180f, max = 180f, step = 1,
-            category = "Customize Item Positions", subcategory = "Thrown Projectile Position",
-            instant = true
+            category = "Customize Item Positions", subcategory = "Thrown Projectile Position"
     )
     public float projectileRotationRoll = 0.0F;
 
     @Slider(
-            name = "Thrown Projectile Scale",
+            title = "Thrown Projectile Scale",
             min = -1.5f, max = 1.5f,
-            category = "Customize Item Positions", subcategory = "Thrown Projectile Position",
-            instant = true
+            category = "Customize Item Positions", subcategory = "Thrown Projectile Position"
     )
     public float projectileScale = 0.0F;
 
     @Button(
-            name = "Reset Thrown Projectile Transformations",
+            title = "Reset Thrown Projectile Transformations",
             text = "Reset",
             category = "Customize Item Positions", subcategory = "Thrown Projectile Position"
     )
@@ -361,63 +327,56 @@ public class ItemPositionAdvancedSettings {
 
     // Fireball Position
     @Slider(
-            name = "Fireball Projectile X Position",
+            title = "Fireball Projectile X Position",
             min = -1.5F, max = 1.5F,
-            category = "Customize Item Positions", subcategory = "Fireball Projectile Position",
-            instant = true
+            category = "Customize Item Positions", subcategory = "Fireball Projectile Position"
     )
     public float fireballPositionX = 0.0F;
 
     @Slider(
-            name = "Fireball Projectile Y Position",
+            title = "Fireball Projectile Y Position",
             min = -1.5F, max = 1.5F,
-            category = "Customize Item Positions", subcategory = "Fireball Projectile Position",
-            instant = true
+            category = "Customize Item Positions", subcategory = "Fireball Projectile Position"
     )
     public float fireballPositionY = 0.0F;
 
     @Slider(
-            name = "Fireball Projectile Z Position",
+            title = "Fireball Projectile Z Position",
             min = -1.5F, max = 1.5F,
-            category = "Customize Item Positions", subcategory = "Fireball Projectile Position",
-            instant = true
+            category = "Customize Item Positions", subcategory = "Fireball Projectile Position"
     )
     public float fireballPositionZ = 0.0F;
 
     @Slider(
-            name = "Fireball Projectile Rotation Yaw",
+            title = "Fireball Projectile Rotation Yaw",
             min = -180f, max = 180f, step = 1,
-            category = "Customize Item Positions", subcategory = "Fireball Projectile Position",
-            instant = true
+            category = "Customize Item Positions", subcategory = "Fireball Projectile Position"
     )
     public float fireballRotationYaw = 0.0F;
 
     @Slider(
-            name = "Fireball Projectile Rotation Pitch",
+            title = "Fireball Projectile Rotation Pitch",
             min = -180f, max = 180f, step = 1,
-            category = "Customize Item Positions", subcategory = "Fireball Projectile Position",
-            instant = true
+            category = "Customize Item Positions", subcategory = "Fireball Projectile Position"
     )
     public float fireballRotationPitch = 0.0F;
 
     @Slider(
-            name = "Fireball Projectile Rotation Roll",
+            title = "Fireball Projectile Rotation Roll",
             min = -180f, max = 180f, step = 1,
-            category = "Customize Item Positions", subcategory = "Fireball Projectile Position",
-            instant = true
+            category = "Customize Item Positions", subcategory = "Fireball Projectile Position"
     )
     public float fireballRotationRoll = 0.0F;
 
     @Slider(
-            name = "Fireball Projectile Scale",
+            title = "Fireball Projectile Scale",
             min = -1.5f, max = 1.5f,
-            category = "Customize Item Positions", subcategory = "Fireball Projectile Position",
-            instant = true
+            category = "Customize Item Positions", subcategory = "Fireball Projectile Position"
     )
     public float fireballScale = 0.0F;
 
     @Button(
-            name = "Reset Fireball Projectile Transformations",
+            title = "Reset Fireball Projectile Transformations",
             text = "Reset",
             category = "Customize Item Positions", subcategory = "Fireball Projectile Position"
     )
@@ -434,38 +393,35 @@ public class ItemPositionAdvancedSettings {
     // Fishing Line Position
 
     @Switch(
-            name = "Custom Fishing Rod Line Position",
+            title = "Custom Fishing Rod Line Position",
             description = "Allows customization of the fishing rod line.",
             category = "Customize Item Positions", subcategory = "Fishing Rod Line Position"
     )
     public static boolean customRodLine = false;
 
     @Slider(
-            name = "Fishing Line X Position",
+            title = "Fishing Line X Position",
             min = -1.5F, max = 1.5F,
-            category = "Customize Item Positions", subcategory = "Fishing Rod Line Position",
-            instant = true
+            category = "Customize Item Positions", subcategory = "Fishing Rod Line Position"
     )
     public float fishingLinePositionX = -0.36F;
 
     @Slider(
-            name = "Fishing Line Y Position",
+            title = "Fishing Line Y Position",
             min = -1.5F, max = 1.5F,
-            category = "Customize Item Positions", subcategory = "Fishing Rod Line Position",
-            instant = true
+            category = "Customize Item Positions", subcategory = "Fishing Rod Line Position"
     )
     public float fishingLinePositionY = 0.03f;
 
     @Slider(
-            name = "Fishing Line Z Position",
+            title = "Fishing Line Z Position",
             min = -1.5F, max = 1.5F,
-            category = "Customize Item Positions", subcategory = "Fishing Rod Line Position",
-            instant = true
+            category = "Customize Item Positions", subcategory = "Fishing Rod Line Position"
     )
     public float fishingLinePositionZ = 0.35f;
 
     @Button(
-            name = "Reset Fishing Rod Line Transformations",
+            title = "Reset Fishing Rod Line Transformations",
             text = "Reset",
             category = "Customize Item Positions", subcategory = "Fishing Rod Line Position"
     )

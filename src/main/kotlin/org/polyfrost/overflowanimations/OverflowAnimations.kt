@@ -1,12 +1,5 @@
 package org.polyfrost.overflowanimations
 
-import cc.polyfrost.oneconfig.events.EventManager
-import cc.polyfrost.oneconfig.events.event.RenderEvent
-import cc.polyfrost.oneconfig.events.event.Stage
-import cc.polyfrost.oneconfig.libs.eventbus.Subscribe
-import cc.polyfrost.oneconfig.libs.universal.UDesktop
-import cc.polyfrost.oneconfig.utils.Notifications
-import cc.polyfrost.oneconfig.utils.gui.GuiUtils
 import dulkirmod.config.Config
 import dulkirmod.config.DulkirConfig
 import net.minecraft.client.Minecraft
@@ -22,9 +15,10 @@ import org.polyfrost.oneconfig.api.event.v1.invoke.impl.Subscribe
 import org.polyfrost.oneconfig.api.ui.v1.Notifications
 import org.polyfrost.overflowanimations.command.OldAnimationsCommand
 import org.polyfrost.overflowanimations.config.OldAnimationsSettings
-import org.polyfrost.overflowanimations.gui.PleaseMigrateDulkirModGui
-import org.polyfrost.universal.UDesktop
-import java.net.URI
+
+//import org.polyfrost.overflowanimations.gui.PleaseMigrateDulkirModGui
+//import org.polyfrost.universal.UDesktop
+//import java.net.URI
 
 @Mod(
     modid = OverflowAnimations.MODID,
@@ -80,9 +74,14 @@ object OverflowAnimations {
         if (customCrosshair) {
             OldAnimationsSettings.smoothModelSneak = false
             OldAnimationsSettings.INSTANCE.save()
-            Notifications.INSTANCE.send("OverflowAnimations", "Custom Crosshair Mod has been detected, which is written poorly and causes major issues with OverflowAnimations. Disabling Smooth Model Sneak. If you want a better crosshair mod, please click here to use PolyCrosshair instead.", 5000f, Runnable {
-                UDesktop.browse(URI("https://modrinth.com/mod/crosshair"))
-            })
+            Notifications.enqueue(
+                Notifications.Type.Warning,
+                "OverflowAnimations",
+                "Custom Crosshair Mod has been detected, which is written poorly and causes major issues with OverflowAnimations. Disabling Smooth Model Sneak. If you want a better crosshair mod, please click here to use PolyCrosshair instead."
+//                Runnable {
+//                UDesktop.browse(URI("https://modrinth.com/mod/crosshair"))
+//            }
+            )
         }
     }
 
@@ -104,7 +103,7 @@ object OverflowAnimations {
     }
 
     private fun dulkirTrollage() {
-        GuiUtils.displayScreen(PleaseMigrateDulkirModGui())
+//        GuiUtils.displayScreen(PleaseMigrateDulkirModGui())
         doTheFunnyDulkirThing = false
         OldAnimationsSettings.didTheFunnyDulkirThingElectricBoogaloo = true
         OldAnimationsSettings.INSTANCE.save()

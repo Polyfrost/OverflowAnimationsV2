@@ -44,7 +44,7 @@ public class OldAnimationsSettings extends Config {
             subcategory = "Smooth Sneaking"
     )
     @PreviousNames(
-            value = {"Smooth Sneaking.Animations.Interaction"}
+            value = {"Animations.Interaction.Smooth Sneaking"}
 
     )
     public static boolean smoothSneaking = true;
@@ -55,9 +55,7 @@ public class OldAnimationsSettings extends Config {
             subcategory = "Smooth Sneaking"
     )
     @PreviousNames(
-            title = "Longer Unsneak",
-            category = "Animations",
-            subcategory = "Interaction"
+            value = {"Animations.Interaction.Longer Unsneak"}
     )
     public static boolean longerUnsneak = true;
 
@@ -75,9 +73,7 @@ public class OldAnimationsSettings extends Config {
             subcategory = "Interaction"
     )
     @PreviousNames(
-            title = "Block-Hitting Animation",
-            category = "Animations",
-            subcategory = "Interaction"
+            value = {"Animations.Interaction.Block-Hitting Animation"}
     )
     public static boolean oldBlockhitting = true;
 
@@ -92,9 +88,7 @@ public class OldAnimationsSettings extends Config {
             subcategory = "HUD"
     )
     @PreviousNames(
-            title = "Red Armor",
-            category = "Animations",
-            subcategory = "Interaction"
+            value = {"Animations.Interaction.Red Armor"}
     )
     public int armorDamageTintStyle = 3;
 
@@ -108,9 +102,7 @@ public class OldAnimationsSettings extends Config {
             subcategory = "Interaction"
     )
     @PreviousNames(
-            title = "Item Switching Animation",
-            category = "Animations",
-            subcategory = "Interaction"
+            value = {"Animations.Interaction.Item Switching Animation"}
     )
     public int itemSwitchMode = 1;
 
@@ -126,9 +118,7 @@ public class OldAnimationsSettings extends Config {
             description = "Purely visual feature. Re-enables the ability to consume food or block a sword whilst punching a block.",
             subcategory = "Interaction")
     @PreviousNames(
-            title = "Punching During Usage",
-            category = "Animations",
-            subcategory = "Interaction"
+            value = {"Animations.Interaction.Punching During Usage"}
     )
     public static boolean punching = true;
 
@@ -194,9 +184,7 @@ public class OldAnimationsSettings extends Config {
             subcategory = "Position"
     )
     @PreviousNames(
-            title = "1.7 3rd Person Block Animation",
-            category = "Animations",
-            subcategory = "Position"
+            value = {"Animations.Position.1.7 3rd Person Block Animation"}
     )
     public static boolean thirdPersonBlock = true;
 
@@ -222,9 +210,7 @@ public class OldAnimationsSettings extends Config {
             subcategory = "Enchantment Glint"
     )
     @PreviousNames(
-            title = "Cleaner Enchantment Glint",
-            category = "General",
-            subcategory = ""
+            value = {"General.Cleaner Enchantment Glint"}
     )
     public static boolean enchantmentGlint = true;
 
@@ -280,9 +266,7 @@ public class OldAnimationsSettings extends Config {
             subcategory = "HUD"
     )
     @PreviousNames(
-            title = "Remove Health Bar Flashing",
-            category = "Animations",
-            subcategory = "HUD"
+            value = {"Animations.HUD.Remove Health Bar Flashing"}
     )
     public static boolean oldHealth = true;
 
@@ -563,72 +547,72 @@ public class OldAnimationsSettings extends Config {
     )
     public static boolean globalPositions = true;
 
-    @Button(
-            title = "Globally Reset ALL Item Transformations",
-            text = "Reset",
-            category = "Customize Item Positions"
-    )
-    Runnable resetGlobally = (() -> {
-        itemPositionX = 0.0F;
-        itemPositionY = 0.0F;
-        itemPositionZ = 0.0F;
-        itemRotationYaw = 0.0F;
-        itemRotationPitch = 0.0F;
-        itemRotationRoll = 0.0F;
-        itemScale = 0.0F;
-
-        advancedSettings.itemSwingPositionX = 0.0F;
-        advancedSettings.itemSwingPositionY = 0.0F;
-        advancedSettings.itemSwingPositionZ = 0.0F;
-        itemSwingSpeed = 0.0F;
-        itemSwingSpeedHaste = 0.0F;
-        itemSwingSpeedFatigue = 0.0F;
-        swingSetting = 0;
-        ignoreHaste = false;
-
-        advancedSettings.consumePositionX = 0.0F;
-        advancedSettings.consumePositionY = 0.0F;
-        advancedSettings.consumePositionZ = 0.0F;
-        advancedSettings.consumeRotationYaw = 0.0F;
-        advancedSettings.consumeRotationPitch = 0.0F;
-        advancedSettings.consumeRotationRoll = 0.0F;
-        advancedSettings.consumeScale = 0.0F;
-        advancedSettings.consumeIntensity = 0.0F;
-        advancedSettings.consumeSpeed = 0.0F;
-        ItemPositionAdvancedSettings.shouldScaleEat = false;
-
-        advancedSettings.blockedPositionX = 0.0F;
-        advancedSettings.blockedPositionY = 0.0F;
-        advancedSettings.blockedPositionZ = 0.0F;
-        advancedSettings.blockedRotationYaw = 0.0F;
-        advancedSettings.blockedRotationPitch = 0.0F;
-        advancedSettings.blockedRotationRoll = 0.0F;
-        advancedSettings. blockedScale = 0.0F;
-
-        advancedSettings.droppedPositionX = 0.0F;
-        advancedSettings.droppedPositionY = 0.0F;
-        advancedSettings.droppedPositionZ = 0.0F;
-        advancedSettings.droppedRotationYaw = 0.0F;
-        advancedSettings.droppedRotationPitch = 0.0F;
-        advancedSettings.droppedRotationRoll = 0.0F;
-        advancedSettings.droppedScale = 0.0F;
-
-        advancedSettings.projectilePositionX = 0.0F;
-        advancedSettings.projectilePositionY = 0.0F;
-        advancedSettings.projectilePositionZ = 0.0F;
-        advancedSettings.projectileRotationYaw = 0.0F;
-        advancedSettings.projectileRotationPitch = 0.0F;
-        advancedSettings.projectileRotationRoll = 0.0F;
-        advancedSettings.projectileScale = 0.0F;
-
-        advancedSettings.fireballPositionX = 0.0F;
-        advancedSettings.fireballPositionY = 0.0F;
-        advancedSettings.fireballPositionZ = 0.0F;
-        advancedSettings.fireballRotationYaw = 0.0F;
-        advancedSettings.fireballRotationPitch = 0.0F;
-        advancedSettings.fireballRotationRoll = 0.0F;
-        advancedSettings.fireballScale = 0.0F;
-    });
+//    @Button(
+//            title = "Globally Reset ALL Item Transformations",
+//            text = "Reset",
+//            category = "Customize Item Positions"
+//    )
+//    Runnable resetGlobally = (() -> {
+//        itemPositionX = 0.0F;
+//        itemPositionY = 0.0F;
+//        itemPositionZ = 0.0F;
+//        itemRotationYaw = 0.0F;
+//        itemRotationPitch = 0.0F;
+//        itemRotationRoll = 0.0F;
+//        itemScale = 0.0F;
+//
+//        advancedSettings.itemSwingPositionX = 0.0F;
+//        advancedSettings.itemSwingPositionY = 0.0F;
+//        advancedSettings.itemSwingPositionZ = 0.0F;
+//        itemSwingSpeed = 0.0F;
+//        itemSwingSpeedHaste = 0.0F;
+//        itemSwingSpeedFatigue = 0.0F;
+//        swingSetting = 0;
+//        ignoreHaste = false;
+//
+//        advancedSettings.consumePositionX = 0.0F;
+//        advancedSettings.consumePositionY = 0.0F;
+//        advancedSettings.consumePositionZ = 0.0F;
+//        advancedSettings.consumeRotationYaw = 0.0F;
+//        advancedSettings.consumeRotationPitch = 0.0F;
+//        advancedSettings.consumeRotationRoll = 0.0F;
+//        advancedSettings.consumeScale = 0.0F;
+//        advancedSettings.consumeIntensity = 0.0F;
+//        advancedSettings.consumeSpeed = 0.0F;
+//        ItemPositionAdvancedSettings.shouldScaleEat = false;
+//
+//        advancedSettings.blockedPositionX = 0.0F;
+//        advancedSettings.blockedPositionY = 0.0F;
+//        advancedSettings.blockedPositionZ = 0.0F;
+//        advancedSettings.blockedRotationYaw = 0.0F;
+//        advancedSettings.blockedRotationPitch = 0.0F;
+//        advancedSettings.blockedRotationRoll = 0.0F;
+//        advancedSettings. blockedScale = 0.0F;
+//
+//        advancedSettings.droppedPositionX = 0.0F;
+//        advancedSettings.droppedPositionY = 0.0F;
+//        advancedSettings.droppedPositionZ = 0.0F;
+//        advancedSettings.droppedRotationYaw = 0.0F;
+//        advancedSettings.droppedRotationPitch = 0.0F;
+//        advancedSettings.droppedRotationRoll = 0.0F;
+//        advancedSettings.droppedScale = 0.0F;
+//
+//        advancedSettings.projectilePositionX = 0.0F;
+//        advancedSettings.projectilePositionY = 0.0F;
+//        advancedSettings.projectilePositionZ = 0.0F;
+//        advancedSettings.projectileRotationYaw = 0.0F;
+//        advancedSettings.projectileRotationPitch = 0.0F;
+//        advancedSettings.projectileRotationRoll = 0.0F;
+//        advancedSettings.projectileScale = 0.0F;
+//
+//        advancedSettings.fireballPositionX = 0.0F;
+//        advancedSettings.fireballPositionY = 0.0F;
+//        advancedSettings.fireballPositionZ = 0.0F;
+//        advancedSettings.fireballRotationYaw = 0.0F;
+//        advancedSettings.fireballRotationPitch = 0.0F;
+//        advancedSettings.fireballRotationRoll = 0.0F;
+//        advancedSettings.fireballScale = 0.0F;
+//    });
 
     @Button(
             title = "Copy / Export Item Positions As String",
@@ -783,21 +767,26 @@ public class OldAnimationsSettings extends Config {
         itemScale = 0.0F;
     });
 
-    @Page(
-            title = "Advanced Item Customization Settings",
-            description = "Customize all sorts of item positions!",
-            location = PageLocation.BOTTOM,
-            category = "Customize Item Positions", subcategory = "Advanced Settings"
-    )
+    //todo: wyvest help
+//    @Page(
+//            title = "Advanced Item Customization Settings",
+//            description = "Customize all sorts of item positions!",
+//            location = PageLocation.BOTTOM,
+//            category = "Customize Item Positions", subcategory = "Advanced Settings"
+//    )
     public static ItemPositionAdvancedSettings advancedSettings = new ItemPositionAdvancedSettings();
 
-    public static boolean didTheFunnyDulkirThingElectricBoogaloo = false;
+    @Include public static boolean didTheFunnyDulkirThingElectricBoogaloo = false;
 
-    @Exclude public static final OldAnimationsSettings INSTANCE = new OldAnimationsSettings();
+    public static final OldAnimationsSettings INSTANCE = new OldAnimationsSettings();
 
     public OldAnimationsSettings() {
-        super(new Mod(OverflowAnimations.title, ModType.PVP, "/overflowanimations_dark.svg", new VigilanceMigrator("./config/sk1eroldanimations.toml")), "overflowanimations.json");
-        initialize();
+        //todo: wyvest help
+
+        // new VigilanceMigrator("./config/sk1eroldanimations.toml")
+        super("overflowanimations.json", OverflowAnimations.NAME, Category.COMBAT);
+        //, "/overflowanimations_dark.svg"
+//        initialize();
 
         addCallback("modernPotColors", PotionColors::reloadColor);
 
