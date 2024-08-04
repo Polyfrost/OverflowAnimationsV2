@@ -39,6 +39,7 @@
     "RenderItemMixin",
     "RenderSnowballMixin",
     "RenderSnowballMixin_CustomPositions",
+    "compat.DulkirConfigMixin",
     "compat.ItemCustomizeManagerMixin",
     "interfaces.EntityLivingBaseInvoker",
     "interfaces.GuiPlayerTabOverlayInvoker",

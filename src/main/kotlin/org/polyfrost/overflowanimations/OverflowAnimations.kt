@@ -35,7 +35,8 @@ object OverflowAnimations {
 
     @JvmField
     var isPatcherPresent: Boolean = false
-    private var doTheFunnyDulkirThing = false
+    @JvmField
+    var doTheFunnyDulkirThing = false
     @JvmField
     var oldDulkirMod: Boolean = false
     private var customCrosshair = false
@@ -100,9 +101,6 @@ object OverflowAnimations {
 
     private fun dulkirTrollage() {
         GuiUtils.displayScreen(PleaseMigrateDulkirModGui())
-        doTheFunnyDulkirThing = false
-        OldAnimationsSettings.didTheFunnyDulkirThingElectricBoogaloo = true
-        OldAnimationsSettings.INSTANCE.save()
     }
 
 }

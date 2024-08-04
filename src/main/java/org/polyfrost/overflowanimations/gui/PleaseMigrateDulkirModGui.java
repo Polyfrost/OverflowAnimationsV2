@@ -10,6 +10,8 @@ import cc.polyfrost.oneconfig.utils.color.ColorPalette;
 import cc.polyfrost.oneconfig.utils.color.ColorUtils;
 import cc.polyfrost.oneconfig.utils.gui.GuiUtils;
 import cc.polyfrost.oneconfig.utils.gui.OneUIScreen;
+import org.polyfrost.overflowanimations.OverflowAnimations;
+import org.polyfrost.overflowanimations.config.OldAnimationsSettings;
 import org.polyfrost.overflowanimations.hooks.AnimationExportUtils;
 
 public class PleaseMigrateDulkirModGui extends OneUIScreen {
@@ -31,12 +33,23 @@ public class PleaseMigrateDulkirModGui extends OneUIScreen {
             2,
             ColorPalette.PRIMARY_DESTRUCTIVE
     );
+    private int ticks = 0;
 
     @Override
     public void draw(long vg, float partialTicks, InputHandler inputHandler) {
+        if (ticks < 10) {
+            ticks++;
+            if (ticks == 10) {
+                markAsViewed();
+            }
+        }
         if (transferButton.getWidth() == -1) {
             transferButton.setWidth((int) (NanoVGHelper.INSTANCE.getTextWidth(vg, TRANSFER, 14f, Fonts.MEDIUM) + 40));
-            transferButton.setClickAction(AnimationExportUtils::transferDulkirConfig);
+            transferButton.setClickAction(() -> {
+                markAsViewed();
+                AnimationExportUtils.transferDulkirConfig();
+                GuiUtils.displayScreen(null);
+            });
         }
         if (cancelButton.getWidth() == -1) {
             cancelButton.setWidth((int) (NanoVGHelper.INSTANCE.getTextWidth(vg, CANCEL, 14f, Fonts.MEDIUM) + 40));
@@ -44,6 +57,7 @@ public class PleaseMigrateDulkirModGui extends OneUIScreen {
                 cancelButton.setText("Confirm");
                 cancelButton.setWidth((int) (NanoVGHelper.INSTANCE.getTextWidth(vg, "Confirm", 14f, Fonts.MEDIUM) + 40));
                 cancelButton.setClickAction(() -> {
+                    markAsViewed();
                     cancelButton.setText(CANCEL);
                     cancelButton.setWidth((int) (NanoVGHelper.INSTANCE.getTextWidth(vg, CANCEL, 14f, Fonts.MEDIUM) + 40));
                     GuiUtils.displayScreen(null);
@@ -64,5 +78,11 @@ public class PleaseMigrateDulkirModGui extends OneUIScreen {
 
         transferButton.draw(vg, x + 300 - transferButton.getWidth(), y + 180, inputHandler);
         cancelButton.draw(vg, x + 300 + 10, y + 180, inputHandler);
+    }
+
+    private void markAsViewed() {
+        OverflowAnimations.doTheFunnyDulkirThing = false;
+        OldAnimationsSettings.didTheFunnyDulkirThingElectricBoogaloo = true;
+        OldAnimationsSettings.INSTANCE.save();
     }
 }
