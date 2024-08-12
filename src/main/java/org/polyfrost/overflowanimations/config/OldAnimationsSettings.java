@@ -95,7 +95,7 @@ public class OldAnimationsSettings extends Config {
                     "\"1.8 (With Glint)\" will use the 1.8 formula AND account for the enchantment glint. " +
                     "\"1.8 (Without Glint)\" will use the 1.8 formula AND NOT account for the enchantment glint. ",
             options = {"None", "1.7", "1.8 (With Glint)", "1.8 (Without Glint)"},
-            subcategory = "HUD"
+            subcategory = "Interaction"
     )
     @VigilanceName(
             name = "Red Armor",
