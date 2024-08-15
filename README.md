@@ -5,12 +5,14 @@
 
 ## [Download (Modrinth)](https://modrinth.com/mod/animations)
 
-This mod combines Overflow Animations (V1) with Sk1er's Old Animations code into a singular mod, with bug fixes, and additional features.
+Extremely precise and advanced old animations mod for 1.8.9.
+
+Originally a fork of Sk1erLLC's OldAnimations mod, it has turned into a much larger mod with essentially full 1.7 parity, animations from ancient and modern Minecraft, custom animations, and much more!
 
 # Features
 
 <details>
-  <summary>All features from Sk1er's Old Animations Mod</summary>
+  <summary>All features from Sk1er's Old Animations Mod (1.7 Animations)</summary>
 
 * Old Eating
 * Old Rod Position
@@ -26,7 +28,7 @@ This mod combines Overflow Animations (V1) with Sk1er's Old Animations code into
 * 1.7 Debug
 * Old Eating Animation
 
-*The "Old Debug Hitbox" feature has been removed as [REDACTION](https://github.com/Polyfrost/REDACTION) has the same functionality.*
+*The "Old Debug Hitbox" feature has been removed as [PolyHitbox](https://github.com/Polyfrost/PolyHitbox) has the same functionality.*
 
 </details>
 
