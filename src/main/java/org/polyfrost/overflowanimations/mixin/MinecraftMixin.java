@@ -43,8 +43,9 @@ public abstract class MinecraftMixin {
     @Inject(method = "sendClickBlockToController", at = @At("HEAD"))
     public void overflowAnimations$blockHitAnimation(boolean leftClick, CallbackInfo ci) {
         if (OldAnimationsSettings.oldBlockhitting && OldAnimationsSettings.punching && OldAnimationsSettings.INSTANCE.enabled && gameSettings.keyBindUseItem.isKeyDown()) {
-            if (leftClickCounter <= 0 && leftClick && objectMouseOver != null && objectMouseOver.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK
-                    && (thePlayer.isUsingItem() || !OldAnimationsSettings.adventurePunching)) {
+            if (leftClickCounter <= 0 && leftClick && objectMouseOver != null
+                    //todo: fix the logic
+                    && ((thePlayer.isUsingItem() && objectMouseOver.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK) || !OldAnimationsSettings.adventurePunching)) {
                 BlockPos posBlock = objectMouseOver.getBlockPos();
                 if (!theWorld.isAirBlock(posBlock)) {
                     if ((thePlayer.isAllowEdit() || !OldAnimationsSettings.adventureParticles) && OldAnimationsSettings.punchingParticles) {

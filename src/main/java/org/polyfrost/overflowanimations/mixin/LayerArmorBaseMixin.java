@@ -40,7 +40,7 @@ public abstract class LayerArmorBaseMixin<T extends ModelBase> implements LayerR
 
     @Inject(method = "shouldCombineTextures", at = @At(value = "HEAD"), cancellable = true)
     public void overflowAnimations$allowCombine(CallbackInfoReturnable<Boolean> cir) {
-        cir.setReturnValue(OldAnimationsSettings.INSTANCE.armorDamageTintStyle == 2 && OldAnimationsSettings.INSTANCE.enabled);
+        cir.setReturnValue((OldAnimationsSettings.INSTANCE.armorDamageTintStyle == 2 || OldAnimationsSettings.INSTANCE.armorDamageTintStyle == 4) && OldAnimationsSettings.INSTANCE.enabled);
     }
 
 }

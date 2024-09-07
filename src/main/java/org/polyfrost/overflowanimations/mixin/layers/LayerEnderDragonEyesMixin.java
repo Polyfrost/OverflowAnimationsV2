@@ -21,7 +21,7 @@ public abstract class LayerEnderDragonEyesMixin {
     public void overflowAnimations$renderHitColor(EntityDragon entitylivingbaseIn, float f, float g, float partialTicks, float h, float i, float j, float scale, CallbackInfo ci) {
         if (OldAnimationsSettings.INSTANCE.armorDamageTintStyle == 1 && OldAnimationsSettings.INSTANCE.enabled) {
             boolean bl = entitylivingbaseIn.hurtTime > 0 || entitylivingbaseIn.deathTime > 0;
-            HitColorHook.renderHitColorPre(entitylivingbaseIn, bl, partialTicks);
+            HitColorHook.renderHitColorPre(entitylivingbaseIn, bl, partialTicks, dragonRenderer);
             if (bl) {
                 dragonRenderer.getMainModel().render(entitylivingbaseIn, f, g, h, i, j, scale);
             }

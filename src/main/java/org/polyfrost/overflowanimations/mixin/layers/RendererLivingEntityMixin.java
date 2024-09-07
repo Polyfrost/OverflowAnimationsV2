@@ -11,6 +11,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
@@ -54,12 +55,27 @@ public abstract class RendererLivingEntityMixin<T extends EntityLivingBase> exte
                 f5 = 1.0f;
             }
             boolean bl = entity.hurtTime > 0 || entity.deathTime > 0;
-            HitColorHook.renderHitColorPre(entity, bl, partialTicks);
+            HitColorHook.renderHitColorPre(entity, bl, partialTicks, (RendererLivingEntity<?>) (Object) this);
             if (bl) {
                 mainModel.render(entity, f6, f5, f8, f2, f7, 0.0625f);
             }
             HitColorHook.renderHitColorPost(bl);
         }
+    }
+
+    @ModifyArg(
+            method = "setBrightness",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Ljava/nio/FloatBuffer;put(F)Ljava/nio/FloatBuffer;",
+                    ordinal = 3
+            ),
+            index = 0
+    )
+    private float overflowAnimations$orangesHitColor(float f) {
+        if (OldAnimationsSettings.INSTANCE.armorDamageTintStyle == 4 && OldAnimationsSettings.INSTANCE.enabled)
+            return 0.5f; /* not sure where he got this value from ?!? */
+        return f;
     }
 
 }

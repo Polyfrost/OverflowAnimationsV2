@@ -14,4 +14,7 @@ public interface RendererLivingEntityInvoker {
     @Invoker
     void invokeUnsetBrightness();
 
+    @Invoker
+    int invokeGetColorMultiplier(EntityLivingBase entitylivingbaseIn, float lightBrightness, float partialTickTime);
+
 }
