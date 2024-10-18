@@ -58,6 +58,7 @@ repositories {
 // Configures the libraries/dependencies for your mod.
 dependencies {
     // If we are building for legacy forge, includes the launch wrapper with `shade` as we configured earlier.
+    compileOnly("org.polyfrost:universalcraft-$mcData:299")
     if (mcData.isLegacyForge) {
         compileOnly("org.spongepowered:mixin:0.7.11-SNAPSHOT")
     }
