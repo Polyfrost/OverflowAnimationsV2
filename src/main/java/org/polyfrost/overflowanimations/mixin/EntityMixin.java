@@ -1,8 +1,8 @@
 package org.polyfrost.overflowanimations.mixin;
 
-import cc.polyfrost.oneconfig.libs.universal.UMinecraft;
 import net.minecraft.entity.Entity;
 import org.polyfrost.overflowanimations.config.OldAnimationsSettings;
+import org.polyfrost.universal.UMinecraft;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
