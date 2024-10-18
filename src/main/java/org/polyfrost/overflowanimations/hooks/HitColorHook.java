@@ -12,9 +12,9 @@ public class HitColorHook {
         float f12 = entitylivingbaseIn.getBrightness(partialTicks);
 
         boolean isDT = OverflowAnimations.isDamageTintPresent;
-        float red = isDT ? DamageTintConfig.color.getRed() / 255.0F : f12;
-        float green = isDT ? DamageTintConfig.color.getGreen() / 255.0F : 0.0F;
-        float blue = isDT ? DamageTintConfig.color.getBlue() / 255.0F : 0.0F;
+        float red = isDT ? DamageTintConfig.color.red() / 255.0F : f12;
+        float green = isDT ? DamageTintConfig.color.green() / 255.0F : 0.0F;
+        float blue = isDT ? DamageTintConfig.color.blue() / 255.0F : 0.0F;
         float alpha = isDT ? DamageTintConfig.color.getAlpha() / 255.0F : 0.4F;
 
         Minecraft.getMinecraft().entityRenderer.disableLightmap();

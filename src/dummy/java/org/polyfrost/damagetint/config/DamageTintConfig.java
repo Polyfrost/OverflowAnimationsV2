@@ -1,10 +1,9 @@
 package org.polyfrost.damagetint.config;
 
-//import cc.polyfrost.oneconfig.config.core.OneColor;
+import org.polyfrost.polyui.color.PolyColor;
 
 public class DamageTintConfig {
 
-    //todo: wyvest help
-//    public static OneColor color;
+    public static PolyColor color;
 
 }
