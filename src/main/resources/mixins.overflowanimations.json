@@ -2,7 +2,7 @@
   "compatibilityLevel": "JAVA_8",
   "minVersion": "0.7",
   "package": "org.polyfrost.overflowanimations.mixin",
-  "refmap": "mixins.${id}.refmap.json",
+  "refmap": "mixins.${mod_id}.refmap.json",
   "verbose": true,
   "client": [
     "EntityLivingBaseMixin",

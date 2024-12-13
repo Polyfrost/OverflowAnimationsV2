@@ -1,10 +1,10 @@
 [
   {
-    "modid": "${id}",
-    "name": "${name}",
+    "modid": "${mod_id}",
+    "name": "${mod_name}",
     "description": "Replaces animations & visuals removed in 1.8 with their old 1.7 visuals while also offering a plethora of extra features!",
-    "version": "${version}",
-    "mcversion": "${mcVersionStr}",
+    "version": "${mod_version}",
+    "mcversion": "${mc_version}",
     "url": "",
     "updateUrl": "",
     "authorList": [

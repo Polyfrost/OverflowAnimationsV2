@@ -24,7 +24,7 @@ enum class CustomModelBakery(modelPath: String) {
     SKULL_WITHER("item/skull_wither"),
     SKULL_ZOMBIE("item/skull_zombie");
 
-    private val resourceLocation = ResourceLocation(OverflowAnimations.MODID, modelPath)
+    private val resourceLocation = ResourceLocation(OverflowAnimations.ID, modelPath)
     private lateinit var loadedModel: IModel
     lateinit var bakedModel: IBakedModel
         private set

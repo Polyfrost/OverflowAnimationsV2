@@ -1,17 +1,22 @@
 package org.polyfrost.overflowanimations
 
+//#if FORGE
 import dulkirmod.config.Config
 import dulkirmod.config.DulkirConfig
-import net.minecraft.client.Minecraft
-import net.minecraftforge.fml.common.Loader
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.common.event.FMLInitializationEvent
 import net.minecraftforge.fml.common.event.FMLLoadCompleteEvent
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent
+//#else
+//$$ import net.fabricmc.api.ClientModInitializer
+//#endif
+
+import net.minecraft.client.Minecraft
 import org.polyfrost.oneconfig.api.commands.v1.CommandManager
 import org.polyfrost.oneconfig.api.event.v1.EventManager
 import org.polyfrost.oneconfig.api.event.v1.events.RenderEvent
 import org.polyfrost.oneconfig.api.event.v1.invoke.impl.Subscribe
+import org.polyfrost.oneconfig.api.platform.v1.Platform
 import org.polyfrost.oneconfig.api.ui.v1.Notifications
 import org.polyfrost.overflowanimations.command.OldAnimationsCommand
 import org.polyfrost.overflowanimations.config.OldAnimationsSettings
@@ -20,53 +25,64 @@ import org.polyfrost.overflowanimations.config.OldAnimationsSettings
 //import org.polyfrost.universal.UDesktop
 //import java.net.URI
 
-@Mod(
-    modid = OverflowAnimations.MODID,
-    name = OverflowAnimations.NAME,
-    version = OverflowAnimations.VERSION,
-    modLanguageAdapter = "cc.polyfrost.oneconfig.utils.KotlinLanguageAdapter"
-)
-object OverflowAnimations {
+//#if FORGE
+@Mod(modid = OverflowAnimations.ID, version = OverflowAnimations.VERSION, name = OverflowAnimations.NAME, modLanguageAdapter = "org.polyfrost.oneconfig.utils.v1.forge.KotlinLanguageAdapter")
+//#endif
+object OverflowAnimations
+    //#if FABRIC
+    //$$ : ClientModInitializer
+    //#endif
+{
 
-    const val MODID: String = "@ID@"
+    const val ID: String = "@ID@"
     const val NAME: String = "@NAME@"
     const val VERSION: String = "@VER@"
 
+    //#if FORGE
     @JvmField
     var isPatcherPresent: Boolean = false
+
     private var doTheFunnyDulkirThing = false
+
     @JvmField
     var oldDulkirMod: Boolean = false
+
     private var customCrosshair = false
+
     @JvmField
     var isDamageTintPresent: Boolean = false
+
     @JvmField
     var isItemPhysics: Boolean = false
+
     @JvmField
-    var isNEUPresent: Boolean = false;
+    var isNEUPresent: Boolean = false
+    //#endif
 
-//    @Mod.EventHandler
-//    fun preInit(event: FMLPreInitializationEvent) {
-//        CustomModelBakery
-//    }
-
-    @Mod.EventHandler
-    fun init(event: FMLInitializationEvent) {
+    fun initialize() {
         OldAnimationsSettings.INSTANCE.preload()
         CommandManager.registerCommand(OldAnimationsCommand())
+        //#if FORGE
         EventManager.INSTANCE.register(this)
+        //#endif
+    }
+
+    //#if FORGE
+    @Mod.EventHandler
+    fun init(event: FMLInitializationEvent) {
+        initialize()
     }
 
     @Mod.EventHandler
     fun postInit(event: FMLPostInitializationEvent) {
-        if (Loader.isModLoaded("dulkirmod")) {
-            doTheFunnyDulkirThing = true
-        }
-        isPatcherPresent = Loader.isModLoaded("patcher")
-        customCrosshair = Loader.isModLoaded("custom-crosshair-mod")
-        isDamageTintPresent = Loader.isModLoaded("damagetint")
-        isItemPhysics = Loader.isModLoaded("itemphysic")
-        isNEUPresent = Loader.isModLoaded("notenoughupdates")
+        val loaderPlatform = Platform.loader()
+
+        doTheFunnyDulkirThing = loaderPlatform.isModLoaded("dulkirmod")
+        isPatcherPresent = loaderPlatform.isModLoaded("patcher")
+        customCrosshair = loaderPlatform.isModLoaded("custom-crosshair-mod")
+        isDamageTintPresent = loaderPlatform.isModLoaded("damagetint")
+        isItemPhysics = loaderPlatform.isModLoaded("itemphysic")
+        isNEUPresent = loaderPlatform.isModLoaded("notenoughupdates")
     }
 
     @Mod.EventHandler
@@ -108,5 +124,10 @@ object OverflowAnimations {
         OldAnimationsSettings.didTheFunnyDulkirThingElectricBoogaloo = true
         OldAnimationsSettings.INSTANCE.save()
     }
+    //#else
+    //$$ override fun onInitializeClient() {
+    //$$     initialize()
+    //$$ }
+    //#endif
 
 }

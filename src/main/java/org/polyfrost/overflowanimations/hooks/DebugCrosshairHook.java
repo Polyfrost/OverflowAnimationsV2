@@ -1,6 +1,5 @@
 package org.polyfrost.overflowanimations.hooks;
 
-import cc.polyfrost.oneconfig.libs.universal.UResolution;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
@@ -9,6 +8,7 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import org.lwjgl.opengl.GL11;
 import org.polyfrost.overflowanimations.util.MathUtils;
+import org.polyfrost.universal.UResolution;
 
 public class DebugCrosshairHook {
 

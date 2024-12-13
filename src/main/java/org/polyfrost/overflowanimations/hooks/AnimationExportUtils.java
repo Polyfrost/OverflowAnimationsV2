@@ -1,15 +1,16 @@
 package org.polyfrost.overflowanimations.hooks;
 
-import cc.polyfrost.oneconfig.config.core.ConfigUtils;
-import cc.polyfrost.oneconfig.utils.Notifications;
 import com.google.gson.Gson;
 import dulkirmod.config.Config;
 import dulkirmod.config.DulkirConfig;
+import kotlin.Unit;
 import org.apache.commons.io.Charsets;
 import org.apache.commons.io.FileUtils;
+import org.polyfrost.oneconfig.api.ui.v1.Notifications;
 import org.polyfrost.overflowanimations.OverflowAnimations;
 import org.polyfrost.overflowanimations.config.ItemPositionAdvancedSettings;
 import org.polyfrost.overflowanimations.config.OldAnimationsSettings;
+import org.polyfrost.polyui.component.extensions.EventsKt;
 
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
@@ -26,7 +27,7 @@ public class AnimationExportUtils {
         String string = Base64.getEncoder().encodeToString(GSON.toJson(new OverflowConfigData()).getBytes());
         StringSelection selection = new StringSelection(string);
         Toolkit.getDefaultToolkit().getSystemClipboard().setContents(selection, selection);
-        Notifications.INSTANCE.send("OverflowAnimations", "Exported item positions to clipboard");
+        Notifications.enqueue(Notifications.Type.Info, "OverflowAnimations", "Exported item positions to clipboard");
     }
 
     public static void importItemPositions() {
@@ -41,7 +42,7 @@ public class AnimationExportUtils {
                     importDulkir(importSettings);
                 } catch (Exception e) {
                     e.printStackTrace();
-                    Notifications.INSTANCE.send("OverflowAnimations", "Failed to detect clipboard data! Please make sure you have copied a valid config from either OverflowAnimations or DulkirMod!");
+                    Notifications.enqueue(Notifications.Type.Error, "OverflowAnimations", "Failed to detect clipboard data! Please make sure you have copied a valid config from either OverflowAnimations or DulkirMod!");
                 }
             }
             System.out.println("Detected OverflowAnimations config data, trying to import");
@@ -49,11 +50,11 @@ public class AnimationExportUtils {
                 OverflowConfigData importSettings = GSON.fromJson(jsonString, OverflowConfigData.class);
                 importOverflow(importSettings);
             } catch (Exception ignored) {
-                Notifications.INSTANCE.send("OverflowAnimations", "Failed to detect clipboard data! Please make sure you have copied a valid config from either OverflowAnimations or DulkirMod!");
+                Notifications.enqueue(Notifications.Type.Error, "OverflowAnimations", "Failed to detect clipboard data! Please make sure you have copied a valid config from either OverflowAnimations or DulkirMod!");
             }
         } catch (Exception e) {
             e.printStackTrace();
-            Notifications.INSTANCE.send("OverflowAnimations", "Failed to decode clipboard data");
+            Notifications.enqueue(Notifications.Type.Error, "OverflowAnimations", "Failed to decode clipboard data");
         }
     }
 
@@ -124,18 +125,29 @@ public class AnimationExportUtils {
 
     public static void transferDulkirConfig() {
         try {
-            File dulkirConfigFile = ConfigUtils.getProfileFile("dulkirmod-config.json");
+            File dulkirConfigFile = getProfileFile("dulkirmod-config.json");
             String dulkirConfig = FileUtils.readFileToString(dulkirConfigFile, Charsets.UTF_8);
             FileUtils.writeStringToFile(new File(dulkirConfigFile.getParentFile(), "dulkirmod-config_backup.json"), dulkirConfig, Charsets.UTF_8);
-            File overflowConfigFile = ConfigUtils.getProfileFile("overflowanimations.json");
+            File overflowConfigFile = getProfileFile("overflowanimations.json");
             String overflowConfig = FileUtils.readFileToString(overflowConfigFile, Charsets.UTF_8);
             FileUtils.writeStringToFile(new File(overflowConfigFile.getParentFile(), "overflowanimations_backup.json"), overflowConfig, Charsets.UTF_8);
         } catch (Exception e) {
             e.printStackTrace();
-            Notifications.INSTANCE.send("OverflowAnimations", "Failed to backup configs! Click here if you want to continue despite this error.", AnimationExportUtils::importDulkirConfig);
+            EventsKt.onClick(Notifications.enqueue(Notifications.Type.Error, "OverflowAnimations", "Failed to backup configs! Click here if you want to continue despite this error."), (component, event) -> {
+                AnimationExportUtils.importDulkirConfig();
+
+                return Unit.INSTANCE;
+            });
+
             return;
         }
         AnimationExportUtils.importDulkirConfig();
+    }
+
+    private static File getProfileFile(String name) {
+        // <MC_DIR>/OneConfig/profiles/Default Profile
+        // name is not used here
+        return new File("OneConfig/profiles/Default Profile");
     }
 
     private static void importDulkirConfig() {
@@ -171,6 +183,6 @@ public class AnimationExportUtils {
         }
         AnimationExportUtils.importDulkir(data);
         DulkirConfig.INSTANCE.setCustomAnimations(false);
-        Notifications.INSTANCE.send("OverflowAnimations", "Successfully imported DulkirMod config!");
+        Notifications.enqueue(Notifications.Type.Info, "OverflowAnimations", "Successfully imported DulkirMod config!");
     }
 }

@@ -20,7 +20,7 @@ preprocess {
 
 toolkitLoomHelper {
     // Adds OneConfig to our project
-    useOneConfig(mcData, "commands", "config-impl", "events", "hud", "internal", "ui")
+    useOneConfig("1.1.0-alpha.34", "1.0.0-alpha.43", mcData, "commands", "config-impl", "events", "hud", "internal", "ui")
     useDevAuth()
 
     // Removes the server configs from IntelliJ IDEA, leaving only client runs.
@@ -34,7 +34,6 @@ toolkitLoomHelper {
 
     // Adds the tweak class if we are building legacy version of forge as per the documentation (https://docs.polyfrost.org)
     if (mcData.isLegacyForge) {
-        useCoreMod("org.polyfrost.overflowanimations.ModDetectorPlugin")
         useTweaker("org.polyfrost.oneconfig.loader.stage0.LaunchWrapperTweaker", GameSide.CLIENT)
         useForgeMixin(modData.id) // Configures the mixins if we are building for forge, useful for when we are dealing with cross-platform projects.
     }
@@ -61,5 +60,7 @@ dependencies {
     compileOnly("org.polyfrost:universalcraft-$mcData:299")
     if (mcData.isLegacyForge) {
         compileOnly("org.spongepowered:mixin:0.7.11-SNAPSHOT")
+    } else if (mcData.isFabric) {
+        modImplementation("net.fabricmc:fabric-language-kotlin:${mcData.dependencies.fabric.fabricLanguageKotlinVersion}")
     }
 }

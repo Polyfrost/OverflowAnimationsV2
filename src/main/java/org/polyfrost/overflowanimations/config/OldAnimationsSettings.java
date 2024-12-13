@@ -729,14 +729,14 @@ public class OldAnimationsSettings extends Config {
             text = "Reset",
             category = "Customize Item Positions", subcategory = "Item Swing"
     )
-    Runnable resetSpeed = (() -> {
+    void resetSpeed() {
         itemSwingSpeed = 0.0F;
         itemSwingSpeedHaste = 0.0F;
         itemSwingSpeedFatigue = 0.0F;
         swingSetting = 0;
         ignoreHaste = false;
         ignoreFatigue = false;
-    });
+    }
 
     @Checkbox(
             title = "Ignore Haste Speed",
@@ -757,7 +757,7 @@ public class OldAnimationsSettings extends Config {
             text = "Reset",
             category = "Customize Item Positions", subcategory = "Item Position"
     )
-    Runnable resetItem = (() -> {
+    void resetItem() {
         itemPositionX = 0.0F;
         itemPositionY = 0.0F;
         itemPositionZ = 0.0F;
@@ -765,7 +765,7 @@ public class OldAnimationsSettings extends Config {
         itemRotationPitch = 0.0F;
         itemRotationRoll = 0.0F;
         itemScale = 0.0F;
-    });
+    }
 
     //todo: wyvest help
 //    @Page(
@@ -804,9 +804,9 @@ public class OldAnimationsSettings extends Config {
         addDependency("adventureParticles", "punching");
         addDependency("adventurePunching", "punching");
         // Transformations
-        addDependency("firstPersonCarpetPosition", "itemTransformations");
-        addDependency("fixRod", "itemTransformations");
-        addDependency("entityTransforms", "thirdTransformations");
+//        addDependency("firstPersonCarpetPosition", "itemTransformations");
+//        addDependency("fixRod", "itemTransformations");
+//        addDependency("entityTransforms", "thirdTransformations");
         // Sneaking
         addDependency("longerUnsneak", "smoothSneaking");
     }
