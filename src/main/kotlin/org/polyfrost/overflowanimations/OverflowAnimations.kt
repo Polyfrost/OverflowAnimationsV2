@@ -34,9 +34,9 @@ object OverflowAnimations
     //#endif
 {
 
-    const val ID: String = "@ID@"
-    const val NAME: String = "@NAME@"
-    const val VERSION: String = "@VER@"
+    const val ID: String = "@MOD_ID@"
+    const val NAME: String = "@MOD_NAME@"
+    const val VERSION: String = "@MOD_VERSION@"
 
     //#if FORGE
     @JvmField
