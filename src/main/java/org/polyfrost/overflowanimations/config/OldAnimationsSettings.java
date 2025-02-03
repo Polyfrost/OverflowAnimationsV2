@@ -784,7 +784,7 @@ public class OldAnimationsSettings extends Config {
         //todo: wyvest help
 
         // new VigilanceMigrator("./config/sk1eroldanimations.toml")
-        super("overflowanimations.json", OverflowAnimations.NAME, Category.COMBAT);
+        super("overflowanimations.json", "/overflowanimations_dark.svg", OverflowAnimations.NAME, Category.COMBAT);
         //, "/overflowanimations_dark.svg"
 //        initialize();
 
