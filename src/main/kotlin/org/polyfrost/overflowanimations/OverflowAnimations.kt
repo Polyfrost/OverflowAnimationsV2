@@ -1,6 +1,7 @@
 package org.polyfrost.overflowanimations
 
 //#if FORGE
+import dev.deftu.omnicore.common.OmniLoader
 import dulkirmod.config.Config
 import dulkirmod.config.DulkirConfig
 import net.minecraftforge.fml.common.Mod
@@ -61,7 +62,7 @@ object OverflowAnimations
 
     fun initialize() {
         OldAnimationsSettings.INSTANCE.preload()
-        CommandManager.registerCommand(OldAnimationsCommand())
+        CommandManager.register(OldAnimationsCommand())
         //#if FORGE
         EventManager.INSTANCE.register(this)
         //#endif
@@ -75,14 +76,12 @@ object OverflowAnimations
 
     @Mod.EventHandler
     fun postInit(event: FMLPostInitializationEvent) {
-        val loaderPlatform = Platform.loader()
-
-        doTheFunnyDulkirThing = loaderPlatform.isModLoaded("dulkirmod")
-        isPatcherPresent = loaderPlatform.isModLoaded("patcher")
-        customCrosshair = loaderPlatform.isModLoaded("custom-crosshair-mod")
-        isDamageTintPresent = loaderPlatform.isModLoaded("damagetint")
-        isItemPhysics = loaderPlatform.isModLoaded("itemphysic")
-        isNEUPresent = loaderPlatform.isModLoaded("notenoughupdates")
+        doTheFunnyDulkirThing = OmniLoader.isModLoaded("dulkirmod")
+        isPatcherPresent = OmniLoader.isModLoaded("patcher")
+        customCrosshair = OmniLoader.isModLoaded("custom-crosshair-mod")
+        isDamageTintPresent = OmniLoader.isModLoaded("damagetint")
+        isItemPhysics = OmniLoader.isModLoaded("itemphysic")
+        isNEUPresent = OmniLoader.isModLoaded("notenoughupdates")
     }
 
     @Mod.EventHandler
@@ -102,7 +101,7 @@ object OverflowAnimations
     }
 
     @Subscribe
-    private fun onTick(event: RenderEvent.Start) {
+    private fun onTick(event: RenderEvent.Pre) {
         if (Minecraft.getMinecraft().currentScreen == null && Minecraft.getMinecraft().theWorld != null && Minecraft.getMinecraft().thePlayer != null && doTheFunnyDulkirThing && !OldAnimationsSettings.didTheFunnyDulkirThingElectricBoogaloo) {
             try {
                 Class.forName("dulkirmod.config.DulkirConfig")
