@@ -52,14 +52,16 @@ public abstract class EntityLivingBaseMixin extends Entity {
     @Inject(method = "getArmSwingAnimationEnd()I", at = @At("HEAD"), cancellable = true)
     public void overflowAnimations$modifySwingSpeed(CallbackInfoReturnable<Integer> cir) {
         OldAnimationsSettings settings = OldAnimationsSettings.INSTANCE;
-        if (OldAnimationsSettings.globalPositions && settings.enabled) {
-            if (isPotionActive(Potion.digSpeed) && !OldAnimationsSettings.ignoreHaste) {
-                cir.setReturnValue((6 - (1 + getActivePotionEffect(Potion.digSpeed).getAmplifier())) * Math.max((int) Math.exp(-settings.itemSwingSpeedHaste), 1));
-            } else if (isPotionActive(Potion.digSlowdown) && !OldAnimationsSettings.ignoreFatigue) {
-                cir.setReturnValue((6 + (1 + getActivePotionEffect(Potion.digSlowdown).getAmplifier())) * 2 * Math.max((int) Math.exp(-settings.itemSwingSpeedFatigue), 1));
-            } else {
-                cir.setReturnValue(6 * Math.max((int) Math.exp(-settings.itemSwingSpeed), 1));
-            }
+        if (!OldAnimationsSettings.globalPositions || !settings.enabled) return;
+        int length = 6;
+        if (isPotionActive(Potion.digSpeed) && !OldAnimationsSettings.ignoreHaste) {
+            length -= (1 + getActivePotionEffect(Potion.digSpeed).getAmplifier());
+            cir.setReturnValue(Math.max((int) (length * Math.exp(-settings.itemSwingSpeedHaste)), 1));
+        } else if (isPotionActive(Potion.digSlowdown) && !OldAnimationsSettings.ignoreFatigue) {
+            length += (1 + getActivePotionEffect(Potion.digSlowdown).getAmplifier()) * 2;
+            cir.setReturnValue(Math.max((int) (length * Math.exp(-settings.itemSwingSpeedFatigue)), 1));
+        } else {
+            cir.setReturnValue(Math.max((int) (length * Math.exp(-settings.itemSwingSpeed)), 1));
         }
     }
 
