@@ -35,17 +35,22 @@ import java.util.stream.Collectors;
 
 @Mixin(RenderItem.class)
 public abstract class RenderItemMixin {
-
-
 //    @Shadow
 //    public abstract void renderItem(ItemStack stack, IBakedModel model);
-    @Shadow @Final
+
+    @Shadow
+    @Final
     private static ResourceLocation RES_ITEM_GLINT;
+
 //    @Unique private ItemStack overflowanimations$stackGui = null;
 //    @Unique private ItemStack overflowanimations$stackHeld = null;
-    @Unique private ItemStack overflowanimations$stack = null;
+
+    @Unique
+    private ItemStack overflowanimations$stack = null;
+
     @Unique
     public IBakedModel overflowAnimations$model;
+
     @Unique
     private EntityLivingBase overflowAnimations$entityLivingBase;
 
@@ -61,7 +66,7 @@ public abstract class RenderItemMixin {
 
     @ModifyArg(method = "renderModel(Lnet/minecraft/client/resources/model/IBakedModel;ILnet/minecraft/item/ItemStack;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/entity/RenderItem;renderQuads(Lnet/minecraft/client/renderer/WorldRenderer;Ljava/util/List;ILnet/minecraft/item/ItemStack;)V", ordinal = 1), index = 1)
     private List<BakedQuad> overflowAnimations$changeToSprite(List<BakedQuad> quads) {
-        if (OldAnimationsSettings.itemSprites && OldAnimationsSettings.INSTANCE.enabled && !overflowAnimations$model.isGui3d() && TransformTypeHook.shouldBeSprite() && !DroppedItemHook.isItemPhysicsAndEntityDropped()) {
+        if (OldAnimationsSettings.itemSprites && OldAnimationsSettings.INSTANCE.enabled && !overflowAnimations$model.isGui3d() && TransformTypeHook.shouldBeSprite() && DroppedItemHook.isItemPhysicsAndEntityNotDropped()) {
             return quads.stream().filter(baked -> baked.getFace() == EnumFacing.SOUTH).collect(Collectors.toList());
         }
         return quads;
@@ -69,8 +74,7 @@ public abstract class RenderItemMixin {
 
     @ModifyArgs(method = "putQuadNormal", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/WorldRenderer;putNormal(FFF)V"))
     private void overflowAnimations$modifyNormalValue(Args args) {
-        if (OldAnimationsSettings.itemSprites && OldAnimationsSettings.itemSpritesColor && OldAnimationsSettings.INSTANCE.enabled &&
-                !overflowAnimations$model.isGui3d() && !(Minecraft.getMinecraft().currentScreen instanceof GuiFlatPresets) && TransformTypeHook.shouldNotHaveGlint() && !DroppedItemHook.isItemPhysicsAndEntityDropped()) {
+        if (OldAnimationsSettings.INSTANCE.enabled && OldAnimationsSettings.itemSprites && OldAnimationsSettings.itemSpritesColor && !overflowAnimations$model.isGui3d() && !(Minecraft.getMinecraft().currentScreen instanceof GuiFlatPresets) && TransformTypeHook.shouldNotHaveGlint() && DroppedItemHook.isItemPhysicsAndEntityNotDropped()) {
             args.setAll(args.get(0), args.get(2), args.get(1));
         }
     }
@@ -81,9 +85,11 @@ public abstract class RenderItemMixin {
             if (OldAnimationsSettings.potionGlint && overflowanimations$stack.getItem() instanceof ItemPotion) {
                 ci.cancel();
             }
-            if (OldAnimationsSettings.itemSprites && OldAnimationsSettings.spritesGlint && TransformTypeHook.shouldNotHaveGlint() && !DroppedItemHook.isItemPhysicsAndEntityDropped()) {
+
+            if (OldAnimationsSettings.itemSprites && OldAnimationsSettings.spritesGlint && TransformTypeHook.shouldNotHaveGlint() && DroppedItemHook.isItemPhysicsAndEntityNotDropped()) {
                 ci.cancel();
             }
+
             if (OldAnimationsSettings.enchantmentGlintGui && TransformTypeHook.isRenderingInGUI() && !OverflowAnimations.isNEUPresent) {
 //                if (OldAnimationsSettings.oldPotionsGui && overflowanimations$stackGui.getItem() instanceof ItemPotion) { return; }
                 ci.cancel();
@@ -110,15 +116,15 @@ public abstract class RenderItemMixin {
                 Block block = ((ItemBlock) stack.getItem()).getBlock();
                 isCarpet = block instanceof BlockCarpet || block instanceof BlockSnow;
             }
+
             if (cameraTransformType == ItemCameraTransforms.TransformType.FIRST_PERSON && !OldAnimationsSettings.lunarPositions) {
                 if (OldAnimationsSettings.fishingRodPosition && isRod) {
                     GlStateManager.rotate(180.0F, 0.0F, 1.0F, 0.0F);
                     GlStateManager.rotate(50.0F, 0.0F, 0.0F, 1.0F);
-                } else if (OldAnimationsSettings.firstTransformations &&  OldAnimationsSettings.firstPersonCarpetPosition && isCarpet) {
+                } else if (OldAnimationsSettings.firstTransformations && OldAnimationsSettings.firstPersonCarpetPosition && isCarpet) {
                     GlStateManager.translate(0.0F, -5.25F * 0.0625F, 0.0F);
                 }
-            } else if (OldAnimationsSettings.thirdTransformations && cameraTransformType == ItemCameraTransforms.TransformType.THIRD_PERSON
-                    && (overflowAnimations$entityLivingBase instanceof EntityPlayer || !OldAnimationsSettings.entityTransforms)) {
+            } else if (OldAnimationsSettings.thirdTransformations && cameraTransformType == ItemCameraTransforms.TransformType.THIRD_PERSON && (overflowAnimations$entityLivingBase instanceof EntityPlayer || !OldAnimationsSettings.entityTransforms)) {
                 if (isRod) {
                     GlStateManager.rotate(180.0F, 0.0F, 1.0F, 0.0F);
                     GlStateManager.rotate(110.0F, 0.0F, 0.0F, 1.0F);
@@ -126,12 +132,14 @@ public abstract class RenderItemMixin {
                 } else if (OldAnimationsSettings.thirdPersonCarpetPosition && isCarpet) {
                     GlStateManager.translate(0.0F, -0.25F, 0.0F);
                 }
+
                 if (isBlock) {
                     if (Block.getBlockFromItem(stack.getItem()).getRenderType() != 2) {
                         GlStateManager.translate(-0.0285F, -0.0375F, 0.0285F);
                         GlStateManager.rotate(-5.0f, 1.0f, 0.0f, 0.0f);
                         GlStateManager.rotate(-5.0f, 0.0f, 0.0f, 1.0f);
                     }
+
                     GlStateManager.scale(-1.0F, 1.0F, -1.0F);
                 }
             } else if (cameraTransformType == ItemCameraTransforms.TransformType.GUI) {
@@ -161,7 +169,8 @@ public abstract class RenderItemMixin {
                     modelresourcelocation = new ModelResourceLocation("fishing_rod_cast", inventory);
                 } else {
                     modelresourcelocation = item.getModel(stack, entityplayer, entityplayer.getItemInUseCount());
-                } if (modelresourcelocation != null) {
+                }
+                if (modelresourcelocation != null) {
                     return instance.getModelManager().getModel(modelresourcelocation);
                 }
             }
@@ -335,5 +344,4 @@ public abstract class RenderItemMixin {
 //    private IBakedModel overflowAnimations$getBottleModel(ItemStack stack) {
 //        return ItemPotion.isSplash(stack.getMetadata()) ? CustomModelBakery.BOTTLE_SPLASH_EMPTY.getBakedModel() : CustomModelBakery.BOTTLE_DRINKABLE_EMPTY.getBakedModel();
 //    }
-
 }

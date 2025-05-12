@@ -18,9 +18,11 @@ import java.awt.datatransfer.StringSelection;
 import java.io.File;
 import java.util.Base64;
 
-public class AnimationExportUtils {
-
+public final class AnimationExportUtils {
     private static final Gson GSON = new Gson();
+
+    private AnimationExportUtils() {
+    }
 
     public static void exportItemPositions() {
         String string = Base64.getEncoder().encodeToString(GSON.toJson(new OverflowConfigData()).getBytes());

@@ -1,9 +1,10 @@
 package org.polyfrost.overflowanimations.hooks;
 
-import net.minecraft.client.Minecraft;
 import org.polyfrost.overflowanimations.config.OldAnimationsSettings;
 
-public class SmoothSneakHook {
+public final class SmoothSneakHook {
+    private SmoothSneakHook() {
+    }
 
     private static float sneakingHeight;
 
@@ -11,12 +12,11 @@ public class SmoothSneakHook {
         SmoothSneakHook.sneakingHeight = sneakingHeight;
     }
 
-    public static float getSmoothSneak() {
-        if (OldAnimationsSettings.smoothSneaking && OldAnimationsSettings.INSTANCE.enabled) {
+    public static float getSmoothSneak(float originalEyeHeight) {
+        if (OldAnimationsSettings.INSTANCE.enabled && OldAnimationsSettings.smoothSneaking) {
             return sneakingHeight;
         } else {
-            return Minecraft.getMinecraft().getRenderViewEntity().getEyeHeight();
+            return originalEyeHeight;
         }
     }
-
 }

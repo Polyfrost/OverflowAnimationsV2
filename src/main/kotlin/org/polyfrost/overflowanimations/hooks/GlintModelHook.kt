@@ -16,7 +16,6 @@ import org.lwjgl.opengl.GL11
 import org.polyfrost.overflowanimations.mixin.interfaces.RenderItemInvoker
 
 object GlintModelHook {
-
     private val glintMap = hashMapOf<HashedModel, IBakedModel>()
 
     fun getGlint(model: IBakedModel): IBakedModel =
@@ -26,7 +25,11 @@ object GlintModelHook {
 
     data class HashedModel(val data: List<Int>) {
         constructor(model: IBakedModel) : this(
-            (EnumFacing.entries.flatMap { face -> model.getFaceQuads(face) } + model.generalQuads).flatMap { it.vertexData.slice(0..2) }
+            (EnumFacing.entries.flatMap { face -> model.getFaceQuads(face) } + model.generalQuads).flatMap {
+                it.vertexData.slice(
+                    0..2
+                )
+            }
         )
     }
 
@@ -41,8 +44,8 @@ object GlintModelHook {
         val blue = 204 / 255f
         val alpha = 255 / 255f
 
-        val tessellator = Tessellator.getInstance()
-        val worldrenderer = tessellator.worldRenderer
+        val tesselator = Tessellator.getInstance()
+        val vertexConsumer = tesselator.worldRenderer
 
         val currentTime = Minecraft.getSystemTime()
         val twentyPixels = 20.0 / 256.0
@@ -67,10 +70,10 @@ object GlintModelHook {
         GlStateManager.scale(0.5f, 0.5f, 0.5f)
         GlStateManager.translate(-0.5f, -0.5f, -0.5f)
 
-        worldrenderer.begin(7, DefaultVertexFormats.POSITION_TEX)
-        drawVertices(worldrenderer, a, twentyPixels)
-        drawVertices(worldrenderer, b - twentyPixels, twentyPixels)
-        tessellator.draw()
+        vertexConsumer.begin(7, DefaultVertexFormats.POSITION_TEX)
+        drawVertices(vertexConsumer, a, twentyPixels)
+        drawVertices(vertexConsumer, b - twentyPixels, twentyPixels)
+        tesselator.draw()
 
         GlStateManager.popMatrix()
 
@@ -84,13 +87,12 @@ object GlintModelHook {
         mc.textureManager.bindTexture(TextureMap.locationBlocksTexture)
     }
 
-    private fun drawVertices(worldrenderer: WorldRenderer, uOffset: Double, twentyPixels: Double) {
-        worldrenderer.run {
+    private fun drawVertices(vertexConsumer: WorldRenderer, uOffset: Double, twentyPixels: Double) {
+        vertexConsumer.run {
             pos(0.0, 0.0, 0.0).tex(uOffset + twentyPixels * 4.0, twentyPixels).endVertex()
             pos(1.0, 0.0, 0.0).tex(uOffset + twentyPixels * 5.0, twentyPixels).endVertex()
             pos(1.0, 1.0, 0.0).tex(uOffset + twentyPixels, 0.0).endVertex()
             pos(0.0, 1.0, 0.0).tex(uOffset, 0.0).endVertex()
         }
     }
-
 }

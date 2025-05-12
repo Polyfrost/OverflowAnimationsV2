@@ -8,7 +8,9 @@ import org.polyfrost.damagetint.config.DamageTintConfig;
 import org.polyfrost.overflowanimations.OverflowAnimations;
 import org.polyfrost.overflowanimations.mixin.interfaces.RendererLivingEntityInvoker;
 
-public class HitColorHook {
+public final class HitColorHook {
+    private HitColorHook() {
+    }
 
     public static void renderHitColorPre(EntityLivingBase entitylivingbaseIn, boolean bl, float partialTicks, RendererLivingEntity<?> instance) {
         float brightness = entitylivingbaseIn.getBrightness(partialTicks);
@@ -39,7 +41,7 @@ public class HitColorHook {
             GlStateManager.enableAlpha();
             GlStateManager.enableTexture2D();
         }
+
         Minecraft.getMinecraft().entityRenderer.enableLightmap();
     }
-
 }

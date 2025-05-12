@@ -4,15 +4,12 @@ import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 
 import java.util.EnumSet;
 
-public class TransformTypeHook {
-
+public final class TransformTypeHook {
     public static ItemCameraTransforms.TransformType transform;
-    private static final EnumSet<ItemCameraTransforms.TransformType> cameraTypes =
-            EnumSet.of(
-                    ItemCameraTransforms.TransformType.GROUND,
-                    ItemCameraTransforms.TransformType.FIXED
-            );
+    private static final EnumSet<ItemCameraTransforms.TransformType> ITEM_CAMERA_TYPES = EnumSet.of(ItemCameraTransforms.TransformType.GROUND, ItemCameraTransforms.TransformType.FIXED);
 
+    private TransformTypeHook() {
+    }
 
     public static boolean shouldBeSprite() {
         return shouldNotHaveGlint() || isRenderingInGUI();
@@ -23,6 +20,6 @@ public class TransformTypeHook {
     }
 
     public static boolean shouldNotHaveGlint() {
-        return cameraTypes.contains(TransformTypeHook.transform);
+        return ITEM_CAMERA_TYPES.contains(TransformTypeHook.transform);
     }
 }
