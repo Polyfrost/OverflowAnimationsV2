@@ -6,7 +6,7 @@
 ## [Download (Modrinth)](https://modrinth.com/mod/animations)
 
 ## What happened to OverflowAnimations? What about Polyfrost?
-OverflowAnimations started as a project between me (Wyvest) and Mixces, and continued to be until its last days at Polyfrost. During this time, Mixces and lowercasebtw would also another project known as Animatium, which would rewrite the majority of the features in OverflowAnimations for modern Minecraft. 
+OverflowAnimations started as a project between me (Wyvest) and Mixces, and continued to be until its last days at Polyfrost. During this time, Mixces and lowercasebtw would also create another project known as Animatium, which would rewrite the majority of the features in OverflowAnimations for modern Minecraft. 
 
 Animatium is a much more unique and special product than OverflowAnimations in terms of both context of the modern Minecraft space and branding, and lowercase and I thought it would soothe user confusion to unite the superior 1.8 solution to animations with the superior modern solution under one name. Hence, OverflowAnimations is now Animatium Legacy.
 
