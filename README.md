@@ -1,9 +1,27 @@
-# Overflow Animations V2
+# Animatium Legacy (f.k.a. OverflowAnimationsV2)
 
 ![Compact Powered by OneConfig](https://polyfrost.org/img/compact_vector.svg)
-![Dev Workflow Status](https://img.shields.io/github/v/release/Polyfrost/OverflowAnimationsV2.svg?style=for-the-badge&color=1452cc&label=release)
+![Dev Workflow Status](https://img.shields.io/github/v/release/Legacy-Visuals-Project/Animatium-Legacy.svg?style=for-the-badge&color=1452cc&label=release)
 
 ## [Download (Modrinth)](https://modrinth.com/mod/animations)
+
+## What happened to OverflowAnimations? What about Polyfrost?
+OverflowAnimations started as a project between me (Wyvest) and Mixces, and continued to be until its last days at Polyfrost. During this time, Mixces and lowercasebtw would also another project known as Animatium, which would rewrite the majority of the features in OverflowAnimations for modern Minecraft. 
+
+Animatium is a much more unique and special product than OverflowAnimations in terms of both context of the modern Minecraft space and branding, and lowercase and I thought it would soothe user confusion to unite the superior 1.8 solution to animations with the superior modern solution under one name. Hence, OverflowAnimations is now Animatium Legacy.
+
+## Transition period
+The transition period for the rebrand and transfer of OverflowAnimationsV2 has started (6:32PM EST on June 26th). The terms were as follows:
+1. Wyvest receives "Admin" role in the newly named Animatium Legacy repository and "Member" in the Legacy Visuals Project organization
+2. OverflowAnimations renames to Animatium-Legacy
+3. OverflowAnimations transfers to the Legacy Visuals Project organization
+4. We (lowercasebtw and Wyvest) will go through the process of rebranding OverflowAnimations to the Animatium Legacy name over the course of the next couple of weeks
+5. lowercasebtw pledges in writing via Discord DMs that Animatium Legacy and all future commits or changes will stay LGPL-3.0 as written in the current OverflowAnimations LICENSE-GPL and LICENSE-LGPL file
+6. An announcement in Legacy Visuals Project and Polyfrost pinging at least 1/4 of its current members (either via a role ping or an everyone ping, an everyone ping is preferred for Legacy Visuals Project as its focus is animations) will be made within a week of this mesage (6:32PM EST on June 26th) describing the pros of the transfer of OverflowAnimations, as well as Animatium and the organization's commitment to partnering with Polyfrost in regards to making PvP easier for all.
+
+Points 1, 2, 3, and 5 have been completed as of this commit, and points 4 and 6 are in progress. It is likely, however, that the rename of OverflowAnimationsV2 will not be released on Modrinth/CurseForge/GitHub Releases until the port of Animatium Legacy to OneConfig V1 is released.
+
+------
 
 Extremely precise and advanced old animations mod for 1.8.9.
 
@@ -108,19 +126,3 @@ Originally a fork of Sk1erLLC's OldAnimations mod, it has turned into a much lar
 * Only Play Re-equip Animation Upon Switching Slots
 
 </details>
-
-## Licensing
-
-This mod is currently licensed under version 3 of the GNU Lesser General Public License. 
-
-#### Trademark usage
-
-The GNU LGPL does not grant any license or rights to use Polyfrost or OneConfig trademarks and logos for publicity purposes without written authorization. You may use these trademarks, however, to describe the origin of the mod, or under fair use.
-
-#### Contribution licensing
-
-Contributions to this repository will be automatically licensed under the licensing for the repository at that time (currently version 3 of the LGPL), as defined in Subsection D6 of the GitHub Terms of Service. If you wish to license your contributions to another LGPL-compatible license, please let us know prior.
-
-## Links and support
-* Did you run into a bug? [Open a bug report](https://polyfrost.org/discord)
-* Have a feature idea? [Join our discord community](https://polyfrost.org/discord)
