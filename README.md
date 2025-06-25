@@ -10,6 +10,8 @@ OverflowAnimations started as a project between me (Wyvest) and Mixces, and cont
 
 Animatium is a much more unique and special product than OverflowAnimations in terms of both context of the modern Minecraft space and branding, and lowercase and I thought it would soothe user confusion to unite the superior 1.8 solution to animations with the superior modern solution under one name. Hence, OverflowAnimations is now Animatium Legacy.
 
+Despite this transfer to LVP, however, development will still be handled by Polyfrost. 
+
 ## Transition period
 The transition period for the rebrand and transfer of OverflowAnimationsV2 has started (6:32PM EST on June 26th). The terms were as follows:
 1. Wyvest receives "Admin" role in the newly named Animatium Legacy repository and "Member" in the Legacy Visuals Project organization
