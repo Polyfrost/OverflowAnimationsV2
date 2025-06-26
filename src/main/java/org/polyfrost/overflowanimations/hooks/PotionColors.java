@@ -3,14 +3,16 @@ package org.polyfrost.overflowanimations.hooks;
 import java.util.HashMap;
 import java.util.Map;
 
-public class PotionColors {
-
+public final class PotionColors {
     public static final Map<Integer, Integer> POTION_COLORS;
 
     public static boolean shouldReload;
 
     public static void reloadColor() {
         shouldReload = true;
+    }
+
+    private PotionColors() {
     }
 
     static {
@@ -40,5 +42,4 @@ public class PotionColors {
             put(23, 16262179);
         }};
     }
-
 }

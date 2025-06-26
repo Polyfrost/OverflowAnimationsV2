@@ -1,17 +1,24 @@
 package org.polyfrost.overflowanimations.hooks;
 
-import org.polyfrost.overflowanimations.mixin.interfaces.EntityLivingBaseInvoker;
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.EntityPlayer;
+import org.polyfrost.overflowanimations.mixin.interfaces.EntityLivingBaseInvoker;
 
-public class SwingHook {
+public final class SwingHook {
+    private SwingHook() {
+    }
+
+    public static boolean isNotSwinging(EntityPlayer player) {
+        return !player.isSwingInProgress ||
+                player.swingProgressInt >= ((EntityLivingBaseInvoker) player).getArmSwingAnimation() / 2 ||
+                player.swingProgressInt < 0;
+    }
 
     public static void swingItem() {
-        final Minecraft mc = Minecraft.getMinecraft();
-        if (!mc.thePlayer.isSwingInProgress ||
-                mc.thePlayer.swingProgressInt >= ((EntityLivingBaseInvoker) mc.thePlayer).getArmSwingAnimation() / 2 ||
-                mc.thePlayer.swingProgressInt < 0) {
-            mc.thePlayer.swingProgressInt = -1;
-            mc.thePlayer.isSwingInProgress = true;
+        final EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+        if (isNotSwinging(player)) {
+            player.swingProgressInt = -1;
+            player.isSwingInProgress = true;
         }
     }
 }

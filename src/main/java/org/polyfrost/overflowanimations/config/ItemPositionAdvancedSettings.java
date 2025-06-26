@@ -4,11 +4,9 @@ import cc.polyfrost.oneconfig.config.annotations.Button;
 import cc.polyfrost.oneconfig.config.annotations.Checkbox;
 import cc.polyfrost.oneconfig.config.annotations.Slider;
 import cc.polyfrost.oneconfig.config.annotations.Switch;
-import net.minecraft.client.Minecraft;
 
 @SuppressWarnings("unused")
 public class ItemPositionAdvancedSettings {
-
     // Swing Position Customization
     @Slider(
             name = "Item Swing X Position",
@@ -474,5 +472,4 @@ public class ItemPositionAdvancedSettings {
         fishingLinePositionY = 0.03f;
         fishingLinePositionZ = OldAnimationsSettings.fishingRodPosition ? 0.8f : 0.35f;
     });
-
 }

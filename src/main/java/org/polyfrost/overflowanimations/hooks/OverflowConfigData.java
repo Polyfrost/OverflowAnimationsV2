@@ -4,90 +4,89 @@ import org.polyfrost.overflowanimations.config.ItemPositionAdvancedSettings;
 import org.polyfrost.overflowanimations.config.OldAnimationsSettings;
 
 public class OverflowConfigData {
+    public float itemPositionX;
 
-    public float itemPositionX = 0.0F;
+    public float itemPositionY;
 
-    public float itemPositionY = 0.0F;
+    public float itemPositionZ;
 
-    public float itemPositionZ = 0.0F;
+    public float itemRotationYaw;
 
-    public float itemRotationYaw = 0.0F;
+    public float itemRotationPitch;
 
-    public float itemRotationPitch = 0.0F;
+    public float itemRotationRoll;
 
-    public float itemRotationRoll = 0.0F;
-
-    public float itemScale = 0.0F;
+    public float itemScale;
 
     // Swing Position Customization
-    public float itemSwingPositionX = 0.0F;
+    public float itemSwingPositionX;
 
-    public float itemSwingPositionY = 0.0F;
+    public float itemSwingPositionY;
 
-    public float itemSwingPositionZ = 0.0F;
+    public float itemSwingPositionZ;
 
-    public float itemSwingSpeed = 0.0F;
+    public float itemSwingSpeed;
 
-    public float itemSwingSpeedHaste = 0.0F;
+    public float itemSwingSpeedHaste;
 
-    public float itemSwingSpeedFatigue = 0.0F;
+    public float itemSwingSpeedFatigue;
 
     public boolean shouldScaleSwing = false;
 
     // Eating/Drinking Position
-    public float consumePositionX = 0.0F;
+    public float consumePositionX;
 
-    public float consumePositionY = 0.0F;
+    public float consumePositionY;
 
-    public float consumePositionZ = 0.0F;
+    public float consumePositionZ;
 
-    public float consumeRotationYaw = 0.0F;
+    public float consumeRotationYaw;
 
-    public float consumeRotationPitch = 0.0F;
+    public float consumeRotationPitch;
 
-    public float consumeRotationRoll = 0.0F;
+    public float consumeRotationRoll;
 
-    public float consumeScale = 0.0F;
+    public float consumeScale;
 
-    public float consumeIntensity = 0.0F;
+    public float consumeIntensity;
 
-    public float consumeSpeed = 0.0F;
+    public float consumeSpeed;
 
     public boolean shouldScaleEat = false;
 
     // Sword Block Position
-    public float blockedPositionX = 0.0F;
+    public float blockedPositionX;
 
-    public float blockedPositionY = 0.0F;
+    public float blockedPositionY;
 
-    public float blockedPositionZ = 0.0F;
+    public float blockedPositionZ;
 
-    public float blockedRotationYaw = 0.0F;
+    public float blockedRotationYaw;
 
-    public float blockedRotationPitch = 0.0F;
+    public float blockedRotationPitch;
 
-    public float blockedRotationRoll = 0.0F;
+    public float blockedRotationRoll;
 
-    public float blockedScale = 0.0F;
+    public float blockedScale;
 
     // Projectiles Position
-    public float projectilePositionX = 0.0F;
+    public float projectilePositionX;
 
-    public float projectilePositionY = 0.0F;
+    public float projectilePositionY;
 
-    public float projectilePositionZ = 0.0F;
+    public float projectilePositionZ;
 
-    public float projectileRotationYaw = 0.0F;
+    public float projectileRotationYaw;
 
-    public float projectileRotationPitch = 0.0F;
+    public float projectileRotationPitch;
 
-    public float projectileRotationRoll = 0.0F;
+    public float projectileRotationRoll;
 
-    public float projectileScale = 0.0F;
+    public float projectileScale;
 
     public OverflowConfigData() {
-        OldAnimationsSettings settings = OldAnimationsSettings.INSTANCE;
-        ItemPositionAdvancedSettings advanced = OldAnimationsSettings.advancedSettings;
+        final OldAnimationsSettings settings = OldAnimationsSettings.INSTANCE;
+        final ItemPositionAdvancedSettings advanced = OldAnimationsSettings.advancedSettings;
         itemPositionX = settings.itemPositionX;
         itemPositionY = settings.itemPositionY;
         itemPositionZ = settings.itemPositionZ;

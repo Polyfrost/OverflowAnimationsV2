@@ -1,6 +1,5 @@
 package org.polyfrost.overflowanimations.hooks;
 
-import org.polyfrost.overflowanimations.config.OldAnimationsSettings;
 import com.google.common.collect.Lists;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.chunk.RenderChunk;
@@ -11,14 +10,18 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.fml.common.FMLCommonHandler;
+import org.polyfrost.overflowanimations.config.OldAnimationsSettings;
 
 import java.util.List;
 
 /**
  * This is obviously quite an intrusive overwrite, so we put it in a hook so other mods can inject into it easier.
  */
-public class DebugOverlayHook {
+public final class DebugOverlayHook {
     private static float overflowEyeHeight;
+
+    private DebugOverlayHook() {
+    }
 
     public static List<String> getDebugInfoLeft() {
         final Minecraft mc = Minecraft.getMinecraft();

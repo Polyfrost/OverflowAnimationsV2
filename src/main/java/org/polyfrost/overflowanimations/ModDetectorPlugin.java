@@ -14,8 +14,7 @@ import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
-public class ModDetectorPlugin implements IFMLLoadingPlugin {
-
+public final class ModDetectorPlugin implements IFMLLoadingPlugin {
     public ModDetectorPlugin() {
         try {
             File modsFolder = new File(Launch.minecraftHome, "mods");
@@ -112,7 +111,6 @@ public class ModDetectorPlugin implements IFMLLoadingPlugin {
             }
 
         } catch (Exception ignored) {
-
         }
     }
 
@@ -133,7 +131,6 @@ public class ModDetectorPlugin implements IFMLLoadingPlugin {
 
     @Override
     public void injectData(Map<String, Object> map) {
-
     }
 
     @Override

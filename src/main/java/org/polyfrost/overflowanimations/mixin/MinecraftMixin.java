@@ -24,34 +24,43 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(Minecraft.class)
 public abstract class MinecraftMixin {
-
     @Shadow
     public MovingObjectPosition objectMouseOver;
+
     @Shadow
     public EffectRenderer effectRenderer;
+
     @Shadow
     public EntityPlayerSP thePlayer;
+
     @Shadow
     public WorldClient theWorld;
+
     @Shadow
     private int leftClickCounter;
 
-    @Shadow public GameSettings gameSettings;
+    @Shadow
+    public GameSettings gameSettings;
 
-    @Shadow public EntityRenderer entityRenderer;
+    @Shadow
+    public EntityRenderer entityRenderer;
+
+    @Shadow
+    private static Minecraft theMinecraft;
 
     @Inject(method = "sendClickBlockToController", at = @At("HEAD"))
-    public void overflowAnimations$blockHitAnimation(boolean leftClick, CallbackInfo ci) {
-        if (OldAnimationsSettings.oldBlockhitting && OldAnimationsSettings.punching && OldAnimationsSettings.INSTANCE.enabled && gameSettings.keyBindUseItem.isKeyDown()) {
-            if (leftClickCounter <= 0 && leftClick && objectMouseOver != null
-                    //todo: fix the logic
-                    && ((thePlayer.isUsingItem() && objectMouseOver.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK) || !OldAnimationsSettings.adventurePunching)) {
-                BlockPos posBlock = objectMouseOver.getBlockPos();
-                if (!theWorld.isAirBlock(posBlock)) {
-                    if ((thePlayer.isAllowEdit() || !OldAnimationsSettings.adventureParticles) && OldAnimationsSettings.punchingParticles) {
-                        effectRenderer.addBlockHitEffects(posBlock, objectMouseOver.sideHit);
+    private void overflowAnimations$blockHitAnimation(boolean leftClick, CallbackInfo ci) {
+        if (OldAnimationsSettings.INSTANCE.enabled && OldAnimationsSettings.oldBlockhitting && OldAnimationsSettings.punching) {
+            if (this.thePlayer != null && !(this.thePlayer.getHeldItem() == null || !this.thePlayer.isUsingItem() || !theMinecraft.gameSettings.keyBindAttack.isKeyDown())) {
+                final boolean isBlockObject = this.objectMouseOver != null && this.objectMouseOver.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK;
+                if (isBlockObject) {
+                    // TODO: Fix adventure, pretty sure I forgot something idk
+                    final BlockPos blockPos = this.objectMouseOver.getBlockPos();
+                    if ((this.thePlayer.isAllowEdit() || !OldAnimationsSettings.adventureParticles) && OldAnimationsSettings.punchingParticles) {
+                        this.effectRenderer.addBlockHitEffects(blockPos, this.objectMouseOver.sideHit);
                     }
-                    if ((thePlayer.isAllowEdit() || !OldAnimationsSettings.adventureBlockHit)) {
+
+                    if ((this.thePlayer.isAllowEdit() || !OldAnimationsSettings.adventureBlockHit)) {
                         SwingHook.swingItem();
                     }
                 }
@@ -60,31 +69,35 @@ public abstract class MinecraftMixin {
     }
 
     @Inject(method = "clickMouse", at = @At(value = "TAIL"))
-    public void overflowAnimations$onHitParticles(CallbackInfo ci) {
+    private void overflowAnimations$onHitParticles(CallbackInfo ci) {
         if (OldAnimationsSettings.visualSwing && OldAnimationsSettings.INSTANCE.enabled && leftClickCounter > 0) {
-            if (objectMouseOver != null && objectMouseOver.typeOfHit == MovingObjectPosition.MovingObjectType.ENTITY &&
-                    !objectMouseOver.entityHit.hitByEntity(thePlayer) && objectMouseOver.entityHit instanceof EntityLivingBase) {
-                if (thePlayer.fallDistance > 0.0F && !thePlayer.onGround && !thePlayer.isOnLadder() &&
-                        !thePlayer.isInWater() && !thePlayer.isPotionActive(Potion.blindness) && thePlayer.ridingEntity == null) {
+            if (objectMouseOver != null && objectMouseOver.typeOfHit == MovingObjectPosition.MovingObjectType.ENTITY && !objectMouseOver.entityHit.hitByEntity(thePlayer) && objectMouseOver.entityHit instanceof EntityLivingBase) {
+                if (thePlayer.fallDistance > 0.0F &&
+                        !thePlayer.onGround &&
+                        !thePlayer.isOnLadder() &&
+                        !thePlayer.isInWater() &&
+                        !thePlayer.isPotionActive(Potion.blindness) &&
+                        thePlayer.ridingEntity == null) {
                     thePlayer.onCriticalHit(objectMouseOver.entityHit);
                 }
-                if (EnchantmentHelper.getModifierForCreature(thePlayer.getHeldItem(),
-                        ((EntityLivingBase)objectMouseOver.entityHit).getCreatureAttribute()) > 0.0F) {
+
+                if (EnchantmentHelper.getModifierForCreature(thePlayer.getHeldItem(), ((EntityLivingBase) objectMouseOver.entityHit).getCreatureAttribute()) > 0.0F) {
                     thePlayer.onEnchantmentCritical(objectMouseOver.entityHit);
                 }
             }
+
             SwingHook.swingItem();
         }
     }
 
     @Redirect(method = "rightClickMouse", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/multiplayer/PlayerControllerMP;getIsHittingBlock()Z"))
-    public boolean overflowAnimations$enabledRightClick(PlayerControllerMP instance) {
-        return (!OldAnimationsSettings.oldBlockhitting || !OldAnimationsSettings.INSTANCE.enabled) && instance.getIsHittingBlock();
+    private boolean overflowAnimations$enabledRightClick(PlayerControllerMP instance) {
+        return (!(OldAnimationsSettings.oldBlockhitting && OldAnimationsSettings.leftRightClickItemUsage) || !OldAnimationsSettings.INSTANCE.enabled) && instance.getIsHittingBlock();
     }
 
     @Inject(method = "runTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/settings/KeyBinding;isPressed()Z", ordinal = 7))
-    public void overflowAnimations$fakeBlockHit(CallbackInfo ci) {
-        if (OldAnimationsSettings.fakeBlockHit && OldAnimationsSettings.INSTANCE.enabled) {
+    private void overflowAnimations$fakeBlockHit(CallbackInfo ci) {
+        if (OldAnimationsSettings.INSTANCE.enabled && OldAnimationsSettings.fakeBlockHit) {
             while (gameSettings.keyBindAttack.isPressed()) {
                 SwingHook.swingItem();
             }
@@ -92,17 +105,20 @@ public abstract class MinecraftMixin {
     }
 
     @Inject(method = "runTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/entity/EntityPlayerSP;dropOneItem(Z)Lnet/minecraft/entity/item/EntityItem;", shift = At.Shift.AFTER))
-    public void overflowAnimations$dropItemSwing(CallbackInfo ci) {
-        if (OldAnimationsSettings.modernDropSwing && OldAnimationsSettings.INSTANCE.enabled && thePlayer.getHeldItem() != null) {
+    private void overflowAnimations$dropItemSwing(CallbackInfo ci) {
+        if (OldAnimationsSettings.INSTANCE.enabled && OldAnimationsSettings.modernDropSwing && thePlayer.getHeldItem() != null) {
             SwingHook.swingItem();
         }
     }
 
     @Inject(method = "rightClickMouse", at = @At(value = "HEAD"))
-    public void overflowAnimations$funnyFidgetyThing(CallbackInfo ci) {
-        if (OldAnimationsSettings.funnyFidget && OldAnimationsSettings.INSTANCE.enabled && thePlayer != null && thePlayer.getHeldItem() != null && thePlayer.getHeldItem().getItemUseAction() != EnumAction.NONE) {
+    private void overflowAnimations$funnyFidgetyThing(CallbackInfo ci) {
+        if (OldAnimationsSettings.INSTANCE.enabled &&
+                OldAnimationsSettings.funnyFidget &&
+                thePlayer != null &&
+                thePlayer.getHeldItem() != null &&
+                thePlayer.getHeldItem().getItemUseAction() != EnumAction.NONE) {
             entityRenderer.itemRenderer.resetEquippedProgress();
         }
     }
-
 }

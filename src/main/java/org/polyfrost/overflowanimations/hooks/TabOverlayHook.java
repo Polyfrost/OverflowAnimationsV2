@@ -1,6 +1,5 @@
 package org.polyfrost.overflowanimations.hooks;
 
-import org.polyfrost.overflowanimations.mixin.interfaces.GuiPlayerTabOverlayInvoker;
 import com.google.common.collect.Ordering;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -13,6 +12,7 @@ import net.minecraft.scoreboard.Score;
 import net.minecraft.scoreboard.ScoreObjective;
 import net.minecraft.scoreboard.ScorePlayerTeam;
 import net.minecraft.util.EnumChatFormatting;
+import org.polyfrost.overflowanimations.mixin.interfaces.GuiPlayerTabOverlayInvoker;
 
 import java.util.List;
 

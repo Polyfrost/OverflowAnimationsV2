@@ -16,56 +16,58 @@ import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(value = RenderFish.class, priority = 2000)
-public class RenderFishMixin {
-
+public abstract class RenderFishMixin {
     @ModifyVariable(method = "doRender(Lnet/minecraft/entity/projectile/EntityFishHook;DDDFF)V", at = @At(value = "STORE", ordinal = 0), index = 23)
     private Vec3 overflowAnimations$modifyLinePosition(Vec3 vec3) {
-        if (!OldAnimationsSettings.INSTANCE.enabled) { return vec3; }
-        ItemPositionAdvancedSettings advanced = OldAnimationsSettings.advancedSettings;
-        double fov = Minecraft.getMinecraft().gameSettings.fovSetting;
-        double decimalFov = fov / 110;
-        boolean isParallaxOffset = PatcherConfigHook.isParallaxFixEnabled();
-        double xCoord = vec3.xCoord;
-        double yCoord = vec3.yCoord;
-        double zCoord = vec3.zCoord;
-        if (OldAnimationsSettings.fishingRodPosition && !OldAnimationsSettings.fixRod) {
-            xCoord = -0.5D + (isParallaxOffset ? -0.1D : 0.0D);
-            yCoord = 0.03D;
-            zCoord = 0.8D;
-        } else if (OldAnimationsSettings.fixRod) {
-            xCoord = (-decimalFov + (decimalFov / 2.5) - (decimalFov / 8)) + 0.16 + (isParallaxOffset ? 0.15D : 0.0D);
-            yCoord = 0.0D;
-            zCoord = 0.4D;
+        if (OldAnimationsSettings.INSTANCE.enabled) {
+            final ItemPositionAdvancedSettings advanced = OldAnimationsSettings.advancedSettings;
+            double fov = Minecraft.getMinecraft().gameSettings.fovSetting;
+            double decimalFov = fov / 110;
+            boolean isParallaxOffset = PatcherConfigHook.isParallaxFixEnabled();
+            double xCoord = vec3.xCoord;
+            double yCoord = vec3.yCoord;
+            double zCoord = vec3.zCoord;
+            if (OldAnimationsSettings.fishingRodPosition && !OldAnimationsSettings.fixRod) {
+                xCoord = -0.5D + (isParallaxOffset ? -0.1D : 0.0D);
+                yCoord = 0.03D;
+                zCoord = 0.8D;
+            } else if (OldAnimationsSettings.fixRod) {
+                xCoord = (-decimalFov + (decimalFov / 2.5) - (decimalFov / 8)) + 0.16 + (isParallaxOffset ? 0.15D : 0.0D);
+                yCoord = 0.0D;
+                zCoord = 0.4D;
+            }
+
+            if (ItemPositionAdvancedSettings.customRodLine) {
+                xCoord = advanced.fishingLinePositionX;
+                yCoord = advanced.fishingLinePositionY;
+                zCoord = advanced.fishingLinePositionZ;
+            }
+
+            return new Vec3(xCoord, yCoord, zCoord);
+        } else {
+            return vec3;
         }
-        if (ItemPositionAdvancedSettings.customRodLine) {
-            xCoord = advanced.fishingLinePositionX;
-            yCoord = advanced.fishingLinePositionY;
-            zCoord = advanced.fishingLinePositionZ;
-        }
-        return new Vec3(xCoord, yCoord, zCoord);
     }
 
-    @ModifyConstant(method = "doRender(Lnet/minecraft/entity/projectile/EntityFishHook;DDDFF)V",
-            constant = @Constant(doubleValue = 0.8D)
-    )
+    @ModifyConstant(method = "doRender(Lnet/minecraft/entity/projectile/EntityFishHook;DDDFF)V", constant = @Constant(doubleValue = 0.8D))
     public double overflowAnimations$moveLinePosition(double constant) {
         return overflowAnimations$moveVecLine(constant);
     }
 
     @Redirect(method = "doRender(Lnet/minecraft/entity/projectile/EntityFishHook;DDDFF)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/EntityPlayer;getEyeHeight()F"))
     public float overflowAnimations$modifyEyeHeight(EntityPlayer instance) {
-        return SmoothSneakHook.getSmoothSneak();
+        return SmoothSneakHook.getSmoothSneak(instance.getEyeHeight());
     }
 
     @Inject(method = "doRender(Lnet/minecraft/entity/projectile/EntityFishHook;DDDFF)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/WorldRenderer;begin(ILnet/minecraft/client/renderer/vertex/VertexFormat;)V", ordinal = 1))
     private void overflowAnimations$modifyLineThickness(EntityFishHook entity, double x, double y, double z, float entityYaw, float partialTicks, CallbackInfo ci) {
-        if (!OldAnimationsSettings.INSTANCE.enabled) { return; }
-        GL11.glLineWidth(1.0f + OldAnimationsSettings.INSTANCE.rodThickness);
+        if (OldAnimationsSettings.INSTANCE.enabled) {
+            GL11.glLineWidth(1.0f + OldAnimationsSettings.INSTANCE.rodThickness);
+        }
     }
 
     @Unique
     private double overflowAnimations$moveVecLine(double constant) {
         return OldAnimationsSettings.fishingStick && OldAnimationsSettings.INSTANCE.enabled ? 0.85D : constant;
     }
-
 }

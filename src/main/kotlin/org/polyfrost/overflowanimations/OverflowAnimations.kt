@@ -28,22 +28,26 @@ import java.net.URI
     modLanguageAdapter = "cc.polyfrost.oneconfig.utils.KotlinLanguageAdapter"
 )
 object OverflowAnimations {
-
     const val MODID: String = "@ID@"
     const val NAME: String = "@NAME@"
     const val VERSION: String = "@VER@"
 
     @JvmField
     var isPatcherPresent: Boolean = false
+
     @JvmField
     var doTheFunnyDulkirThing = false
+
     @JvmField
     var oldDulkirMod: Boolean = false
     private var customCrosshair = false
+
     @JvmField
     var isDamageTintPresent: Boolean = false
+
     @JvmField
     var isItemPhysics: Boolean = false
+
     @JvmField
     var isNEUPresent: Boolean = false;
 
@@ -76,9 +80,13 @@ object OverflowAnimations {
         if (customCrosshair) {
             OldAnimationsSettings.smoothModelSneak = false
             OldAnimationsSettings.INSTANCE.save()
-            Notifications.INSTANCE.send("OverflowAnimations", "Custom Crosshair Mod has been detected, which is written poorly and causes major issues with OverflowAnimations. Disabling Smooth Model Sneak. If you want a better crosshair mod, please click here to use PolyCrosshair instead.", 5000f, Runnable {
-                UDesktop.browse(URI("https://modrinth.com/mod/crosshair"))
-            })
+            Notifications.INSTANCE.send(
+                "OverflowAnimations",
+                "Custom Crosshair Mod has been detected, which is written poorly and causes major issues with OverflowAnimations. Disabling Smooth Model Sneak. If you want a better crosshair mod, please click here to use PolyCrosshair instead.",
+                5000f,
+                Runnable {
+                    UDesktop.browse(URI("https://modrinth.com/mod/crosshair"))
+                })
         }
     }
 
@@ -102,5 +110,4 @@ object OverflowAnimations {
     private fun dulkirTrollage() {
         GuiUtils.displayScreen(PleaseMigrateDulkirModGui())
     }
-
 }

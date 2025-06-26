@@ -12,7 +12,6 @@ import org.polyfrost.overflowanimations.hooks.AnimationExportUtils;
 import org.polyfrost.overflowanimations.hooks.PotionColors;
 
 public class OldAnimationsSettings extends Config {
-
     // 2D Items
     @Switch(
             name = "2D Dropped Items",
@@ -138,6 +137,13 @@ public class OldAnimationsSettings extends Config {
             subcategory = "Interaction"
     )
     public static boolean punching = true;
+
+    @Checkbox(
+            name = "1.7 Left-Right Click Item Usage",
+            description = "Re-enables the ability to right click (use item) when holding left click on a block. (WARNING: Does flag anti-cheats)",
+            subcategory = "Interaction"
+    )
+    public static boolean leftRightClickItemUsage = true;
 
     @Checkbox(
             name = "1.7 Punch-During-Usage Particles",
@@ -613,7 +619,7 @@ public class OldAnimationsSettings extends Config {
         advancedSettings.blockedRotationYaw = 0.0F;
         advancedSettings.blockedRotationPitch = 0.0F;
         advancedSettings.blockedRotationRoll = 0.0F;
-        advancedSettings. blockedScale = 0.0F;
+        advancedSettings.blockedScale = 0.0F;
 
         advancedSettings.droppedPositionX = 0.0F;
         advancedSettings.droppedPositionY = 0.0F;
@@ -813,7 +819,8 @@ public class OldAnimationsSettings extends Config {
 
     public static boolean didTheFunnyDulkirThingElectricBoogaloo = false;
 
-    @Exclude public static final OldAnimationsSettings INSTANCE = new OldAnimationsSettings();
+    @Exclude
+    public static final OldAnimationsSettings INSTANCE = new OldAnimationsSettings();
 
     public OldAnimationsSettings() {
         super(new Mod(OverflowAnimations.NAME, ModType.PVP, "/overflowanimations_dark.svg", new VigilanceMigrator("./config/sk1eroldanimations.toml")), "overflowanimations.json");
@@ -830,6 +837,7 @@ public class OldAnimationsSettings extends Config {
         addDependency("punchingParticles", "oldBlockhitting");
         addDependency("adventureParticles", "oldBlockhitting");
         addDependency("adventurePunching", "oldBlockhitting");
+        addDependency("useItemWhenMining", "oldBlockhitting");
         addDependency("adventureParticles", "punchingParticles");
         addDependency("punchingParticles", "punching");
         addDependency("adventureParticles", "punching");

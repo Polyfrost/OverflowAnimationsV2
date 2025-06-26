@@ -14,7 +14,6 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import org.polyfrost.overflowanimations.OverflowAnimations
 
 enum class CustomModelBakery(modelPath: String) {
-
     BOTTLE_OVERLAY("item/bottle_overlay"),
     BOTTLE_DRINKABLE_EMPTY("item/bottle_drinkable_empty"),
     BOTTLE_SPLASH_EMPTY("item/bottle_splash_empty"),
@@ -30,15 +29,16 @@ enum class CustomModelBakery(modelPath: String) {
         private set
 
     private fun stitch(map: TextureMap) {
-        loadedModel = ModelLoaderRegistry.getModel(resourceLocation).apply { textures.forEach { map.registerSprite(it) } }
+        loadedModel =
+            ModelLoaderRegistry.getModel(resourceLocation).apply { textures.forEach { map.registerSprite(it) } }
     }
 
     private fun bake() {
-        bakedModel = loadedModel.bake(loadedModel.defaultState, DefaultVertexFormats.ITEM, ModelLoader.defaultTextureGetter())
+        bakedModel =
+            loadedModel.bake(loadedModel.defaultState, DefaultVertexFormats.ITEM, ModelLoader.defaultTextureGetter())
     }
 
     companion object {
-
         init {
             MinecraftForge.EVENT_BUS.register(this)
         }
@@ -53,5 +53,4 @@ enum class CustomModelBakery(modelPath: String) {
             CustomModelBakery.entries.forEach { it.bake() }
         }
     }
-
 }

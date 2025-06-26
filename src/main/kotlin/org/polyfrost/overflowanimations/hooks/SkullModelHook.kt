@@ -1,7 +1,6 @@
 package org.polyfrost.overflowanimations.hooks
 
 object SkullModelHook {
-
 //    fun getSkullModel(stack: ItemStack): IBakedModel {
 //        return when (stack.metadata) {
 //            0 -> CustomModelBakery.SKULL_SKELETON.bakedModel
@@ -11,5 +10,4 @@ object SkullModelHook {
 //            else -> CustomModelBakery.SKULL_CHAR.bakedModel
 //        }
 //    }
-
 }
