@@ -25,11 +25,9 @@
 
 package org.polyfrost.overflowanimations.mixins.v1.entity.particles;
 
-import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.Holder;
 import net.minecraft.core.particles.ColorParticleOption;
 import net.minecraft.core.particles.ParticleOptions;
@@ -48,7 +46,6 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.polyfrost.overflowanimations.OverflowAnimations;
 import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig;
-import org.polyfrost.overflowanimations.util.EntityUtilKt;
 
 import java.util.Map;
 
@@ -60,12 +57,6 @@ public abstract class MixinLivingEntity_Particles extends Entity {
 
     public MixinLivingEntity_Particles(final EntityType<?> entityType, final Level level) {
         super(entityType, level);
-    }
-
-    @WrapWithCondition(method = "tickEffects", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/Level;addParticle(Lnet/minecraft/core/particles/ParticleOptions;DDDDDD)V"))
-    private boolean overflowanimations$hideFirstPersonParticles(final Level instance, final ParticleOptions particle, final double x, final double y, final double z, final double xd, final double yd, final double zd) {
-        final Minecraft client = Minecraft.getInstance();
-        return !OverflowAnimations.isEnabled() || !OverflowAnimationsConfig.instance().extras.disableFirstPersonParticles || !EntityUtilKt.isSelf(this) || !client.options.getCameraType().isFirstPerson();
     }
 
     @WrapOperation(method = "tickEffects", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/Level;addParticle(Lnet/minecraft/core/particles/ParticleOptions;DDDDDD)V"))

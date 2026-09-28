@@ -54,7 +54,7 @@ public abstract class MixinItemInHandRenderer_HeldItemArmLogic {
     *///?}
 //? if <26.3 {
         /*final Minecraft minecraft = Minecraft.getInstance();
-        if (OverflowAnimations.isEnabled() && (OverflowAnimationsConfig.instance().other.heldItemArmLogic || OverflowAnimationsConfig.instance().extras.showArmWhileInvisible || OverflowAnimationsConfig.instance().extras.damageTintItems) && minecraft.player != null) {
+        if (OverflowAnimations.isEnabled() && (OverflowAnimationsConfig.instance().other.heldItemArmLogic || OverflowAnimationsConfig.instance().other.damageTintItems) && minecraft.player != null) {
             avatarRenderer.extractRenderState(minecraft.player, avatarRenderer.createRenderState(), minecraft.getDeltaTracker().getGameTimeDeltaTicks());
         }
     }

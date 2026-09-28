@@ -96,7 +96,7 @@ public abstract class MixinFirstPersonHandsAndItems_EquipAnimationChecks {
     //? if >=26.3 {
     @WrapOperation(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/LocalPlayer;getItemSwapScale(F)F"))
     private float overflowanimations$legacySwingAnimation(final LocalPlayer instance, final float delta, final Operation<Float> original) {
-        if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().extras.legacySwingAnimation) {
+        if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().items.legacySwingAnimation) {
             return 1.0F;
         } else {
             return original.call(instance, delta);

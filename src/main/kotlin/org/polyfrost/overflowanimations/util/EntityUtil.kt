@@ -71,18 +71,18 @@ fun isBlockingArm(arm: HumanoidArm, armedEntityState: ArmedEntityRenderState) =
 
 fun applySwingWhilstMining(level: ClientLevel?, player: Player, hitResult: HitResult?) {
     val activeHand = player.usedItemHand
-    val hand = if (OverflowAnimationsConfig.instance().extras.offhandUsageSwinging) activeHand else InteractionHand.MAIN_HAND
+    val hand = if (OverflowAnimationsConfig.instance().items.offhandUsageSwinging) activeHand else InteractionHand.MAIN_HAND
     if (activeHand == hand) {
         if (hitResult != null && hitResult.type == HitResult.Type.BLOCK) {
             val blockHitResult = hitResult as BlockHitResult
-            if (level != null && !level.getBlockState(blockHitResult.blockPos).isAir && !ServerFeatureManager.isPresent(ServerFeatures.MINING_ITEM_USAGE)) {
+            if (OverflowAnimationsConfig.instance().items.usageSwingingParticles && level != null && !level.getBlockState(blockHitResult.blockPos).isAir && !ServerFeatureManager.isPresent(ServerFeatures.MINING_ITEM_USAGE)) {
                 //? if <26.3 {
                 /*level.addBreakingBlockEffect(blockHitResult.blockPos, blockHitResult.direction)
                 *///?} else {
                 level.addBreakingBlockEffects(blockHitResult.blockPos, blockHitResult.direction, false)
                 //?}
             }
-        } else if (!OverflowAnimationsConfig.instance().extras.alwaysUsageSwing) {
+        } else if (!OverflowAnimationsConfig.instance().items.alwaysUsageSwing) {
             return
         }
 

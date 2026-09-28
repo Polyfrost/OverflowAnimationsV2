@@ -39,8 +39,6 @@ public abstract class MixinPlayer_UncapHeadRotation {
     private boolean overflowanimations$uncapBlockingHeadRotation(final Player instance, final Operation<Boolean> original) {
         if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().movement.uncapBlockingHeadRotation) {
             return false;
-        } else if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().extras.alwaysBlockingHeadCap) {
-            return true;
         } else {
             return original.call(instance);
         }

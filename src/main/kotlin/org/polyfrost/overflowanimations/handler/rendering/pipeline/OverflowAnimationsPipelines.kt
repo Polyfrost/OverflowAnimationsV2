@@ -320,28 +320,6 @@ object OverflowAnimationsPipelines {
     else
         LEGACY_CLOUDS
 
-    // Color Boost
-    @JvmField
-    val COLOR_BOOST_BLIT: RenderPipeline = RenderPipelines.register(
-        RenderPipeline.builder()
-            .withLocation(location("pipeline/colorboost"))
-            .withVertexShader("core/screenquad")
-            .withFragmentShader(location("core/colorboost"))
-            //? if <26.2 {
-            /*.withSampler("Sampler0")
-            .withVertexFormat(DefaultVertexFormat.EMPTY, VertexFormat.Mode.TRIANGLES)
-            *///?} else {
-            .withBindGroupLayout(BindGroupLayouts.SAMPLER0)
-            //?}
-            //? if >=26.3 {
-            .withColorTargetState(ColorTargetState.DEFAULT)
-            //?}
-            //? if >=26.2 {
-            .withPrimitiveTopology(PrimitiveTopology.TRIANGLES)
-            //?}
-            .build()
-    )
-
     // Lighting
     //? if >=26.2 {
     @JvmField

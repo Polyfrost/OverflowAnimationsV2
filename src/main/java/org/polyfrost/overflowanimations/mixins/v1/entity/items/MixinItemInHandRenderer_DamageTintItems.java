@@ -49,7 +49,7 @@ public abstract class MixinItemInHandRenderer_DamageTintItems {
     /*private int overflowanimations$damageTintItems(final int original, @Local(argsOnly = true, name = "mob") final LivingEntity mob) {
     *///?}
 //? if <26.3 {
-        /*if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().extras.damageTintItems) {
+        /*if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().other.damageTintItems) {
             return OverlayTexture.pack(0, OverlayTexture.v(mob.hurtTime > 0 || mob.deathTime > 0));
         } else {
             return original;

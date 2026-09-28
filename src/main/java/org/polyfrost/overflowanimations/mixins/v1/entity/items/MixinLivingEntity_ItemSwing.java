@@ -34,7 +34,7 @@ import net.minecraft.world.item.component.SwingAnimation;
 import org.spongepowered.asm.mixin.Mixin;
 import org.polyfrost.overflowanimations.util.SwingUtilKt;
 
-// TODO/FIX: Should not affect swing code, only visual, currently matches Legacy OverflowAnimations tho
+// TODO/FIX: Should not affect swing code, only visual, currently matches Legacy Animatium tho
 @Mixin(LivingEntity.class)
 public abstract class MixinLivingEntity_ItemSwing {
     //? if <26.3 {

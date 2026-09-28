@@ -50,6 +50,7 @@ public final class ScreenConfigCategory extends Category {
     public boolean fullWidthInventoryEffects = false;
     public boolean panoramaRendering = false;
     public boolean legacyLoadingScreen = false;
+    public boolean legacyLoadingScreenProgressBar = false;
     public boolean oldChatPosition = false;
     public boolean oldCrosshairPosition = false;
     public boolean disconnectServerToTitleScreen = false;
@@ -82,6 +83,7 @@ public final class ScreenConfigCategory extends Category {
         bundle.booleanEntry("fullWidthInventoryEffects");
         bundle.booleanEntry("panoramaRendering");
         bundle.booleanEntry("legacyLoadingScreen");
+        bundle.booleanEntry("legacyLoadingScreenProgressBar");
         bundle.booleanEntry("oldChatPosition");
         bundle.booleanEntry("oldCrosshairPosition");
         bundle.booleanEntry("disconnectServerToTitleScreen");

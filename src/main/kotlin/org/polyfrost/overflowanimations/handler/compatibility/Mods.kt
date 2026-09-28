@@ -31,7 +31,4 @@ import net.fabricmc.loader.api.FabricLoader
 val HAS_VFP = FabricLoader.getInstance().isModLoaded("viafabricplus")
 
 @JvmField
-val HAS_SODIUM_EXTRAS = FabricLoader.getInstance().isModLoaded("sodium-extra")
-
-@JvmField
 val HAS_LUNAR_CLIENT = FabricLoader.getInstance().isModLoaded("ichor")

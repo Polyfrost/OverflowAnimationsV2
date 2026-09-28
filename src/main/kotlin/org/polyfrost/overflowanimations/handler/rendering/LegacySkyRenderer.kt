@@ -156,7 +156,7 @@ object LegacySkyRenderer {
                 val matrix = RenderSystem.getModelViewMatrixCopy().translate(
                 //?}
                     0.0F,
-                    if (OverflowAnimationsConfig.instance().extras.dontMoveBlueVoid) 12.0F else -((depth - 16.0).toFloat()),
+                    -((depth - 16.0).toFloat()),
                     0.0F
                 )
 

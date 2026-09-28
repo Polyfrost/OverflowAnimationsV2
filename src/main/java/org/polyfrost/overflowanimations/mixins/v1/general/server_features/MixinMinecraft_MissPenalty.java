@@ -56,7 +56,7 @@ public abstract class MixinMinecraft_MissPenalty {
 
     @Inject(method = "startAttack", at = @At(value = "RETURN", ordinal = 0))
     private void overflowanimations$fakeMissPenaltySwing(final CallbackInfoReturnable<Boolean> cir) {
-        if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().extras.fakeMissPenaltySwing && this.player != null) {
+        if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().items.fakeMissPenaltySwing && this.player != null) {
             SwingUtilKt.fakeHandSwing(this.player, InteractionHand.MAIN_HAND);
         }
     }

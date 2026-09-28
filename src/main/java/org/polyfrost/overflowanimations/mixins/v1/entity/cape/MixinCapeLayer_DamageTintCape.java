@@ -40,7 +40,7 @@ import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig;
 public abstract class MixinCapeLayer_DamageTintCape {
     @ModifyExpressionValue(method = "submit(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;ILnet/minecraft/client/renderer/entity/state/AvatarRenderState;FF)V", at = @At(value = "FIELD", target = "Lnet/minecraft/client/renderer/texture/OverlayTexture;NO_OVERLAY:I", opcode = Opcodes.GETSTATIC))
     private int overflowanimations$damageTintItems(final int original, @Local(argsOnly = true, ordinal = 0) final AvatarRenderState state) {
-        if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().extras.damageTintCape) {
+        if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().other.damageTintCape) {
             return LivingEntityRenderer.getOverlayCoords(state, 0.0F);
         } else {
             return original;

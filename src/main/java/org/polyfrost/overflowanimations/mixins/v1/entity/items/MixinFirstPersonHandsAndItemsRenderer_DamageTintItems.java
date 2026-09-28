@@ -43,7 +43,7 @@ import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig;
 public abstract class MixinFirstPersonHandsAndItemsRenderer_DamageTintItems {
     @ModifyExpressionValue(method = "submitArmWithItem", at = @At(value = "FIELD", target = "Lnet/minecraft/client/renderer/texture/OverlayTexture;NO_OVERLAY:I", opcode = Opcodes.GETSTATIC))
     private int overflowanimations$damageTintItems(final int original, @Local(argsOnly = true, name = "playerState") final PlayerRenderState playerState) {
-        if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().extras.damageTintItems && playerState.avatarRenderState != null) {
+        if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().other.damageTintItems && playerState.avatarRenderState != null) {
             return OverlayTexture.pack(0, OverlayTexture.v(playerState.avatarRenderState.hasRedOverlay));
         } else {
             return original;

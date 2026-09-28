@@ -53,6 +53,7 @@ public final class ItemsConfigCategory extends Category {
     // (Items) Other
     public boolean thinFishingRodLineThickness = false;
     public boolean itemUsageSwinging = false;
+    public boolean usageSwingingParticles = true;
     public boolean disableSwingOnUse = false;
     public boolean disableSwingOnDrop = false;
     public boolean disableSwingOnEntityInteract = false;
@@ -64,6 +65,30 @@ public final class ItemsConfigCategory extends Category {
     public boolean itemPickupPosition = false;
     public boolean mobHeadIcons = false;
     public boolean eggSnowballParticles = false;
+    // Item Swing
+    public boolean customSwingSpeed = false;
+    public float itemSwingSpeed = 0.0F;
+    public float hasteSwingSpeed = 0.0F;
+    public float miningFatigueSwingSpeed = 0.0F;
+    public boolean ignoreHasteSpeed = false;
+    public boolean ignoreMiningFatigueSpeed = false;
+    public boolean offhandUsageSwinging = false;
+    public boolean alwaysUsageSwing = false;
+    public boolean fakeMissPenaltySwing = false;
+    public boolean disableSwingTranslate = false;
+    public boolean disableSwingPivot = false;
+    public boolean legacySwingAnimation = false;
+    // Item Modifications
+    public float itemScaleX = 1.0F;
+    public float itemScaleY = 1.0F;
+    public float itemScaleZ = 1.0F;
+    public float itemOffsetX = 0.0F;
+    public float itemOffsetY = 0.0F;
+    public float itemOffsetZ = 0.0F;
+    public float itemRotationX = 0.0F;
+    public float itemRotationY = 0.0F;
+    public float itemRotationZ = 0.0F;
+    public boolean applyCustomizationToBlockItems = true;
 
     public static ConfigCategory create(final ItemsConfigCategory defaults, final ItemsConfigCategory config) {
         final ConfigCategory.Builder category = ConfigCategory.createBuilder();
@@ -95,9 +120,36 @@ public final class ItemsConfigCategory extends Category {
                 .booleanEntry("skullPosition")
                 .enumEntry("fishingRodVersion", FishingRodVersionSetting.class);
 
+        bundle.group("item_swing")
+                .booleanEntry("customSwingSpeed")
+                .floatRange("itemSwingSpeed", -2.0F, 1.0F, 0.1F)
+                .floatRange("hasteSwingSpeed", -2.0F, 1.0F, 0.1F)
+                .floatRange("miningFatigueSwingSpeed", -2.0F, 1.0F, 0.1F)
+                .booleanEntry("ignoreHasteSpeed")
+                .booleanEntry("ignoreMiningFatigueSpeed")
+                .booleanEntry("offhandUsageSwinging")
+                .booleanEntry("alwaysUsageSwing")
+                .booleanEntry("fakeMissPenaltySwing")
+                .booleanEntry("disableSwingTranslate")
+                .booleanEntry("disableSwingPivot")
+                .booleanEntry("legacySwingAnimation");
+
+        bundle.group("item_modifications")
+                .floatRange("itemScaleX", 0.2F, 2.0F, 0.1F)
+                .floatRange("itemScaleY", 0.2F, 2.0F, 0.1F)
+                .floatRange("itemScaleZ", 0.2F, 2.0F, 0.1F)
+                .floatEntry("itemOffsetX")
+                .floatEntry("itemOffsetY")
+                .floatEntry("itemOffsetZ")
+                .floatEntry("itemRotationX")
+                .floatEntry("itemRotationY")
+                .floatEntry("itemRotationZ")
+                .booleanEntry("applyCustomizationToBlockItems");
+
         bundle.group("other")
                 .booleanEntry("thinFishingRodLineThickness")
                 .booleanEntry("itemUsageSwinging")
+                .booleanEntry("usageSwingingParticles")
                 .booleanEntry("disableSwingOnUse")
                 .booleanEntry("disableSwingOnDrop")
                 .booleanEntry("disableSwingOnEntityInteract")

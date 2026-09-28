@@ -154,7 +154,7 @@ public abstract class MixinLoadingOverlay_LegacyLoadingScreen {
     @WrapWithCondition(method = "extractRenderState", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screens/LoadingOverlay;extractProgressBar(Lnet/minecraft/client/gui/GuiGraphicsExtractor;IIIIF)V"))
     private boolean overflowanimations$disableProgressBar(final LoadingOverlay instance, final GuiGraphicsExtractor graphics, final int x0, final int y0, final int x1, final int y1, final float fade) {
     //?}
-        return !OverflowAnimations.isEnabled() || !OverflowAnimationsConfig.instance().screen.legacyLoadingScreen || OverflowAnimationsConfig.instance().extras.legacyLoadingScreenProgressBar;
+        return !OverflowAnimations.isEnabled() || !OverflowAnimationsConfig.instance().screen.legacyLoadingScreen || OverflowAnimationsConfig.instance().screen.legacyLoadingScreenProgressBar;
     }
 
     //? if 1.21.11 {
@@ -163,7 +163,7 @@ public abstract class MixinLoadingOverlay_LegacyLoadingScreen {
     @WrapOperation(method = "extractProgressBar", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/ARGB;color(IIII)I"))
     //?}
     private int overflowanimations$blackProgressBar(final int alpha, final int red, final int green, final int blue, final Operation<Integer> original) {
-        if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().screen.legacyLoadingScreen && OverflowAnimationsConfig.instance().extras.legacyLoadingScreenProgressBar) {
+        if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().screen.legacyLoadingScreen && OverflowAnimationsConfig.instance().screen.legacyLoadingScreenProgressBar) {
             return ARGB.color(alpha, 0, 0, 0);
         } else {
             return original.call(alpha, red, green, blue);

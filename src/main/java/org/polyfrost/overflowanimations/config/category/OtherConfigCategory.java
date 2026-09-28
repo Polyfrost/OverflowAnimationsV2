@@ -31,6 +31,7 @@ import net.minecraft.network.chat.Component;
 import org.jspecify.annotations.NonNull;
 import org.polyfrost.overflowanimations.handler.compatibility.ModsKt;
 import org.polyfrost.overflowanimations.handler.config.bundle.EntryBundle;
+import org.polyfrost.overflowanimations.handler.config.bundle.GroupBundle;
 import org.polyfrost.overflowanimations.handler.config.category.Category;
 import org.polyfrost.overflowanimations.handler.rendering.RenderUtilsKt;
 import org.polyfrost.overflowanimations.handler.rendering.lighting.LegacyDiffuseLighting;
@@ -50,6 +51,8 @@ public final class OtherConfigCategory extends Category {
     // Damage Tint
     public boolean damageTintArmor = false;
     public boolean glintAffectsArmorTint = false;
+    public boolean damageTintItems = false;
+    public boolean damageTintCape = false;
     public DamageTintSetting damageTintStyle = DamageTintSetting.VANILLA;
     public Color customTintColor = new Color(1.0F, 0.0F, 0.0F, 0.3F); // Vanilla color as of 26.2
     // Other
@@ -71,6 +74,7 @@ public final class OtherConfigCategory extends Category {
     public boolean oldY0Height = false;
     public boolean oldWaterOverlayOpacity = false;
     public boolean oldWaterColorFog = false;
+    public boolean oldWaterColorEffects = false;
     public boolean disableRandomBlockRotations = false;
     public boolean legacyDiffuseLighting = false;
     public boolean legacyLightmap = false;
@@ -96,11 +100,17 @@ public final class OtherConfigCategory extends Category {
                 .enumEntry("voidFog", VoidFogSetting.class)
                 .booleanEntry("planarSkyFog");
 
+        // Lunar Client handles armor tint itself, but item and cape tint still apply there.
+        final GroupBundle damageTint = bundle.group("damage_tint");
         if (!ModsKt.HAS_LUNAR_CLIENT) {
-            bundle.group("damage_tint")
-                    .booleanEntry("damageTintArmor")
-                    .booleanEntry("glintAffectsArmorTint")
-                    .enumEntry("damageTintStyle", DamageTintSetting.class, (option, value) -> RenderUtilsKt.updateOverlayTint(value))
+            damageTint.booleanEntry("damageTintArmor")
+                    .booleanEntry("glintAffectsArmorTint");
+        }
+
+        damageTint.booleanEntry("damageTintItems")
+                .booleanEntry("damageTintCape");
+        if (!ModsKt.HAS_LUNAR_CLIENT) {
+            damageTint.enumEntry("damageTintStyle", DamageTintSetting.class, (option, value) -> RenderUtilsKt.updateOverlayTint(value))
                     .colorEntry("customTintColor", (option, value) -> RenderUtilsKt.updateOverlayTint(this.damageTintStyle));
         }
 
@@ -127,6 +137,11 @@ public final class OtherConfigCategory extends Category {
                 .booleanEntry("oldY0Height")
                 .booleanEntry("oldWaterOverlayOpacity")
                 .booleanEntry("oldWaterColorFog")
+                //? if <26.2 {
+                /*.booleanEntry("oldWaterColorEffects", (option, value) -> Minecraft.getInstance().levelRenderer.allChanged())
+                *///?} else {
+                .booleanEntry("oldWaterColorEffects", (option, value) -> Minecraft.getInstance().levelExtractor.allChanged())
+                //?}
                 .booleanEntry("disableRandomBlockRotations")
                 .booleanEntry("legacyDiffuseLighting", (option, value) -> LegacyDiffuseLighting.refresh())
                 .booleanEntry("legacyLightmap")

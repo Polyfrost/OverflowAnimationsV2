@@ -33,7 +33,6 @@ object ConfigBundles {
     val SCREEN = OverflowAnimationsConfig.instance().screen.bundle()
     val FIXES = OverflowAnimationsConfig.instance().fixes.bundle()
     val OTHER = OverflowAnimationsConfig.instance().other.bundle()
-    val EXTRAS = OverflowAnimationsConfig.instance().extras.bundle()
 
-    val ALL = arrayOf(MOVEMENT, ITEMS, SCREEN, FIXES, OTHER, EXTRAS)
+    val ALL = arrayOf(MOVEMENT, ITEMS, SCREEN, FIXES, OTHER)
 }

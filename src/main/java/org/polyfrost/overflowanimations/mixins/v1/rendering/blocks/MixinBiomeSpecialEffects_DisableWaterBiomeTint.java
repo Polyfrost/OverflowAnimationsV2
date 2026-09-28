@@ -46,7 +46,7 @@ public abstract class MixinBiomeSpecialEffects_DisableWaterBiomeTint {
     @Expression("this.waterColor")
     @ModifyExpressionValue(method = "waterColor", at = @At("MIXINEXTRAS:EXPRESSION"))
     private int overflowanimations$oldWaterColor(final int original) {
-        if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().extras.oldWaterColorEffects) {
+        if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().other.oldWaterColorEffects) {
             if (this.waterColor == 6388580/*Swamp Water Color*/) {
                 return 0xFFe0FFAE;
             } else {

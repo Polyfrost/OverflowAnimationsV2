@@ -49,7 +49,7 @@ public abstract class MixinFirstPersonHandsAndItemsRenderer_HeldItemArmLogic {
     @Inject(method = "renderPlayerHand", at = @At(value = "INVOKE", target = "Lnet/minecraft/core/ClientAsset$Texture;texturePath()Lnet/minecraft/resources/Identifier;", shift = At.Shift.AFTER))
     private void overflowanimations$extractArmState(final PoseStack poseStack, final SubmitNodeCollector submitNodeCollector, final int lightCoords, final HumanoidArm arm, final PlayerRenderState playerState, final CallbackInfo ci, @Local(name = "avatarRenderer") final AvatarRenderer<AbstractClientPlayer> avatarRenderer) {
         final Minecraft minecraft = Minecraft.getInstance();
-        if (OverflowAnimations.isEnabled() && (OverflowAnimationsConfig.instance().other.heldItemArmLogic || OverflowAnimationsConfig.instance().extras.showArmWhileInvisible || OverflowAnimationsConfig.instance().extras.damageTintItems) && minecraft.player != null) {
+        if (OverflowAnimations.isEnabled() && (OverflowAnimationsConfig.instance().other.heldItemArmLogic || OverflowAnimationsConfig.instance().other.damageTintItems) && minecraft.player != null) {
             avatarRenderer.extractRenderState(minecraft.player, avatarRenderer.createRenderState(), minecraft.getDeltaTracker().getGameTimeDeltaTicks());
         }
     }

@@ -25,24 +25,14 @@
 
 package org.polyfrost.overflowanimations.handler.server_features
 
-import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig
-import org.polyfrost.overflowanimations.config.category.ExtrasConfigCategory
 import org.polyfrost.overflowanimations.util.isSingleplayer
 
 object ServerFeatureManager {
     @JvmField
     val ENABLED_SERVER_FEATURES: HashSet<ServerFeature> = hashSetOf()
 
-    private val SINGLEPLAYER_FIELDS = ServerFeatures.allFeatures()
-        .filter { it != ServerFeatures.ALL }
-        .associateWith { ExtrasConfigCategory::class.java.getField(it.identifier.path) }
-
     @JvmStatic
     fun isPresent(feature: ServerFeature): Boolean {
-        return if (isSingleplayer()) {
-            SINGLEPLAYER_FIELDS[feature]?.getBoolean(OverflowAnimationsConfig.instance().extras) ?: false
-        } else {
-            ENABLED_SERVER_FEATURES.contains(feature)
-        }
+        return !isSingleplayer() && ENABLED_SERVER_FEATURES.contains(feature)
     }
 }

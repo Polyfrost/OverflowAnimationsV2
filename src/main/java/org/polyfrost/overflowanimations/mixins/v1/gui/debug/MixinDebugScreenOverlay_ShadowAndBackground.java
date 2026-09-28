@@ -62,17 +62,4 @@ public abstract class MixinDebugScreenOverlay_ShadowAndBackground {
             return dropShadow;
         }
     }
-
-    //? if 1.21.11 {
-    /*@ModifyArg(method = "renderLines", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphics;drawString(Lnet/minecraft/client/gui/Font;Ljava/lang/String;IIIZ)V"), index = 4)
-    *///?} else {
-    @ModifyArg(method = "extractLines", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphicsExtractor;text(Lnet/minecraft/client/gui/Font;Ljava/lang/String;IIIZ)V"), index = 4)
-    //?}
-    private int overflowanimations$debugHudTextColor(final int color) {
-        if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().extras.debugHudTextColor) {
-            return -1;
-        } else {
-            return color;
-        }
-    }
 }

@@ -28,14 +28,11 @@ package org.polyfrost.overflowanimations.mixins.v1.entity;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
-import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
-import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.state.ArmedEntityRenderState;
-import net.minecraft.client.renderer.entity.state.AvatarRenderState;
 import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
 //? if 1.21.11 {
 /*import net.minecraft.client.renderer.state.CameraRenderState;
@@ -44,7 +41,6 @@ import net.minecraft.client.renderer.state.level.CameraRenderState;
 //?}
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.Pose;
-import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -88,15 +84,6 @@ public abstract class MixinLivingEntityRenderer<S extends LivingEntityRenderStat
             return true;
         } else {
             return original;
-        }
-    }
-
-    @WrapOperation(method = "setupRotations", at = @At(value = "FIELD", target = "Lnet/minecraft/client/renderer/entity/state/LivingEntityRenderState;deathTime:F", opcode = Opcodes.GETFIELD))
-    private float overflowanimations$entityDeathTopple(final LivingEntityRenderState instance, final Operation<Float> original, @Local(argsOnly = true, ordinal = 0) final S state) {
-        if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().extras.disableEntityDeathTopple && state instanceof AvatarRenderState) {
-            return 0;
-        } else {
-            return original.call(instance);
         }
     }
 

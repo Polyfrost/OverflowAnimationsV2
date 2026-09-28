@@ -114,15 +114,15 @@ fun LocalPlayer.sendSwingPacket(hand: InteractionHand, animation: SwingAnimation
 //?}
 
 /**
- * Code sourced from OverflowAnimations Legacy & Modified for Modern Use
+ * Code sourced from Animatium Legacy & Modified for Modern Use
  */
 //? if <26.3 {
 /*fun LivingEntity.getItemSwingSpeed(fallback: Int): Int {
 *///?} else {
 fun LivingEntity.getItemSwingSpeed(animation: SwingAnimation, fallback: Int): Int {
 //?}
-    val extras = OverflowAnimationsConfig.instance().extras
-    if (OverflowAnimations.isEnabled() && extras.customSwingSpeed) {
+    val items = OverflowAnimationsConfig.instance().items
+    if (OverflowAnimations.isEnabled() && items.customSwingSpeed) {
         //? if <26.3 {
         /*val swingingHand = if (this.swingingArm != null) this.swingingArm!! else InteractionHand.MAIN_HAND
         val stack = this.getItemInHand(swingingHand)
@@ -132,15 +132,15 @@ fun LivingEntity.getItemSwingSpeed(animation: SwingAnimation, fallback: Int): In
         //? if >=26.3 {
         val swingDuration = animation.duration()
         //?}
-        val itemSwingSpeed = extras.itemSwingSpeed
-        val hasteSwingSpeed = extras.hasteSwingSpeed
-        val miningFatigueSwingSpeed = extras.miningFatigueSwingSpeed
+        val itemSwingSpeed = items.itemSwingSpeed
+        val hasteSwingSpeed = items.hasteSwingSpeed
+        val miningFatigueSwingSpeed = items.miningFatigueSwingSpeed
         if (!(itemSwingSpeed == 0.0F && hasteSwingSpeed == 0.0F && miningFatigueSwingSpeed == 0.0F)) {
-            if (MobEffectUtil.hasDigSpeed(this) && !extras.ignoreHasteSpeed) {
+            if (MobEffectUtil.hasDigSpeed(this) && !items.ignoreHasteSpeed) {
                 val durationOffset =
                     swingDuration - (1 + MobEffectUtil.getDigSpeedAmplification(this))
                 return max((durationOffset * exp(-hasteSwingSpeed)).toInt(), 1)
-            } else if (this.hasEffect(MobEffects.MINING_FATIGUE) && !extras.ignoreMiningFatigueSpeed) {
+            } else if (this.hasEffect(MobEffects.MINING_FATIGUE) && !items.ignoreMiningFatigueSpeed) {
                 val durationOffset =
                     swingDuration + (1 + Objects.requireNonNull(this.getEffect(MobEffects.MINING_FATIGUE))!!.amplifier) * 2
                 return max((durationOffset * exp(-miningFatigueSwingSpeed)).toInt(), 1)

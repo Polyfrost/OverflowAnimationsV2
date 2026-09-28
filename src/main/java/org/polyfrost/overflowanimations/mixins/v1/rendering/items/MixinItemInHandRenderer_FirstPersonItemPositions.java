@@ -60,7 +60,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.polyfrost.overflowanimations.OverflowAnimations;
 import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig;
-import org.polyfrost.overflowanimations.config.category.ExtrasConfigCategory;
+import org.polyfrost.overflowanimations.config.category.ItemsConfigCategory;
 import org.polyfrost.overflowanimations.util.EntityUtilKt;
 import org.polyfrost.overflowanimations.util.ItemUtilKt;
 import org.polyfrost.overflowanimations.util.enums.EquipAnimationVersionSetting;
@@ -113,31 +113,10 @@ public abstract class MixinItemInHandRenderer_FirstPersonItemPositions {
     *///?}
 
     //? if <26.3 {
-    /*@SuppressWarnings({"MixinAnnotationTarget"})
-    *///?}
-    //? if <26.2 {
-    /*@ModifyExpressionValue(method = {"renderOneHandedMap", "renderTwoHandedMap", "renderArmWithItem"}, at = {
-    *///?} elif 26.2 {
-    /*@ModifyExpressionValue(method = {"renderOneHandedMap", "renderTwoHandedMap", "submitArmWithItem"}, at = {
-    *///?}
-    //? if <26.3 {
-            /*@At(value = "INVOKE", target = "Lnet/minecraft/client/player/AbstractClientPlayer;isInvisible()Z"),
-            @At(value = "INVOKE", target = "Lnet/minecraft/client/player/LocalPlayer;isInvisible()Z")
-    })
-    private boolean overflowanimations$showArmWhileInvisible(final boolean original) {
-        if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().extras.showArmWhileInvisible) {
-            return false;
-        } else {
-            return original;
-        }
-    }
-    *///?}
-
-    //? if <26.3 {
     /*@WrapWithCondition(method = "swingArm", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/PoseStack;translate(FFF)V"))
     private boolean overflowanimations$disableSwingTranslate(final PoseStack instance, final float x, final float y, final float z) {
         if (OverflowAnimations.isEnabled()) {
-            return !OverflowAnimationsConfig.instance().extras.disableSwingTranslate;
+            return !OverflowAnimationsConfig.instance().items.disableSwingTranslate;
         } else {
             return true;
         }
@@ -147,17 +126,17 @@ public abstract class MixinItemInHandRenderer_FirstPersonItemPositions {
     //? if <26.3 {
     /*@WrapMethod(method = "applyItemArmAttackTransform")
     private void overflowanimations$modifySwingPivot(final PoseStack poseStack, final HumanoidArm arm, final float attackValue, final Operation<Void> original) {
-        final ExtrasConfigCategory extras = OverflowAnimationsConfig.instance().extras;
-        final boolean shouldApply = OverflowAnimations.isEnabled() && extras.disableSwingPivot;
+        final ItemsConfigCategory items = OverflowAnimationsConfig.instance().items;
+        final boolean shouldApply = OverflowAnimations.isEnabled() && items.disableSwingPivot;
         if (shouldApply) {
-            poseStack.translate(extras.itemOffsetX * overflowanimations$TRANSLATE_OFFSET_MULTIPLIER, extras.itemOffsetY * overflowanimations$TRANSLATE_OFFSET_MULTIPLIER, extras.itemOffsetZ * overflowanimations$TRANSLATE_OFFSET_MULTIPLIER);
+            poseStack.translate(items.itemOffsetX * overflowanimations$TRANSLATE_OFFSET_MULTIPLIER, items.itemOffsetY * overflowanimations$TRANSLATE_OFFSET_MULTIPLIER, items.itemOffsetZ * overflowanimations$TRANSLATE_OFFSET_MULTIPLIER);
         }
     *///?}
 
     //? if <26.3 {
         /*original.call(poseStack, arm, attackValue);
         if (shouldApply) {
-            poseStack.translate(extras.itemOffsetX * -overflowanimations$TRANSLATE_OFFSET_MULTIPLIER, extras.itemOffsetY * -overflowanimations$TRANSLATE_OFFSET_MULTIPLIER, extras.itemOffsetZ * -overflowanimations$TRANSLATE_OFFSET_MULTIPLIER);
+            poseStack.translate(items.itemOffsetX * -overflowanimations$TRANSLATE_OFFSET_MULTIPLIER, items.itemOffsetY * -overflowanimations$TRANSLATE_OFFSET_MULTIPLIER, items.itemOffsetZ * -overflowanimations$TRANSLATE_OFFSET_MULTIPLIER);
         }
     }
     *///?}
@@ -301,10 +280,10 @@ public abstract class MixinItemInHandRenderer_FirstPersonItemPositions {
             *///?}
 
             //? if <26.3 {
-            /*final ExtrasConfigCategory extras = OverflowAnimationsConfig.instance().extras;
+            /*final ItemsConfigCategory items = OverflowAnimationsConfig.instance().items;
             if (OverflowAnimationsConfig.instance().items.skullPosition && ItemUtilKt.isSkullBlock(itemStack) && !OverflowAnimationsConfig.instance().items.mobHeadIcons) {
-                if (extras.applyCustomizationToBlockItems) {
-                    poseStack.translate(extras.itemOffsetX * overflowanimations$TRANSLATE_OFFSET_MULTIPLIER, extras.itemOffsetY * overflowanimations$TRANSLATE_OFFSET_MULTIPLIER, extras.itemOffsetZ * overflowanimations$TRANSLATE_OFFSET_MULTIPLIER);
+                if (items.applyCustomizationToBlockItems) {
+                    poseStack.translate(items.itemOffsetX * overflowanimations$TRANSLATE_OFFSET_MULTIPLIER, items.itemOffsetY * overflowanimations$TRANSLATE_OFFSET_MULTIPLIER, items.itemOffsetZ * overflowanimations$TRANSLATE_OFFSET_MULTIPLIER);
                 }
             *///?}
 
@@ -316,7 +295,7 @@ public abstract class MixinItemInHandRenderer_FirstPersonItemPositions {
                 //? if <26.3 {
                 /*// TODO: This is not quite right... (@Mixces)
                 poseStack.mulPose(Axis.YP.rotationDegrees(-180.0F));
-                if (!extras.applyCustomizationToBlockItems) {
+                if (!items.applyCustomizationToBlockItems) {
                     poseStack.translate(0.0F, 0.25F, 0.0F);
                 }
                 *///?}
@@ -327,16 +306,16 @@ public abstract class MixinItemInHandRenderer_FirstPersonItemPositions {
             *///?}
 
     //? if <26.3 {
-            /*if (isNotBlock3d || extras.applyCustomizationToBlockItems) {
+            /*if (isNotBlock3d || items.applyCustomizationToBlockItems) {
                 if (OverflowAnimationsConfig.instance().items.fishingRodVersion == FishingRodVersionSetting.V1_7 && ItemUtilKt.isFishingRodItem(itemStack)) {
-                    poseStack.translate(extras.itemOffsetX * -overflowanimations$TRANSLATE_OFFSET_MULTIPLIER, extras.itemOffsetY * overflowanimations$TRANSLATE_OFFSET_MULTIPLIER, extras.itemOffsetZ * overflowanimations$TRANSLATE_OFFSET_MULTIPLIER);
+                    poseStack.translate(items.itemOffsetX * -overflowanimations$TRANSLATE_OFFSET_MULTIPLIER, items.itemOffsetY * overflowanimations$TRANSLATE_OFFSET_MULTIPLIER, items.itemOffsetZ * overflowanimations$TRANSLATE_OFFSET_MULTIPLIER);
                 } else if (!(OverflowAnimationsConfig.instance().items.skullPosition && ItemUtilKt.isSkullBlock(itemStack) && !OverflowAnimationsConfig.instance().items.mobHeadIcons)) {
-                    poseStack.translate(extras.itemOffsetX * overflowanimations$TRANSLATE_OFFSET_MULTIPLIER, extras.itemOffsetY * overflowanimations$TRANSLATE_OFFSET_MULTIPLIER, extras.itemOffsetZ * overflowanimations$TRANSLATE_OFFSET_MULTIPLIER);
+                    poseStack.translate(items.itemOffsetX * overflowanimations$TRANSLATE_OFFSET_MULTIPLIER, items.itemOffsetY * overflowanimations$TRANSLATE_OFFSET_MULTIPLIER, items.itemOffsetZ * overflowanimations$TRANSLATE_OFFSET_MULTIPLIER);
                 }
-                poseStack.scale(extras.itemScaleX, extras.itemScaleY, extras.itemScaleZ);
-                poseStack.mulPose(Axis.XP.rotationDegrees(direction * extras.itemRotationX));
-                poseStack.mulPose(Axis.YP.rotationDegrees(direction * extras.itemRotationY));
-                poseStack.mulPose(Axis.ZP.rotationDegrees(direction * extras.itemRotationZ));
+                poseStack.scale(items.itemScaleX, items.itemScaleY, items.itemScaleZ);
+                poseStack.mulPose(Axis.XP.rotationDegrees(direction * items.itemRotationX));
+                poseStack.mulPose(Axis.YP.rotationDegrees(direction * items.itemRotationY));
+                poseStack.mulPose(Axis.ZP.rotationDegrees(direction * items.itemRotationZ));
             }
         }
     }
@@ -376,7 +355,7 @@ public abstract class MixinItemInHandRenderer_FirstPersonItemPositions {
     //? if <26.3 {
     /*@WrapOperation(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/LocalPlayer;getItemSwapScale(F)F"))
     private float overflowanimations$legacySwingAnimation(final LocalPlayer instance, final float delta, final Operation<Float> original) {
-        if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().extras.legacySwingAnimation) {
+        if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().items.legacySwingAnimation) {
             return 1.0F;
         } else {
             return original.call(instance, delta);

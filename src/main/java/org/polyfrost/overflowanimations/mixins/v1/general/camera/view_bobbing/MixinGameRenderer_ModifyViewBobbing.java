@@ -25,7 +25,6 @@
 
 package org.polyfrost.overflowanimations.mixins.v1.general.camera.view_bobbing;
 
-import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -74,16 +73,6 @@ public abstract class MixinGameRenderer_ModifyViewBobbing {
         } else {
             return original.call(instance);
         }
-    }
-
-    //? if 1.21.11 {
-    /*@WrapWithCondition(method = "renderLevel", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GameRenderer;bobView(Lcom/mojang/blaze3d/vertex/PoseStack;F)V"))
-    private boolean overflowanimations$minimalViewBobbing(final GameRenderer instance, final PoseStack poseStack, final float tickDelta) {
-    *///?} else {
-    @WrapWithCondition(method = "renderLevel", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GameRenderer;bobView(Lnet/minecraft/client/renderer/state/level/CameraRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;)V"))
-    private boolean overflowanimations$minimalViewBobbing(final GameRenderer instance, final CameraRenderState cameraState, final PoseStack poseStack) {
-    //?}
-        return !OverflowAnimations.isEnabled() || !OverflowAnimationsConfig.instance().extras.minimalViewBobbing;
     }
 
     //? if 1.21.11 {
