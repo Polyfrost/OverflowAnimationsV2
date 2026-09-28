@@ -1,0 +1,48 @@
+/**
+ * OverflowAnimations
+ * The all-you-could-want legacy animations mod for modern minecraft versions.
+ * Brings back animations from the 1.7/1.8 era and more.
+ * <p>
+ * Copyright (C) 2024-2027 lowercasebtw
+ * Copyright (C) 2024-2027 mixces
+ * Copyright (C) 2024-2027 Contributors to the project retain their copyright
+ * <p>
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * <p>
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * <p>
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * <p>
+ * "MINECRAFT" LINKING EXCEPTION TO THE GPL
+ */
+
+package org.polyfrost.overflowanimations.mixins.v1.rendering.items.usage;
+
+import com.llamalad7.mixinextras.injector.ModifyReturnValue;
+import com.llamalad7.mixinextras.sugar.Local;
+import net.minecraft.client.renderer.item.properties.conditional.FishingRodCast;
+import net.minecraft.world.item.ItemDisplayContext;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
+import org.polyfrost.overflowanimations.OverflowAnimations;
+import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig;
+import org.polyfrost.overflowanimations.util.enums.FishingRodVersionSetting;
+
+@Mixin(FishingRodCast.class)
+public abstract class MixinFishingRodCast {
+    @ModifyReturnValue(method = "get", at = @At(value = "RETURN", ordinal = 0))
+    private boolean overflowanimations$getValue(final boolean original, @Local(argsOnly = true, ordinal = 0) final ItemDisplayContext displayContext) {
+        if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().items.disableItemUsingTextureInGUI && displayContext == ItemDisplayContext.GUI) {
+            return false;
+        } else {
+            return (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().items.fishingRodVersion.ordinal() <= FishingRodVersionSetting.V1_8.ordinal()) || original;
+        }
+    }
+}

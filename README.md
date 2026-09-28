@@ -1,11 +1,9 @@
-# Animatium
-
-[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/C0C31INYGG)
+# OverflowAnimations
 
 The all-you-could-want legacy animations mod for modern minecraft versions. Brings back animations from the 1.7/1.8 era
 and more.
 
-Join our discord: https://discord.gg/C8KKgbA8jy
+Join our discord: https://polyfrost.org/discord
 
 ## License
 
@@ -13,8 +11,7 @@ This project is licensed under the GPL-3.0 license w/ Minecraft Linking Exceptio
 
 ## Download
 
-You can download the latest releases from Modrinth [here](https://modrinth.com/mod/animatium) or from
-CurseForge [here](https://www.curseforge.com/minecraft/mc-mods/animatium).
+You can download the latest releases from Modrinth [here](https://modrinth.com/mod/overflowanimations).
 
 ## Dependencies
 
@@ -30,9 +27,9 @@ Do note that, Lunar does take priority in some places for enabled/disabled setti
 ## Support
 
 Have any issues or need support? Feel free to use
-our [issue tracker](https://github.com/Legacy-Visuals-Project/Animatium/issues) to address that. If you are reporting a
+our [issue tracker](https://github.com/Polyfrost/OverflowAnimationsV2/issues) to address that. If you are reporting a
 crash, make sure you include information about the mods you are using and attach any relevant log files you have. If you
-want to suggest features, join our [discord](https://discord.gg/C8KKgbA8jy)!
+want to suggest features, join our [discord](https://polyfrost.org/discord)!
 
 ## Enums
 
@@ -55,13 +52,13 @@ Allows the server to enable/disable server-only features that enhance gameplay.
 
 | Identifier             | Direction | Field Name          | Field Type         | Description                                                                         |
 |------------------------|-----------|:--------------------|:-------------------|:------------------------------------------------------------------------------------|
-| animatium:info         | Server    | Version             | Double             | Current release version of the mod.                                                 |
+| overflowanimations:info         | Server    | Version             | Double             | Current release version of the mod.                                                 |
 |                        |           | Development Version | Optional<String>   | Current dev build commit of the mod. Only provided when mod is a development build. |
-| animatium:config_data  | Server    | Bundle Count        | Byte               |                                                                                     |
+| overflowanimations:config_data  | Server    | Bundle Count        | Byte               |                                                                                     |
 |                        |           | Bundle Entry*       | Bundle Entry (x)^* |                                                                                     |
-| animatium:set_features | Client    | Features List       | EnumSet\<Feature\> | List of server-features the client should use currently.                            |
+| overflowanimations:set_server_features | Client    | Features List       | EnumSet\<Feature\> | List of server-features the client should use currently.                            |
 
-NOTE: As of 3.1 for now, 'animatium:config_data' is never sent as its been disabled for now.
+NOTE: As of 3.1 for now, 'overflowanimations:config_data' is never sent as its been disabled for now.
 
 ### Bundle Entry
 

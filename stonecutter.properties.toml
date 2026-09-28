@@ -1,14 +1,13 @@
-mod.id = "animatium"
-mod.name = "Animatium"
-mod.group = "org.visuals.legacy"
+mod.id = "overflowanimations"
+mod.name = "OverflowAnimations"
+mod.group = "org.polyfrost"
 mod.version = "4.4.1"
 mod.description = "Visual Tweaks/QOL Settings For Modern Minecraft Versions, Aimed At 1.7/1.8 players."
-mod.source = "https://github.com/Legacy-Visuals-Project/Animatium/"
-mod.issues = "https://github.com/Legacy-Visuals-Project/Animatium/issues"
+mod.source = "https://github.com/Polyfrost/OverflowAnimationsV2"
+mod.issues = "https://github.com/Polyfrost/OverflowAnimationsV2/issues"
 mod.license = "GPL-3.0-with-linking-exception"
-mod.modrinth = "https://modrinth.com/mod/animatium/"
-mod.curseforge = "https://legacy.curseforge.com/minecraft/mc-mods/animatium"
-mod.discord = "https://discord.gg/C8KKgbA8jy"
+mod.modrinth = "https://modrinth.com/mod/overflowanimations"
+mod.discord = "https://polyfrost.org/discord"
 mod.development = false
 
 deps.fabric_loader = "0.19.5"
@@ -18,8 +17,8 @@ deps.mixinsquared = "0.2.0"
 
 loomx.loom_version = "1.17-SNAPSHOT"
 
-publish.modrinth = "zy0karK1"
-publish.curseforge = "1311114"
+publish.modrinth = "4Hfmgaef"
+publish.curseforge = ""
 
 ["1.21.11"]
 mod.mc_compat = "1.21.11"

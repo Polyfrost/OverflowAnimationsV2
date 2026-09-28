@@ -141,7 +141,6 @@ tasks {
             "issues" to sc.properties.get<String>("mod.issues"),
             "license" to sc.properties.get<String>("mod.license"),
             "modrinth" to sc.properties.get<String>("mod.modrinth"),
-            "curseforge" to sc.properties.get<String>("mod.curseforge"),
             "discord" to sc.properties.get<String>("mod.discord"),
             "fabric_loader_version" to loaderversion,
             "minecraft_version_range" to versionrange

@@ -1,0 +1,11 @@
+{
+	"required": true,
+	"package": "org.polyfrost.overflowanimations.mixins",
+	"compatibilityLevel": "JAVA_21",
+	"injectors": {
+		"defaultRequire": 1
+	},
+	"mixinextras": {
+		"minVersion": "0.5.0"
+	}
+}

@@ -27,4 +27,4 @@ stonecutter {
     }
 }
 
-rootProject.name = "Animatium"
+rootProject.name = "OverflowAnimations"
