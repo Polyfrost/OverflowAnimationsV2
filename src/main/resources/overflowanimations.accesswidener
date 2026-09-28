@@ -6,7 +6,6 @@ accessible class net/minecraft/client/gui/Font$PreparedTextBuilder
 #?} else {
 accessible class net/minecraft/client/gui/Hud$HeartType
 #?}
-accessible class net/minecraft/client/gui/components/toasts/ToastManager$ToastInstance
 accessible class com/mojang/blaze3d/pipeline/MainTarget$Dimension
 accessible class net/minecraft/client/renderer/CloudRenderer$RelativeCameraPos
 accessible class net/minecraft/client/gui/components/AbstractSelectionList$Entry

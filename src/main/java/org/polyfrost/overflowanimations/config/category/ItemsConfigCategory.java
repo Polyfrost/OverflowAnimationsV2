@@ -44,15 +44,15 @@ public final class ItemsConfigCategory extends Category {
     public boolean itemDrops2D = false;
     public boolean itemFramed2D = false;
     // (Items) Transformations
-    public boolean itemPositions = false;
-    public boolean itemPositionsInThirdPerson = false;
-    public boolean strictItemPositionsInThirdPerson = false;
+    public boolean itemPositions = true;
+    public boolean itemPositionsInThirdPerson = true;
+    public boolean strictItemPositionsInThirdPerson = true;
     public boolean thinBlockPositions = false;
     public boolean skullPosition = false;
-    public FishingRodVersionSetting fishingRodVersion = FishingRodVersionSetting.VANILLA;
+    public FishingRodVersionSetting fishingRodVersion = FishingRodVersionSetting.V1_7;
     // (Items) Other
     public boolean thinFishingRodLineThickness = false;
-    public boolean itemUsageSwinging = false;
+    public boolean itemUsageSwinging = true;
     public boolean usageSwingingParticles = true;
     public boolean disableSwingOnUse = false;
     public boolean disableSwingOnDrop = false;
@@ -62,7 +62,7 @@ public final class ItemsConfigCategory extends Category {
     public boolean durabilityBarColors = false;
     public boolean legacyItemRarities = false;
     public boolean heldItemVisibilityInBoat = false;
-    public boolean itemPickupPosition = false;
+    public boolean itemPickupPosition = true;
     public boolean mobHeadIcons = false;
     public boolean eggSnowballParticles = false;
     // Item Swing

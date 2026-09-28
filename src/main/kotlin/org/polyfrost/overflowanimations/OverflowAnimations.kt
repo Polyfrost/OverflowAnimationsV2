@@ -26,16 +26,13 @@
 package org.polyfrost.overflowanimations
 
 import com.mojang.logging.LogUtils
-import net.minecraft.ChatFormatting
 import net.minecraft.SharedConstants
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.components.debug.DebugScreenEntries
-import net.minecraft.network.chat.Component
 import net.minecraft.resources.Identifier
 import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig
 import org.polyfrost.overflowanimations.handler.rendering.lighting.LegacyDiffuseLighting
 import org.polyfrost.overflowanimations.handler.screen.debug.OverflowAnimationsDebugEntry
-import org.polyfrost.overflowanimations.util.ToastUtil
 import org.polyfrost.overflowanimations.util.config.GeneralConfigUtil
 import org.polyfrost.overflowanimations.util.reinitializeInventorySlots
 
@@ -62,7 +59,6 @@ object OverflowAnimations {
         //?}
         LegacyDiffuseLighting.refresh()
         reinitializeInventorySlots()
-        ToastUtil.send(Component.literal("Mod reloaded.").withStyle(ChatFormatting.GREEN))
     }
 
     @JvmStatic

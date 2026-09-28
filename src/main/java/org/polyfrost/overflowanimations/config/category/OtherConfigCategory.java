@@ -49,7 +49,7 @@ public final class OtherConfigCategory extends Category {
     public boolean oldCloudRendering = false;
     public VoidFogSetting voidFog = VoidFogSetting.OFF;
     // Damage Tint
-    public boolean damageTintArmor = false;
+    public boolean damageTintArmor = true;
     public boolean glintAffectsArmorTint = false;
     public boolean damageTintItems = false;
     public boolean damageTintCape = false;
@@ -64,7 +64,7 @@ public final class OtherConfigCategory extends Category {
     public boolean disableModelWhilstSleeping = false;
     public boolean flameDimensions = false;
     public boolean heldItemArmLogic = false;
-    public boolean thirdPersonSwordBlockingPosition = false;
+    public boolean thirdPersonSwordBlockingPosition = true;
     public boolean disableInventoryEntityScissor = false;
     public boolean itemGlintOnEntity = false;
     public boolean maxGlintProperties = false;
