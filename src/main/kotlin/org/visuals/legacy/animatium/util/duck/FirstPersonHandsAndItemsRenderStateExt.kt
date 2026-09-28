@@ -25,10 +25,16 @@
 
 package org.visuals.legacy.animatium.util.duck
 
+//? if >=26.3 {
 import net.minecraft.world.item.ItemStack
+//?}
 
+//? if >=26.3 {
 interface FirstPersonHandsAndItemsRenderStateExt {
     fun `animatium$getMainHandItem`(): ItemStack
+//?}
 
+//? if >=26.3 {
     fun `animatium$setMainHandItem`(stack: ItemStack)
 }
+//?}

@@ -25,8 +25,13 @@
 
 package org.visuals.legacy.animatium.renderer.uniform
 
+//? if <26.3 {
+/*import com.mojang.blaze3d.buffers.GpuBufferSlice
+*///?}
 import com.mojang.blaze3d.buffers.Std140SizeCalculator
+//? if >=26.3 {
 import com.mojang.renderpearl.api.buffers.GpuBufferSlice
+//?}
 
 interface UniformStorage : AutoCloseable {
     fun name(): String

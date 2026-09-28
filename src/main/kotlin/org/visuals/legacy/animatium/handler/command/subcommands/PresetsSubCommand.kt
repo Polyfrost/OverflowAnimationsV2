@@ -38,7 +38,11 @@ class PresetsSubCommand : Command<FabricClientCommandSource> {
 
     override fun run(context: CommandContext<FabricClientCommandSource>): Int {
         val minecraft = context.getSource().client
+        //? if <26.2 {
+        /*minecraft.schedule({ minecraft.setScreen(PresetsScreen(minecraft.screen)) })
+        *///?} else {
         minecraft.schedule({ minecraft.gui.setScreen(PresetsScreen(minecraft.gui.screen())) })
+        //?}
         return Command.SINGLE_SUCCESS
     }
 }

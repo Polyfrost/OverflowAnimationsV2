@@ -32,6 +32,7 @@
 	},
 	"custom": {
 		"loom:injected_interfaces": {
+			"net/minecraft/client/renderer/state/CameraRenderState": ["org/visuals/legacy/animatium/util/states/CameraUtilityRenderState"],
 			"net/minecraft/client/renderer/state/level/CameraRenderState": ["org/visuals/legacy/animatium/util/states/CameraUtilityRenderState"],
 			"net/minecraft/client/renderer/item/ItemStackRenderState": ["org/visuals/legacy/animatium/util/states/ItemUtilityRenderState"],
 			"net/minecraft/client/renderer/entity/state/ArmedEntityRenderState": ["org/visuals/legacy/animatium/util/states/UtilityRenderState"],

@@ -25,6 +25,7 @@
 
 package org.visuals.legacy.animatium.mixins.v1.rendering.items;
 
+//? if >=26.3 {
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
@@ -45,38 +46,54 @@ import org.visuals.legacy.animatium.Animatium;
 import org.visuals.legacy.animatium.config.AnimatiumConfig;
 import org.visuals.legacy.animatium.util.duck.FirstPersonHandsAndItemsRenderStateExt;
 import org.visuals.legacy.animatium.util.enums.EquipAnimationVersionSetting;
+//?}
 
+//? if >=26.3 {
 @Mixin(FirstPersonHandsAndItems.class)
 public abstract class MixinFirstPersonHandsAndItems_EquipAnimationChecks {
     @Shadow
     private float mainHandHeight;
+//?}
 
+    //? if >=26.3 {
     @Shadow
     private ItemStack mainHandItem;
+    //?}
 
+    //? if >=26.3 {
     @Unique
     private int animatium$currentSlot = -1;
+    //?}
 
+    //? if >=26.3 {
     @Unique
     private ItemStack animatium$mainHandItem = ItemStack.EMPTY;
+    //?}
 
+    //? if >=26.3 {
     @ModifyExpressionValue(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/FirstPersonHandsAndItems;shouldInstantlyReplaceVisibleItem(Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/client/player/LocalPlayer;)Z", ordinal = 0))
     private boolean animatium$disableEquipConstraint(final boolean original) {
         return (!Animatium.isEnabled() || !AnimatiumConfig.instance().items.equipAnimationVersion.useStackForRendering()) && original;
     }
+    //?}
 
+    //? if >=26.3 {
     @Inject(method = "shouldInstantlyReplaceVisibleItem", at = @At("HEAD"), cancellable = true)
     private void animatium$skipEquipAnimation(final ItemStack currentlyVisibleItem, final ItemStack expectedItem, final LocalPlayer player, final CallbackInfoReturnable<Boolean> cir) {
         if (Animatium.isEnabled() && AnimatiumConfig.instance().items.equipAnimationVersion == EquipAnimationVersionSetting.DISABLED && player != null) {
             cir.setReturnValue(true);
         }
     }
+    //?}
 
+    //? if >=26.3 {
     @WrapOperation(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/LocalPlayer;isHandsBusy()Z"))
     private boolean animatium$heldItemVisibilityInBoat(final LocalPlayer instance, final Operation<Boolean> original) {
         return (!Animatium.isEnabled() || !AnimatiumConfig.instance().items.heldItemVisibilityInBoat) && original.call(instance);
     }
+    //?}
 
+    //? if >=26.3 {
     @WrapOperation(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/LocalPlayer;getItemSwapScale(F)F"))
     private float animatium$legacySwingAnimation(final LocalPlayer instance, final float delta, final Operation<Float> original) {
         if (Animatium.isEnabled() && AnimatiumConfig.instance().extras.legacySwingAnimation) {
@@ -85,7 +102,9 @@ public abstract class MixinFirstPersonHandsAndItems_EquipAnimationChecks {
             return original.call(instance, delta);
         }
     }
+    //?}
 
+    //? if >=26.3 {
     // Fixes MC-262560
     @ModifyArg(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/Mth;clamp(FFF)F", ordinal = 2), index = 0)
     private float animatium$handleEquipLogic(final float value, @Local(argsOnly = true, name = "player") final LocalPlayer player, @Local(name = "attackAnim") float attackAnim) {
@@ -93,29 +112,39 @@ public abstract class MixinFirstPersonHandsAndItems_EquipAnimationChecks {
         if (Animatium.isEnabled() && setting != EquipAnimationVersionSetting.VANILLA && setting != EquipAnimationVersionSetting.DISABLED && player != null) {
             final float scale = (float) Math.pow(attackAnim, 3);
             final ItemStack stackCopy = player.getInventory().getSelectedItem().copy();
+    //?}
 
+            //? if >=26.3 {
             float mainHandTargetHeight = stackCopy == this.animatium$mainHandItem ? scale : 0;
             if (this.animatium$mainHandItem.isEmpty() && stackCopy.isEmpty()) {
                 mainHandTargetHeight = scale;
             }
+            //?}
 
+            //? if >=26.3 {
             if (!stackCopy.isEmpty() && !this.animatium$mainHandItem.isEmpty() &&
                     stackCopy != this.animatium$mainHandItem && stackCopy.getItem() == this.animatium$mainHandItem.getItem() &&
                     stackCopy.getDamageValue() == this.animatium$mainHandItem.getDamageValue()) {
                 this.animatium$mainHandItem = stackCopy;
                 mainHandTargetHeight = scale;
             }
+            //?}
 
+            //? if >=26.3 {
             if (setting == EquipAnimationVersionSetting.V1_7 && this.animatium$currentSlot != player.getInventory().getSelectedSlot()) {
                 mainHandTargetHeight = 0;
             }
+            //?}
 
+    //? if >=26.3 {
             return mainHandTargetHeight - this.mainHandHeight;
         } else {
             return value;
         }
     }
+    //?}
 
+    //? if >=26.3 {
     @Inject(method = "tick", at = @At("TAIL"))
     private void animatium$updateFakeItem(final LocalPlayer player, final CallbackInfo ci) {
         if (Animatium.isEnabled() && AnimatiumConfig.instance().items.equipAnimationVersion != EquipAnimationVersionSetting.VANILLA && AnimatiumConfig.instance().items.equipAnimationVersion != EquipAnimationVersionSetting.DISABLED && player != null && this.mainHandHeight < 0.1F) {
@@ -123,7 +152,9 @@ public abstract class MixinFirstPersonHandsAndItems_EquipAnimationChecks {
             this.animatium$currentSlot = player.getInventory().getSelectedSlot();
         }
     }
+    //?}
 
+//? if >=26.3 {
     /**
      * @Mixces TODO/NOTE: Should we just override mainHandItem in the vanilla state instead or?
      * Me (lowercasebtw) tried porting what we had prior to the new code, might be possible to cleanup/make better
@@ -133,3 +164,4 @@ public abstract class MixinFirstPersonHandsAndItems_EquipAnimationChecks {
         ((FirstPersonHandsAndItemsRenderStateExt) state).animatium$setMainHandItem(this.animatium$mainHandItem);
     }
 }
+//?}

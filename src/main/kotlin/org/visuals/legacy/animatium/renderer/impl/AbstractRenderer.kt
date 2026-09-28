@@ -25,15 +25,42 @@
 
 package org.visuals.legacy.animatium.renderer.impl
 
+//? if <26.3 {
+/*import com.mojang.blaze3d.buffers.GpuBuffer
+import com.mojang.blaze3d.buffers.GpuBufferSlice
+*///?}
+//? if 26.2 {
+/*import com.mojang.blaze3d.pipeline.BindGroupLayout
+*///?}
+//? if <26.3 {
+/*import com.mojang.blaze3d.pipeline.RenderPipeline
+*///?}
+//? if <26.2 {
+/*import com.mojang.blaze3d.pipeline.RenderPipeline.UniformDescription
+*///?}
+//? if <26.3 {
+/*import com.mojang.blaze3d.systems.RenderPass
+*///?} elif 26.4 {
 import com.mojang.blaze3d.pipeline.RenderPipeline
+//?}
 import com.mojang.blaze3d.systems.RenderSystem
+//? if <26.3 {
+/*import com.mojang.blaze3d.textures.GpuSampler
+import com.mojang.blaze3d.textures.GpuTextureView
+*///?} else {
 import com.mojang.renderpearl.api.buffers.GpuBuffer
 import com.mojang.renderpearl.api.buffers.GpuBufferSlice
 import com.mojang.renderpearl.api.commands.RenderPass
 import com.mojang.renderpearl.api.pipeline.BindGroupLayout
+//?}
+//? if 26.3 {
+/*import com.mojang.renderpearl.api.pipeline.RenderPipeline
+*///?}
+//? if >=26.3 {
 import com.mojang.renderpearl.api.pipeline.UniformType
 import com.mojang.renderpearl.api.textures.GpuSampler
 import com.mojang.renderpearl.api.textures.GpuTextureView
+//?}
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap
 import net.minecraft.resources.Identifier
 import org.visuals.legacy.animatium.handler.compatibility.IrisPipeline
@@ -43,6 +70,7 @@ import org.visuals.legacy.animatium.renderer.buffer.Geometry
 import org.visuals.legacy.animatium.renderer.texture.TextureAndSampler
 
 abstract class AbstractRenderer : AutoCloseable {
+    //? if >=26.3 {
     companion object {
         private fun flattenSamplers(groups: List<BindGroupLayout>): List<String> {
             return BindGroupLayout.flattenUniforms(groups)
@@ -52,6 +80,7 @@ abstract class AbstractRenderer : AutoCloseable {
                 .toList()
         }
     }
+    //?}
 
     protected var pipeline: RenderPipeline? = null
     protected val textures = Object2ObjectOpenHashMap<String, TextureAndSampler>()
@@ -64,7 +93,13 @@ abstract class AbstractRenderer : AutoCloseable {
     }
 
     fun setPipeline(pipeline: RenderPipeline): AbstractRenderer {
+        //? if <26.2 {
+        /*val samplers = pipeline.samplers
+        *///?} elif 26.2 {
+        /*val samplers = BindGroupLayout.flattenSamplers(pipeline.bindGroupLayouts)
+        *///?} else {
         val samplers = flattenSamplers(pipeline.bindGroupLayouts)
+        //?}
         return this.setPipeline(
             pipeline,
             if (samplers.contains("Sampler0")) {
@@ -98,16 +133,34 @@ abstract class AbstractRenderer : AutoCloseable {
         if (geometry.isClosed()) {
             throw RuntimeException("Cannot render, the provided geometry has already been closed!")
         } else {
+            //? if <26.3 {
+            /*pass.setPipeline(pipeline)
+            *///?} else {
             pass.setPipeline(RenderSystem.getCompiledPipeline(pipeline))
+            //?}
 
+            //? if <26.2 {
+            /*val descriptions = pipeline.uniforms
+            *///?} else {
             val bindGroupLayouts = pipeline.bindGroupLayouts
             val descriptions = BindGroupLayout.flattenUniforms(bindGroupLayouts)
+            //?}
                 .stream()
+                //? if <26.2 {
+                /*.map(UniformDescription::name)
+                *///?} elif >=26.3 {
                 .filter { it.type == UniformType.UNIFORM_BUFFER }
+                //?}
+                //? if >=26.2 {
                 .map(BindGroupLayout.UniformDescription::name)
+                //?}
                 .toList()
 
+            //? if <26.2 {
+            /*val indexBuffer = RenderSystem.getSequentialBuffer(pipeline.vertexFormatMode)
+            *///?} else {
             val indexBuffer = RenderSystem.getSequentialBuffer(pipeline.primitiveTopology)
+            //?}
             RenderSystem.bindDefaultUniforms(pass)
             pass.setUniform(DynamicTransforms.KEY, dynamicTransforms)
             for (entry in this.uniforms) {
@@ -121,11 +174,21 @@ abstract class AbstractRenderer : AutoCloseable {
                 }
             }
 
+            //? if <26.2 {
+            /*val samplers = pipeline.samplers
+            *///?} elif 26.2 {
+            /*val samplers = BindGroupLayout.flattenSamplers(bindGroupLayouts)
+            *///?} else {
             val samplers = flattenSamplers(bindGroupLayouts)
+            //?}
             for (entry in this.textures) {
                 val name = entry.key
                 if (samplers.contains(name)) {
+                    //? if <26.3 {
+                    /*pass.bindTexture(name, entry.value.textureView, entry.value.sampler)
+                    *///?} else {
                     pass.setUniform(name, entry.value.textureView, entry.value.sampler)
+                    //?}
                 }
             }
 

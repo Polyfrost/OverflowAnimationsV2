@@ -39,7 +39,11 @@ object AnimatiumNetworking {
         ClientConfigurationConnectionEvents.DISCONNECT.register { _, _ -> ServerFeatureManager.ENABLED_SERVER_FEATURES.clear() }
         ClientPlayConnectionEvents.DISCONNECT.register { _, _ -> ServerFeatureManager.ENABLED_SERVER_FEATURES.clear() }
 
+        //? if 1.21.11 {
+        /*PayloadTypeRegistry.playC2S()
+        *///?} else {
         PayloadTypeRegistry.serverboundPlay()
+        //?}
             .register(InfoPayload.TYPE, InfoPayload.STREAM_CODEC)
         ServerPlayNetworking.registerGlobalReceiver(InfoPayload.TYPE) { _, _ -> /* NO-OP */ }
         ClientPlayConnectionEvents.JOIN.register { _, sender, _ ->
@@ -48,7 +52,11 @@ object AnimatiumNetworking {
             }
         }
 
+        //? if 1.21.11 {
+        /*PayloadTypeRegistry.configurationS2C()
+        *///?} else {
         PayloadTypeRegistry.clientboundConfiguration()
+        //?}
             .register(SetServerFeaturesPayload.TYPE, SetServerFeaturesPayload.STREAM_CODEC)
         ClientConfigurationNetworking.registerGlobalReceiver(SetServerFeaturesPayload.TYPE) { payload, context ->
             context.client().schedule {
@@ -57,7 +65,11 @@ object AnimatiumNetworking {
             }
         }
 
+        //? if 1.21.11 {
+        /*PayloadTypeRegistry.playS2C()
+        *///?} else {
         PayloadTypeRegistry.clientboundPlay()
+        //?}
             .register(SetServerFeaturesPayload.TYPE, SetServerFeaturesPayload.STREAM_CODEC)
         ClientPlayNetworking.registerGlobalReceiver(SetServerFeaturesPayload.TYPE) { payload, context ->
             context.client().schedule {

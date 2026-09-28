@@ -25,12 +25,16 @@
 
 package org.visuals.legacy.animatium.mixins.v1.gui.old_inventory_rendering;
 
+//? if >=26.1 {
 import com.llamalad7.mixinextras.expression.Definition;
+//?}
 import com.llamalad7.mixinextras.expression.Expression;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+//? if >=26.1 {
 import com.llamalad7.mixinextras.sugar.Local;
+//?}
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.gui.screens.inventory.AbstractRecipeBookScreen;
 import net.minecraft.client.gui.screens.inventory.EffectsInInventory;
@@ -49,9 +53,14 @@ public abstract class MixinEffectsInInventory_EffectBackgroundWidthAndPosition {
     @Final
     private AbstractContainerScreen<?> screen;
 
+    //? if 1.21.11 {
+    /*@Expression("? - 7")
+    @ModifyExpressionValue(method = "render", at = @At("MIXINEXTRAS:EXPRESSION"))
+    *///?} else {
     @Definition(id = "availableWidth", local = @Local(type = int.class, name = "availableWidth"))
     @Expression("availableWidth - 7")
     @ModifyExpressionValue(method = "extractRenderState", at = @At("MIXINEXTRAS:EXPRESSION"))
+    //?}
     private int animatium$fullWidthInventoryEffects(final int original) {
         if (Animatium.isEnabled() && AnimatiumConfig.instance().screen.fullWidthInventoryEffects && !(this.screen instanceof AbstractRecipeBookScreen<?> recipeBookScreen && ((AbstractRecipeBookScreenAccessor) recipeBookScreen).animatium$getRecipeBookComponent().isVisible())) {
             return 120;
@@ -60,7 +69,11 @@ public abstract class MixinEffectsInInventory_EffectBackgroundWidthAndPosition {
         }
     }
 
+    //? if 1.21.11 {
+    /*@WrapOperation(method = "renderBackground", at = @At(value = "INVOKE", target = "Ljava/lang/Math;min(II)I"))
+    *///?} else {
     @WrapOperation(method = "extractBackground", at = @At(value = "INVOKE", target = "Ljava/lang/Math;min(II)I"))
+    //?}
     private int animatium$fullWidthInventoryEffects$useOldWidth(final int min, final int max, final Operation<Integer> original) {
         if (Animatium.isEnabled() && AnimatiumConfig.instance().screen.fullWidthInventoryEffects) {
             return min == 120 ? 120 : 32; // Hardcode old width values
@@ -69,7 +82,11 @@ public abstract class MixinEffectsInInventory_EffectBackgroundWidthAndPosition {
         }
     }
 
+    //? if 1.21.11 {
+    /*@WrapOperation(method = "render", at = @At(value = "FIELD", target = "Lnet/minecraft/client/gui/screens/inventory/AbstractContainerScreen;imageWidth:I", opcode = Opcodes.GETFIELD))
+    *///?} else {
     @WrapOperation(method = "extractRenderState", at = @At(value = "FIELD", target = "Lnet/minecraft/client/gui/screens/inventory/AbstractContainerScreen;imageWidth:I", opcode = Opcodes.GETFIELD))
+    //?}
     private int animatium$effectsInventoryPosition(final AbstractContainerScreen<?> instance, final Operation<Integer> original) {
         final int imageWidth = original.call(instance);
         if (Animatium.isEnabled() && AnimatiumConfig.instance().screen.inventoryEffectsPosition && !(this.screen instanceof AbstractRecipeBookScreen<?> recipeBookScreen && ((AbstractRecipeBookScreenAccessor) recipeBookScreen).animatium$getRecipeBookComponent().isVisible())) {
@@ -79,7 +96,11 @@ public abstract class MixinEffectsInInventory_EffectBackgroundWidthAndPosition {
         }
     }
 
+    //? if 1.21.11 {
+    /*@ModifyExpressionValue(method = "render", at = @At(value = "CONSTANT", args = "intValue=2"))
+    *///?} else {
     @ModifyExpressionValue(method = "extractRenderState", at = @At(value = "CONSTANT", args = "intValue=2"))
+    //?}
     private int animatium$effectsInventoryPosition(final int original) {
         if (Animatium.isEnabled() && AnimatiumConfig.instance().screen.inventoryEffectsPosition && !(this.screen instanceof AbstractRecipeBookScreen<?> recipeBookScreen && ((AbstractRecipeBookScreenAccessor) recipeBookScreen).animatium$getRecipeBookComponent().isVisible())) {
             return AnimatiumConfig.instance().screen.fullWidthInventoryEffects ? -124 : 0; // TODO: Modern

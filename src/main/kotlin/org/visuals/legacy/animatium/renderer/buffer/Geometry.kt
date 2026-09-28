@@ -25,8 +25,13 @@
 
 package org.visuals.legacy.animatium.renderer.buffer
 
+//? if <26.3 {
+/*import com.mojang.blaze3d.systems.RenderPass
+*///?}
 import com.mojang.blaze3d.systems.RenderSystem
+//? if >=26.3 {
 import com.mojang.renderpearl.api.commands.RenderPass
+//?}
 import org.joml.Matrix3x2f
 import org.visuals.legacy.animatium.renderer.vertex.VertexLayouts
 

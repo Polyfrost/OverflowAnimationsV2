@@ -25,15 +25,28 @@
 
 package org.visuals.legacy.animatium.handler.rendering.clouds
 
+//? if <26.3 {
+/*import com.mojang.blaze3d.buffers.GpuBuffer
 import com.mojang.blaze3d.pipeline.RenderPipeline
+*///?} elif 26.4 {
+import com.mojang.blaze3d.pipeline.RenderPipeline
+//?}
 import com.mojang.blaze3d.platform.NativeImage
 import com.mojang.blaze3d.systems.RenderSystem
 import com.mojang.blaze3d.vertex.ByteBufferBuilder
 import com.mojang.blaze3d.vertex.DefaultVertexFormat
 import com.mojang.blaze3d.vertex.VertexConsumer
+//? if >=26.3 {
 import com.mojang.renderpearl.api.buffers.GpuBuffer
 import com.mojang.renderpearl.api.commands.RenderPass
+//?}
+//? if 26.3 {
+/*import com.mojang.renderpearl.api.pipeline.RenderPipeline
+*///?}
 import net.minecraft.client.CloudStatus
+//? if <26.3 {
+/*import net.minecraft.client.Minecraft
+*///?}
 import net.minecraft.client.renderer.CloudRenderer
 import net.minecraft.client.renderer.CloudRenderer.RelativeCameraPos
 import net.minecraft.client.renderer.CloudRenderer.TextureData
@@ -48,8 +61,15 @@ import org.visuals.legacy.animatium.config.AnimatiumConfig
 import org.visuals.legacy.animatium.handler.rendering.pipeline.AnimatiumPipelines
 import org.visuals.legacy.animatium.renderer.DynamicTransforms
 import org.visuals.legacy.animatium.renderer.buffer.IndexedGeometry
+//? if <26.3 {
+/*import org.visuals.legacy.animatium.renderer.impl.DeferredRenderer
+*///?} else {
 import org.visuals.legacy.animatium.renderer.impl.WrappedRenderer
+//?}
 import org.visuals.legacy.animatium.renderer.vertex.VertexLayouts
+//? if <26.3 {
+/*import org.visuals.legacy.animatium.util.profile
+*///?}
 import java.io.IOException
 import java.util.*
 import kotlin.math.abs
@@ -225,13 +245,26 @@ class LegacyCloudRenderer : SimplePreparableReloadListener<Optional<TextureData>
         }
     }
 
+    //? if <26.3 {
+    /*fun render(cloudColor: Int, cloudStatus: CloudStatus, height: Float, cameraOffset: Vec3, ticks: Float) {
+        if (this.textureData != null) {
+            var x = cameraOffset.x + ticks * 0.030000001F
+            var z = cameraOffset.z + 3.96F
+    *///?} else {
     data class CloudRenderState(val color: Int, val cloudStatus: CloudStatus, val bottomY: Float, val cameraPosition: Vec3, val tickDelta: Float)
+    //?}
 
+    //? if >=26.3 {
     private var state: CloudRenderState? = null
+    //?}
 
+    //? if >=26.3 {
     fun prepare(cloudColor: Int, cloudStatus: CloudStatus, height: Float, cameraOffset: Vec3, tickDelta: Float) {
         this.state = CloudRenderState(cloudColor, cloudStatus, height, cameraOffset, tickDelta)
+        if (this.textureData == null) return
+    //?}
 
+        //? if >=26.3 {
         var x = cameraOffset.x + tickDelta * 0.030000001F
         var z = cameraOffset.z + 3.96F
         val scaledWidth = this.textureData!!.width() * 12.0
@@ -240,12 +273,16 @@ class LegacyCloudRenderer : SimplePreparableReloadListener<Optional<TextureData>
         z -= Mth.floor(z / scaledHeight) * scaledHeight
         val cellX = Mth.floor(x / 12.0)
         val cellZ = Mth.floor(z / 12.0)
+        //?}
 
+        //? if >=26.3 {
         val offsetBottom = (height - cameraOffset.y).toFloat()
         val offsetTop = offsetBottom + 4.0F
         val relativeCameraPos =
             if (offsetTop < 0.0F) RelativeCameraPos.ABOVE_CLOUDS else (if (offsetBottom > 0.0F) RelativeCameraPos.BELOW_CLOUDS else RelativeCameraPos.INSIDE_CLOUDS)
+        //?}
 
+    //? if >=26.3 {
         if (this.needsRebuild || cellX != this.prevCellX || cellZ != this.prevCellZ || relativeCameraPos != this.prevRelativeCameraPos || cloudStatus != this.prevType) {
             this.needsRebuild = false
             this.prevRelativeCameraPos = relativeCameraPos
@@ -255,12 +292,15 @@ class LegacyCloudRenderer : SimplePreparableReloadListener<Optional<TextureData>
             this.setupMesh(cellX, cellZ, cloudStatus, relativeCameraPos)
         }
     }
+    //?}
 
+    //? if >=26.3 {
     fun render(pass: RenderPass) {
         if (this.textureData != null && this.indexCount != 0) {
             val state = this.state ?: return
             var x = state.cameraPosition.x + state.tickDelta * 0.030000001F
             var z = state.cameraPosition.z + 3.96F
+    //?}
             val scaledWidth = this.textureData!!.width() * 12.0
             val scaledHeight = this.textureData!!.height() * 12.0
             x -= Mth.floor(x / scaledWidth) * scaledWidth
@@ -268,24 +308,84 @@ class LegacyCloudRenderer : SimplePreparableReloadListener<Optional<TextureData>
             val cellX = Mth.floor(x / 12.0)
             val cellZ = Mth.floor(z / 12.0)
 
+            //? if <26.3 {
+            /*val offsetBottom = (height - cameraOffset.y).toFloat()
+            val offsetTop = offsetBottom + 4.0F
+            val relativeCameraPos =
+                if (offsetTop < 0.0F) RelativeCameraPos.ABOVE_CLOUDS else (if (offsetBottom > 0.0F) RelativeCameraPos.BELOW_CLOUDS else RelativeCameraPos.INSIDE_CLOUDS)
+            *///?} else {
             val pipelineSet = AnimatiumPipelines.getCloudsSet(AnimatiumConfig.instance().other.planarSkyFog)
             val pipeline = pipelineSet.get(state.cloudStatus)
+            //?}
 
+            //? if <26.3 {
+            /*val pipelineSet = AnimatiumPipelines.getCloudsSet(AnimatiumConfig.instance().other.planarSkyFog)
+            val pipeline = pipelineSet.get(cloudStatus)
+            if (this.needsRebuild || cellX != this.prevCellX || cellZ != this.prevCellZ || relativeCameraPos != this.prevRelativeCameraPos || cloudStatus != this.prevType) {
+                this.needsRebuild = false
+                this.prevRelativeCameraPos = relativeCameraPos
+                this.prevType = cloudStatus
+                this.prevCellX = cellX
+                this.prevCellZ = cellZ
+                this.setupMesh(cellX, cellZ, cloudStatus, relativeCameraPos)
+            *///?} else {
             val offsetBottom = (state.bottomY - state.cameraPosition.y).toFloat()
             val offsetX = (x - cellX * 12.0F).toFloat()
             val offsetZ = (z - cellZ * 12.0F).toFloat()
             val offset = Vector3f(-offsetX, offsetBottom, -offsetZ)
             if (pipeline != pipelineSet.flatPipeline) {
                 this.draw(pass, pipelineSet.depthOnlyPipeline, offset, state.color)
+            //?}
             }
 
+            //? if <26.3 {
+            /*if (this.indexCount != 0) {
+                profile("cloud_rendering") {
+                    val offsetX = (x - cellX * 12.0F).toFloat()
+                    val offsetZ = (z - cellZ * 12.0F).toFloat()
+                    val offset = Vector3f(-offsetX, offsetBottom, -offsetZ)
+                    if (pipeline != pipelineSet.flatPipeline) {
+                        this.draw(pipelineSet.depthOnlyPipeline, offset, cloudColor)
+                    }
+            *///?}
+
+            //? if <26.3 {
+                    /*this.draw(pipeline, offset, cloudColor)
+                }
+            }
+            *///?} else {
             this.draw(pass, pipeline, offset, state.color)
+            //?}
         }
     }
 
+    //? if <26.3 {
+    /*private fun draw(pipeline: RenderPipeline, offset: Vector3f, color: Int) {
+    *///?}
+        //? if <26.2 {
+        /*var cloudsTarget = Minecraft.getInstance().levelRenderer.cloudsTarget
+        *///?} elif 26.2 {
+        /*var cloudsTarget = Minecraft.getInstance().levelRenderer.cloudsTarget()
+        *///?}
+        //? if <26.3 {
+        /*if (cloudsTarget == null) {
+        *///?}
+            //? if <26.2 {
+            /*cloudsTarget = Minecraft.getInstance().mainRenderTarget
+            *///?} elif 26.2 {
+            /*cloudsTarget = Minecraft.getInstance().gameRenderer.mainRenderTarget()
+            *///?}
+        //? if <26.3 {
+        /*}
+        *///?}
+
+    //? if <26.3 {
+        /*DeferredRenderer.of("Legacy Clouds (${pipeline.location})", cloudsTarget).use { renderer ->
+    *///?} else {
     private fun draw(pass: RenderPass, pipeline: RenderPipeline, offset: Vector3f, color: Int) {
         WrappedRenderer.of(pass).use { renderer ->
             pass.pushDebugGroup({ "Legacy Clouds (${pipeline.location})" })
+    //?}
             renderer.setPipeline(pipeline)
             renderer.setUniform(
                 DynamicTransforms.KEY, DynamicTransforms.builder()
@@ -294,7 +394,9 @@ class LegacyCloudRenderer : SimplePreparableReloadListener<Optional<TextureData>
                     .build()
             )
             renderer.draw(this.geometry!!)
+            //? if >=26.3 {
             pass.popDebugGroup()
+            //?}
         }
     }
 

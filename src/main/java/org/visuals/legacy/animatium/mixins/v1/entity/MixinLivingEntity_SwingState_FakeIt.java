@@ -25,6 +25,7 @@
 
 package org.visuals.legacy.animatium.mixins.v1.entity;
 
+//? if >=26.3 {
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.component.SwingAnimation;
@@ -33,22 +34,36 @@ import org.jspecify.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.visuals.legacy.animatium.util.duck.SwingStateExt;
+//?}
 
+//? if >=26.3 {
 @Mixin(LivingEntity.SwingState.class)
 public abstract class MixinLivingEntity_SwingState_FakeIt implements SwingStateExt {
     @Shadow
     protected abstract void start(final InteractionHand hand, final SwingAnimation animation, final int durationTicks);
+//?}
 
+    //? if >=26.3 {
     @Shadow
     private LivingEntity.@Nullable SwingDescription currentSwing;
+    //?}
 
+    //? if >=26.3 {
     @Shadow
     private int ticks;
+    //?}
 
+//? if >=26.3 {
     @Override
     public void animatium$forceSwing(final @NotNull InteractionHand hand, final @NotNull SwingAnimation animation, final int duration) {
-        if (this.currentSwing == null || this.ticks > duration / 2 || this.ticks < 0) {
+        if (this.animatium$canStartSwing()) {
             this.start(hand, animation, duration);
         }
     }
+
+    @Override
+    public boolean animatium$canStartSwing() {
+        return this.currentSwing == null || this.ticks > this.currentSwing.durationTicks() / 2 || this.ticks <= 0;
+    }
 }
+//?}

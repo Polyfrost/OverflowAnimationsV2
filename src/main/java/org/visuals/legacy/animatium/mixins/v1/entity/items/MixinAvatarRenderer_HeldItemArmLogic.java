@@ -38,7 +38,11 @@ import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.player.AvatarRenderer;
 import net.minecraft.client.renderer.entity.state.AvatarRenderState;
 import net.minecraft.client.renderer.rendertype.RenderType;
+//? if <26.3 {
+/*import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+*///?} else {
 import net.minecraft.client.renderer.texture.UvMapping;
+//?}
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.ARGB;
 import net.minecraft.world.entity.Avatar;
@@ -80,8 +84,13 @@ public abstract class MixinAvatarRenderer_HeldItemArmLogic<AvatarLikeEntity exte
         }
     }
 
+    //? if <26.3 {
+    /*@WrapOperation(method = "renderHand", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/SubmitNodeCollector;submitModelPart(Lnet/minecraft/client/model/geom/ModelPart;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/rendertype/RenderType;IILnet/minecraft/client/renderer/texture/TextureAtlasSprite;)V"))
+    private void animatium$partialVisibleArmWhileInvisible$damageTintArm(final SubmitNodeCollector instance, final ModelPart modelPart, final PoseStack poseStack, final RenderType renderType, final int packedLight, final int packedOverlay, final TextureAtlasSprite textureAtlasSprite, final Operation<Void> original) {
+    *///?} else {
     @WrapOperation(method = "renderHand", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/SubmitNodeCollector;submitModelPart(Lnet/minecraft/client/model/geom/ModelPart;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/rendertype/RenderType;IILnet/minecraft/client/renderer/texture/UvMapping;)V"))
     private void animatium$partialVisibleArmWhileInvisible$damageTintArm(final SubmitNodeCollector instance, final ModelPart modelPart, final PoseStack poseStack, final RenderType renderType, final int packedLight, final int packedOverlay, final UvMapping uvMapping, final Operation<Void> original) {
+    //?}
         final AvatarRenderState avatarRenderState = animatium$renderState.get();
 
         int overlay = packedOverlay;
@@ -92,11 +101,19 @@ public abstract class MixinAvatarRenderer_HeldItemArmLogic<AvatarLikeEntity exte
 
             if (AnimatiumConfig.instance().extras.showArmWhileInvisible && avatarRenderState.isInvisible) {
                 final int color = ARGB.multiply(654311423, this.getModelTint(avatarRenderState));
+                //? if <26.3 {
+                /*instance.submitModelPart(modelPart, poseStack, renderType, packedLight, overlay, textureAtlasSprite, color, null);
+                *///?} else {
                 instance.submitModelPart(modelPart, poseStack, renderType, packedLight, overlay, uvMapping, color, avatarRenderState.outlineColor);
+                //?}
                 return;
             }
         }
 
+        //? if <26.3 {
+        /*original.call(instance, modelPart, poseStack, renderType, packedLight, overlay, textureAtlasSprite);
+        *///?} else {
         original.call(instance, modelPart, poseStack, renderType, packedLight, overlay, uvMapping);
+        //?}
     }
 }

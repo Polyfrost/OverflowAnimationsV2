@@ -25,6 +25,7 @@
 
 package org.visuals.legacy.animatium.mixins.v1.entity.particles.smooth;
 
+//? if >=26.1 {
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import net.minecraft.client.Minecraft;
@@ -35,14 +36,20 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.visuals.legacy.animatium.Animatium;
 import org.visuals.legacy.animatium.config.AnimatiumConfig;
+//?}
 
+//? if >=26.1 {
 import java.util.List;
+//?}
 
+//? if >=26.1 {
 @Mixin(ParticleResources.MutableSpriteSet.class)
 public abstract class MixinParticleResources$MutableSpriteSet_Interpolate {
     @Shadow
     private List<TextureAtlasSprite> sprites;
+//?}
 
+//? if >=26.1 {
     @WrapMethod(method = "get(II)Lnet/minecraft/client/renderer/texture/TextureAtlasSprite;")
     private TextureAtlasSprite animatium$interpolateSpriteIndex(final int age, final int lifetime, final Operation<TextureAtlasSprite> original) {
         if (Animatium.isEnabled() && AnimatiumConfig.instance().fixes.smoothParticles) {
@@ -54,3 +61,4 @@ public abstract class MixinParticleResources$MutableSpriteSet_Interpolate {
         }
     }
 }
+//?}

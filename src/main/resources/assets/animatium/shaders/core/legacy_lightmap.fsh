@@ -1,5 +1,7 @@
 #version 330
+//? if >=26.3 {
 #extension GL_ARB_separate_shader_objects : require
+//?}
 
 precision highp float;
 
@@ -12,8 +14,13 @@ layout(std140) uniform LightmapInfo {
     int UseBrightLightmap;
 };
 
+//? if <26.3 {
+//in vec2 texCoord;
+//out vec4 fragColor;
+//?} else {
 layout(location = 0) in vec2 texCoord;
 layout(location = 0) out vec4 fragColor;
+//?}
 
 float getBrightness(int index) {
     float value = 1.0 - float(index) / 15.0;

@@ -1,184 +1,199 @@
-@file:OptIn(StonecutterExperimentalAPI::class)
-
-import com.google.devtools.ksp.processing.parseBoolean
-import dev.kikugie.stonecutter.StonecutterExperimentalAPI
-import net.fabricmc.loom.api.LoomGradleExtensionAPI
-import net.fabricmc.loom.api.fabricapi.FabricApiExtension
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    alias(libs.plugins.kotlin.jvm)
-    alias(libs.plugins.loom) apply false
-    alias(libs.plugins.loom.remap) apply false
-    alias(libs.plugins.publishing)
-    alias(libs.plugins.blossom)
-    alias(libs.plugins.ksp)
-    alias(libs.plugins.fletchingtable.fabric)
+    id("dev.kikugie.loom-back-compat")
+    id("org.jetbrains.kotlin.jvm") version "2.4.10"
+    id("com.google.devtools.ksp") version "2.3.6"
+    id("dev.kikugie.fletching-table.fabric") version "0.1.0-alpha.22"
+    id("dev.deftu.gradle.bloom") version "0.2.0"
+    id("me.modmuss50.mod-publish-plugin") version "2.2.0"
 }
+
+val modid: String = sc.properties["mod.id"]
+val modname: String = sc.properties["mod.name"]
+val modversion: String = sc.properties["mod.version"]
+val development: Boolean = sc.properties["mod.development"]
+val mcversion: String = sc.properties.getOrNull<String>("deps.minecraft") ?: sc.current.version
+val versionrange: String = sc.properties["mod.mc_compat"]
+val loaderversion: String = sc.properties["deps.fabric_loader"]
+
+version = "$modversion+$mcversion-fabric" + (if (development) "_development" else "")
+group = sc.properties.get<String>("mod.group")
+base.archivesName = modid
+
+val requiredJava: JavaVersion = when {
+    sc.current.parsed >= "26.1" -> JavaVersion.VERSION_25
+    sc.current.parsed >= "1.20.5" -> JavaVersion.VERSION_21
+    sc.current.parsed >= "1.18" -> JavaVersion.VERSION_17
+    sc.current.parsed >= "1.17" -> JavaVersion.VERSION_16
+    else -> JavaVersion.VERSION_1_8
+}
+
+val compatibleVersions: List<String> = sc.properties.rawOrNull("mod", "mc_releases")
+    ?.asList().orEmpty().map { it.toString() }
 
 repositories {
-    maven("https://maven.parchmentmc.org") // Parchment
-    maven("https://maven.nucleoid.xyz/") // Placeholder API - required by Mod Menu
-    maven("https://pkgs.dev.azure.com/djtheredstoner/DevAuth/_packaging/public/maven/v1") // DevAuth
-    maven("https://maven.bawnorton.com/releases") // MixinSquared
-    maven("https://maven.terraformersmc.com/") // Mod Menu
-    maven("https://maven.isxander.dev/releases") // YACL
+    fun strictMaven(url: String, alias: String, vararg groups: String) = exclusiveContent {
+        forRepository { maven(url) { name = alias } }
+        filter { groups.forEach(::includeGroup) }
+    }
+
+    mavenCentral()
+    strictMaven("https://maven.fabricmc.net/", "FabricMC", "net.fabricmc", "net.fabricmc.fabric-api")
+    strictMaven("https://maven.terraformersmc.com/", "TerraformersMC", "com.terraformersmc")
+    maven("https://maven.isxander.dev/releases") { // YACL, some releases only on Maven Central
+        name = "isXander"
+        content { includeGroup("dev.isxander") }
+    }
+    strictMaven("https://maven.bawnorton.com/releases", "Bawnorton", "com.github.bawnorton.mixinsquared")
+    strictMaven("https://pkgs.dev.azure.com/djtheredstoner/DevAuth/_packaging/public/maven/v1", "DevAuth", "me.djtheredstoner")
+    maven("https://maven.nucleoid.xyz/") { name = "Nucleoid" } // Placeholder API - required by Mod Menu
 }
 
-class ModData {
-    val id = property("mod.id") as String
-    val name = property("mod.name") as String
-    val version = property("mod.version") as String
-    val group = property("mod.group") as String
-    val description = property("mod.description") as String
-    val source = property("mod.source") as String
-    val issues = property("mod.issues") as String
-    val license = property("mod.license") as String
-    val modrinth = property("mod.modrinth") as String
-    val curseforge = property("mod.curseforge") as String
-    val discord = property("mod.discord") as String
-    val obfuscated = parseBoolean(property("mod.obfuscated") as String)
-    val development = parseBoolean(property("mod.development") as String)
+dependencies {
+    minecraft("com.mojang:minecraft:$mcversion")
+    loomx.applyMojangMappings()
 
-    val minecraftVersion = property("mod.minecraft_version") as String
-    val minecraftVersionRange = property("mod.minecraft_version_range") as String
+    modImplementation("net.fabricmc:fabric-loader:$loaderversion")
+    modImplementation("net.fabricmc.fabric-api:fabric-api:${sc.properties.get<String>("deps.fabric_api")}")
+    modImplementation("com.terraformersmc:modmenu:${sc.properties.get<String>("deps.modmenu")}")
+    modImplementation("dev.isxander:yet-another-config-lib:${sc.properties.get<String>("deps.yacl")}")
+    include(modImplementation("net.fabricmc:fabric-language-kotlin:${sc.properties.get<String>("deps.fabric_language_kotlin")}")!!)
+
+    include(implementation("com.moulberry:mixinconstraints:${sc.properties.get<String>("deps.mixinconstraints")}")!!)
+    include(implementation(annotationProcessor("com.github.bawnorton.mixinsquared:mixinsquared-fabric:${sc.properties.get<String>("deps.mixinsquared")}")!!)!!)
+
+    modRuntimeOnly("me.djtheredstoner:DevAuth-fabric:${sc.properties.get<String>("deps.devauth")}")
 }
 
-class Dependencies {
-    val fabricLoaderVersion = property("deps.fabric_loader_version") as String?
-    val fabricApiVersion = property("deps.fabric_api_version") as String?
-    val languageKotlinVersion = property("deps.language_kotlin_version") as String?
-    val devAuthVersion = property("deps.devauth_version") as String?
-    val mixinConstraintsVersion = property("deps.mixinconstraints_version") as String?
-    val mixinSquaredVersion = property("deps.mixinsquared_version") as String?
-}
+loom {
+    fabricModJsonPath = rootProject.file("src/main/resources/fabric.mod.json")
+    accessWidenerPath = sc.process(rootProject.file("src/main/resources/$modid.accesswidener"), "build/processed.accesswidener")
 
-val mod = ModData()
-val deps = Dependencies()
-
-// Apply specific loom
-if (mod.obfuscated) {
-    apply(plugin = "net.fabricmc.fabric-loom-remap")
-} else {
-    apply(plugin = "net.fabricmc.fabric-loom")
-}
-
-class LoaderData {
-    val name = property("loader.platform") as String?
-}
-
-val loader = LoaderData()
-
-version = "${mod.version}+${mod.minecraftVersion}-${loader.name}" + (if (mod.development) "_development" else "")
-group = mod.group
-base { archivesName.set(mod.id) }
-
-extensions.configure<LoomGradleExtensionAPI> {
-    runConfigs.remove(runConfigs["server"]) // Removes server run configs
     runConfigs.all {
-        ideConfigGenerated(stonecutter.current.isActive)
-        runDir = "../../run"
+        preferGradleTask = true
+        generateRunConfig = true
+        runDirectory = rootProject.file("run")
+        jvmArguments.add("-Dmixin.debug.export=true")
+        jvmArguments.add("-Dmixin.hotSwap=true")
+        jvmArguments.add("-Ddevauth.enabled=true")
+        jvmArguments.add("-Ddevauth.account=main")
     }
 
-    accessWidenerPath = stonecutter.process(
-        rootProject.file("src/main/resources/${mod.id}.accesswidener"),
-        "build/processed.accesswidener"
-    )
-
-    runs {
-        afterEvaluate {
-            configureEach {
-                property("mixin.hotSwap", "true")
-                property("mixin.debug.export", "true") // Puts mixin outputs in /run/.mixin.out
-                property("devauth.enabled", "true")
-                property("devauth.account", "main")
-            }
-        }
-    }
+    runConfigs.remove(runConfigs["server"])
 }
 
 fletchingTable {
     mixins.create("main") {
-        mixin("default", "${mod.id}.mixins.json")
+        // Every @Mixin class compiled for this node is registered, so version-gated mixins only need a Stonecutter condition
+        mixin("default", "$modid.mixins.json") {
+            env("CLIENT")
+        }
     }
 
     lang.create("main") {
-        patterns.add("assets/${mod.id}/lang/**")
+        patterns.add("assets/$modid/lang/**")
     }
 }
 
-val loom: LoomGradleExtensionAPI by extensions
-val fabricApi: FabricApiExtension by extensions
-val minecraft by configurations.existing
-val include by configurations.existing
-val modImplementation: NamedDomainObjectProvider<Configuration> =
-    configurations.named(if (mod.obfuscated) "modImplementation" else "implementation")
-val modRuntimeOnly: NamedDomainObjectProvider<Configuration> =
-    configurations.named(if (mod.obfuscated) "modRuntimeOnly" else "runtimeOnly")
+java {
+    withSourcesJar()
+    targetCompatibility = requiredJava
+    sourceCompatibility = requiredJava
 
-dependencies {
-    minecraft("com.mojang:minecraft:${mod.minecraftVersion}")
+    toolchain {
+        vendor = JvmVendorSpec.ADOPTIUM
+        languageVersion = JavaLanguageVersion.of(requiredJava.majorVersion)
+    }
+}
 
-    if (mod.obfuscated) {
-        val mappings by configurations.existing
+tasks.withType<JavaCompile>().configureEach {
+    options.release = requiredJava.majorVersion.toInt()
+}
 
-        @Suppress("UnstableApiUsage")
-        mappings(loom.layered {
-            officialMojangMappings()
+tasks.withType<KotlinCompile>().configureEach {
+    compilerOptions.jvmTarget = JvmTarget.fromTarget(requiredJava.majorVersion)
+}
 
-            optionalProp("deps.parchment_version") {
-                parchment("org.parchmentmc.data:parchment-${mod.minecraftVersion}:$it@zip")
-            }
-        })
+val currentCommitHash: String by lazy {
+    providers.exec {
+        commandLine("git", "rev-parse", "--verify", "--short", "HEAD")
+        isIgnoreExitValue = true
+    }.standardOutput.asText.get().trim()
+}
+
+bloom {
+    replacement("@MODID@", modid)
+    replacement("@VERSION@", modversion)
+    replacement("@DEVELOPMENT@", development.toString())
+    replacement("@COMMIT@", currentCommitHash)
+}
+
+tasks {
+    processResources {
+        val props = mapOf(
+            "id" to modid,
+            "name" to modname,
+            "version" to modversion,
+            "description" to sc.properties.get<String>("mod.description"),
+            "source" to sc.properties.get<String>("mod.source"),
+            "issues" to sc.properties.get<String>("mod.issues"),
+            "license" to sc.properties.get<String>("mod.license"),
+            "modrinth" to sc.properties.get<String>("mod.modrinth"),
+            "curseforge" to sc.properties.get<String>("mod.curseforge"),
+            "discord" to sc.properties.get<String>("mod.discord"),
+            "fabric_loader_version" to loaderversion,
+            "minecraft_version_range" to versionrange
+        )
+
+        inputs.properties(props)
+
+        filesMatching("fabric.mod.json") { expand(props) }
     }
 
-    modRuntimeOnly("me.djtheredstoner:DevAuth-${loader.name}:${deps.devAuthVersion}")
-    include(implementation("com.moulberry:mixinconstraints:${deps.mixinConstraintsVersion}")!!)
-    include(implementation(annotationProcessor("com.github.bawnorton.mixinsquared:mixinsquared-${loader.name}:${deps.mixinSquaredVersion}")!!)!!)
+    jar {
+        inputs.property("archivesName", base.archivesName)
 
-    modImplementation("net.fabricmc:fabric-loader:${deps.fabricLoaderVersion}")!!
-    modImplementation("net.fabricmc.fabric-api:fabric-api:${deps.fabricApiVersion}")
-    optionalProp("deps.modmenu_version") { prop ->
-        modImplementation("com.terraformersmc:modmenu:$prop")
+        from(rootProject.file("LICENSE")) {
+            rename { "${it}_${inputs.properties["archivesName"]}" }
+        }
     }
 
-    include(implementation("net.fabricmc:fabric-language-kotlin:${deps.languageKotlinVersion}")!!)
-    optionalProp("deps.yacl_version") { prop ->
-        modImplementation("dev.isxander:yet-another-config-lib:$prop")
+    register<Copy>("buildAndCollect") {
+        group = "build"
+        description = "Builds mod jars and copies results to `build/libs/{mod version}/`"
+
+        inputs.property("version", modversion)
+        from(loomx.modJar.flatMap { it.archiveFile }, loomx.modSourcesJar.flatMap { it.archiveFile })
+        into(rootProject.layout.buildDirectory.file("libs/$modversion"))
     }
 }
 
 val modrinthId = findProperty("publish.modrinth")?.toString()?.takeIf { it.isNotBlank() }
 val curseforgeId = findProperty("publish.curseforge")?.toString()?.takeIf { it.isNotBlank() }
 
-// accessTokens should be placed in the user Gradle gradle.properties file
-// for example, on Windows this would be "C:\Users\{user}\.gradle\gradle.properties"
-// then add:
+// Tokens go in the user Gradle gradle.properties file (e.g. ~/.gradle/gradle.properties):
 // modrinth.token=
 // curseforge.token=
+// discord.webhook=
 publishMods {
-    file =
-        (if (mod.obfuscated) tasks.named<net.fabricmc.loom.task.RemapJarTask>("remapJar") else tasks.jar).flatMap { it.archiveFile }
+    file = loomx.modJar.flatMap { it.archiveFile }
 
-    val niceVersionRangeTitle = if (mod.minecraftVersionRange.contains(' ')) {
-        val parts = mod.minecraftVersionRange.trim().split(' ')
-        parts.first() + '-' + parts.last()
-    } else {
-        mod.minecraftVersionRange
-    }
-
-    displayName = "Release ${mod.version} for $niceVersionRangeTitle"
-    version = mod.version
-    changelog = project.rootProject.file("CHANGELOG.md").takeIf { it.exists() }?.readText() ?: "No changelog provided."
+    val releases = compatibleVersions.ifEmpty { listOf(mcversion) }
+    displayName = "Release $modversion for " + if (releases.size > 1) "${releases.first()}-${releases.last()}" else releases.first()
+    version = modversion
+    changelog = rootProject.file("CHANGELOG.md").takeIf { it.exists() }?.readText() ?: "No changelog provided."
     type = STABLE
 
-    modLoaders.add(loader.name ?: "fabric")
+    modLoaders.add("fabric")
 
     dryRun = modrinthId == null && curseforgeId == null
     if (modrinthId != null) {
         modrinth {
             projectId = modrinthId
             accessToken = findProperty("modrinth.token").toString()
-            minecraftVersions.addAll(mod.minecraftVersionRange.split(' '))
+            minecraftVersions.addAll(releases)
 
             requires("fabric-api")
             requires("yacl")
@@ -189,9 +204,9 @@ publishMods {
     if (curseforgeId != null) {
         curseforge {
             projectId = curseforgeId
-            projectSlug = mod.id
+            projectSlug = modid
             accessToken = findProperty("curseforge.token").toString()
-            minecraftVersions.addAll(mod.minecraftVersionRange.split(' '))
+            minecraftVersions.addAll(releases)
             client = true
 
             requires("fabric-api")
@@ -200,100 +215,9 @@ publishMods {
         }
     }
 
-    val discordWebhookUrl = findProperty("discord.webhook")?.toString()?.takeIf { it.isNotBlank() }
-    if (discordWebhookUrl != null) {
+    findProperty("discord.webhook")?.toString()?.takeIf { it.isNotBlank() }?.let { url ->
         discord {
-            webhookUrl = discordWebhookUrl
+            webhookUrl = url
         }
     }
 }
-
-java {
-    val requiredJava = when {
-        stonecutter.eval(stonecutter.current.version, ">=26.1") -> JavaVersion.VERSION_25
-        stonecutter.eval(stonecutter.current.version, ">=1.20.5") -> JavaVersion.VERSION_21
-        stonecutter.eval(stonecutter.current.version, ">=1.18") -> JavaVersion.VERSION_17
-        stonecutter.eval(stonecutter.current.version, ">=1.17") -> JavaVersion.VERSION_16
-        else -> JavaVersion.VERSION_1_8
-    }
-
-    sourceCompatibility = requiredJava
-    targetCompatibility = requiredJava
-    if (!mod.obfuscated) {
-        withSourcesJar()
-    }
-}
-
-tasks {
-    processResources {
-        val props = buildMap {
-            put("id", mod.id)
-            put("name", mod.name)
-            put("version", mod.version)
-            put("description", mod.description)
-            put("source", mod.source)
-            put("issues", mod.issues)
-            put("license", mod.license)
-            put("modrinth", mod.modrinth)
-            put("curseforge", mod.curseforge)
-            put("discord", mod.discord)
-            put("fabric_loader_version", deps.fabricLoaderVersion)
-
-            val minecraftVersionRange = if (mod.minecraftVersionRange.contains(' ')) {
-                val parts = mod.minecraftVersionRange.trim().split(' ')
-                ">=" + parts.first() + ' ' + "<=" + parts.last()
-            } else {
-                mod.minecraftVersionRange
-            }
-
-            put("minecraft_version_range", minecraftVersionRange)
-        }
-
-        props.forEach(inputs::property)
-        filesMatching("**/lang/en_us.json") { // Defaults description to English translation
-            expand(props)
-            filteringCharset = "UTF-8"
-        }
-
-        filesMatching("fabric.mod.json") { expand(props) }
-    }
-
-    register<Copy>("buildAndCollect") {
-        group = "build"
-
-        if (mod.obfuscated) {
-            val remapJar by existing(net.fabricmc.loom.task.RemapJarTask::class)
-            val remapSourcesJar by existing(net.fabricmc.loom.task.RemapSourcesJarTask::class)
-            from(remapJar, remapSourcesJar)
-        } else {
-            val sourcesJar by existing
-            from(jar, sourcesJar)
-        }
-
-        into(rootProject.layout.buildDirectory.file("libs/${mod.version}"))
-        dependsOn("build")
-    }
-}
-
-val currentCommitHash: String by lazy {
-    Runtime.getRuntime()
-        .exec(arrayOf("git", "rev-parse", "--verify", "--short", "HEAD"), null, rootDir)
-        .inputStream.bufferedReader().readText().trim()
-}
-
-blossom {
-    replaceToken("@MODID@", mod.id)
-    replaceToken("@VERSION@", mod.version)
-    replaceToken("@DEVELOPMENT@", mod.development)
-    replaceToken("@COMMIT@", currentCommitHash)
-}
-
-if (stonecutter.current.isActive) {
-    rootProject.tasks.register("buildActive") {
-        group = "project"
-        dependsOn(tasks.named("build"))
-    }
-}
-
-fun <T> optionalProp(property: String, block: (String) -> T?): T? =
-    findProperty(property)?.toString()?.takeUnless { it.isBlank() }?.let(block)

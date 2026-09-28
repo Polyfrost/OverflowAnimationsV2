@@ -26,10 +26,18 @@
 package org.visuals.legacy.animatium.handler.rendering
 
 import com.mojang.blaze3d.systems.RenderSystem
+//? if <26.3 {
+/*import com.mojang.blaze3d.textures.GpuTexture
+*///?} else {
 import com.mojang.renderpearl.api.textures.GpuTexture
+//?}
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.Font
+//? if 1.21.11 {
+/*import net.minecraft.client.gui.GuiGraphics
+*///?} else {
 import net.minecraft.client.gui.GuiGraphicsExtractor
+//?}
 import net.minecraft.client.renderer.texture.OverlayTexture
 import org.visuals.legacy.animatium.config.AnimatiumConfig
 import org.visuals.legacy.animatium.mixins.accessor.GameRendererAccessor
@@ -46,32 +54,52 @@ fun copyTextureToTexture(source: GpuTexture, destination: GpuTexture) =
         source.getWidth(0), source.getHeight(0)
     )
 
+//? if 1.21.11 {
+/*fun GuiGraphics.fillVerticalLine(
+*///?} else {
 fun GuiGraphicsExtractor.fillVerticalLine(
+//?}
     x: Int, y: Int,
     length: Int,
     color: Int
 ) = this.fill(x, y, x + 1, y + length, color)
 
+//? if 1.21.11 {
+/*fun GuiGraphics.fillVerticalGradientLine(
+*///?} else {
 fun GuiGraphicsExtractor.fillVerticalGradientLine(
+//?}
     x: Int, y: Int,
     length: Int,
     startColor: Int,
     endColor: Int
 ) = this.fillGradient(x, y, x + 1, y + length, startColor, endColor)
 
+//? if 1.21.11 {
+/*fun GuiGraphics.fillHorizontalLine(
+*///?} else {
 fun GuiGraphicsExtractor.fillHorizontalLine(
+//?}
     x: Int, y: Int,
     length: Int,
     color: Int
 ) = this.fill(x, y, x + length, y + 1, color)
 
+//? if 1.21.11 {
+/*fun GuiGraphics.fillRectangle(
+*///?} else {
 fun GuiGraphicsExtractor.fillRectangle(
+//?}
     x: Int, y: Int,
     width: Int, height: Int,
     color: Int
 ) = this.fill(x, y, x + width, y + height, color)
 
+//? if 1.21.11 {
+/*fun GuiGraphics.fillFrameGradient(
+*///?} else {
 fun GuiGraphicsExtractor.fillFrameGradient(
+//?}
     x: Int,
     y: Int,
     width: Int,
@@ -85,7 +113,11 @@ fun GuiGraphicsExtractor.fillFrameGradient(
     this.fillHorizontalLine(x, y - 1 + height - 1, width, endColor)
 }
 
+//? if 1.21.11 {
+/*fun GuiGraphics.drawScaledText(font: Font, text: String, x: Int, y: Int, scale: Float) {
+*///?} else {
 fun GuiGraphicsExtractor.drawScaledText(font: Font, text: String, x: Int, y: Int, scale: Float) {
+//?}
     val stack = this.pose()
     stack.pushMatrix()
     val originX = stack.m20
@@ -93,7 +125,11 @@ fun GuiGraphicsExtractor.drawScaledText(font: Font, text: String, x: Int, y: Int
     stack.setTranslation(0.0F, 0.0F)
     stack.scale(scale, scale)
     stack.setTranslation(originX, originY)
+    //? if 1.21.11 {
+    /*this.drawCenteredString(font, text, (x / scale).toInt(), (y / scale).toInt(), 0xFFFFFFFF.toInt())
+    *///?} else {
     this.centeredText(font, text, (x / scale).toInt(), (y / scale).toInt(), 0xFFFFFFFF.toInt())
+    //?}
     stack.popMatrix()
 }
 
@@ -110,15 +146,31 @@ fun setOverlayColor(color: Int) {
     val overlayTexture = Minecraft.getInstance().gameRenderer.overlayTexture()
     val dynamicTexture = (overlayTexture as OverlayTextureAccessor).`animatium$getDynamicTexture`()
     val pixels = dynamicTexture.pixels
+    //? if 1.21.11 {
+    /*if (pixels != null) {
+        for (y in 0..<16) {
+            for (x in 0..<16) {
+                if (y < 8) {
+                    pixels.setPixel(x, y, color)
+                }
+    *///?} else {
     for (y in 0..<16) {
         for (x in 0..<16) {
             if (y < 8) {
                 pixels.setPixel(x, y, color)
+    //?}
             }
         }
+    //? if >=26.1 {
     }
+    //?}
 
+    //? if 1.21.11 {
+        /*dynamicTexture.upload()
+    }
+    *///?} else {
     dynamicTexture.upload()
+    //?}
 }
 
 fun updateOverlayTint(style: DamageTintSetting = AnimatiumConfig.instance().other.damageTintStyle) {

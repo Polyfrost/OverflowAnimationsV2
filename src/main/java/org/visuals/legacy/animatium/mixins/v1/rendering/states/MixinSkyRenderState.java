@@ -25,7 +25,11 @@
 
 package org.visuals.legacy.animatium.mixins.v1.rendering.states;
 
+//? if 1.21.11 {
+/*import net.minecraft.client.renderer.state.SkyRenderState;
+*///?} else {
 import net.minecraft.client.renderer.state.level.SkyRenderState;
+//?}
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.visuals.legacy.animatium.util.states.SkyUtilityState;

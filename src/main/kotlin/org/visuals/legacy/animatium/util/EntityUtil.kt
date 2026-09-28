@@ -45,7 +45,11 @@ import org.visuals.legacy.animatium.handler.server_features.ServerFeatures
 import java.util.*
 
 fun getHandMultiplier(player: Player): Int {
+    //? if <26.3 {
+    /*val hand = MoreObjects.firstNonNull(player.swingingArm, InteractionHand.MAIN_HAND)
+    *///?} else {
     val hand = MoreObjects.firstNonNull(swingingArm(player), InteractionHand.MAIN_HAND)
+    //?}
     val direction = (if (Minecraft.getInstance().options.cameraType.isFirstPerson) 1 else -1)
     return direction * getHandMultiplier(player, hand)
 }
@@ -72,7 +76,11 @@ fun applySwingWhilstMining(level: ClientLevel?, player: Player, hitResult: HitRe
         if (hitResult != null && hitResult.type == HitResult.Type.BLOCK) {
             val blockHitResult = hitResult as BlockHitResult
             if (level != null && !level.getBlockState(blockHitResult.blockPos).isAir && !ServerFeatureManager.isPresent(ServerFeatures.MINING_ITEM_USAGE)) {
+                //? if <26.3 {
+                /*level.addBreakingBlockEffect(blockHitResult.blockPos, blockHitResult.direction)
+                *///?} else {
                 level.addBreakingBlockEffects(blockHitResult.blockPos, blockHitResult.direction, false)
+                //?}
             }
         } else if (!AnimatiumConfig.instance().extras.alwaysUsageSwing) {
             return

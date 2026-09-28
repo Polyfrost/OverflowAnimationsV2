@@ -27,17 +27,26 @@ package org.visuals.legacy.animatium.handler.rendering
 
 import com.mojang.blaze3d.systems.RenderSystem
 import com.mojang.blaze3d.vertex.VertexConsumer
+//? if >=26.3 {
 import com.mojang.renderpearl.api.commands.RenderPass
+//?}
 import net.minecraft.client.Minecraft
 import net.minecraft.client.multiplayer.ClientLevel
 import net.minecraft.util.ARGB
+//? if <26.2 {
+/*import org.joml.Matrix4f
+*///?}
 import org.joml.Vector4f
 import org.visuals.legacy.animatium.config.AnimatiumConfig
 import org.visuals.legacy.animatium.handler.compatibility.IrisPipeline
 import org.visuals.legacy.animatium.handler.rendering.pipeline.AnimatiumPipelines
 import org.visuals.legacy.animatium.renderer.DynamicTransforms
 import org.visuals.legacy.animatium.renderer.buffer.IndexedGeometry
+//? if <26.3 {
+/*import org.visuals.legacy.animatium.renderer.impl.DeferredRenderer
+*///?} else {
 import org.visuals.legacy.animatium.renderer.impl.WrappedRenderer
+//?}
 import org.visuals.legacy.animatium.renderer.vertex.VertexLayouts
 import org.visuals.legacy.animatium.util.profile
 
@@ -79,10 +88,32 @@ object LegacySkyRenderer {
         }
     }
 
+    //? if <26.3 {
+    /*@JvmField
+    val TOP_GEOMETRY = IndexedGeometry.compilePersistent(VertexLayouts.POSITIONED_QUAD, 676) { vertexConsumer ->
+        buildSkyHalf(
+            vertexConsumer,
+            16.0F,
+            false
+        )
+    }
+    *///?} else {
     lateinit var TOP_GEOMETRY: IndexedGeometry
+    //?}
 
+    //? if <26.3 {
+    /*@JvmField
+    val BOTTOM_GEOMETRY = IndexedGeometry.compilePersistent(VertexLayouts.POSITIONED_QUAD, 676) { vertexConsumer ->
+        buildSkyHalf(
+            vertexConsumer,
+            -16.0F,
+            true
+        )
+    *///?} else {
     lateinit var BOTTOM_GEOMETRY: IndexedGeometry
+    //?}
 
+    //? if >=26.3 {
     @JvmStatic
     fun initialize() {
         TOP_GEOMETRY = IndexedGeometry.compilePersistent(VertexLayouts.POSITIONED_QUAD, 676) { vertexConsumer ->
@@ -92,7 +123,9 @@ object LegacySkyRenderer {
                 false
             )
         }
+    //?}
 
+        //? if >=26.3 {
         BOTTOM_GEOMETRY = IndexedGeometry.compilePersistent(VertexLayouts.POSITIONED_QUAD, 676) { vertexConsumer ->
             buildSkyHalf(
                 vertexConsumer,
@@ -100,14 +133,28 @@ object LegacySkyRenderer {
                 true
             )
         }
+        //?}
     }
 
     @JvmStatic
+    //? if <26.3 {
+    /*fun renderBlueVoid(skyColor: Int, depth: Double) {
+    *///?} else {
     fun renderBlueVoid(pass: RenderPass, skyColor: Int, depth: Double) {
+    //?}
         profile("blue_void") {
+            //? if <26.3 {
+            /*DeferredRenderer.of("Lower Sky Disc").use { renderer ->
+            *///?}
+            //? if <26.2 {
+                /*val matrix = Matrix4f(RenderSystem.getModelViewMatrix()).translate(
+            *///?} elif >=26.3 {
             WrappedRenderer.of(pass).use { renderer ->
                 pass.pushDebugGroup({ "Lower Sky Disc" })
+            //?}
+                //? if >=26.2 {
                 val matrix = RenderSystem.getModelViewMatrixCopy().translate(
+                //?}
                     0.0F,
                     if (AnimatiumConfig.instance().extras.dontMoveBlueVoid) 12.0F else -((depth - 16.0).toFloat()),
                     0.0F
@@ -134,7 +181,9 @@ object LegacySkyRenderer {
                 )
 
                 renderer.draw(BOTTOM_GEOMETRY)
+                //? if >=26.3 {
                 pass.popDebugGroup()
+                //?}
             }
         }
     }
@@ -145,13 +194,23 @@ object LegacySkyRenderer {
 
     // TODO/NOTE: Figure out why its rendering differently than in 18w07a (last snapshot to have it)
     @JvmStatic
+    //? if <26.3 {
+    /*fun renderVoidBox(depth: Double) {
+    *///?} else {
     fun renderVoidBox(pass: RenderPass, depth: Double) {
+    //?}
         profile("player_void_box") {
+            //? if <26.3 {
+            /*DeferredRenderer.of("Player Void Box").use { renderer ->
+            *///?} else {
             WrappedRenderer.of(pass).use { renderer ->
                 pass.pushDebugGroup({ "Player Void Box" })
+            //?}
                 renderer.setPipeline(AnimatiumPipelines.VOID_BOX)
                 renderer.draw(GET_VOID_BOX_GEOMETRY(-((depth + 65.0).toFloat())))
+                //? if >=26.3 {
                 pass.popDebugGroup()
+                //?}
             }
         }
     }

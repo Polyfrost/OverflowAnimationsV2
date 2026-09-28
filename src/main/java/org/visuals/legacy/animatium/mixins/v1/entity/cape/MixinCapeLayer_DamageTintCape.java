@@ -39,7 +39,7 @@ import org.visuals.legacy.animatium.config.AnimatiumConfig;
 @Mixin(CapeLayer.class)
 public abstract class MixinCapeLayer_DamageTintCape {
     @ModifyExpressionValue(method = "submit(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;ILnet/minecraft/client/renderer/entity/state/AvatarRenderState;FF)V", at = @At(value = "FIELD", target = "Lnet/minecraft/client/renderer/texture/OverlayTexture;NO_OVERLAY:I", opcode = Opcodes.GETSTATIC))
-    private int animatium$damageTintItems(final int original, @Local(argsOnly = true, name = "state") final AvatarRenderState state) {
+    private int animatium$damageTintItems(final int original, @Local(argsOnly = true, ordinal = 0) final AvatarRenderState state) {
         if (Animatium.isEnabled() && AnimatiumConfig.instance().extras.damageTintCape) {
             return LivingEntityRenderer.getOverlayCoords(state, 0.0F);
         } else {

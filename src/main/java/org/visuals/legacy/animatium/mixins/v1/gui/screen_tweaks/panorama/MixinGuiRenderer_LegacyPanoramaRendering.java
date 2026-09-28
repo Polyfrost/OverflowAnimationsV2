@@ -25,6 +25,7 @@
 
 package org.visuals.legacy.animatium.mixins.v1.gui.screen_tweaks.panorama;
 
+//? if >=26.1 {
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.minecraft.client.gui.render.GuiRenderer;
@@ -36,7 +37,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.visuals.legacy.animatium.Animatium;
 import org.visuals.legacy.animatium.config.AnimatiumConfig;
 import org.visuals.legacy.animatium.handler.rendering.panorama.LegacyPanoramaRenderer;
+//?}
 
+//? if >=26.1 {
 @Mixin(GuiRenderer.class)
 public abstract class MixinGuiRenderer_LegacyPanoramaRendering {
     @WrapOperation(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/CubeMap;render(FF)V", ordinal = 0))
@@ -47,9 +50,12 @@ public abstract class MixinGuiRenderer_LegacyPanoramaRendering {
             original.call(instance, rotXInDegrees, rotYInDegrees);
         }
     }
+//?}
 
+//? if >=26.1 {
     @Inject(method = "close", at = @At("TAIL"))
     private void animatium$closePanorama(final CallbackInfo ci) {
         LegacyPanoramaRenderer.INSTANCE.close();
     }
 }
+//?}

@@ -25,9 +25,18 @@
 
 package org.visuals.legacy.animatium.mixins.v1.gui.screen_tweaks.panorama;
 
+//? if >=26.1 {
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+//?}
+//? if >=26.1 <26.3 {
+/*import com.mojang.blaze3d.pipeline.RenderPipeline;
+*///?} elif 26.3 {
+/*import com.mojang.renderpearl.api.pipeline.RenderPipeline;
+*///?} elif 26.4 {
 import com.mojang.blaze3d.pipeline.RenderPipeline;
+//?}
+//? if >=26.1 {
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.renderer.Panorama;
@@ -37,10 +46,20 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.visuals.legacy.animatium.Animatium;
 import org.visuals.legacy.animatium.config.AnimatiumConfig;
 import org.visuals.legacy.animatium.handler.rendering.panorama.LegacyPanoramaRenderer;
+//?}
 
+//? if >=26.1 {
 @Mixin(Panorama.class)
 public abstract class MixinPanorama_LegacyPanorama {
+//?}
+    //? if >=26.1 <26.3 {
+    /*@WrapOperation(method = "extractRenderState", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphicsExtractor;blit(Lcom/mojang/blaze3d/pipeline/RenderPipeline;Lnet/minecraft/resources/Identifier;IIFFIIIIII)V"))
+    *///?} elif 26.3 {
+    /*@WrapOperation(method = "extractRenderState", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphicsExtractor;blit(Lcom/mojang/renderpearl/api/pipeline/RenderPipeline;Lnet/minecraft/resources/Identifier;IIFFIIIIII)V"))
+    *///?} elif 26.4 {
     @WrapOperation(method = "extractRenderState", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphicsExtractor;blit(Lcom/mojang/blaze3d/pipeline/RenderPipeline;Lnet/minecraft/resources/Identifier;IIFFIIIIII)V"))
+    //?}
+//? if >=26.1 {
     private void animatium$legacyPanorama(final GuiGraphicsExtractor instance, final RenderPipeline renderPipeline, final Identifier texture, final int x, final int y, final float u, final float v, final int width, final int height, final int srcWidth, final int srcHeight, final int textureWidth, final int textureHeight, final Operation<Void> original) {
         if (Animatium.isEnabled() && AnimatiumConfig.instance().screen.panoramaRendering) {
             LegacyPanoramaRenderer.INSTANCE.extractRenderState(instance, width, height, Minecraft.getInstance().getDeltaTracker().getRealtimeDeltaTicks());
@@ -51,3 +70,4 @@ public abstract class MixinPanorama_LegacyPanorama {
         }
     }
 }
+//?}

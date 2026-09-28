@@ -25,9 +25,16 @@
 
 package org.visuals.legacy.animatium.mixins.v1.rendering.lighting;
 
+//? if >=26.1 {
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+//?}
+//? if >=26.1 <26.3 {
+/*import com.mojang.blaze3d.textures.GpuTextureView;
+*///?} elif >=26.3 {
 import com.mojang.renderpearl.api.textures.GpuTextureView;
+//?}
+//? if >=26.1 {
 import net.minecraft.client.renderer.Lightmap;
 import net.minecraft.client.renderer.state.LightmapRenderState;
 import org.spongepowered.asm.mixin.Final;
@@ -41,16 +48,22 @@ import org.visuals.legacy.animatium.Animatium;
 import org.visuals.legacy.animatium.config.AnimatiumConfig;
 import org.visuals.legacy.animatium.handler.rendering.lighting.lightmap.LegacyLightmapRenderer;
 import org.visuals.legacy.animatium.handler.rendering.lighting.lightmap.LightmapStateExtension;
+//?}
 
+//? if >=26.1 {
 @Mixin(Lightmap.class)
 public abstract class MixinLightmap_LegacyLightmap {
     @Shadow
     @Final
     private GpuTextureView textureView;
+//?}
 
+    //? if >=26.1 {
     @Unique
     private final LegacyLightmapRenderer animatium$renderer = new LegacyLightmapRenderer();
+    //?}
 
+    //? if >=26.1 {
     @WrapMethod(method = "render")
     private void animatium$legacyLightmap(final LightmapRenderState renderState, final Operation<Void> original) {
         if (Animatium.isEnabled() && AnimatiumConfig.instance().other.legacyLightmap) {
@@ -59,9 +72,12 @@ public abstract class MixinLightmap_LegacyLightmap {
             original.call(renderState);
         }
     }
+    //?}
 
+//? if >=26.1 {
     @Inject(method = "close", at = @At("TAIL"))
     private void animatium$legacyLightmap$close(final CallbackInfo ci) {
         this.animatium$renderer.close();
     }
 }
+//?}

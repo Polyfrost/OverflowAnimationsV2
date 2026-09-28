@@ -25,14 +25,34 @@
 
 package org.visuals.legacy.animatium.handler.rendering.clouds
 
+//? if 26.2 {
+/*import com.mojang.blaze3d.GpuFormat
+*///?}
+//? if <26.3 {
+/*import com.mojang.blaze3d.pipeline.BlendFunction
+*///?}
+//? if >=26.1 <26.3 {
+/*import com.mojang.blaze3d.pipeline.ColorTargetState
+*///?}
+//? if <26.3 {
+/*import com.mojang.blaze3d.pipeline.RenderPipeline
+*///?} elif 26.4 {
 import com.mojang.blaze3d.pipeline.RenderPipeline
+//?}
+//? if >=26.3 {
 import com.mojang.renderpearl.api.GpuFormat
 import com.mojang.renderpearl.api.pipeline.BlendFunction
 import com.mojang.renderpearl.api.pipeline.ColorTargetState
+//?}
+//? if 26.3 {
+/*import com.mojang.renderpearl.api.pipeline.RenderPipeline
+*///?}
 import net.minecraft.client.CloudStatus
 import net.minecraft.client.renderer.RenderPipelines
 import org.visuals.legacy.animatium.Animatium.location
+//? if >=26.1 {
 import java.util.*
+//?}
 
 data class CloudPipelineSet(
     val defaultPipeline: RenderPipeline,
@@ -50,13 +70,22 @@ data class CloudPipelineSet(
             val depthOnlyPipeline = RenderPipelines.register(
                 RenderPipeline.builder(snippet)
                     .withLocation(location("pipeline/${name}_depth_only"))
+                    //? if 1.21.11 {
+                    /*.withBlend(BlendFunction.TRANSLUCENT)
+                    .withColorWrite(false)
+                    *///?} else {
                     .withColorTargetState(
                         ColorTargetState(
                             Optional.of(BlendFunction.TRANSLUCENT),
+                    //?}
+                            //? if >=26.2 {
                             GpuFormat.RGBA8_UNORM,
+                            //?}
+                    //? if >=26.1 {
                             ColorTargetState.WRITE_NONE
                         )
                     )
+                    //?}
                     .build()
             )
 

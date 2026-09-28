@@ -1,9 +1,16 @@
 #version 330
+//? if >=26.3 {
 #extension GL_ARB_separate_shader_objects : require
+//?}
 
 uniform sampler2D Sampler0;
+//? if <26.3 {
+//in vec2 texCoord;
+//out vec4 fragColor;
+//?} else {
 layout(location = 0) in vec2 texCoord;
 layout(location = 0) out vec4 fragColor;
+//?}
 
 void main() {
     vec4 color = texture(Sampler0, texCoord);

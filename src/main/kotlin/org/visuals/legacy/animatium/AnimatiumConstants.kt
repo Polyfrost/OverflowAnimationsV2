@@ -26,7 +26,11 @@
 package org.visuals.legacy.animatium
 
 import net.fabricmc.fabric.api.client.model.loading.v1.ExtraModelKey
+//? if 1.21.11 {
+/*import net.minecraft.client.renderer.block.model.BlockStateModel
+*///?} else {
 import net.minecraft.client.renderer.block.dispatch.BlockStateModel
+//?}
 import org.visuals.legacy.animatium.handler.networking.payloads.InfoPayload
 import org.visuals.legacy.animatium.util.version.Version
 import java.lang.Boolean.parseBoolean

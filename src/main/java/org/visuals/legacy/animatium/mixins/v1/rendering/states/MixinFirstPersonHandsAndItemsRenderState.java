@@ -25,25 +25,33 @@
 
 package org.visuals.legacy.animatium.mixins.v1.rendering.states;
 
+//? if >=26.3 {
 import net.minecraft.client.renderer.state.level.FirstPersonHandsAndItemsRenderState;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.visuals.legacy.animatium.util.duck.FirstPersonHandsAndItemsRenderStateExt;
+//?}
 
+//? if >=26.3 {
 @Mixin(FirstPersonHandsAndItemsRenderState.class)
 public abstract class MixinFirstPersonHandsAndItemsRenderState implements FirstPersonHandsAndItemsRenderStateExt {
     @Unique
     private ItemStack animatium$mainHandItem = ItemStack.EMPTY;
+//?}
 
+    //? if >=26.3 {
     @Override
     public @NotNull ItemStack animatium$getMainHandItem() {
         return this.animatium$mainHandItem;
     }
+    //?}
 
+//? if >=26.3 {
     @Override
     public void animatium$setMainHandItem(final @NotNull ItemStack stack) {
         this.animatium$mainHandItem = stack;
     }
 }
+//?}

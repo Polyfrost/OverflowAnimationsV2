@@ -25,13 +25,16 @@
 
 package org.visuals.legacy.animatium.mixins.v1.rendering;
 
+//? if >=26.3 {
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import net.minecraft.client.renderer.extract.LevelExtractor;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.visuals.legacy.animatium.Animatium;
 import org.visuals.legacy.animatium.config.AnimatiumConfig;
+//?}
 
+//? if >=26.3 {
 @Mixin(LevelExtractor.class)
 public abstract class MixinLevelExtractor_WaterTextureOverlay {
     @ModifyExpressionValue(method = "extractPlayerState", at = @At(value = "CONSTANT", args = "floatValue=0.1"))
@@ -43,3 +46,4 @@ public abstract class MixinLevelExtractor_WaterTextureOverlay {
         }
     }
 }
+//?}

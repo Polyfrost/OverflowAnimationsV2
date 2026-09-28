@@ -40,6 +40,9 @@ import net.minecraft.client.renderer.entity.layers.CustomHeadLayer;
 import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
 import net.minecraft.client.renderer.feature.ModelFeatureRenderer;
 import net.minecraft.client.renderer.rendertype.RenderType;
+//? if 1.21.11 {
+/*import net.minecraft.core.Direction;
+*///?}
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -49,19 +52,50 @@ import org.visuals.legacy.animatium.config.AnimatiumConfig;
 @IfModAbsent("ichor")
 @Mixin(CustomHeadLayer.class)
 public abstract class MixinCustomHeadLayer_DamageTintArmor<S extends LivingEntityRenderState, M extends EntityModel<S> & HeadedModel> {
+    //? if 1.21.11 {
+    /*@WrapOperation(method = "submit(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;ILnet/minecraft/client/renderer/entity/state/LivingEntityRenderState;FF)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/blockentity/SkullBlockRenderer;submitSkull(Lnet/minecraft/core/Direction;FFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;ILnet/minecraft/client/model/object/skull/SkullModelBase;Lnet/minecraft/client/renderer/rendertype/RenderType;ILnet/minecraft/client/renderer/feature/ModelFeatureRenderer$CrumblingOverlay;)V"))
+    private void animatium$damageTintArmor$skullOverride(final Direction direction, final float rotation, final float animationValue, final PoseStack poseStack, final SubmitNodeCollector submitNodeCollector, final int lightCoords, final SkullModelBase model, final RenderType renderType, final int outlineColor, final ModelFeatureRenderer.CrumblingOverlay breakProgress, final Operation<Void> original, @Local(argsOnly = true, ordinal = 0) final S state) {
+    *///?} else {
     @WrapOperation(method = "submit(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;ILnet/minecraft/client/renderer/entity/state/LivingEntityRenderState;FF)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/blockentity/SkullBlockRenderer;submitSkull(FLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;ILnet/minecraft/client/model/object/skull/SkullModelBase;Lnet/minecraft/client/renderer/rendertype/RenderType;ILnet/minecraft/client/renderer/feature/ModelFeatureRenderer$CrumblingOverlay;)V"))
     private void animatium$damageTintArmor$skullOverride(final float animationValue, final PoseStack poseStack, final SubmitNodeCollector submitNodeCollector, final int lightCoords, final SkullModelBase model, final RenderType renderType, final int outlineColor, final ModelFeatureRenderer.CrumblingOverlay breakProgress, final Operation<Void> original, @Local(argsOnly = true, name = "state") final S state) {
+    //?}
         if (Animatium.isEnabled() && AnimatiumConfig.instance().other.damageTintArmor) {
+            //? if 1.21.11 {
+            /*poseStack.pushPose();
+            if (direction == null) {
+                poseStack.translate(0.5F, 0.0F, 0.5F);
+            } else {
+                poseStack.translate(0.5F - (float) direction.getStepX() * 0.25F, 0.25F, 0.5F - (float) direction.getStepZ() * 0.25F);
+            }
+            *///?}
+
+            //? if 1.21.11 {
+            /*poseStack.scale(-1.0F, -1.0F, 1.0F);
+            *///?}
             final SkullModelBase.State modelState = new SkullModelBase.State();
             modelState.animationPos = animationValue;
-            submitNodeCollector.submitModel(model, modelState, poseStack, renderType, lightCoords, LivingEntityRenderer.getOverlayCoords(state, 0.0F), -1, null, state.outlineColor);
+            //? if 1.21.11 {
+            /*modelState.yRot = rotation;
+            *///?}
+            //? if <26.3 {
+            /*submitNodeCollector.submitModel(model, modelState, poseStack, renderType, lightCoords, LivingEntityRenderer.getOverlayCoords(state, 0.0F), outlineColor, breakProgress);
+            *///?}
+            //? if 1.21.11 {
+            /*poseStack.popPose();
+            *///?} elif >=26.3 {
+            submitNodeCollector.submitModel(model, modelState, poseStack, renderType, lightCoords, LivingEntityRenderer.getOverlayCoords(state, 0.0F), -1, null, outlineColor);
+            //?}
         } else {
+            //? if 1.21.11 {
+            /*original.call(direction, rotation, animationValue, poseStack, submitNodeCollector, lightCoords, model, renderType, outlineColor, breakProgress);
+            *///?} else {
             original.call(animationValue, poseStack, submitNodeCollector, lightCoords, model, renderType, outlineColor, breakProgress);
+            //?}
         }
     }
 
     @ModifyExpressionValue(method = "submit(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;ILnet/minecraft/client/renderer/entity/state/LivingEntityRenderState;FF)V", at = @At(value = "FIELD", target = "Lnet/minecraft/client/renderer/texture/OverlayTexture;NO_OVERLAY:I", opcode = Opcodes.GETSTATIC))
-    private int animatium$damageTintArmor(final int original, @Local(argsOnly = true, name = "state") final S state) {
+    private int animatium$damageTintArmor(final int original, @Local(argsOnly = true, ordinal = 0) final S state) {
         if (Animatium.isEnabled() && AnimatiumConfig.instance().other.damageTintArmor) {
             return LivingEntityRenderer.getOverlayCoords(state, 0.0F);
         } else {

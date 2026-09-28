@@ -25,20 +25,38 @@
 
 package org.visuals.legacy.animatium.handler.rendering.panorama
 
+//? if 26.2 {
+/*import com.mojang.blaze3d.GpuFormat
+*///?}
 import com.mojang.blaze3d.pipeline.MainTarget
 import com.mojang.blaze3d.systems.RenderSystem
+//? if <26.3 {
+/*import com.mojang.blaze3d.textures.FilterMode
+import com.mojang.blaze3d.textures.GpuTexture
+import com.mojang.blaze3d.textures.GpuTextureView
+*///?}
+//? if <26.2 {
+/*import com.mojang.blaze3d.textures.TextureFormat
+*///?} elif >=26.3 {
 import com.mojang.renderpearl.api.GpuFormat
 import com.mojang.renderpearl.api.textures.FilterMode
 import com.mojang.renderpearl.api.textures.GpuTexture
 import com.mojang.renderpearl.api.textures.GpuTextureView
+//?}
 import net.minecraft.client.Minecraft
+//? if 1.21.11 {
+/*import net.minecraft.client.gui.GuiGraphics
+*///?} else {
 import net.minecraft.client.gui.GuiGraphicsExtractor
+//?}
 import net.minecraft.resources.Identifier
 import net.minecraft.util.ARGB
 import net.minecraft.util.Mth
 import org.joml.Matrix3x2f
 import org.joml.Matrix4f
+//? if >=26.2 {
 import org.joml.Vector4f
+//?}
 import org.visuals.legacy.animatium.handler.rendering.copyTextureToTexture
 import org.visuals.legacy.animatium.handler.rendering.pipeline.AnimatiumPipelines
 import org.visuals.legacy.animatium.renderer.DynamicTransforms
@@ -56,7 +74,11 @@ class LegacyPanoramaRenderer : AutoCloseable {
     companion object {
         private const val SAMPLES = 64
         private val VIEWPORT = RenderDescriptor.Area(256, 256)
+        //? if <26.2 {
+        /*private val CLEAR_COLOR = ARGB.colorFromFloat(1.0F, 0.0F, 0.0F, 0.0F)
+        *///?} else {
         private val CLEAR_COLOR = Vector4f(0.0F, 0.0F, 0.0F, 1.0F)
+        //?}
         private val CUBE_MAP_LOCATION = Identifier.withDefaultNamespace("textures/gui/title/background/panorama")
         private val CUBE_MAP_PROJECTION = Matrix4f().setPerspective(toRadians(120.0F), 1.0F, 0.05F, 10.0F)
 
@@ -94,7 +116,11 @@ class LegacyPanoramaRenderer : AutoCloseable {
         this.backgroundTexture = device.createTexture(
             { "Legacy Panorama Temp Texture" },
             GpuTexture.USAGE_TEXTURE_BINDING or GpuTexture.USAGE_RENDER_ATTACHMENT or GpuTexture.USAGE_COPY_SRC or GpuTexture.USAGE_COPY_DST,
+            //? if <26.2 {
+            /*TextureFormat.RGBA8,
+            *///?} else {
             GpuFormat.RGBA8_UNORM,
+            //?}
             this.panoramaTarget.width,
             this.panoramaTarget.height,
             1,
@@ -121,14 +147,27 @@ class LegacyPanoramaRenderer : AutoCloseable {
         }
     }
 
+    //? if 1.21.11 {
+    /*fun extractRenderState(graphics: GuiGraphics, width: Int, height: Int, tickDelta: Float) {
+        val panoramaSpeed = Minecraft.getInstance().options.panoramaSpeed().get()
+    *///?} else {
     fun extractRenderState(graphics: GuiGraphicsExtractor, width: Int, height: Int, tickDelta: Float) {
+    //?}
+        //? if 26.1 {
+        /*val panoramaSpeed = Minecraft.getInstance().gameRenderer.gameRenderState.optionsRenderState.panoramaSpeed
+        *///?} elif >=26.2 {
         val panoramaSpeed = Minecraft.getInstance().gameRenderer.gameRenderState().optionsRenderState.panoramaSpeed
+        //?}
 
         val lastSpin = this.state?.spin ?: 0.0F
         val newSpin = (lastSpin + (tickDelta * panoramaSpeed)).toFloat()
 
         this.state = LegacyPanoramaRenderState(graphics.pose(), width, height, newSpin)
+        //? if 1.21.11 {
+        /*graphics.guiRenderState.submitGuiElement(
+        *///?} else {
         graphics.guiRenderState.addGuiElement(
+        //?}
             LegacyPanoramaBlitTexture(graphics.pose(), this.backgroundTextureView, width, height)
         )
     }

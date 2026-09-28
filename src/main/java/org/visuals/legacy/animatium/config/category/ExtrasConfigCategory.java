@@ -124,7 +124,11 @@ public final class ExtrasConfigCategory extends Category {
                 .booleanEntry("disableFirstPersonParticles")
                 .booleanEntry("dontClearChat")
                 .booleanEntry("dontCloseChat")
+                //? if <26.2 {
+                /*.booleanEntry("oldWaterColorEffects", (option, event) -> minecraft.levelRenderer.allChanged())
+                *///?} else {
                 .booleanEntry("oldWaterColorEffects", (option, event) -> minecraft.levelExtractor.allChanged())
+                //?}
                 .booleanEntry("colorBoost")
                 .booleanEntry("alwaysBlockingHeadCap")
                 .booleanEntry("hideRecipeBook")

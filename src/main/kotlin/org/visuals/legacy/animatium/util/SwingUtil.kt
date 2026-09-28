@@ -26,24 +26,60 @@
 package org.visuals.legacy.animatium.util
 
 import net.minecraft.client.player.LocalPlayer
+//? if >=26.3 {
 import net.minecraft.client.renderer.entity.state.HumanoidRenderState
+//?}
+//? if <26.3 {
+/*import net.minecraft.network.protocol.game.ClientboundAnimatePacket
+import net.minecraft.network.protocol.game.ServerboundSwingPacket
+*///?} else {
 import net.minecraft.network.protocol.game.ClientboundSwingAnimationPacket
+//?}
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.effect.MobEffectUtil
 import net.minecraft.world.effect.MobEffects
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.player.Player
+//? if >=26.3 {
 import net.minecraft.world.item.component.SwingAnimation
+//?}
 import org.visuals.legacy.animatium.Animatium
 import org.visuals.legacy.animatium.config.AnimatiumConfig
 import org.visuals.legacy.animatium.mixins.accessor.LivingEntityAccessor
+//? if >=26.3 {
 import org.visuals.legacy.animatium.mixins.accessor.LivingEntity_SwingStateAccessor
 import org.visuals.legacy.animatium.util.duck.SwingStateExt
+//?}
 import java.util.*
 import kotlin.math.exp
 import kotlin.math.max
 
+//? if <26.3 {
+/*// Fake Swinging, Doesn't Send A Packet
+fun Player.fakeHandSwing(hand: InteractionHand) {
+    if (this.isNotSwinging()) {
+        this.swingTime = -1
+        this.swinging = true
+        this.swingingArm = hand
+    }
+}
+
+fun Player.isNotSwinging() =
+    !this.swinging || this.swingTime >= (this as LivingEntityAccessor).`animatium$getSwingDuration`() / 2 || this.swingTime < 0
+
+// Sends necessary swing packets, without playing the player hand swing animation
+fun LocalPlayer.sendSwingPacket(hand: InteractionHand) {
+    val level = this.level()
+    if (this.isNotSwinging() && level is ServerLevel) {
+        val swingHand =
+            if (hand == InteractionHand.MAIN_HAND) ClientboundAnimatePacket.SWING_MAIN_HAND else ClientboundAnimatePacket.SWING_OFF_HAND
+        level.chunkSource.sendToTrackingPlayers(this, ClientboundAnimatePacket(this, swingHand))
+    }
+
+    this.connection.send(ServerboundSwingPacket(hand))
+}
+*///?} else {
 fun attackArm(state: HumanoidRenderState) = state.useItemHand.asArm(state.mainArm)
 
 fun swingState(livingEntity: LivingEntity) = (livingEntity as LivingEntityAccessor).`animatium$getSwingState`()
@@ -64,7 +100,7 @@ fun Player.fakeHandSwing(hand: InteractionHand) {
 
 // Sends necessary swing packets, without playing the player hand swing animation
 fun LocalPlayer.sendSwingPacket(hand: InteractionHand, animation: SwingAnimation): Boolean {
-    return if (!this.isSwinging) {
+    return if ((swingState(this) as SwingStateExt).`animatium$canStartSwing`()) {
         val level = this.level()
         if (level is ServerLevel) {
             level.chunkSource.sendToTrackingPlayers(this, ClientboundSwingAnimationPacket(this, hand, animation))
@@ -75,14 +111,27 @@ fun LocalPlayer.sendSwingPacket(hand: InteractionHand, animation: SwingAnimation
         false
     }
 }
+//?}
 
 /**
  * Code sourced from Animatium Legacy & Modified for Modern Use
  */
+//? if <26.3 {
+/*fun LivingEntity.getItemSwingSpeed(fallback: Int): Int {
+*///?} else {
 fun LivingEntity.getItemSwingSpeed(animation: SwingAnimation, fallback: Int): Int {
+//?}
     val extras = AnimatiumConfig.instance().extras
     if (Animatium.isEnabled() && extras.customSwingSpeed) {
+        //? if <26.3 {
+        /*val swingingHand = if (this.swingingArm != null) this.swingingArm!! else InteractionHand.MAIN_HAND
+        val stack = this.getItemInHand(swingingHand)
+        val swingDuration = stack.swingAnimation.duration()
+        *///?}
+
+        //? if >=26.3 {
         val swingDuration = animation.duration()
+        //?}
         val itemSwingSpeed = extras.itemSwingSpeed
         val hasteSwingSpeed = extras.hasteSwingSpeed
         val miningFatigueSwingSpeed = extras.miningFatigueSwingSpeed

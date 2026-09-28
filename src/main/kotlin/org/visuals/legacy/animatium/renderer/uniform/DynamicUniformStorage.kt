@@ -25,9 +25,14 @@
 
 package org.visuals.legacy.animatium.renderer.uniform
 
+//? if <26.3 {
+/*import com.mojang.blaze3d.buffers.GpuBuffer
+*///?}
 import com.mojang.blaze3d.buffers.Std140Builder
 import com.mojang.blaze3d.systems.RenderSystem
+//? if >=26.3 {
 import com.mojang.renderpearl.api.buffers.GpuBuffer
+//?}
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap
 
 class DynamicUniformStorage : UniformStorage, AutoCloseable {
@@ -36,6 +41,10 @@ class DynamicUniformStorage : UniformStorage, AutoCloseable {
     private val keys: List<UniformKey<*>>
     private val values = Object2ObjectOpenHashMap<UniformKey<*>, Any?>()
     private val size: Int
+
+    //? if <26.2 {
+    /*private var buffer: GpuBuffer
+    *///?}
 
     var isClosed = false
         private set
@@ -47,6 +56,14 @@ class DynamicUniformStorage : UniformStorage, AutoCloseable {
         for (key in this.keys) {
             this.values[key] = defaults[key]
         }
+
+        //? if <26.2 {
+        /*this.buffer = RenderSystem.getDevice().createBuffer(
+            { "$name Uniform Buffer" },
+            GpuBuffer.USAGE_UNIFORM or GpuBuffer.USAGE_MAP_WRITE,
+            this.size.toLong()
+        )
+        *///?}
     }
 
     companion object {
@@ -72,6 +89,10 @@ class DynamicUniformStorage : UniformStorage, AutoCloseable {
     override fun upload() = if (this.isClosed) {
         throw RuntimeException("Cannot upload Uniform Storage (${this.name}) as it has been closed!")
     } else {
+        //? if <26.2 {
+        /*RenderSystem.getDevice().createCommandEncoder().mapBuffer(this.buffer, false, true).use { view ->
+            val builder = Std140Builder.intoBuffer(view.data())
+        *///?} else {
         val device = RenderSystem.getDevice()
         val transientMemory = device.createCommandEncoder().transientMemory()
         val alignment = device.deviceInfo.limits.minUniformOffsetAlignment
@@ -81,20 +102,30 @@ class DynamicUniformStorage : UniformStorage, AutoCloseable {
             GpuBuffer.USAGE_UNIFORM
         ).use { view ->
             val builder = Std140Builder.intoBuffer(view.data)
+        //?}
             for (key in this.keys) {
                 val value = this.values[key]
                     ?: throw RuntimeException("Failed to bind \"${key.name}\" in Uniform Storage (${this.name}) as value is not set!")
                 (key.serializer as UniformSerializer<Any>).put(builder, value)
             }
 
+            //? if >=26.2 {
             view.slice
+            //?}
         }
+
+        //? if <26.2 {
+        /*this.buffer.slice()
+        *///?}
     }
 
     override fun close() {
         if (!this.isClosed) {
             this.isClosed = true
             this.values.clear()
+            //? if <26.2 {
+            /*this.buffer.close()
+            *///?}
         }
     }
 

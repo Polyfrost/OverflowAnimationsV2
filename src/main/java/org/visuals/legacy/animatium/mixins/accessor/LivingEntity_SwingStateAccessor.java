@@ -25,13 +25,17 @@
 
 package org.visuals.legacy.animatium.mixins.accessor;
 
+//? if >=26.3 {
 import net.minecraft.world.entity.LivingEntity;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
+//?}
 
+//? if >=26.3 {
 @Mixin(LivingEntity.SwingState.class)
 public interface LivingEntity_SwingStateAccessor {
     @Accessor("currentSwing")
     @Nullable LivingEntity.SwingDescription animatium$getCurrentSwing();
 }
+//?}

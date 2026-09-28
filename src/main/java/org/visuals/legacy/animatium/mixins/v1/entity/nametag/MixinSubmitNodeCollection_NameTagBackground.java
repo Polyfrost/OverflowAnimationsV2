@@ -25,6 +25,7 @@
 
 package org.visuals.legacy.animatium.mixins.v1.entity.nametag;
 
+//? if >=26.2 {
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.minecraft.client.renderer.SubmitNodeCollection;
@@ -33,7 +34,9 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.visuals.legacy.animatium.Animatium;
 import org.visuals.legacy.animatium.config.AnimatiumConfig;
+//?}
 
+//? if >=26.2 {
 @Mixin(SubmitNodeCollection.class)
 public abstract class MixinSubmitNodeCollection_NameTagBackground {
     @WrapOperation(method = "submitNameTag", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/state/OptionsRenderState;getBackgroundOpacity(F)F"))
@@ -45,3 +48,4 @@ public abstract class MixinSubmitNodeCollection_NameTagBackground {
         }
     }
 }
+//?}

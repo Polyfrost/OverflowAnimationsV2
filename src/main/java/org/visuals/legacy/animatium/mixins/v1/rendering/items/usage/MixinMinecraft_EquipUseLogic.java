@@ -36,10 +36,16 @@ import net.minecraft.client.Options;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.multiplayer.MultiPlayerGameMode;
 import net.minecraft.client.player.LocalPlayer;
+//? if <26.3 {
+/*import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.renderer.ItemInHandRenderer;
+*///?}
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.ItemStack;
+//? if >=26.3 {
 import net.minecraft.world.item.component.SwingAnimation;
+//?}
 import net.minecraft.world.phys.HitResult;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
@@ -78,7 +84,17 @@ public abstract class MixinMinecraft_EquipUseLogic {
     @Nullable
     public MultiPlayerGameMode gameMode;
 
+    //? if <26.3 {
+    /*@Shadow
+    @Final
+    public GameRenderer gameRenderer;
+    *///?}
+
+    //? if 1.21.11 {
+    /*@ModifyVariable(method = "startUseItem", at = @At("STORE"), ordinal = 0)
+    *///?} else {
     @ModifyVariable(method = "startUseItem", at = @At("STORE"), name = "heldItem")
+    //?}
     private ItemStack animatium$fixCopyStackUseItem(final ItemStack heldItem) {
         if (Animatium.isEnabled() && AnimatiumConfig.instance().items.equipAnimationVersion != EquipAnimationVersionSetting.VANILLA) {
             // Update the stack to match mutations to the stack in other classes
@@ -88,21 +104,60 @@ public abstract class MixinMinecraft_EquipUseLogic {
         }
     }
 
+    //? if <26.3 {
+    /*@WrapOperation(method = "startUseItem", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/LocalPlayer;swing(Lnet/minecraft/world/InteractionHand;)V", ordinal = 2))
+    *///?}
+    //? if 1.21.11 {
+    /*private void animatium$swingOnUse(final LocalPlayer instance, final InteractionHand hand, final Operation<Void> original, @Local(ordinal = 0) final ItemStack heldItem) {
+    *///?} elif >=26.1 <26.3 {
+    /*private void animatium$swingOnUse(final LocalPlayer instance, final InteractionHand hand, final Operation<Void> original, @Local(name = "heldItem") final ItemStack heldItem) {
+    *///?} else {
     @WrapOperation(method = "startUseItem", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/LocalPlayer;swing(Lnet/minecraft/world/InteractionHand;Lnet/minecraft/world/item/component/SwingAnimation;Z)Z", ordinal = 2))
     private boolean animatium$swingOnUse(final LocalPlayer instance, final InteractionHand hand, final SwingAnimation animation, final boolean sendToSwingingEntity, final Operation<Boolean> original, @Local(name = "heldItem") final ItemStack heldItem) {
+    //?}
         if (Animatium.isEnabled() && AnimatiumConfig.instance().items.disableSwingOnUse && ItemUtilKt.isSwingItemBlacklisted(heldItem)) {
+            //? if <26.3 {
+            /*SwingUtilKt.sendSwingPacket(instance, hand);
+            *///?} else {
             return SwingUtilKt.sendSwingPacket(instance, hand, animation);
+            //?}
         } else {
+            //? if <26.3 {
+            /*original.call(instance, hand);
+            *///?} else {
             return original.call(instance, hand, animation, sendToSwingingEntity);
+            //?}
         }
     }
 
+    //? if <26.3 {
+    /*@WrapOperation(method = "handleKeybinds", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/LocalPlayer;swing(Lnet/minecraft/world/InteractionHand;)V"))
+    private void animatium$swingOnDrop(final LocalPlayer instance, final InteractionHand hand, final Operation<Void> original) {
+        if (Animatium.isEnabled() && AnimatiumConfig.instance().items.disableSwingOnDrop) {
+            SwingUtilKt.sendSwingPacket(instance, hand);
+    *///?} else {
     @WrapOperation(method = "startUseItem", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/LocalPlayer;swing(Lnet/minecraft/world/InteractionHand;Lnet/minecraft/world/item/component/SwingAnimation;Z)Z", ordinal = 0))
     private boolean animatium$swingOnEntityInteract(final LocalPlayer instance, final InteractionHand hand, final SwingAnimation animation, final boolean sendToSwingingEntity, final Operation<Boolean> original) {
         if (Animatium.isEnabled() && AnimatiumConfig.instance().items.disableSwingOnEntityInteract) {
             return SwingUtilKt.sendSwingPacket(instance, hand, animation);
+    //?}
         } else {
+    //? if <26.3 {
+            /*original.call(instance, hand);
+        }
+    }
+    *///?}
+
+    //? if <26.3 {
+    /*@WrapOperation(method = "startUseItem", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/LocalPlayer;swing(Lnet/minecraft/world/InteractionHand;)V", ordinal = 0))
+    private void animatium$swingOnEntityInteract(final LocalPlayer instance, final InteractionHand hand, final Operation<Void> original) {
+        if (Animatium.isEnabled() && AnimatiumConfig.instance().items.disableSwingOnEntityInteract) {
+            SwingUtilKt.sendSwingPacket(instance, hand);
+        } else {
+            original.call(instance, hand);
+    *///?} else {
             return original.call(instance, hand, animation, sendToSwingingEntity);
+    //?}
         }
     }
 
@@ -116,8 +171,13 @@ public abstract class MixinMinecraft_EquipUseLogic {
         }
     }
 
+    //? if <26.3 {
+    /*@WrapWithCondition(method = "startUseItem", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/ItemInHandRenderer;itemUsed(Lnet/minecraft/world/InteractionHand;)V"))
+    private boolean animatium$equipAnimationOnItemUse(final ItemInHandRenderer instance, final InteractionHand hand) {
+    *///?} else {
     @WrapWithCondition(method = "startUseItem", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/LocalPlayer;itemUsed(Lnet/minecraft/world/InteractionHand;)V"))
     private boolean animatium$equipAnimationOnItemUse(final LocalPlayer instance, final InteractionHand hand) {
+    //?}
         // TODO: This fixes projectile equip, but it isn't going to be 100% accurate in some other areas. This needs to be worked on :)
         if (Animatium.isEnabled() && AnimatiumConfig.instance().fixes.fixEquipAnimationOnItemUse) {
             // The equip animation plays when right-clicking blocks in creative mode in <1.8.x
@@ -131,17 +191,29 @@ public abstract class MixinMinecraft_EquipUseLogic {
         }
     }
 
+    //? if 1.21.11 {
+    /*@Definition(id = "useResult", local = @Local(type = InteractionResult.class, ordinal = 1))
+    *///?} else {
     @Definition(id = "useResult", local = @Local(type = InteractionResult.class, name = "useResult"))
+    //?}
     @Definition(id = "Fail", type = InteractionResult.Fail.class)
     @Expression("useResult instanceof Fail")
     @Inject(method = "startUseItem", at = @At(value = "MIXINEXTRAS:EXPRESSION", shift = At.Shift.BEFORE))
+    //? if 1.21.11 {
+    /*private void animatium$oldEquipUse(final CallbackInfo ci, @Local(ordinal = 0) final ItemStack heldItem, @Local(ordinal = 0) final int oldCount, @Local(ordinal = 0) final InteractionHand hand) {
+    *///?} else {
     private void animatium$oldEquipUse(final CallbackInfo ci, @Local(name = "heldItem") final ItemStack heldItem, @Local(name = "oldCount") final int oldCount, @Local(name = "hand") final InteractionHand hand) {
+    //?}
         if (Animatium.isEnabled()
                 && AnimatiumConfig.instance().items.equipAnimationVersion != EquipAnimationVersionSetting.VANILLA
                 && !heldItem.isEmpty()
                 && this.player != null
                 && (heldItem.getCount() != oldCount || this.player.hasInfiniteMaterials())) {
+            //? if <26.3 {
+            /*this.gameRenderer.itemInHandRenderer.itemUsed(hand);
+            *///?} else {
             this.player.itemUsed(hand);
+            //?}
         }
     }
 }

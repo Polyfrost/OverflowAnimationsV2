@@ -25,8 +25,13 @@
 
 package org.visuals.legacy.animatium.renderer.texture
 
+//? if <26.3 {
+/*import com.mojang.blaze3d.textures.GpuSampler
+import com.mojang.blaze3d.textures.GpuTextureView
+*///?} else {
 import com.mojang.renderpearl.api.textures.GpuSampler
 import com.mojang.renderpearl.api.textures.GpuTextureView
+//?}
 import net.minecraft.client.Minecraft
 import net.minecraft.resources.Identifier
 

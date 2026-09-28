@@ -28,7 +28,11 @@ package org.visuals.legacy.animatium.handler.command
 import com.mojang.brigadier.Command
 import com.mojang.brigadier.builder.LiteralArgumentBuilder
 import com.mojang.brigadier.context.CommandContext
+//? if 1.21.11 {
+/*import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager
+*///?} else {
 import net.fabricmc.fabric.api.client.command.v2.ClientCommands
+//?}
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource
 import net.minecraft.client.Minecraft
 import net.minecraft.network.chat.Component
@@ -49,7 +53,11 @@ class AnimatiumCommand : Command<FabricClientCommandSource> {
         )
 
         fun create(): LiteralArgumentBuilder<FabricClientCommandSource> {
+            //? if 1.21.11 {
+            /*val command = ClientCommandManager.literal("animatium").executes(AnimatiumCommand())
+            *///?} else {
             val command = ClientCommands.literal("animatium").executes(AnimatiumCommand())
+            //?}
             command.then(subCommand("on", OnSubCommand.UNIT))
             command.then(subCommand("off", OffSubCommand.UNIT))
             command.then(subCommand("reload", ReloadSubCommand.UNIT))
@@ -77,7 +85,11 @@ class AnimatiumCommand : Command<FabricClientCommandSource> {
         source.sendFeedback(Component.literal("Opening config menu...").withColor(Random().nextInt(0xFFFFFF)))
 
         val minecraft = source.client
+        //? if <26.2 {
+        /*minecraft.schedule({ minecraft.setScreen(AnimatiumConfig.getConfigScreen(minecraft.screen)) })
+        *///?} else {
         minecraft.schedule({ minecraft.gui.setScreen(AnimatiumConfig.getConfigScreen(minecraft.gui.screen())) })
+        //?}
 
         return Command.SINGLE_SUCCESS
     }

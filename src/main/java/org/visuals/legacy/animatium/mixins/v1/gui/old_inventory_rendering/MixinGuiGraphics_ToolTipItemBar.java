@@ -28,7 +28,11 @@ package org.visuals.legacy.animatium.mixins.v1.gui.old_inventory_rendering;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
+//? if 1.21.11 {
+/*import net.minecraft.client.gui.GuiGraphics;
+*///?} else {
 import net.minecraft.client.gui.GuiGraphicsExtractor;
+//?}
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.ARGB;
 import net.minecraft.world.item.BundleItem;
@@ -42,10 +46,19 @@ import org.visuals.legacy.animatium.config.AnimatiumConfig;
 import org.visuals.legacy.animatium.handler.rendering.RenderUtilsKt;
 import org.visuals.legacy.animatium.util.ItemUtilKt;
 
+//? if 1.21.11 {
+/*@Mixin(GuiGraphics.class)
+*///?} else {
 @Mixin(GuiGraphicsExtractor.class)
+//?}
 public abstract class MixinGuiGraphics_ToolTipItemBar {
+    //? if 1.21.11 {
+    /*@WrapOperation(method = "renderTooltip", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screens/inventory/tooltip/TooltipRenderUtil;renderTooltipBackground(Lnet/minecraft/client/gui/GuiGraphics;IIIILnet/minecraft/resources/Identifier;)V"))
+    private void animatium$tooltipStyleRendering(final GuiGraphics graphics, final int x, final int y, final int w, final int h, final Identifier style, final Operation<Void> original) {
+    *///?} else {
     @WrapOperation(method = "tooltip", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screens/inventory/tooltip/TooltipRenderUtil;extractTooltipBackground(Lnet/minecraft/client/gui/GuiGraphicsExtractor;IIIILnet/minecraft/resources/Identifier;)V"))
     private void animatium$tooltipStyleRendering(final GuiGraphicsExtractor graphics, final int x, final int y, final int w, final int h, final Identifier style, final Operation<Void> original) {
+    //?}
         if (Animatium.isEnabled() && AnimatiumConfig.instance().screen.tooltipStyleRendering) {
             int n = x - 3;
             int o = y - 3;
@@ -64,11 +77,26 @@ public abstract class MixinGuiGraphics_ToolTipItemBar {
         }
     }
 
+    //? if 1.21.11 {
+    /*@Inject(method = "renderItemBar", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphics;fill(Lcom/mojang/blaze3d/pipeline/RenderPipeline;IIIII)V", ordinal = 0, shift = At.Shift.AFTER))
+    private void animatium$oldDurabilityBar(final ItemStack itemStack, final int x, final int y, final CallbackInfo ci, @Local(ordinal = 2) final int left, final @Local(ordinal = 3) int top) {
+    *///?} elif >=26.1 <26.3 {
+    /*@Inject(method = "itemBar", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphicsExtractor;fill(Lcom/mojang/blaze3d/pipeline/RenderPipeline;IIIII)V", ordinal = 0, shift = At.Shift.AFTER))
+    *///?} elif 26.3 {
+    /*@Inject(method = "itemBar", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphicsExtractor;fill(Lcom/mojang/renderpearl/api/pipeline/RenderPipeline;IIIII)V", ordinal = 0, shift = At.Shift.AFTER))
+    *///?} else {
     @Inject(method = "itemBar", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphicsExtractor;fill(Lcom/mojang/blaze3d/pipeline/RenderPipeline;IIIII)V", ordinal = 0, shift = At.Shift.AFTER))
+    //?}
+    //? if >=26.1 {
     private void animatium$oldDurabilityBar(final ItemStack itemStack, final int x, final int y, final CallbackInfo ci, @Local(name = "left") final int left, final @Local(name = "top") int top) {
+    //?}
         if (Animatium.isEnabled() && AnimatiumConfig.instance().items.durabilityBarColors && !(itemStack.getItem() instanceof BundleItem)) {
             final int color = ARGB.opaque(ARGB.color((255 - ItemUtilKt.getLegacyDurabilityColorValue(itemStack)) / 4, 64, 0));
+            //? if 1.21.11 {
+            /*RenderUtilsKt.fillRectangle((GuiGraphics) (Object) this, left, top, 12, 1, color);
+            *///?} else {
             RenderUtilsKt.fillRectangle((GuiGraphicsExtractor) (Object) this, left, top, 12, 1, color);
+            //?}
         }
     }
 }

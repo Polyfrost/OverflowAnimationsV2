@@ -51,9 +51,19 @@ class LegacyLightmapExtractor {
             profiler.push("lightmap")
             state.skyDarken = level.getLegacySkyDarken()
             state.blockLightRed = this.blockLightRed
+            //? if 1.21.11 {
+            /*state.skyDarkness = minecraft.gameRenderer.getDarkenWorldAmount(tickDelta)
+            *///?} elif 26.1 {
+            /*state.skyDarkness = minecraft.gameRenderer.getBossOverlayWorldDarkening(tickDelta)
+            *///?} else {
             state.skyDarkness = minecraft.gameRenderer.bossOverlayWorldDarkening(tickDelta)
+            //?}
             if (player.hasEffect(MobEffects.NIGHT_VISION)) {
+                //? if <26.2 {
+                /*state.nightVisionScale = GameRenderer.getNightVisionScale(player, tickDelta)
+                *///?} else {
                 state.nightVisionScale = GameRenderer.nightVisionScale(player, tickDelta)
+                //?}
             }
 
             state.gamma = minecraft.options.gamma().get().toFloat()

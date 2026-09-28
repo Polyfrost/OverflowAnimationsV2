@@ -25,6 +25,7 @@
 
 package org.visuals.legacy.animatium.mixins.v1.entity.particles.smooth;
 
+//? if >=26.1 {
 import net.minecraft.client.Camera;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.Particle;
@@ -38,16 +39,22 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.visuals.legacy.animatium.Animatium;
 import org.visuals.legacy.animatium.config.AnimatiumConfig;
+//?}
 
+//? if >=26.1 {
 @Mixin(SingleQuadParticle.class)
 public abstract class MixinSingleQuadParticle_UpdateSprite extends Particle {
     @Shadow
     public abstract void setSpriteFromAge(final SpriteSet sprites);
+//?}
 
+    //? if >=26.1 {
     protected MixinSingleQuadParticle_UpdateSprite(final ClientLevel level, final double x, final double y, final double z) {
         super(level, x, y, z);
     }
+    //?}
 
+//? if >=26.1 {
     @Inject(method = "extract", at = @At("HEAD"))
     public void animatium$extractSprite(final QuadParticleRenderState quadParticleRenderState, final Camera camera, final float tickDelta, final CallbackInfo ci) {
         if (Animatium.isEnabled() && AnimatiumConfig.instance().fixes.smoothParticles && this instanceof SpritesAccessor spritesAccessor) {
@@ -55,3 +62,4 @@ public abstract class MixinSingleQuadParticle_UpdateSprite extends Particle {
         }
     }
 }
+//?}

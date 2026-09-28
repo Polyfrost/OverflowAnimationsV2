@@ -25,20 +25,31 @@
 
 package org.visuals.legacy.animatium.mixins.v1.entity.particles.smooth;
 
+//? if >=26.1 {
 import net.minecraft.client.particle.*;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
+//?}
 
+//? if >=26.1 {
 @Mixin({
         AttackSweepParticle.class,
         BaseAshSmokeParticle.class,
         BubblePopParticle.class,
         DragonBreathParticle.class,
         DustParticleBase.class,
+//?}
+        //? if >=26.3 {
         EmissiveRisingParticle.class,
+        //?}
+        //? if >=26.1 {
         ExplodeParticle.class,
         FallingDustParticle.class,
+        //?}
+        //? if >=26.2 {
         GeyserPlumeParticle.class,
+        //?}
+        //? if >=26.1 {
         GlowParticle.class,
         GustParticle.class,
         HugeExplosionParticle.class,
@@ -47,6 +58,11 @@ import org.spongepowered.asm.mixin.gen.Accessor;
         SculkChargePopParticle.class,
         SimpleAnimatedParticle.class,
         SnowflakeParticle.class,
+        //?}
+        //? if >=26.1 <26.3 {
+        /*SoulParticle.class,
+        *///?}
+//? if >=26.1 {
         SpellParticle.class,
         TrialSpawnerDetectionParticle.class,
         WakeParticle.class
@@ -55,3 +71,4 @@ public interface SpritesAccessor {
     @Accessor("sprites")
     SpriteSet animatium$sprites();
 }
+//?}

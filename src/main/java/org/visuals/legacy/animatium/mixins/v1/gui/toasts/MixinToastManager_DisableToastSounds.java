@@ -41,8 +41,13 @@ import org.visuals.legacy.animatium.config.AnimatiumConfig;
 @IfModAbsent(value = "sodium-extra")
 @Mixin(ToastManager.class)
 public abstract class MixinToastManager_DisableToastSounds {
+    //? if 1.21.11 {
+    /*@WrapWithCondition(method = "method_61991", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/components/toasts/Toast$Visibility;playSound(Lnet/minecraft/client/sounds/SoundManager;)V"))
+    private boolean animatium$disableToastSounds(final Toast.Visibility instance, final SoundManager manager, @Local(argsOnly = true, ordinal = 0) final ToastManager.ToastInstance<Toast> toastInstance) {
+    *///?} else {
     @WrapWithCondition(method = "lambda$update$0", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/components/toasts/Toast$Visibility;playSound(Lnet/minecraft/client/sounds/SoundManager;)V"))
     private boolean animatium$disableToastSounds(final Toast.Visibility instance, final SoundManager manager, @Local(argsOnly = true, name = "toast") final ToastManager.ToastInstance<Toast> toastInstance) {
+    //?}
         final Toast toast = toastInstance.getToast();
         return !Animatium.isEnabled() || !AnimatiumConfig.instance().extras.disableRecipeAndTutorialToasts || (!(toast instanceof RecipeToast) && !(toast instanceof TutorialToast));
     }

@@ -26,15 +26,23 @@
 package org.visuals.legacy.animatium.util
 
 import net.minecraft.client.Camera
+//? if 1.21.11 {
+/*import net.minecraft.client.renderer.state.CameraRenderState
+*///?} else {
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.state.level.CameraRenderState
+//?}
 import net.minecraft.util.Mth
 import org.visuals.legacy.animatium.mixins.accessor.CameraAccessor
 
 fun Camera.getPositionLerped(): Float {
     val cameraAccessor = this as CameraAccessor
     return Mth.lerp(
+        //? if 1.21.11 {
+        /*this.partialTickTime,
+        *///?} else {
         this.getCameraEntityPartialTicks(Minecraft.getInstance().deltaTracker),
+        //?}
         cameraAccessor.`animatium$getOldEyeHeight`(),
         cameraAccessor.`animatium$getEyeHeight`()
     )

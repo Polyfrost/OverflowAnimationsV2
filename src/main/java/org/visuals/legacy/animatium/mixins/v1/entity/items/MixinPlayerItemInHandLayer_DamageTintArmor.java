@@ -42,7 +42,7 @@ import org.visuals.legacy.animatium.config.AnimatiumConfig;
 @Mixin(PlayerItemInHandLayer.class)
 public abstract class MixinPlayerItemInHandLayer_DamageTintArmor<S extends AvatarRenderState, M extends EntityModel<S> & ArmedModel<S> & HeadedModel> {
     @ModifyExpressionValue(method = "renderItemHeldToEye", at = @At(value = "FIELD", target = "Lnet/minecraft/client/renderer/texture/OverlayTexture;NO_OVERLAY:I", opcode = Opcodes.GETSTATIC))
-    private int animatium$damageTintItems(final int original, @Local(argsOnly = true, name = "state") final S state) {
+    private int animatium$damageTintItems(final int original, @Local(argsOnly = true, ordinal = 0) final S state) {
         if (Animatium.isEnabled() && AnimatiumConfig.instance().extras.damageTintItems) {
             return LivingEntityRenderer.getOverlayCoords(state, 0.0F);
         } else {

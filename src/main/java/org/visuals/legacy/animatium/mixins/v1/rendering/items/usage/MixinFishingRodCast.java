@@ -38,7 +38,7 @@ import org.visuals.legacy.animatium.util.enums.FishingRodVersionSetting;
 @Mixin(FishingRodCast.class)
 public abstract class MixinFishingRodCast {
     @ModifyReturnValue(method = "get", at = @At(value = "RETURN", ordinal = 0))
-    private boolean animatium$getValue(final boolean original, @Local(argsOnly = true, name = "displayContext") final ItemDisplayContext displayContext) {
+    private boolean animatium$getValue(final boolean original, @Local(argsOnly = true, ordinal = 0) final ItemDisplayContext displayContext) {
         if (Animatium.isEnabled() && AnimatiumConfig.instance().items.disableItemUsingTextureInGUI && displayContext == ItemDisplayContext.GUI) {
             return false;
         } else {

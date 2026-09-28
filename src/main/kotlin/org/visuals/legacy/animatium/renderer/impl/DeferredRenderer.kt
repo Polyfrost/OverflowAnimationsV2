@@ -28,9 +28,17 @@ package org.visuals.legacy.animatium.renderer.impl
 import com.mojang.blaze3d.ProjectionType
 import com.mojang.blaze3d.pipeline.RenderTarget
 import com.mojang.blaze3d.systems.RenderSystem
+//? if <26.3 {
+/*import com.mojang.blaze3d.textures.GpuTextureView
+*///?} else {
 import com.mojang.renderpearl.api.textures.GpuTextureView
+//?}
 import net.minecraft.client.Minecraft
+//? if 1.21.11 {
+/*import net.minecraft.client.renderer.PerspectiveProjectionMatrixBuffer
+*///?} else {
 import net.minecraft.client.renderer.ProjectionMatrixBuffer
+//?}
 import org.joml.Matrix4f
 import org.visuals.legacy.animatium.renderer.DynamicTransforms
 import org.visuals.legacy.animatium.renderer.RenderDescriptor
@@ -56,22 +64,38 @@ class DeferredRenderer(private val descriptor: RenderDescriptor) : AbstractRende
         @JvmStatic
         fun of(name: String, renderTarget: RenderTarget) =
             of(RenderDescriptor.builder { name }
+                //? if <26.3 {
+                /*.withRenderTarget(renderTarget, false)
+                *///?} else {
                 .withRenderTarget(renderTarget)
+                //?}
                 .withArea(RenderDescriptor.Area(renderTarget))
                 .build())
 
         @JvmStatic
+        //? if <26.2 {
+        /*fun of(name: String) = of(name, Minecraft.getInstance().mainRenderTarget)
+        *///?} else {
         fun of(name: String) = of(name, Minecraft.getInstance().gameRenderer.mainRenderTarget())
+        //?}
     }
 
     // Data
     private val name: String = descriptor.name.get()
     private var projectionMatrix: Matrix4f? = null
+    //? if 1.21.11 {
+    /*private var projectionMatrixBuffer: PerspectiveProjectionMatrixBuffer? = null
+    *///?} else {
     private var projectionMatrixBuffer: ProjectionMatrixBuffer? = null
+    //?}
 
     fun setProjectionMatrix(matrix4f: Matrix4f): AbstractRenderer {
         if (this.projectionMatrixBuffer == null) {
+            //? if 1.21.11 {
+            /*this.projectionMatrixBuffer = PerspectiveProjectionMatrixBuffer("Immediate Projection Buffer for " + this.name)
+            *///?} else {
             this.projectionMatrixBuffer = ProjectionMatrixBuffer("Immediate Projection Buffer for " + this.name)
+            //?}
         }
 
         this.projectionMatrix = matrix4f
@@ -92,8 +116,13 @@ class DeferredRenderer(private val descriptor: RenderDescriptor) : AbstractRende
             RenderSystem.setProjectionMatrix(this.projectionMatrixBuffer!!.getBuffer(this.projectionMatrix!!), projectionType)
         }
 
+        //? if <26.2 {
+        /*val dynamicTransforms = this.uniforms.getOrDefault(DynamicTransforms.KEY, DynamicTransforms.current())
+        *///?}
         this.descriptor.createPass().use { pass ->
+            //? if >=26.2 {
             val dynamicTransforms = this.uniforms.getOrDefault(DynamicTransforms.KEY, DynamicTransforms.current())
+            //?}
             this.render(pass, geometry, dynamicTransforms)
             if (!geometry.persistent()) {
                 geometry.close()
@@ -114,8 +143,16 @@ class DeferredRenderer(private val descriptor: RenderDescriptor) : AbstractRende
                 window.height.toFloat() / window.guiScale.toFloat(),
                 0.0F,
                 1000.0F,
+                //? if 1.21.11 {
+                /*11000.0F
+                *///?} else {
                 11000.0F,
+                //?}
+                //? if 26.1 {
+                /*RenderSystem.getDevice().isZZeroToOne
+                *///?} elif >=26.2 {
                 RenderSystem.getDevice().deviceInfo.isZZeroToOne
+                //?}
             )
         )
         this.setUniform(

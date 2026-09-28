@@ -33,7 +33,11 @@ import net.minecraft.util.RandomSource
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.level.GameType
 import net.minecraft.world.level.block.Blocks
+//? if <26.3 {
+/*import net.minecraft.world.level.block.RedStoneWireBlock
+*///?} else {
 import net.minecraft.world.level.block.RedstoneWireBlock
+//?}
 import net.minecraft.world.phys.EntityHitResult
 import org.visuals.legacy.animatium.config.AnimatiumConfig
 
@@ -47,7 +51,11 @@ class BloodParticle(
     level,
     x, y, z,
     velocityX, velocityY, velocityZ,
+    //? if <26.3 {
+    /*Blocks.REDSTONE_WIRE.defaultBlockState().setValue(RedStoneWireBlock.POWER, 15)
+    *///?} else {
     Blocks.REDSTONE_WIRE.defaultBlockState().setValue(RedstoneWireBlock.POWER, 15)
+    //?}
 ) {
     init {
         this.rCol = random.nextFloat() * 0.25F + 0.3F
@@ -57,7 +65,11 @@ class BloodParticle(
     }
 
     companion object {
+        //? if 1.21.11 {
+        /*val RANDOM = RandomSource.createNewThreadLocalInstance()
+        *///?} else {
         val RANDOM = RandomSource.createThreadLocalInstance()
+        //?}
 
         @JvmStatic
         fun canSpawn(): Boolean {

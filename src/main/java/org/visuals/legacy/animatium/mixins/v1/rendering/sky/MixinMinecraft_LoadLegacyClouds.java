@@ -47,8 +47,13 @@ public abstract class MixinMinecraft_LoadLegacyClouds {
     @Definition(id = "resourceManager", field = "Lnet/minecraft/client/Minecraft;resourceManager:Lnet/minecraft/server/packs/resources/ReloadableResourceManager;")
     @Definition(id = "registerReloadListener", method = "Lnet/minecraft/server/packs/resources/ReloadableResourceManager;registerReloadListener(Lnet/minecraft/server/packs/resources/PreparableReloadListener;)V")
     @Definition(id = "levelRenderer", field = "Lnet/minecraft/client/Minecraft;levelRenderer:Lnet/minecraft/client/renderer/LevelRenderer;")
+    //? if <26.2 {
+    /*@Definition(id = "getCloudRenderer", method = "Lnet/minecraft/client/renderer/LevelRenderer;getCloudRenderer()Lnet/minecraft/client/renderer/CloudRenderer;")
+    @Expression("this.resourceManager.registerReloadListener(this.levelRenderer.getCloudRenderer())")
+    *///?} else {
     @Definition(id = "cloudRenderer", method = "Lnet/minecraft/client/renderer/LevelRenderer;cloudRenderer()Lnet/minecraft/client/renderer/CloudRenderer;")
     @Expression("this.resourceManager.registerReloadListener(this.levelRenderer.cloudRenderer())")
+    //?}
     @Inject(method = "<init>", at = @At(value = "MIXINEXTRAS:EXPRESSION", shift = At.Shift.AFTER))
     private void animatium$loadLegacyClouds(final GameConfig gameConfig, final CallbackInfo ci) {
         this.resourceManager.registerReloadListener(LegacyCloudRenderer.INSTANCE);

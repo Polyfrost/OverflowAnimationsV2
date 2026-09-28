@@ -26,7 +26,9 @@
 package org.visuals.legacy.animatium.renderer
 
 import com.mojang.blaze3d.systems.RenderSystem
+//? if >=26.3 {
 import com.mojang.renderpearl.api.buffers.GpuBufferSlice
+//?}
 import net.minecraft.util.ARGB
 import org.joml.Matrix4f
 import org.joml.Vector3f
@@ -81,7 +83,11 @@ object DynamicTransforms {
         }
 
         fun build() = RenderSystem.getDynamicUniforms().writeTransform(
+            //? if <26.2 {
+            /*this.modelViewMatrix ?: Matrix4f(RenderSystem.getModelViewMatrix()),
+            *///?} else {
             this.modelViewMatrix ?: RenderSystem.getModelViewMatrixCopy(),
+            //?}
             this.shaderColor,
             this.modelOffset,
             this.textureMatrix ?: Matrix4f()

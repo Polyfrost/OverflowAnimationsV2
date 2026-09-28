@@ -25,9 +25,24 @@
 
 package org.visuals.legacy.animatium.renderer.vertex
 
+//? if 26.2 {
+/*import com.mojang.blaze3d.PrimitiveTopology
+*///?}
 import com.mojang.blaze3d.vertex.DefaultVertexFormat
+//? if <26.3 {
+/*import com.mojang.blaze3d.vertex.VertexFormat
+*///?}
+//? if <26.2 {
+/*import com.mojang.blaze3d.vertex.VertexFormat.Mode
+*///?} elif 26.4 {
 import com.mojang.blaze3d.vertex.VertexFormat
+//?}
+//? if >=26.3 {
 import com.mojang.renderpearl.api.pipeline.PrimitiveTopology
+//?}
+//? if 26.3 {
+/*import com.mojang.renderpearl.api.vertex.VertexFormat
+*///?}
 
 object VertexLayouts {
     @JvmField
@@ -39,5 +54,9 @@ object VertexLayouts {
     @JvmField
     val POSITION_TEX_QUAD = quads(DefaultVertexFormat.POSITION_TEX)
 
+    //? if <26.2 {
+    /*private fun quads(vertexFormat: VertexFormat) = VertexLayout(vertexFormat, Mode.QUADS)
+    *///?} else {
     private fun quads(vertexFormat: VertexFormat) = VertexLayout(vertexFormat, PrimitiveTopology.QUADS)
+    //?}
 }

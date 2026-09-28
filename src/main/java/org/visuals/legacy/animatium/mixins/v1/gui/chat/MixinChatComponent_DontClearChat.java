@@ -28,6 +28,9 @@ package org.visuals.legacy.animatium.mixins.v1.gui.chat;
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.mojang.blaze3d.platform.InputConstants;
+//? if <26.3 {
+/*import net.minecraft.client.Minecraft;
+*///?}
 import net.minecraft.client.gui.components.ChatComponent;
 import org.spongepowered.asm.mixin.Mixin;
 import org.visuals.legacy.animatium.Animatium;
@@ -37,7 +40,11 @@ import org.visuals.legacy.animatium.config.AnimatiumConfig;
 public abstract class MixinChatComponent_DontClearChat {
     @WrapMethod(method = "clearMessages")
     private void animatium$dontClearChat(final boolean history, final Operation<Void> original) {
+        //? if <26.3 {
+        /*if (!Animatium.isEnabled() || !AnimatiumConfig.instance().extras.dontClearChat || InputConstants.isKeyDown(Minecraft.getInstance().getWindow(), InputConstants.KEY_D)) {
+        *///?} else {
         if (!Animatium.isEnabled() || !AnimatiumConfig.instance().extras.dontClearChat || InputConstants.isKeyDown(InputConstants.KEY_D)) {
+        //?}
             original.call(history);
         }
     }

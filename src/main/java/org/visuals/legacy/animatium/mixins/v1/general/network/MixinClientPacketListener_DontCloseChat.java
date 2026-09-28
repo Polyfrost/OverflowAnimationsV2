@@ -39,6 +39,10 @@ import org.visuals.legacy.animatium.config.AnimatiumConfig;
 public abstract class MixinClientPacketListener_DontCloseChat {
     @WrapWithCondition(method = "handleContainerClose", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/LocalPlayer;clientSideCloseContainer()V"))
     private boolean animatium$dontCloseChat(final LocalPlayer instance) {
+        //? if <26.2 {
+        /*return !Animatium.isEnabled() || !AnimatiumConfig.instance().extras.dontCloseChat || !(Minecraft.getInstance().screen instanceof ChatScreen);
+        *///?} else {
         return !Animatium.isEnabled() || !AnimatiumConfig.instance().extras.dontCloseChat || !(Minecraft.getInstance().gui.screen() instanceof ChatScreen);
+        //?}
     }
 }

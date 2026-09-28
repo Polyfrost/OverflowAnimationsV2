@@ -26,16 +26,27 @@
 package org.visuals.legacy.animatium.mixins.accessor;
 
 import net.minecraft.world.entity.LivingEntity;
+//? if >=26.3 {
 import net.minecraft.world.item.component.SwingAnimation;
+//?}
 import org.spongepowered.asm.mixin.Mixin;
+//? if >=26.3 {
 import org.spongepowered.asm.mixin.gen.Accessor;
+//?}
 import org.spongepowered.asm.mixin.gen.Invoker;
 
 @Mixin(LivingEntity.class)
 public interface LivingEntityAccessor {
+    //? if <26.3 {
+    /*@Invoker("getCurrentSwingDuration")
+    int animatium$getSwingDuration();
+    *///?} else {
     @Invoker("getModifiedSwingDuration")
     int animatium$getModifiedSwingDuration(final SwingAnimation animation);
+    //?}
 
+    //? if >=26.3 {
     @Accessor("swingState")
     LivingEntity.SwingState animatium$getSwingState();
+    //?}
 }

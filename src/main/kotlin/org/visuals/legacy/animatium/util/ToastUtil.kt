@@ -31,7 +31,11 @@ import net.minecraft.network.chat.Component
 
 object ToastUtil {
     fun send(message: Component) {
+        //? if <26.2 {
+        /*Minecraft.getInstance().toastManager.addToast(
+        *///?} else {
         Minecraft.getInstance().gui.toastManager().addToast(
+        //?}
             SystemToast(
                 SystemToast.SystemToastId.PERIODIC_NOTIFICATION,
                 Component.literal("Animatium"),

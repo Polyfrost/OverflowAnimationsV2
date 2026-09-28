@@ -25,9 +25,16 @@
 
 package org.visuals.legacy.animatium.util.duck
 
+//? if >=26.3 {
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.item.component.SwingAnimation
+//?}
 
+//? if >=26.3 {
 interface SwingStateExt {
     fun `animatium$forceSwing`(hand: InteractionHand, animation: SwingAnimation, duration: Int)
+
+    // Mirrors vanilla SwingState.startIfAble: no swing active, or past the halfway point of the current one
+    fun `animatium$canStartSwing`(): Boolean
 }
+//?}

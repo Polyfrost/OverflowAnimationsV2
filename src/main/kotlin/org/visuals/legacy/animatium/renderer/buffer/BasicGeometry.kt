@@ -25,8 +25,13 @@
 
 package org.visuals.legacy.animatium.renderer.buffer
 
+//? if <26.3 {
+/*import com.mojang.blaze3d.systems.RenderPass
+*///?}
 import com.mojang.blaze3d.systems.RenderSystem
+//? if >=26.3 {
 import com.mojang.renderpearl.api.commands.RenderPass
+//?}
 
 class BasicGeometry(val firstVertex: Int, val vertexCount: Int) : Geometry {
     override fun bind(
@@ -35,7 +40,11 @@ class BasicGeometry(val firstVertex: Int, val vertexCount: Int) : Geometry {
     ) {
     }
 
+    //? if <26.2 {
+    /*override fun draw(pass: RenderPass) = pass.draw(firstVertex, vertexCount)
+    *///?} else {
     override fun draw(pass: RenderPass) = pass.draw(vertexCount, 1, firstVertex, 0)
+    //?}
 
     override fun persistent() = true
 

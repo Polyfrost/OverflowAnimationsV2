@@ -27,10 +27,19 @@ package org.visuals.legacy.animatium.mixins.v1.rendering.items.flat;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
+//? if 1.21.11 {
+/*import net.minecraft.client.renderer.SubmitNodeCollector;
+import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.renderer.block.model.ItemTransform;
+*///?}
 import net.minecraft.client.renderer.item.ItemStackRenderState;
+//? if >=26.1 {
 import net.minecraft.client.resources.model.cuboid.ItemTransform;
 import net.minecraft.client.resources.model.geometry.BakedQuad;
+//?}
+//? if >=26.3 {
 import net.minecraft.client.resources.model.geometry.ItemQuads;
+//?}
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
@@ -45,7 +54,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.visuals.legacy.animatium.Animatium;
 import org.visuals.legacy.animatium.config.AnimatiumConfig;
 import org.visuals.legacy.animatium.util.ItemUtilKt;
-import org.visuals.legacy.animatium.util.UtilsKt;
 import org.visuals.legacy.animatium.util.enums.FishingRodVersionSetting;
 
 import java.util.List;
@@ -54,36 +62,69 @@ import java.util.stream.Collectors;
 @Mixin(ItemStackRenderState.LayerRenderState.class)
 public abstract class MixinItemStackRenderLayerState {
     @Shadow
+    //? if 1.21.11 {
+    /*ItemTransform transform;
+    *///?} else {
     private ItemTransform itemTransform;
+    //?}
 
+    //? if 1.21.11 {
+    /*@Shadow(aliases = "field_55345")
+    *///?} else {
     @Shadow(aliases = "this$0")
+    //?}
     @Final
     ItemStackRenderState itemStackRenderState;
 
     @Shadow
+    //? if 1.21.11 {
+    /*boolean usesBlockLight;
+    *///?} else {
     private boolean usesBlockLight;
+    //?}
 
+    //? if 1.21.11 {
+    /*@ModifyArg(method = "submit", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/SubmitNodeCollector;submitItem(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/world/item/ItemDisplayContext;III[ILjava/util/List;Lnet/minecraft/client/renderer/rendertype/RenderType;Lnet/minecraft/client/renderer/item/ItemStackRenderState$FoilType;)V"), index = 6)
+    *///?} elif >=26.1 <26.3 {
+    /*@ModifyArg(method = "submit", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/SubmitNodeCollector;submitItem(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/world/item/ItemDisplayContext;III[ILjava/util/List;Lnet/minecraft/client/renderer/item/ItemStackRenderState$FoilType;)V"), index = 6)
+    *///?}
+    //? if <26.3 {
+    /*private List<BakedQuad> animatium$itemDrops2D(final List<BakedQuad> quads) {
+    *///?} else {
     @ModifyArg(method = "submit", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/SubmitNodeCollector;submitItem(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/world/item/ItemDisplayContext;III[ILnet/minecraft/client/resources/model/geometry/ItemQuads;Lnet/minecraft/client/renderer/item/ItemStackRenderState$FoilType;)V"), index = 6)
     private ItemQuads animatium$itemDrops2D(final ItemQuads quads) {
+    //?}
         if (Animatium.isEnabled() && animatium$isTransformationModeValid() && !this.usesBlockLight) {
+            //? if <26.3 {
+            /*return quads.stream().filter(baked -> baked.direction() == Direction.SOUTH).collect(Collectors.toList());
+            *///?} else {
             return new ItemQuads(animatium$flatten(quads.all()), animatium$flatten(quads.solid()), animatium$flatten(quads.translucent()));
+            //?}
         } else {
             return quads;
         }
     }
 
+    //? if 1.21.11 {
+    /*@ModifyArg(method = "submit", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/SubmitNodeCollector;submitItem(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/world/item/ItemDisplayContext;III[ILjava/util/List;Lnet/minecraft/client/renderer/rendertype/RenderType;Lnet/minecraft/client/renderer/item/ItemStackRenderState$FoilType;)V"), index = 8)
+    *///?} elif >=26.1 <26.3 {
+    /*@ModifyArg(method = "submit", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/SubmitNodeCollector;submitItem(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/world/item/ItemDisplayContext;III[ILjava/util/List;Lnet/minecraft/client/renderer/item/ItemStackRenderState$FoilType;)V"), index = 7)
+    *///?} else {
     @Unique
     private static List<BakedQuad> animatium$flatten(final List<BakedQuad> quads) {
         return quads.stream().filter(baked -> baked.direction() == Direction.SOUTH).collect(Collectors.toList());
     }
+    //?}
 
+    //? if >=26.3 {
     @ModifyArg(method = "submit", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/SubmitNodeCollector;submitItem(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/world/item/ItemDisplayContext;III[ILnet/minecraft/client/resources/model/geometry/ItemQuads;Lnet/minecraft/client/renderer/item/ItemStackRenderState$FoilType;)V"), index = 7)
+    //?}
     private ItemStackRenderState.FoilType animatium$disableGlintOn2DItems(final ItemStackRenderState.FoilType foilType) {
         final boolean glintDropped = !AnimatiumConfig.instance().items.glintOnItemDrops2D;
         final boolean glintFramed = !AnimatiumConfig.instance().items.glintOnItemFramed2D;
-        if (Animatium.isEnabled() &&
+        if (Animatium.isEnabled() && (
                 (glintDropped && this.itemStackRenderState.displayContext == ItemDisplayContext.GROUND) ||
-                (glintFramed && this.itemStackRenderState.displayContext == ItemDisplayContext.FIXED)) {
+                (glintFramed && this.itemStackRenderState.displayContext == ItemDisplayContext.FIXED))) {
             return ItemStackRenderState.FoilType.NONE;
         } else {
             return foilType;
@@ -91,18 +132,31 @@ public abstract class MixinItemStackRenderLayerState {
     }
 
     // TODO/MOVE
+    //? if 1.21.11 {
+    /*@Inject(method = "submit", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/block/model/ItemTransform;apply(ZLcom/mojang/blaze3d/vertex/PoseStack$Pose;)V"))
+    private void animatium$itemPositions(final PoseStack poseStack, final SubmitNodeCollector nodeCollector, final int packedLight, final int packedOverlay, final int outlineColor, final CallbackInfo ci) {
+    *///?} else {
     @Inject(method = "applyTransform", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/resources/model/cuboid/ItemTransform;apply(ZLcom/mojang/blaze3d/vertex/PoseStack$Pose;)V"))
     private void animatium$itemPositions(final PoseStack.Pose localPose, final CallbackInfo ci) {
+    //?}
         if (Animatium.isEnabled()) {
             final ItemStack stack = this.itemStackRenderState.animatium$getItemStack();
             if (!stack.isEmpty()) {
+                //? if 1.21.11 {
+                /*final PoseStack.Pose localPose = poseStack.last();
+                *///?}
                 final ItemDisplayContext itemDisplayContext = this.itemStackRenderState.displayContext;
                 final boolean isGui = itemDisplayContext == ItemDisplayContext.GUI;
                 final boolean isFirstPerson = itemDisplayContext == ItemDisplayContext.FIRST_PERSON_LEFT_HAND || itemDisplayContext == ItemDisplayContext.FIRST_PERSON_RIGHT_HAND;
                 final boolean isThirdPerson = itemDisplayContext == ItemDisplayContext.THIRD_PERSON_LEFT_HAND || itemDisplayContext == ItemDisplayContext.THIRD_PERSON_RIGHT_HAND;
-                float x = this.itemTransform.translation().x();
-                float y = this.itemTransform.translation().y();
-                float z = this.itemTransform.translation().z();
+                //? if 1.21.11 {
+                /*final ItemTransform transform = this.transform;
+                *///?} else {
+                final ItemTransform transform = this.itemTransform;
+                //?}
+                final float x = transform.translation().x();
+                final float y = transform.translation().y();
+                final float z = transform.translation().z();
                 if (AnimatiumConfig.instance().items.fishingRodVersion != FishingRodVersionSetting.VANILLA && ItemUtilKt.isFishingRodItem(stack) && isFirstPerson) {
                     final int ordinal = AnimatiumConfig.instance().items.fishingRodVersion.ordinal();
                     if (ordinal <= FishingRodVersionSetting.V1_8.ordinal()) {
@@ -128,24 +182,24 @@ public abstract class MixinItemStackRenderLayerState {
                 // TODO/NEED TO FIX
                 if (AnimatiumConfig.instance().items.skullPosition && ItemUtilKt.isSkullBlock(stack) && isGui && !AnimatiumConfig.instance().items.mobHeadIcons) {
                     localPose.translate(x, y, z);
-                    localPose.rotate(Axis.XP.rotationDegrees(UtilsKt.toRadians(this.itemTransform.rotation().x())));
-                    localPose.rotate(Axis.YP.rotationDegrees(UtilsKt.toRadians(this.itemTransform.rotation().y())));
-                    localPose.rotate(Axis.ZP.rotationDegrees(UtilsKt.toRadians(this.itemTransform.rotation().x())));
+                    localPose.rotate(Axis.XP.rotationDegrees(transform.rotation().z()));
+                    localPose.rotate(Axis.YP.rotationDegrees(transform.rotation().y()));
+                    localPose.rotate(Axis.ZP.rotationDegrees(transform.rotation().x()));
                     localPose.scale(0.9F, 0.9F, 0.9F);
-                    localPose.scale(this.itemTransform.scale().x(), this.itemTransform.scale().y(), this.itemTransform.scale().z());
-                    animatium$doInverseTransformations(localPose);
+                    localPose.scale(transform.scale().x(), transform.scale().y(), transform.scale().z());
+                    animatium$doInverseTransformations(localPose, transform);
                 }
             }
         }
     }
 
     @Unique
-    private void animatium$doInverseTransformations(final PoseStack.Pose localPose) {
-        localPose.scale(1 / this.itemTransform.scale().x(), 1 / this.itemTransform.scale().y(), 1 / this.itemTransform.scale().z());
-        localPose.rotate(Axis.ZP.rotationDegrees(-UtilsKt.toRadians(this.itemTransform.rotation().x())));
-        localPose.rotate(Axis.YP.rotationDegrees(-UtilsKt.toRadians(this.itemTransform.rotation().y())));
-        localPose.rotate(Axis.XP.rotationDegrees(-UtilsKt.toRadians(this.itemTransform.rotation().z())));
-        localPose.translate(-this.itemTransform.translation().x(), -this.itemTransform.translation().y(), -this.itemTransform.translation().z());
+    private static void animatium$doInverseTransformations(final PoseStack.Pose localPose, final ItemTransform transform) {
+        localPose.scale(1 / transform.scale().x(), 1 / transform.scale().y(), 1 / transform.scale().z());
+        localPose.rotate(Axis.ZP.rotationDegrees(-transform.rotation().x()));
+        localPose.rotate(Axis.YP.rotationDegrees(-transform.rotation().y()));
+        localPose.rotate(Axis.XP.rotationDegrees(-transform.rotation().z()));
+        localPose.translate(-transform.translation().x(), -transform.translation().y(), -transform.translation().z());
     }
 
     @Unique

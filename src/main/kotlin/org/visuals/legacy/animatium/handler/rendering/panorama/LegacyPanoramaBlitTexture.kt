@@ -26,13 +26,24 @@
 package org.visuals.legacy.animatium.handler.rendering.panorama
 
 import com.mojang.blaze3d.systems.RenderSystem
+//? if <26.3 {
+/*import com.mojang.blaze3d.textures.FilterMode
+import com.mojang.blaze3d.textures.GpuTextureView
+*///?}
 import com.mojang.blaze3d.vertex.VertexConsumer
+//? if >=26.3 {
 import com.mojang.renderpearl.api.textures.FilterMode
 import com.mojang.renderpearl.api.textures.GpuTextureView
+//?}
 import net.minecraft.client.gui.navigation.ScreenRectangle
 import net.minecraft.client.gui.render.TextureSetup
+//? if 1.21.11 {
+/*import net.minecraft.client.gui.render.state.GuiElementRenderState
+*///?}
 import net.minecraft.client.renderer.RenderPipelines
+//? if >=26.1 {
 import net.minecraft.client.renderer.state.gui.GuiElementRenderState
+//?}
 import net.minecraft.util.ARGB
 import org.joml.Matrix3x2f
 

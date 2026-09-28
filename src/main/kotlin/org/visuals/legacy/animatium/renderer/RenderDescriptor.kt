@@ -26,10 +26,23 @@
 package org.visuals.legacy.animatium.renderer
 
 import com.mojang.blaze3d.pipeline.RenderTarget
+//? if <26.3 {
+/*import com.mojang.blaze3d.systems.RenderPass
+*///?}
+//? if 26.2 {
+/*import com.mojang.blaze3d.systems.RenderPassDescriptor
+*///?}
 import com.mojang.blaze3d.systems.RenderSystem
+//? if <26.3 {
+/*import com.mojang.blaze3d.textures.GpuTextureView
+*///?}
+//? if <26.2 {
+/*import java.util.*
+*///?} elif >=26.3 {
 import com.mojang.renderpearl.api.commands.RenderPass
 import com.mojang.renderpearl.api.commands.RenderPassDescriptor
 import com.mojang.renderpearl.api.textures.GpuTextureView
+//?}
 import java.util.function.Supplier
 
 data class RenderDescriptor(
@@ -44,14 +57,29 @@ data class RenderDescriptor(
     }
 
     fun createPass(): RenderPass {
+        //? if <26.2 {
+        /*return RenderSystem.getDevice().createCommandEncoder()
+            .createRenderPass(this.name, this.colorTexture, OptionalInt.empty(), this.depthTexture, OptionalDouble.empty())
+        *///?} elif 26.2 {
+        /*val descriptor = RenderPassDescriptor.create(this.name)
+        *///?} else {
         val descriptor = RenderPassDescriptor.builder(this.name)
+        //?}
+        //? if >=26.2 {
         descriptor.withColorAttachment(this.colorTexture)
         if (this.depthTexture != null) {
             descriptor.withDepthAttachment(this.depthTexture)
         }
+        //?}
 
+        //? if >=26.2 {
         descriptor.withRenderArea(this.area.vanilla())
+        //?}
+        //? if 26.2 {
+        /*return RenderSystem.getDevice().createCommandEncoder().createRenderPass(descriptor)
+        *///?} elif >=26.3 {
         return RenderSystem.getDevice().createCommandEncoder().createRenderPass(descriptor.build())
+        //?}
     }
 
     data class Area(val x: Int, val y: Int, val width: Int, val height: Int) {
@@ -59,7 +87,9 @@ data class RenderDescriptor(
         constructor(renderTarget: RenderTarget) : this(0, 0, renderTarget.width, renderTarget.height)
         constructor(textureView: GpuTextureView) : this(0, 0, textureView.getWidth(0), textureView.getHeight(0))
 
+        //? if >=26.2 {
         fun vanilla() = RenderPass.RenderArea(this.x, this.y, this.width, this.height)
+        //?}
     }
 
     class Builder(private val name: Supplier<String>) {
@@ -67,12 +97,37 @@ data class RenderDescriptor(
         private var depthTexture: GpuTextureView? = null
         private var area: Area? = null
 
+        //? if <26.3 {
+        /*fun withRenderTarget(renderTarget: RenderTarget, ignoreGlobalOverrides: Boolean): Builder {
+        *///?} else {
         fun withRenderTarget(renderTarget: RenderTarget): Builder {
+        //?}
             this.colorTexture = renderTarget.getColorTextureView()
+            //? if <26.3 {
+            /*this.depthTexture = if (renderTarget.useDepth) renderTarget.getDepthTextureView() else null
+            if (!ignoreGlobalOverrides) {
+                if (RenderSystem.outputColorTextureOverride != null) {
+                    this.colorTexture = RenderSystem.outputColorTextureOverride
+                }
+            *///?}
+
+            //? if <26.3 {
+                /*if (RenderSystem.outputDepthTextureOverride != null) {
+                    this.depthTexture = if (renderTarget.useDepth) RenderSystem.outputDepthTextureOverride else null
+                }
+            }
+            *///?}
+
+            //? if >=26.3 {
             this.depthTexture = if (renderTarget.hasDepth()) renderTarget.getDepthTextureView() else null
+            //?}
             this.area = Area(0, 0, renderTarget.width, renderTarget.height)
             return this
         }
+
+        //? if <26.3 {
+        /*fun withRenderTarget(renderTarget: RenderTarget) = this.withRenderTarget(renderTarget, true)
+        *///?}
 
         fun withColorTexture(colorTexture: GpuTextureView): Builder {
             this.colorTexture = colorTexture

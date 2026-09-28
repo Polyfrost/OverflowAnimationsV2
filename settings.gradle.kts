@@ -1,38 +1,29 @@
 pluginManagement {
-	repositories {
-		mavenCentral()
-		gradlePluginPortal()
-		maven("https://maven.fabricmc.net")
-		maven("https://maven.architectury.dev")
-		maven("https://maven.kikugie.dev/snapshots")
-		maven("https://maven.kikugie.dev/releases")
-		maven("https://repo.polyfrost.cc/releases")
-	}
+    repositories {
+        mavenCentral()
+        gradlePluginPortal()
+        maven("https://maven.fabricmc.net/")
+        maven("https://maven.kikugie.dev/releases") { name = "KikuGie Releases" }
+        maven("https://maven.kikugie.dev/snapshots") { name = "KikuGie Snapshots" }
+        maven("https://maven.deftu.dev/releases")
+        maven("https://maven.deftu.dev/snapshots")
+        maven("https://maven.architectury.dev")
+        maven("https://repo.polyfrost.org/releases")
+        maven("https://repo.polyfrost.org/snapshots")
+    }
 }
 
 plugins {
-	id("dev.kikugie.stonecutter") version "0.8.3"
+    id("dev.kikugie.stonecutter") version "0.9.7"
+    id("dev.kikugie.loom-back-compat") version "0.4.2"
+    id("org.gradle.toolchains.foojay-resolver-convention") version "1.0.0"
 }
 
 stonecutter {
-	kotlinController = true
-	centralScript = "build.gradle.kts"
-	create(rootProject) {
-		fun mc(mcVersion: String, loaders: Iterable<String>) {
-			for (loader in loaders) {
-                version("$mcVersion-$loader", mcVersion)
-			}
-		}
+    create(rootProject) {
+        versions("1.21.11", "26.1", "26.2", "26.3", "26.4")
 
-		mc("26.4", listOf("fabric"))
-
-		vcsVersion = "26.4-fabric"
-	}
-}
-
-dependencyResolutionManagement {
-    versionCatalogs {
-        create("libs")
+        vcsVersion = "26.4"
     }
 }
 

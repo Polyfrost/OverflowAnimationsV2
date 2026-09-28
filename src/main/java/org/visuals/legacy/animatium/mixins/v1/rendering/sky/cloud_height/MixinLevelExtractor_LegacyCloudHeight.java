@@ -25,6 +25,7 @@
 
 package org.visuals.legacy.animatium.mixins.v1.rendering.sky.cloud_height;
 
+//? if >=26.2 {
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -37,12 +38,16 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.visuals.legacy.animatium.Animatium;
 import org.visuals.legacy.animatium.config.AnimatiumConfig;
+//?}
 
+//? if >=26.2 {
 @Mixin(LevelExtractor.class)
 public abstract class MixinLevelExtractor_LegacyCloudHeight {
     @Shadow
     private @Nullable ClientLevel level;
+//?}
 
+//? if >=26.2 {
     @WrapOperation(method = "extract", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/attribute/EnvironmentAttributeProbe;getValue(Lnet/minecraft/world/attribute/EnvironmentAttribute;F)Ljava/lang/Object;", ordinal = 1))
     private <Value> Value animatium$cloudHeight(final EnvironmentAttributeProbe instance, final EnvironmentAttribute<Value> attribute, final float partialTicks, final Operation<Value> original) {
         if (Animatium.isEnabled() && AnimatiumConfig.instance().other.cloudHeight && !this.level.dimensionType().hasCeiling()) {
@@ -52,3 +57,4 @@ public abstract class MixinLevelExtractor_LegacyCloudHeight {
         }
     }
 }
+//?}

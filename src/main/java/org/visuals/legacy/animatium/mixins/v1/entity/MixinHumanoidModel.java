@@ -103,8 +103,12 @@ public abstract class MixinHumanoidModel<T extends HumanoidRenderState> extends 
     }
 
     @WrapOperation(method = "setupAttackAnimation", at = @At(value = "FIELD", opcode = Opcodes.PUTFIELD, target = "Lnet/minecraft/client/model/geom/ModelPart;xRot:F", ordinal = 0))
-    public void animatium$fixMirrorArmSwing$field(final ModelPart instance, final float value, final Operation<Void> original, @Local(argsOnly = true, name = "state") final T state) {
+    public void animatium$fixMirrorArmSwing$field(final ModelPart instance, final float value, final Operation<Void> original, @Local(argsOnly = true, ordinal = 0) final T state) {
+        //? if <26.3 {
+        /*if (Animatium.isEnabled() && AnimatiumConfig.instance().fixes.fixMirrorArmSwing && state.attackArm == HumanoidArm.LEFT) {
+        *///?} else {
         if (Animatium.isEnabled() && AnimatiumConfig.instance().fixes.fixMirrorArmSwing && SwingUtilKt.attackArm(state) == HumanoidArm.LEFT) {
+        //?}
             this.rightArm.xRot -= this.body.yRot;
         } else {
             original.call(instance, value);
@@ -112,9 +116,13 @@ public abstract class MixinHumanoidModel<T extends HumanoidRenderState> extends 
     }
 
     @ModifyExpressionValue(method = "setupAttackAnimation", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/Mth;sin(D)F", ordinal = 5))
-    public float animatium$fixMirrorArmSwing$sin(final float original, @Local(argsOnly = true, name = "state") final T state) {
+    public float animatium$fixMirrorArmSwing$sin(final float original, @Local(argsOnly = true, ordinal = 0) final T state) {
         if (Animatium.isEnabled() && AnimatiumConfig.instance().fixes.fixMirrorArmSwing) {
+            //? if <26.3 {
+            /*return original * EntityUtilKt.getArmMultiplier(state.attackArm);
+            *///?} else {
             return original * EntityUtilKt.getArmMultiplier(SwingUtilKt.attackArm(state));
+            //?}
         } else {
             return original;
         }
@@ -129,7 +137,11 @@ public abstract class MixinHumanoidModel<T extends HumanoidRenderState> extends 
         }
     }
 
+    //? if <26.3 {
+    /*@Inject(method = "setupAnim(Lnet/minecraft/client/renderer/entity/state/HumanoidRenderState;)V", at = @At(value = "CONSTANT", args = "floatValue=0.0", ordinal = 1))
+    *///?} else {
     @Inject(method = "setupAnim(Lnet/minecraft/client/renderer/entity/state/HumanoidRenderState;)V", at = @At(value = "CONSTANT", args = "floatValue=0.0", ordinal = 0))
+    //?}
     private void animatium$bowArmMovement(final T state, final CallbackInfo ci) {
         if (Animatium.isEnabled() && AnimatiumConfig.instance().movement.bowArmMovement) {
             final boolean isLeftArmPose = state.leftArmPose == HumanoidModel.ArmPose.BOW_AND_ARROW;
@@ -154,7 +166,7 @@ public abstract class MixinHumanoidModel<T extends HumanoidRenderState> extends 
     }
 
     @WrapOperation(method = {"poseLeftArm", "poseRightArm"}, at = @At(value = "INVOKE", target = "Lnet/minecraft/client/model/HumanoidModel;poseBlockingArm(Lnet/minecraft/client/model/geom/ModelPart;Z)V"))
-    private void animatium$oldSwordBlockArm(final HumanoidModel<?> instance, final ModelPart arm, final boolean right, final Operation<Void> original, @Local(argsOnly = true, name = "state") final T state) {
+    private void animatium$oldSwordBlockArm(final HumanoidModel<?> instance, final ModelPart arm, final boolean right, final Operation<Void> original, @Local(argsOnly = true, ordinal = 0) final T state) {
         original.call(instance, arm, right);
         if (Animatium.isEnabled() && AnimatiumConfig.instance().other.thirdPersonSwordBlockingPosition) {
             final ItemStack stack = state.animatium$getItemHeldByArm(right ? HumanoidArm.RIGHT : HumanoidArm.LEFT);

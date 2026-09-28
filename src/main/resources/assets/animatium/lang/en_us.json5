@@ -195,8 +195,10 @@
 	"animatium.fixDoubleUsageVisual.description": "Fixes the double item usage issue on servers, usually found when you have high ping.",
 	"animatium.oldSkyRenderingCheck": "[*] Sky Rendering Check",
 	"animatium.oldSkyRenderingCheck.description": "Brings back the old render distance check for sky rendering, making it not render in <=4 render distance.",
+	//? if >=26.1 {
 	"animatium.smoothParticles": "[1.13] Smooth Particles",
 	"animatium.smoothParticles.description": "Updates particles w/ multiple textures on render so that they appear smoothly like in <=1.13.2.",
+	//?}
 
 	"animatium.category.other": "Other",
 

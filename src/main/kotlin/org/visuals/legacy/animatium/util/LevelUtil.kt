@@ -60,7 +60,11 @@ fun ClientLevel.getLegacyFixedTime(): Long? {
 }
 
 fun ClientLevel.getTimeOfDay(tickDelta: Float): Float {
+    //? if 1.21.11 {
+    /*var dayTime = this.getLegacyFixedTime() ?: this.dayTime
+    *///?} else {
     var dayTime = this.getLegacyFixedTime() ?: this.overworldClockTime
+    //?}
     if (dayTime == 0L) {
         dayTime = 1L // 1.8 never lets the tick time be 0
     }

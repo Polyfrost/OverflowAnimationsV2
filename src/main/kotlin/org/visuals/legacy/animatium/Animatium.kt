@@ -55,7 +55,11 @@ object Animatium {
     @JvmStatic
     fun reload() {
         val minecraft = Minecraft.getInstance()
+        //? if <26.2 {
+        /*minecraft.levelRenderer.allChanged()
+        *///?} else {
         minecraft.levelExtractor.allChanged()
+        //?}
         LegacyDiffuseLighting.refresh()
         reinitializeInventorySlots()
         ToastUtil.send(Component.literal("Mod reloaded.").withStyle(ChatFormatting.GREEN))

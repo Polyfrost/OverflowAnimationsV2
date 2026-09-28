@@ -25,6 +25,7 @@
 
 package org.visuals.legacy.animatium.mixins.v1.rendering.lighting;
 
+//? if >=26.1 {
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
@@ -43,19 +44,27 @@ import org.visuals.legacy.animatium.config.AnimatiumConfig;
 import org.visuals.legacy.animatium.handler.rendering.lighting.lightmap.LegacyLightmapExtractor;
 import org.visuals.legacy.animatium.handler.rendering.lighting.lightmap.LegacyLightmapState;
 import org.visuals.legacy.animatium.handler.rendering.lighting.lightmap.LightmapStateExtension;
+//?}
 
+//? if >=26.1 {
 @Mixin(LightmapRenderStateExtractor.class)
 public abstract class MixinLightmapRenderStateExtractor_LegacyLightmap {
     @Shadow
     @Final
     private Minecraft minecraft;
+//?}
 
+    //? if >=26.1 {
     @Shadow
     private float blockLightFlicker;
+    //?}
 
+    //? if >=26.1 {
     @Unique
     private final LegacyLightmapExtractor animatium$extractor = new LegacyLightmapExtractor();
+    //?}
 
+    //? if >=26.1 {
     @ModifyExpressionValue(method = "tick", at = @At(value = "CONSTANT", args = "floatValue=0.1"))
     private float animatium$legacyLightmap$changeFlickerDifference(final float original) {
         if (Animatium.isEnabled() && AnimatiumConfig.instance().other.legacyLightmap) {
@@ -64,12 +73,16 @@ public abstract class MixinLightmapRenderStateExtractor_LegacyLightmap {
             return original;
         }
     }
+    //?}
 
+    //? if >=26.1 {
     @Inject(method = "tick", at = @At("TAIL"))
     private void animatium$legacyLightmap$tick(final CallbackInfo ci) {
         this.animatium$extractor.tick(this.blockLightFlicker);
     }
+    //?}
 
+//? if >=26.1 {
     @WrapMethod(method = "extract")
     private void animatium$legacyLightmap$extract(final LightmapRenderState renderState, final float tickDelta, final Operation<Void> original) {
         if (Animatium.isEnabled() && AnimatiumConfig.instance().other.legacyLightmap) {
@@ -81,3 +94,4 @@ public abstract class MixinLightmapRenderStateExtractor_LegacyLightmap {
         }
     }
 }
+//?}

@@ -25,6 +25,7 @@
 
 package org.visuals.legacy.animatium.mixins.v1.rendering.blocks;
 
+//? if >=26.1 {
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.BlockStateModelSet;
 import net.minecraft.client.renderer.block.dispatch.BlockStateModel;
@@ -38,7 +39,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.visuals.legacy.animatium.Animatium;
 import org.visuals.legacy.animatium.AnimatiumConstants;
 import org.visuals.legacy.animatium.config.AnimatiumConfig;
+//?}
 
+//? if >=26.1 {
 @Mixin(BlockStateModelSet.class)
 public abstract class MixinBlockStateModelSet_FastGrassSide {
     @Inject(method = "get", at = @At("HEAD"), cancellable = true)
@@ -48,3 +51,4 @@ public abstract class MixinBlockStateModelSet_FastGrassSide {
         }
     }
 }
+//?}

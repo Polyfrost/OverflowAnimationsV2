@@ -25,6 +25,7 @@
 
 package org.visuals.legacy.animatium.mixins.v1.entity.items;
 
+//? if >=26.3 {
 import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
@@ -40,7 +41,9 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.visuals.legacy.animatium.Animatium;
 import org.visuals.legacy.animatium.config.AnimatiumConfig;
+//?}
 
+//? if >=26.3 {
 @Mixin(FirstPersonHandsAndItemsRenderer.class)
 public abstract class MixinFirstPersonHandsAndItemsRenderer_HeldItemArmLogic {
     @Inject(method = "renderPlayerHand", at = @At(value = "INVOKE", target = "Lnet/minecraft/core/ClientAsset$Texture;texturePath()Lnet/minecraft/resources/Identifier;", shift = At.Shift.AFTER))
@@ -51,3 +54,4 @@ public abstract class MixinFirstPersonHandsAndItemsRenderer_HeldItemArmLogic {
         }
     }
 }
+//?}

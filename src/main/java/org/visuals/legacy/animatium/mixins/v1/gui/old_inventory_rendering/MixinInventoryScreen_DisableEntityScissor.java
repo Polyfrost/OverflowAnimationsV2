@@ -27,13 +27,27 @@ package org.visuals.legacy.animatium.mixins.v1.gui.old_inventory_rendering;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+//? if 1.21.11 {
+/*import net.minecraft.client.gui.GuiGraphics;
+*///?} else {
 import net.minecraft.client.gui.GuiGraphicsExtractor;
+//?}
 import net.minecraft.client.gui.navigation.ScreenRectangle;
+//? if 1.21.11 {
+/*import net.minecraft.client.gui.render.state.pip.GuiEntityRenderState;
+*///?}
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.client.renderer.entity.state.EntityRenderState;
+//? if >=26.1 {
 import net.minecraft.client.renderer.state.gui.pip.GuiEntityRenderState;
+//?}
+//? if <26.2 {
+/*import org.joml.Quaternionf;
+import org.joml.Vector3f;
+*///?} else {
 import org.joml.Quaternionfc;
 import org.joml.Vector3fc;
+//?}
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.visuals.legacy.animatium.Animatium;
@@ -41,12 +55,24 @@ import org.visuals.legacy.animatium.config.AnimatiumConfig;
 
 @Mixin(InventoryScreen.class)
 public abstract class MixinInventoryScreen_DisableEntityScissor {
+    //? if 1.21.11 {
+    /*@WrapOperation(method = "renderEntityInInventoryFollowsMouse", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphics;submitEntityRenderState(Lnet/minecraft/client/renderer/entity/state/EntityRenderState;FLorg/joml/Vector3f;Lorg/joml/Quaternionf;Lorg/joml/Quaternionf;IIII)V"))
+    private static void animatium$disableEntityScissor(final GuiGraphics instance, final EntityRenderState renderState, final float scale, final Vector3f translation, final Quaternionf rotation, final Quaternionf overrideCameraAngle, final int x0, final int y0, final int x1, final int y1, final Operation<Void> original) {
+    *///?} elif 26.1 {
+    /*@WrapOperation(method = "extractEntityInInventoryFollowsMouse", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphicsExtractor;entity(Lnet/minecraft/client/renderer/entity/state/EntityRenderState;FLorg/joml/Vector3f;Lorg/joml/Quaternionf;Lorg/joml/Quaternionf;IIII)V"))
+    private static void animatium$disableEntityScissor(final GuiGraphicsExtractor instance, final EntityRenderState renderState, final float scale, final Vector3f translation, final Quaternionf rotation, final Quaternionf overrideCameraAngle, final int x0, final int y0, final int x1, final int y1, final Operation<Void> original) {
+    *///?} else {
     @WrapOperation(method = "extractEntityInInventoryFollowsMouse", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphicsExtractor;entity(Lnet/minecraft/client/renderer/entity/state/EntityRenderState;FLorg/joml/Vector3fc;Lorg/joml/Quaternionfc;Lorg/joml/Quaternionfc;IIII)V"))
     private static void animatium$disableEntityScissor(final GuiGraphicsExtractor instance, final EntityRenderState renderState, final float scale, final Vector3fc translation, final Quaternionfc rotation, final Quaternionfc overrideCameraAngle, final int x0, final int y0, final int x1, final int y1, final Operation<Void> original) {
+    //?}
         if (Animatium.isEnabled() && AnimatiumConfig.instance().other.disableInventoryEntityScissor) {
             final ScreenRectangle bounds = new ScreenRectangle(0, 0, instance.guiWidth(), instance.guiHeight());
             final int expansion = 40;
+            //? if 1.21.11 {
+            /*instance.guiRenderState.submitPicturesInPictureState(new GuiEntityRenderState(renderState, translation, rotation, overrideCameraAngle, x0 - expansion, y0 - expansion, x1 + expansion, y1 + expansion, scale, null, bounds));
+            *///?} else {
             instance.guiRenderState.addPicturesInPictureState(new GuiEntityRenderState(renderState, translation, rotation, overrideCameraAngle, x0 - expansion, y0 - expansion, x1 + expansion, y1 + expansion, scale, null, bounds));
+            //?}
         } else {
             original.call(instance, renderState, scale, translation, rotation, overrideCameraAngle, x0, y0, x1, y1);
         }

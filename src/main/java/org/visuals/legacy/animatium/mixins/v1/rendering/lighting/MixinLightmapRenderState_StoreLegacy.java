@@ -25,24 +25,32 @@
 
 package org.visuals.legacy.animatium.mixins.v1.rendering.lighting;
 
+//? if >=26.1 {
 import net.minecraft.client.renderer.state.LightmapRenderState;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.visuals.legacy.animatium.handler.rendering.lighting.lightmap.LegacyLightmapState;
 import org.visuals.legacy.animatium.handler.rendering.lighting.lightmap.LightmapStateExtension;
+//?}
 
+//? if >=26.1 {
 @Mixin(LightmapRenderState.class)
 public abstract class MixinLightmapRenderState_StoreLegacy implements LightmapStateExtension {
     @Unique
     private LegacyLightmapState animatium$legacyState;
+//?}
 
+    //? if >=26.1 {
     @Override
     public LegacyLightmapState animatium$getState() {
         return this.animatium$legacyState;
     }
+    //?}
 
+//? if >=26.1 {
     @Override
     public void animatium$setState(final LegacyLightmapState state) {
         this.animatium$legacyState = state;
     }
 }
+//?}

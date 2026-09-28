@@ -26,8 +26,13 @@
 package org.visuals.legacy.animatium.mixins.v1.rendering.fog;
 
 import net.minecraft.client.Camera;
+//? if 1.21.11 {
+/*import net.minecraft.client.Minecraft;
+*///?}
 import net.minecraft.client.renderer.GameRenderer;
+//? if >=26.1 {
 import net.minecraft.client.renderer.state.GameRenderState;
+//?}
 import net.minecraft.world.entity.Entity;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -45,13 +50,21 @@ public abstract class MixinGameRenderer_TickDarkness {
 
     @Shadow
     @Final
+    //? if 1.21.11 {
+    /*private Minecraft minecraft;
+    *///?} else {
     private GameRenderState gameRenderState;
+    //?}
 
     @Inject(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/Camera;tick()V", shift = At.Shift.AFTER))
     private void animatium$tickFogDarkness(final CallbackInfo ci) {
         final Entity entity = this.mainCamera.entity();
         if (entity != null) {
+            //? if 1.21.11 {
+            /*LegacyFogDarkness.tick(entity, this.minecraft.options.renderDistance().get());
+            *///?} else {
             LegacyFogDarkness.tick(entity, this.gameRenderState.optionsRenderState.renderDistance);
+            //?}
         }
     }
 }

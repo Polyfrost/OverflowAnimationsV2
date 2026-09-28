@@ -29,7 +29,11 @@ import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.moulberry.mixinconstraints.annotations.IfModAbsent;
 import net.minecraft.client.gui.Font;
+//? if 1.21.11 {
+/*import net.minecraft.client.gui.GuiGraphics;
+*///?} else {
 import net.minecraft.client.gui.GuiGraphicsExtractor;
+//?}
 import net.minecraft.client.gui.components.toasts.ToastManager;
 import net.minecraft.client.gui.components.toasts.TutorialToast;
 import org.spongepowered.asm.mixin.Mixin;
@@ -46,8 +50,13 @@ public abstract class MixinTutorialToast_DisableToast {
         }
     }
 
+    //? if 1.21.11 {
+    /*@WrapMethod(method = "render")
+    private void animatium$disableTutorialToast(final GuiGraphics graphics, final Font font, final long fullyVisibleForMs, final Operation<Void> original) {
+    *///?} else {
     @WrapMethod(method = "extractRenderState")
     private void animatium$disableTutorialToast(final GuiGraphicsExtractor graphics, final Font font, final long fullyVisibleForMs, final Operation<Void> original) {
+    //?}
         if (!Animatium.isEnabled() || !AnimatiumConfig.instance().extras.disableRecipeAndTutorialToasts) {
             original.call(graphics, font, fullyVisibleForMs);
         }

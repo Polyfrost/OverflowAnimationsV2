@@ -47,7 +47,9 @@ public final class FixesConfigCategory extends Category {
     public boolean fixItemUsageVisualInGUI = true;
     public boolean fixDoubleUsageVisual = true;
     public boolean oldSkyRenderingCheck = true;
+    //? if >=26.1 {
     public boolean smoothParticles = true;
+    //?}
 
     public static ConfigCategory create(final FixesConfigCategory defaults, final FixesConfigCategory config) {
         final ConfigCategory.Builder category = ConfigCategory.createBuilder();
@@ -77,7 +79,9 @@ public final class FixesConfigCategory extends Category {
         bundle.booleanEntry("fixItemUsageVisualInGUI");
         bundle.booleanEntry("fixDoubleUsageVisual");
         bundle.booleanEntry("oldSkyRenderingCheck");
+        //? if >=26.1 {
         bundle.booleanEntry("smoothParticles");
+        //?}
 
         return bundle;
     }

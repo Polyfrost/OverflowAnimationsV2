@@ -25,11 +25,17 @@
 
 package org.visuals.legacy.animatium.renderer.buffer
 
+//? if <26.3 {
+/*import com.mojang.blaze3d.buffers.GpuBuffer
+import com.mojang.blaze3d.systems.RenderPass
+*///?}
 import com.mojang.blaze3d.systems.RenderSystem
 import com.mojang.blaze3d.vertex.ByteBufferBuilder
 import com.mojang.blaze3d.vertex.VertexConsumer
+//? if >=26.3 {
 import com.mojang.renderpearl.api.buffers.GpuBuffer
 import com.mojang.renderpearl.api.commands.RenderPass
+//?}
 import org.visuals.legacy.animatium.renderer.vertex.VertexLayout
 import java.util.function.Consumer
 
@@ -78,11 +84,19 @@ data class IndexedGeometry(
     }
 
     override fun bind(pass: RenderPass, autoStorageIndexBuffer: RenderSystem.AutoStorageIndexBuffer) {
+        //? if <26.2 {
+        /*pass.setVertexBuffer(0, vertexBuffer)
+        *///?} else {
         pass.setVertexBuffer(0, vertexBuffer.slice())
+        //?}
         pass.setIndexBuffer(autoStorageIndexBuffer.getBuffer(indexCount), autoStorageIndexBuffer.type())
     }
 
+    //? if <26.2 {
+    /*override fun draw(pass: RenderPass) = pass.drawIndexed(0, 0, indexCount, 1)
+    *///?} else {
     override fun draw(pass: RenderPass) = pass.drawIndexed(indexCount, 1, 0, 0, 0)
+    //?}
 
     override fun persistent() = persistent
 

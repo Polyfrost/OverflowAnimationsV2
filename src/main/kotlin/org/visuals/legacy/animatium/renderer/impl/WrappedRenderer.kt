@@ -25,7 +25,11 @@
 
 package org.visuals.legacy.animatium.renderer.impl
 
+//? if <26.3 {
+/*import com.mojang.blaze3d.systems.RenderPass
+*///?} else {
 import com.mojang.renderpearl.api.commands.RenderPass
+//?}
 import org.visuals.legacy.animatium.renderer.DynamicTransforms
 import org.visuals.legacy.animatium.renderer.buffer.Geometry
 

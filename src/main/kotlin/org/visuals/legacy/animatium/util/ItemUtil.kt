@@ -96,11 +96,19 @@ fun isSwingItemBlacklisted(stack: ItemStack) =
 fun isBlock3d(stack: ItemStack, usesBlockLight: Boolean) = stack.item is BlockItem && usesBlockLight
 
 fun applyLegacyFirstPersonTransforms(poseStack: PoseStack, direction: Int, runnable: Runnable) {
+    //? if <26.3 {
+    /*poseStack.mulPose(Axis.YP.rotationDegrees(direction * 45.0F))
+    *///?} else {
     poseStack.rotate(Axis.YP.rotationDegrees(direction * 45.0F))
+    //?}
     poseStack.scale(0.4F, 0.4F, 0.4F)
     runnable.run()
     poseStack.scale(1 / 0.4F, 1 / 0.4F, 1 / 0.4F)
+    //? if <26.3 {
+    /*poseStack.mulPose(Axis.YP.rotationDegrees(direction * -45.0F))
+    *///?} else {
     poseStack.rotate(Axis.YP.rotationDegrees(direction * -45.0F))
+    //?}
 }
 
 fun shouldApplyItemPositionsInThirdPerson(armedEntityRenderState: ArmedEntityRenderState, stack: ItemStack, useBlockLight: Boolean) =

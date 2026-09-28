@@ -71,7 +71,11 @@ public abstract class MixinFishingHookRenderer extends EntityRenderer<FishingHoo
         }
     }
 
+    //? if 1.21.11 {
+    /*@ModifyArg(method = "method_72983", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/entity/FishingHookRenderer;stringVertex(FFFLcom/mojang/blaze3d/vertex/VertexConsumer;Lcom/mojang/blaze3d/vertex/PoseStack$Pose;FFF)V"), index = 7)
+    *///?} else {
     @ModifyArg(method = "lambda$submit$1", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/entity/FishingHookRenderer;stringVertex(FFFLcom/mojang/blaze3d/vertex/VertexConsumer;Lcom/mojang/blaze3d/vertex/PoseStack$Pose;FFF)V"), index = 7)
+    //?}
     private static float animatium$fishingRodLineThickness(final float lineWidth) {
         if (AnimatiumConfig.instance().items.thinFishingRodLineThickness) {
             return 1.0F;
@@ -132,7 +136,7 @@ public abstract class MixinFishingHookRenderer extends EntityRenderer<FishingHoo
     }
 
     @ModifyArg(method = "extractRenderState(Lnet/minecraft/world/entity/projectile/FishingHook;Lnet/minecraft/client/renderer/entity/state/FishingHookRenderState;F)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/entity/FishingHookRenderer;getPlayerHandPos(Lnet/minecraft/world/entity/player/Player;FF)Lnet/minecraft/world/phys/Vec3;"), index = 1)
-    private float animatium$fixCastLineSwing(final float original, @Local(argsOnly = true, name = "entity") final FishingHook entity) {
+    private float animatium$fixCastLineSwing(final float original, @Local(argsOnly = true, ordinal = 0) final FishingHook entity) {
         final Player player = entity.getPlayerOwner();
         if (Animatium.isEnabled() && AnimatiumConfig.instance().fixes.fixCastLineSwing && player != null) {
             return original * EntityUtilKt.getHandMultiplier(player);

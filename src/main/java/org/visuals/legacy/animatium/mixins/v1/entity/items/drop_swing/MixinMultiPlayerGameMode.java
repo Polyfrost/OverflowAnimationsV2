@@ -25,6 +25,7 @@
 
 package org.visuals.legacy.animatium.mixins.v1.entity.items.drop_swing;
 
+//? if >=26.3 {
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.minecraft.client.multiplayer.MultiPlayerGameMode;
@@ -36,7 +37,9 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.visuals.legacy.animatium.Animatium;
 import org.visuals.legacy.animatium.config.AnimatiumConfig;
 import org.visuals.legacy.animatium.util.SwingUtilKt;
+//?}
 
+//? if >=26.3 {
 @Mixin(MultiPlayerGameMode.class)
 public abstract class MixinMultiPlayerGameMode {
     @WrapOperation(method = "dropItem", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/LocalPlayer;swing(Lnet/minecraft/world/InteractionHand;Lnet/minecraft/world/item/component/SwingAnimation;Z)Z"))
@@ -48,3 +51,4 @@ public abstract class MixinMultiPlayerGameMode {
         }
     }
 }
+//?}

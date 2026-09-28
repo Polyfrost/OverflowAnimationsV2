@@ -28,7 +28,9 @@ package org.visuals.legacy.animatium.handler.rendering.lighting
 import com.mojang.blaze3d.platform.Lighting
 import org.joml.Matrix4f
 import org.joml.Vector3f
+//? if >=26.2 {
 import org.joml.Vector3fc
+//?}
 import org.visuals.legacy.animatium.Animatium
 import org.visuals.legacy.animatium.config.AnimatiumConfig
 import java.util.function.BiConsumer
@@ -75,9 +77,17 @@ object LegacyDiffuseLighting {
 
     data class Lights(
         @JvmField
+        //? if <26.2 {
+        /*val light0: Vector3f,
+        *///?} else {
         val light0: Vector3fc,
+        //?}
 
         @JvmField
+        //? if <26.2 {
+        /*val light1: Vector3f
+        *///?} else {
         val light1: Vector3fc
+        //?}
     )
 }

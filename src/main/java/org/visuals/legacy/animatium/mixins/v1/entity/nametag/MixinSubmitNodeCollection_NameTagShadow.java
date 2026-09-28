@@ -25,13 +25,16 @@
 
 package org.visuals.legacy.animatium.mixins.v1.entity.nametag;
 
+//? if >=26.3 {
 import net.minecraft.client.renderer.SubmitNodeCollection;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.visuals.legacy.animatium.Animatium;
 import org.visuals.legacy.animatium.config.AnimatiumConfig;
+//?}
 
+//? if >=26.3 {
 @Mixin(SubmitNodeCollection.class)
 public abstract class MixinSubmitNodeCollection_NameTagShadow {
     @ModifyArg(method = "nameTag", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/feature/TextFeatureRenderer$Content$Text;<init>(FFLnet/minecraft/util/FormattedCharSequence;ZIII)V"), index = 3)
@@ -39,3 +42,4 @@ public abstract class MixinSubmitNodeCollection_NameTagShadow {
         return (Animatium.isEnabled() && AnimatiumConfig.instance().extras.nameTagTextShadow) || shadow;
     }
 }
+//?}

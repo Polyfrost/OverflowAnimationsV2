@@ -1,17 +1,21 @@
 plugins {
     id("dev.kikugie.stonecutter")
-    alias(libs.plugins.publishing)
-    alias(libs.plugins.spotless)
+    id("com.diffplug.spotless") version "8.2.1"
 }
 
-stonecutter active "26.4-fabric" /* [SC] DO NOT EDIT */
+stonecutter active "26.4" /* [SC] DO NOT EDIT */
 
 stonecutter tasks {
-    order("publishMods", versionComparator)
+    order("publishMods")
 }
 
-tasks.named("publishMods") {
-    group = "build"
+stonecutter parameters {
+    replacements {
+        // Mojang mappings are the official names from 26.1 onwards
+        string(current.parsed >= "26.1") {
+            replace("accessWidener v2 named", "accessWidener v2 official")
+        }
+    }
 }
 
 // Header
@@ -21,11 +25,11 @@ spotless {
 
     java {
         licenseHeaderFile(licenseHeader)
-        target("src/**/*.java", "versions/*/src/**/*.java")
+        target("src/**/*.java")
     }
 
     kotlin {
         licenseHeaderFile(licenseHeader)
-        target("src/**/*.kt", "versions/*/src/**/*.kt")
+        target("src/**/*.kt")
     }
 }

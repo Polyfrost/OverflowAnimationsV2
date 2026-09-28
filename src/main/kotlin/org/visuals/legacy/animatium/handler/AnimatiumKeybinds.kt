@@ -27,7 +27,11 @@ package org.visuals.legacy.animatium.handler
 
 import com.mojang.blaze3d.platform.InputConstants
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents
+//? if 1.21.11 {
+/*import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper
+*///?} else {
 import net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper
+//?}
 import net.minecraft.client.KeyMapping
 import net.minecraft.client.Minecraft
 import org.visuals.legacy.animatium.Animatium
@@ -42,7 +46,11 @@ object AnimatiumKeybinds {
     val CONFIG_SCREEN = create(
         "Open Mod Configuration",
         InputConstants.KEY_BACKSLASH
+    //? if <26.2 {
+    /*) { client -> client.setScreen(AnimatiumConfig.getConfigScreen(client.screen)) }
+    *///?} else {
     ) { client -> client.gui.setScreen(AnimatiumConfig.getConfigScreen(client.gui.screen())) }
+    //?}
 
     val RELOAD = create(
         "Reload Mod",
@@ -52,7 +60,11 @@ object AnimatiumKeybinds {
     fun bootstrap() {
         ClientTickEvents.END_CLIENT_TICK.register { tick(it) }
         for (binding in REGISTRY) {
+            //? if 1.21.11 {
+            /*KeyBindingHelper.registerKeyBinding(binding.mapping)
+            *///?} else {
             KeyMappingHelper.registerKeyMapping(binding.mapping)
+            //?}
         }
     }
 

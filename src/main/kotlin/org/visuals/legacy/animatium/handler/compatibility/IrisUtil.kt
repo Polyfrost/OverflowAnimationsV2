@@ -25,7 +25,13 @@
 
 package org.visuals.legacy.animatium.handler.compatibility
 
+//? if <26.3 {
+/*import com.mojang.blaze3d.pipeline.RenderPipeline
+*///?} elif 26.3 {
+/*import com.mojang.renderpearl.api.pipeline.RenderPipeline
+*///?} else {
 import com.mojang.blaze3d.pipeline.RenderPipeline
+//?}
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap
 import java.lang.reflect.Method
 import java.util.*

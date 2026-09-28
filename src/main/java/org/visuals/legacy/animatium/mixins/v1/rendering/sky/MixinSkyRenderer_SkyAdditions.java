@@ -25,21 +25,31 @@
 
 package org.visuals.legacy.animatium.mixins.v1.rendering.sky;
 
+//? if >=26.3 {
 import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.renderpearl.api.buffers.GpuBufferSlice;
 import com.mojang.renderpearl.api.commands.RenderPass;
+//?}
 import net.minecraft.client.Camera;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.SkyRenderer;
+//? if 1.21.11 {
+/*import net.minecraft.client.renderer.state.SkyRenderState;
+*///?} else {
 import net.minecraft.client.renderer.state.level.SkyRenderState;
+//?}
+//? if >=26.3 {
 import net.minecraft.util.ARGB;
 import net.minecraft.world.level.dimension.DimensionType;
+//?}
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+//? if >=26.3 {
 import org.visuals.legacy.animatium.Animatium;
 import org.visuals.legacy.animatium.config.AnimatiumConfig;
+//?}
 import org.visuals.legacy.animatium.handler.rendering.LegacySkyRenderer;
 import org.visuals.legacy.animatium.util.states.SkyUtilityState;
 
@@ -50,6 +60,7 @@ public abstract class MixinSkyRenderer_SkyAdditions {
         ((SkyUtilityState) state).animatium$setHorizonHeight(LegacySkyRenderer.getHorizonEyeHeight(level, tickDelta));
     }
 
+    //? if >=26.3 {
     @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/SkyRenderer;renderDarkDisc(Lcom/mojang/renderpearl/api/commands/RenderPass;)V", shift = At.Shift.AFTER))
     private void animatium$voidBox(final GpuBufferSlice skyFog, final SkyRenderState state, final CallbackInfo ci, @Local(name = "renderPass") final RenderPass pass) {
         if (Animatium.isEnabled() && AnimatiumConfig.instance().other.playerVoidBox) {
@@ -69,4 +80,5 @@ public abstract class MixinSkyRenderer_SkyAdditions {
     private void animatium$closeSkyRenderUtility(final CallbackInfo ci) {
         LegacySkyRenderer.close();
     }
+    //?}
 }

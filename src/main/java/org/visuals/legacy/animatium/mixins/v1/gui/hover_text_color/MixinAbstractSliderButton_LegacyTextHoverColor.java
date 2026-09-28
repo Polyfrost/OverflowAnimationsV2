@@ -41,7 +41,11 @@ public abstract class MixinAbstractSliderButton_LegacyTextHoverColor extends Abs
         super(x, y, width, height, message);
     }
 
+    //? if 1.21.11 {
+    /*@WrapOperation(method = "renderWidget", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/components/AbstractSliderButton;getMessage()Lnet/minecraft/network/chat/Component;"))
+    *///?} else {
     @WrapOperation(method = "extractWidgetRenderState", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/components/AbstractSliderButton;getMessage()Lnet/minecraft/network/chat/Component;"))
+    //?}
     private Component animatium$renderWidget$old$textColor(final AbstractSliderButton instance, final Operation<Component> original) {
         final Component component = original.call(instance);
         if (Animatium.isEnabled() && AnimatiumConfig.instance().screen.legacyWidgetHoverTextColor) {

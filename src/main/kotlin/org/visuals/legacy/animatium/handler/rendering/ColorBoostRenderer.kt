@@ -26,8 +26,13 @@
 package org.visuals.legacy.animatium.handler.rendering
 
 import com.mojang.blaze3d.systems.RenderSystem
+//? if <26.3 {
+/*import com.mojang.blaze3d.textures.FilterMode
+import com.mojang.blaze3d.textures.GpuTextureView
+*///?} else {
 import com.mojang.renderpearl.api.textures.FilterMode
 import com.mojang.renderpearl.api.textures.GpuTextureView
+//?}
 import org.visuals.legacy.animatium.handler.rendering.pipeline.AnimatiumPipelines
 import org.visuals.legacy.animatium.renderer.buffer.BasicGeometry
 import org.visuals.legacy.animatium.renderer.impl.DeferredRenderer

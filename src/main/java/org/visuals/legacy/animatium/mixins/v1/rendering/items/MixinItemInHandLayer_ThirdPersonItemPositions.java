@@ -37,6 +37,9 @@ import net.minecraft.client.renderer.item.ItemStackRenderState;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+//? if <26.3 {
+/*import org.joml.Quaternionfc;
+*///?}
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -54,9 +57,15 @@ public abstract class MixinItemInHandLayer_ThirdPersonItemPositions<S extends Ar
     @ModifyArgs(method = "submitArmWithItem", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/PoseStack;translate(FFF)V"))
     private void animatium$oldTransformTranslation(
             final Args args,
+            //? if 1.21.11 {
+            /*@Local(argsOnly = true, ordinal = 0) final S state,
+            @Local(argsOnly = true, ordinal = 0) final ItemStackRenderState item,
+            @Local(argsOnly = true, ordinal = 0) final HumanoidArm arm
+            *///?} else {
             @Local(argsOnly = true, name = "state") final S state,
             @Local(argsOnly = true, name = "item") final ItemStackRenderState item,
             @Local(argsOnly = true, name = "arm") final HumanoidArm arm
+            //?}
     ) {
         final ItemStack stack = state.animatium$getItemHeldByArm(arm);
         if (Animatium.isEnabled() && ItemUtilKt.shouldApplyItemPositionsInThirdPerson(state, stack, item.usesBlockLight()) && !ItemUtilKt.isItemBlacklisted(stack)) {
@@ -64,14 +73,29 @@ public abstract class MixinItemInHandLayer_ThirdPersonItemPositions<S extends Ar
         }
     }
 
+    //? if <26.3 {
+    /*@WrapWithCondition(method = "submitArmWithItem", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/PoseStack;mulPose(Lorg/joml/Quaternionfc;)V"))
+    *///?} else {
     @WrapWithCondition(method = "submitArmWithItem", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/PoseStack;rotateDegrees(Lcom/mojang/math/Axis;F)V"))
+    //?}
     private boolean animatium$removeTransformMultiply(
             final PoseStack instance,
+            //? if <26.3 {
+            /*final Quaternionfc by,
+            *///?}
+            //? if 1.21.11 {
+            /*@Local(argsOnly = true, ordinal = 0) final S state,
+            @Local(argsOnly = true, ordinal = 0) final ItemStackRenderState item,
+            @Local(argsOnly = true, ordinal = 0) final HumanoidArm arm
+            *///?} elif >=26.3 {
             final Axis axis,
             final float angle,
+            //?}
+            //? if >=26.1 {
             @Local(argsOnly = true, name = "state") final S state,
             @Local(argsOnly = true, name = "item") final ItemStackRenderState item,
             @Local(argsOnly = true, name = "arm") final HumanoidArm arm
+            //?}
     ) {
         final ItemStack stack = state.animatium$getItemHeldByArm(arm);
         return !Animatium.isEnabled() || !ItemUtilKt.shouldApplyItemPositionsInThirdPerson(state, stack, item.usesBlockLight()) || ItemUtilKt.isItemBlacklisted(stack);
@@ -92,77 +116,143 @@ public abstract class MixinItemInHandLayer_ThirdPersonItemPositions<S extends Ar
                     if (ItemUtilKt.isBlock3d(stack, usesBlockLight)) {
                         final float scale = 0.375F;
                         poseStack.translate(0.0F, 0.1875F, -0.3125F);
+                        //? if <26.3 {
+                        /*poseStack.mulPose(Axis.XP.rotationDegrees(20.0F));
+                        poseStack.mulPose(Axis.YP.rotationDegrees(direction * 45.0F));
+                        *///?} else {
                         poseStack.rotate(Axis.XP.rotationDegrees(20.0F));
                         poseStack.rotate(Axis.YP.rotationDegrees(direction * 45.0F));
+                        //?}
                         poseStack.scale(-scale, -scale, scale);
                     } else if (stack.is(Items.BOW)) {
                         final float scale = 0.625F;
                         poseStack.translate(direction * 0.0F, 0.125F, 0.3125F);
+                        //? if <26.3 {
+                        /*poseStack.mulPose(Axis.YP.rotationDegrees(direction * -20.0F));
+                        *///?} else {
                         poseStack.rotate(Axis.YP.rotationDegrees(direction * -20.0F));
+                        //?}
                         poseStack.translate(direction * -0.0625F, 0.0F, 0.0F);
                         poseStack.scale(scale, scale, scale);
+                        //? if <26.3 {
+                        /*poseStack.mulPose(Axis.XP.rotationDegrees(180));
+                        poseStack.mulPose(Axis.XP.rotationDegrees(100.0F));
+                        poseStack.mulPose(Axis.YP.rotationDegrees(direction * -145.0F));
+                        *///?} else {
                         poseStack.rotate(Axis.XP.rotationDegrees(180));
                         poseStack.rotate(Axis.XP.rotationDegrees(100.0F));
                         poseStack.rotate(Axis.YP.rotationDegrees(direction * -145.0F));
+                        //?}
                         poseStack.translate(-0.011765625F, 0.0F, 0.002125F);
                     } else if (ItemUtilKt.isHandheldItem(stack)) {
                         final float scale = 0.625F;
                         if (ItemUtilKt.isFishingRodItem(stack) && !isStickRod) {
+                            //? if <26.3 {
+                            /*poseStack.mulPose(Axis.ZP.rotationDegrees(direction * 180.0F));
+                            *///?} else {
                             poseStack.rotate(Axis.ZP.rotationDegrees(direction * 180.0F));
+                            //?}
                             poseStack.translate(0.0F, -0.125F, 0.0F);
                         }
 
                         if (EntityUtilKt.isBlockingArm(arm, state)) {
                             poseStack.translate(direction * 0.05F, 0.0F, -0.1F);
+                            //? if <26.3 {
+                            /*poseStack.mulPose(Axis.YP.rotationDegrees(direction * -50.0F));
+                            poseStack.mulPose(Axis.XP.rotationDegrees(-10.0F));
+                            poseStack.mulPose(Axis.ZP.rotationDegrees(direction * -60.0F));
+                            *///?} else {
                             poseStack.rotate(Axis.YP.rotationDegrees(direction * -50.0F));
                             poseStack.rotate(Axis.XP.rotationDegrees(-10.0F));
                             poseStack.rotate(Axis.ZP.rotationDegrees(direction * -60.0F));
+                            //?}
                         }
 
                         poseStack.translate(direction * -0.0625F, 0.1875F, 0.0F);
                         poseStack.scale(scale, scale, scale);
+                        //? if <26.3 {
+                        /*poseStack.mulPose(Axis.XP.rotationDegrees(180));
+                        poseStack.mulPose(Axis.XP.rotationDegrees(100));
+                        poseStack.mulPose(Axis.YP.rotationDegrees(direction * -145));
+                        *///?} else {
                         poseStack.rotate(Axis.XP.rotationDegrees(180));
                         poseStack.rotate(Axis.XP.rotationDegrees(100));
                         poseStack.rotate(Axis.YP.rotationDegrees(direction * -145));
+                        //?}
                         poseStack.translate(-0.011765625F, 0.0F, 0.002125F);
                     } else {
                         final float scale = 0.375F;
                         poseStack.translate(direction * 0.25F, 0.1875F, -0.1875F);
                         poseStack.scale(scale, scale, scale);
+                        //? if <26.3 {
+                        /*poseStack.mulPose(Axis.ZP.rotationDegrees(direction * 60.0F));
+                        poseStack.mulPose(Axis.XP.rotationDegrees(-90.0F));
+                        poseStack.mulPose(Axis.ZP.rotationDegrees(direction * 20.0F));
+                        *///?} else {
                         poseStack.rotate(Axis.ZP.rotationDegrees(direction * 60.0F));
                         poseStack.rotate(Axis.XP.rotationDegrees(-90.0F));
                         poseStack.rotate(Axis.ZP.rotationDegrees(direction * 20.0F));
+                        //?}
                     }
 
                     if (!ItemUtilKt.isBlock3d(stack, usesBlockLight)) {
                         poseStack.translate(0.0F, -0.3F, 0.0F);
                         poseStack.scale(1.5F, 1.5F, 1.5F);
+                        //? if <26.3 {
+                        /*poseStack.mulPose(Axis.YP.rotationDegrees(direction * 50.0F));
+                        poseStack.mulPose(Axis.ZP.rotationDegrees(direction * 335.0F));
+                        *///?} else {
                         poseStack.rotate(Axis.YP.rotationDegrees(direction * 50.0F));
                         poseStack.rotate(Axis.ZP.rotationDegrees(direction * 335.0F));
+                        //?}
                         poseStack.translate(direction * -0.9375F, -0.0625F, 0.0F);
 
+                        //? if <26.3 {
+                        /*poseStack.mulPose(Axis.YP.rotationDegrees(direction * 180.0F));
+                        *///?} else {
                         poseStack.rotate(Axis.YP.rotationDegrees(direction * 180.0F));
+                        //?}
                         poseStack.translate(direction * -0.5F, 0.5F, 0.03125F);
                     }
 
                     if (ItemUtilKt.isBlock3d(stack, usesBlockLight)) {
                         poseStack.scale(1 / 0.375F, 1 / 0.375F, 1 / 0.375F);
+                        //? if <26.3 {
+                        /*poseStack.mulPose(Axis.YP.rotationDegrees(direction * -45.0F));
+                        poseStack.mulPose(Axis.XP.rotationDegrees(-75.0F));
+                        *///?} else {
                         poseStack.rotate(Axis.YP.rotationDegrees(direction * -45.0F));
                         poseStack.rotate(Axis.XP.rotationDegrees(-75.0F));
+                        //?}
                         poseStack.translate(0.0F, -2.5F * 0.0625F, 0.0F);
                     } else if (stack.is(Items.BOW)) {
                         poseStack.scale(1 / 0.9F, 1 / 0.9F, 1 / 0.9F);
+                        //? if <26.3 {
+                        /*poseStack.mulPose(Axis.ZP.rotationDegrees(direction * 40.0F));
+                        poseStack.mulPose(Axis.YP.rotationDegrees(direction * -260.0F));
+                        poseStack.mulPose(Axis.XP.rotationDegrees(80.0F));
+                        *///?} else {
                         poseStack.rotate(Axis.ZP.rotationDegrees(direction * 40.0F));
                         poseStack.rotate(Axis.YP.rotationDegrees(direction * -260.0F));
                         poseStack.rotate(Axis.XP.rotationDegrees(80.0F));
+                        //?}
                         poseStack.translate(direction * 0.0625F, 2.0F * 0.0625F, -2.5F * 0.0625F);
                     } else if (ItemUtilKt.isHandheldItem(stack)) {
                         final boolean isRod = ItemUtilKt.isFishingRodItem(stack) && !isStickRod;
                         poseStack.scale(1 / 0.85F, 1 / 0.85F, 1 / 0.85F);
+                        //? if <26.3 {
+                        /*poseStack.mulPose(Axis.ZP.rotationDegrees(direction * -55.0F));
+                        poseStack.mulPose(Axis.YP.rotationDegrees(direction * 90.0F));
+                        *///?} else {
                         poseStack.rotate(Axis.ZP.rotationDegrees(direction * -55.0F));
                         poseStack.rotate(Axis.YP.rotationDegrees(direction * 90.0F));
+                        //?}
                         if (isRod) {
+                            //? if <26.3 {
+                            /*poseStack.mulPose(Axis.YP.rotationDegrees(direction * -180.0F));
+                            *///?} else {
                             poseStack.rotate(Axis.YP.rotationDegrees(direction * -180.0F));
+                            //?}
                         }
 
                         poseStack.translate(0.0F, -4.0F * 0.0625F, -0.5F * 0.0625F);
