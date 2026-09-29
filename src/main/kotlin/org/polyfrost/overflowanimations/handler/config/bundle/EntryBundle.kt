@@ -49,7 +49,6 @@ open class EntryBundle(protected val category: Category, private val name: Strin
             *///?}
             //? if <1.21.11 {
             /*add("fullWidthInventoryEffects") // Effects already use the full width before 1.21.11
-            add("legacySwingAnimation") // The item swap animation was added in 1.21.11
             *///?}
         }
     }

@@ -370,7 +370,17 @@ public abstract class MixinItemInHandRenderer_FirstPersonItemPositions {
     }
     *///?}
 
-    // The item swap scale was added in 1.21.11
+    //? if <1.21.11 {
+    /*@WrapOperation(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/LocalPlayer;getAttackStrengthScale(F)F"))
+    private float overflowanimations$legacySwingAnimation(final LocalPlayer instance, final float delta, final Operation<Float> original) {
+        if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().items.legacySwingAnimation) {
+            return 1.0F;
+        } else {
+            return original.call(instance, delta);
+        }
+    }
+    *///?}
+
     //? if >=1.21.11 <26.3 {
     /*@WrapOperation(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/LocalPlayer;getItemSwapScale(F)F"))
     private float overflowanimations$legacySwingAnimation(final LocalPlayer instance, final float delta, final Operation<Float> original) {

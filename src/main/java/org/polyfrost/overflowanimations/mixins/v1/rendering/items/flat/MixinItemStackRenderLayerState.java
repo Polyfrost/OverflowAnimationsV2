@@ -25,11 +25,12 @@
 
 package org.polyfrost.overflowanimations.mixins.v1.rendering.items.flat;
 
-// Targets the item model rendering from 1.21.5 (quad lists, record item transforms)
-//? if >=1.21.5 {
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
-//? if <1.21.9 {
+//? if <1.21.5 {
+/*import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.block.model.ItemTransform;
+*///?} elif <1.21.9 {
 /*import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.ItemTransform;
@@ -61,16 +62,24 @@ import org.polyfrost.overflowanimations.OverflowAnimations;
 import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig;
 import org.polyfrost.overflowanimations.util.ItemUtilKt;
 import org.polyfrost.overflowanimations.util.enums.FishingRodVersionSetting;
+import org.joml.Quaternionf;
+import org.joml.Vector3fc;
 
+//? if >=1.21.5 {
 import java.util.List;
 import java.util.stream.Collectors;
+//?}
 
 @Mixin(ItemStackRenderState.LayerRenderState.class)
 public abstract class MixinItemStackRenderLayerState {
-    @Shadow
-    //? if <26.1 {
-    /*ItemTransform transform;
+    //? if <1.21.5 {
+    /*@Shadow
+    abstract ItemTransform transform();
+    *///?} elif <26.1 {
+    /*@Shadow
+    ItemTransform transform;
     *///?} else {
+    @Shadow
     private ItemTransform itemTransform;
     //?}
 
@@ -82,6 +91,7 @@ public abstract class MixinItemStackRenderLayerState {
     @Final
     ItemStackRenderState itemStackRenderState;
 
+    //? if >=1.21.5 {
     @Shadow
     //? if <26.1 {
     /*boolean usesBlockLight;
@@ -112,8 +122,11 @@ public abstract class MixinItemStackRenderLayerState {
             return quads;
         }
     }
+    //?}
 
-    //? if <1.21.9 {
+    //? if <1.21.5 {
+    /*@ModifyArg(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/entity/ItemRenderer;renderItem(Lnet/minecraft/world/item/ItemDisplayContext;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;II[ILnet/minecraft/client/resources/model/BakedModel;Lnet/minecraft/client/renderer/rendertype/RenderType;Lnet/minecraft/client/renderer/item/ItemStackRenderState$FoilType;)V"), index = 8)
+    *///?} elif <1.21.9 {
     /*@ModifyArg(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/entity/ItemRenderer;renderItem(Lnet/minecraft/world/item/ItemDisplayContext;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;II[ILjava/util/List;Lnet/minecraft/client/renderer/rendertype/RenderType;Lnet/minecraft/client/renderer/item/ItemStackRenderState$FoilType;)V"), index = 8)
     *///?} elif <26.1 {
     /*@ModifyArg(method = "submit", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/SubmitNodeCollector;submitItem(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/world/item/ItemDisplayContext;III[ILjava/util/List;Lnet/minecraft/client/renderer/rendertype/RenderType;Lnet/minecraft/client/renderer/item/ItemStackRenderState$FoilType;)V"), index = 8)
@@ -142,9 +155,13 @@ public abstract class MixinItemStackRenderLayerState {
     }
 
     // TODO/MOVE
-    //? if <1.21.9 {
+    //? if <1.21.5 {
+    /*@Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/block/model/ItemTransform;apply(ZLcom/mojang/blaze3d/vertex/PoseStack;)V"))
+    *///?} elif <1.21.9 {
     /*@Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/block/model/ItemTransform;apply(ZLcom/mojang/blaze3d/vertex/PoseStack$Pose;)V"))
-    private void overflowanimations$itemPositions(final PoseStack poseStack, final MultiBufferSource bufferSource, final int packedLight, final int packedOverlay, final CallbackInfo ci) {
+    *///?}
+    //? if <1.21.9 {
+    /*private void overflowanimations$itemPositions(final PoseStack poseStack, final MultiBufferSource bufferSource, final int packedLight, final int packedOverlay, final CallbackInfo ci) {
     *///?} elif <26.1 {
     /*@Inject(method = "submit", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/block/model/ItemTransform;apply(ZLcom/mojang/blaze3d/vertex/PoseStack$Pose;)V"))
     private void overflowanimations$itemPositions(final PoseStack poseStack, final SubmitNodeCollector nodeCollector, final int packedLight, final int packedOverlay, final int outlineColor, final CallbackInfo ci) {
@@ -155,21 +172,29 @@ public abstract class MixinItemStackRenderLayerState {
         if (OverflowAnimations.isEnabled()) {
             final ItemStack stack = this.itemStackRenderState.overflowanimations$getItemStack();
             if (!stack.isEmpty()) {
-                //? if <26.1 {
+                //? if <1.21.5 {
+                /*final PoseStack localPose = poseStack;
+                *///?} elif <26.1 {
                 /*final PoseStack.Pose localPose = poseStack.last();
                 *///?}
                 final ItemDisplayContext itemDisplayContext = this.itemStackRenderState.displayContext;
                 final boolean isGui = itemDisplayContext == ItemDisplayContext.GUI;
                 final boolean isFirstPerson = itemDisplayContext == ItemDisplayContext.FIRST_PERSON_LEFT_HAND || itemDisplayContext == ItemDisplayContext.FIRST_PERSON_RIGHT_HAND;
                 final boolean isThirdPerson = itemDisplayContext == ItemDisplayContext.THIRD_PERSON_LEFT_HAND || itemDisplayContext == ItemDisplayContext.THIRD_PERSON_RIGHT_HAND;
-                //? if <26.1 {
+                //? if <1.21.5 {
+                /*final ItemTransform transform = this.transform();
+                final Vector3fc translation = transform.translation, rotation = transform.rotation, scale = transform.scale;
+                *///?} elif <26.1 {
                 /*final ItemTransform transform = this.transform;
                 *///?} else {
                 final ItemTransform transform = this.itemTransform;
                 //?}
-                final float x = transform.translation().x();
-                final float y = transform.translation().y();
-                final float z = transform.translation().z();
+                //? if >=1.21.5 {
+                final Vector3fc translation = transform.translation(), rotation = transform.rotation(), scale = transform.scale();
+                //?}
+                final float x = translation.x();
+                final float y = translation.y();
+                final float z = translation.z();
                 if (OverflowAnimationsConfig.instance().items.fishingRodVersion != FishingRodVersionSetting.VANILLA && ItemUtilKt.isFishingRodItem(stack) && isFirstPerson) {
                     final int ordinal = OverflowAnimationsConfig.instance().items.fishingRodVersion.ordinal();
                     if (ordinal <= FishingRodVersionSetting.V1_8.ordinal()) {
@@ -178,7 +203,7 @@ public abstract class MixinItemStackRenderLayerState {
 
                     localPose.translate(x, y, z);
                     if (ordinal == FishingRodVersionSetting.V1_7.ordinal()) {
-                        localPose.rotate(Axis.YP.rotationDegrees(180));
+                        overflowanimations$rotate(localPose, Axis.YP.rotationDegrees(180));
                     }
 
                     localPose.translate(-x, -y, -z);
@@ -195,31 +220,47 @@ public abstract class MixinItemStackRenderLayerState {
                 // TODO/NEED TO FIX
                 if (OverflowAnimationsConfig.instance().items.skullPosition && ItemUtilKt.isSkullBlock(stack) && isGui && !OverflowAnimationsConfig.instance().items.mobHeadIcons) {
                     localPose.translate(x, y, z);
-                    localPose.rotate(Axis.XP.rotationDegrees(transform.rotation().z()));
-                    localPose.rotate(Axis.YP.rotationDegrees(transform.rotation().y()));
-                    localPose.rotate(Axis.ZP.rotationDegrees(transform.rotation().x()));
+                    overflowanimations$rotate(localPose, Axis.XP.rotationDegrees(rotation.z()));
+                    overflowanimations$rotate(localPose, Axis.YP.rotationDegrees(rotation.y()));
+                    overflowanimations$rotate(localPose, Axis.ZP.rotationDegrees(rotation.x()));
                     localPose.scale(0.9F, 0.9F, 0.9F);
-                    localPose.scale(transform.scale().x(), transform.scale().y(), transform.scale().z());
-                    overflowanimations$doInverseTransformations(localPose, transform);
+                    localPose.scale(scale.x(), scale.y(), scale.z());
+                    overflowanimations$doInverseTransformations(localPose, translation, rotation, scale);
                 }
             }
         }
     }
 
-    @Unique
-    private static void overflowanimations$doInverseTransformations(final PoseStack.Pose localPose, final ItemTransform transform) {
-        localPose.scale(1 / transform.scale().x(), 1 / transform.scale().y(), 1 / transform.scale().z());
-        localPose.rotate(Axis.ZP.rotationDegrees(-transform.rotation().x()));
-        localPose.rotate(Axis.YP.rotationDegrees(-transform.rotation().y()));
-        localPose.rotate(Axis.XP.rotationDegrees(-transform.rotation().z()));
-        localPose.translate(-transform.translation().x(), -transform.translation().y(), -transform.translation().z());
+    //? if <1.21.5 {
+    /*@Unique
+    private static void overflowanimations$rotate(final PoseStack localPose, final Quaternionf rotation) {
+        localPose.mulPose(rotation);
     }
 
+    @Unique
+    private static void overflowanimations$doInverseTransformations(final PoseStack localPose, final Vector3fc translation, final Vector3fc rotation, final Vector3fc scale) {
+    *///?} else {
+    @Unique
+    private static void overflowanimations$rotate(final PoseStack.Pose localPose, final Quaternionf rotation) {
+        localPose.rotate(rotation);
+    }
+
+    @Unique
+    private static void overflowanimations$doInverseTransformations(final PoseStack.Pose localPose, final Vector3fc translation, final Vector3fc rotation, final Vector3fc scale) {
+    //?}
+        localPose.scale(1 / scale.x(), 1 / scale.y(), 1 / scale.z());
+        overflowanimations$rotate(localPose, Axis.ZP.rotationDegrees(-rotation.x()));
+        overflowanimations$rotate(localPose, Axis.YP.rotationDegrees(-rotation.y()));
+        overflowanimations$rotate(localPose, Axis.XP.rotationDegrees(-rotation.z()));
+        localPose.translate(-translation.x(), -translation.y(), -translation.z());
+    }
+
+    //? if >=1.21.5 {
     @Unique
     private boolean overflowanimations$isTransformationModeValid() {
         final boolean itemDrops2D = OverflowAnimationsConfig.instance().items.itemDrops2D;
         final boolean itemFramed2D = OverflowAnimationsConfig.instance().items.itemFramed2D;
         return (itemDrops2D && this.itemStackRenderState.displayContext == ItemDisplayContext.GROUND) || (itemFramed2D && this.itemStackRenderState.displayContext == ItemDisplayContext.FIXED);
     }
+    //?}
 }
-//?}
