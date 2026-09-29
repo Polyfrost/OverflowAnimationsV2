@@ -25,7 +25,9 @@
 
 package org.polyfrost.overflowanimations.mixins.v1.rendering.lighting;
 
-//? if 1.21.11 {
+// Needs the 1.21.5 GPU API / 1.21.6 rendering changes; compiled out on older versions
+//? if >=1.21.6 {
+//? if <26.1 {
 /*import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
@@ -46,7 +48,7 @@ import org.polyfrost.overflowanimations.handler.rendering.lighting.lightmap.Lega
 import org.polyfrost.overflowanimations.handler.rendering.lighting.lightmap.LegacyLightmapState;
 *///?}
 
-//? if 1.21.11 {
+//? if <26.1 {
 /*@Mixin(LightTexture.class)
 public abstract class MixinLightTexture_LegacyLightmap {
     @Shadow
@@ -54,28 +56,37 @@ public abstract class MixinLightTexture_LegacyLightmap {
     private GpuTextureView textureView;
 *///?}
 
-    //? if 1.21.11 {
+    //? if <26.1 {
     /*@Shadow
     @Final
     private Minecraft minecraft;
     *///?}
 
-    //? if 1.21.11 {
+    //? if <26.1 {
     /*@Shadow
     private float blockLightRedFlicker;
     *///?}
 
-    //? if 1.21.11 {
+    //? if <26.1 {
     /*@Unique
     private final LegacyLightmapExtractor overflowanimations$extractor = new LegacyLightmapExtractor();
     *///?}
 
-    //? if 1.21.11 {
+    //? if <26.1 {
     /*@Unique
     private final LegacyLightmapRenderer overflowanimations$renderer = new LegacyLightmapRenderer();
     *///?}
 
-    //? if 1.21.11 {
+    //? if <1.21.11 {
+    /*@ModifyExpressionValue(method = "tick", at = @At(value = "CONSTANT", args = "doubleValue=0.1"))
+    private double overflowanimations$legacyLightmap$changeFlickerDifference(final double original) {
+        if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().other.legacyLightmap) {
+            return 1.0D;
+        } else {
+            return original;
+        }
+    }
+    *///?} elif <26.1 {
     /*@ModifyExpressionValue(method = "tick", at = @At(value = "CONSTANT", args = "floatValue=0.1"))
     private float overflowanimations$legacyLightmap$changeFlickerDifference(final float original) {
         if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().other.legacyLightmap) {
@@ -86,14 +97,14 @@ public abstract class MixinLightTexture_LegacyLightmap {
     }
     *///?}
 
-    //? if 1.21.11 {
+    //? if <26.1 {
     /*@Inject(method = "tick", at = @At("TAIL"))
     private void overflowanimations$legacyLightmap$tick(final CallbackInfo ci) {
         this.overflowanimations$extractor.tick(this.blockLightRedFlicker);
     }
     *///?}
 
-    //? if 1.21.11 {
+    //? if <26.1 {
     /*@WrapMethod(method = "updateLightTexture")
     private void overflowanimations$legacyLightmap(final float tickDelta, final Operation<Void> original) {
         if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().other.legacyLightmap) {
@@ -106,10 +117,11 @@ public abstract class MixinLightTexture_LegacyLightmap {
     }
     *///?}
 
-//? if 1.21.11 {
+//? if <26.1 {
     /*@Inject(method = "close", at = @At("TAIL"))
     private void overflowanimations$legacyLightmap$close(final CallbackInfo ci) {
         this.overflowanimations$renderer.close();
     }
 }
 *///?}
+//?}

@@ -32,6 +32,7 @@ import net.minecraft.client.renderer.item.ItemModelResolver;
 import net.minecraft.client.renderer.item.ItemStackRenderState;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.resources.Identifier;
+//? if >=1.21.9
 import net.minecraft.world.entity.ItemOwner;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -50,7 +51,11 @@ import org.polyfrost.overflowanimations.util.enums.FishingRodVersionSetting;
 @Mixin(ItemModelResolver.class)
 public abstract class MixinItemModelResolver {
     @Inject(method = "appendItemLayers", at = @At("HEAD"))
+    //? if <1.21.9 {
+    /*private void overflowanimations$storeItemStack(final ItemStackRenderState output, final ItemStack item, final ItemDisplayContext displayContext, final Level level, final LivingEntity owner, final int seed, final CallbackInfo ci) {
+    *///?} else {
     private void overflowanimations$storeItemStack(final ItemStackRenderState output, final ItemStack item, final ItemDisplayContext displayContext, final Level level, final ItemOwner owner, final int seed, final CallbackInfo ci) {
+    //?}
         output.overflowanimations$setItemStack(item);
     }
 
@@ -59,7 +64,11 @@ public abstract class MixinItemModelResolver {
             final ItemStack instance,
             final DataComponentType<?> dataComponentType,
             final Operation<Object> original,
-            //? if 1.21.11 {
+            //? if <1.21.9 {
+            /*@Local(argsOnly = true, ordinal = 0) final ItemDisplayContext displayContext,
+            @Local(argsOnly = true, ordinal = 0) final LivingEntity livingEntity,
+            @Local(argsOnly = true, ordinal = 0) final ItemStack item
+            *///?} elif <26.1 {
             /*@Local(argsOnly = true, ordinal = 0) final ItemDisplayContext displayContext,
             @Local(argsOnly = true, ordinal = 0) final ItemOwner owner,
             @Local(argsOnly = true, ordinal = 0) final ItemStack item
@@ -69,6 +78,7 @@ public abstract class MixinItemModelResolver {
             @Local(argsOnly = true, name = "item") final ItemStack item
             //?}
     ) {
+        //? if >=1.21.9
         final LivingEntity livingEntity = owner == null ? null : owner.asLivingEntity();
         // TODO/FIX
         if (OverflowAnimations.isEnabled() &&

@@ -28,10 +28,13 @@ package org.polyfrost.overflowanimations.mixins.v1.gui.loading_screen;
 import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
-//? if <26.3 {
+//? if <1.21.6 {
+/*import net.minecraft.client.renderer.rendertype.RenderType;
+import java.util.function.Function;
+*///?} elif <26.3 {
 /*import com.mojang.blaze3d.pipeline.RenderPipeline;
 *///?}
-//? if 1.21.11 {
+//? if <26.1 {
 /*import net.minecraft.client.gui.GuiGraphics;
 *///?} elif 26.3 {
 /*import com.mojang.renderpearl.api.pipeline.RenderPipeline;
@@ -42,11 +45,14 @@ import com.mojang.blaze3d.pipeline.RenderPipeline;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 //?}
 import net.minecraft.client.gui.screens.LoadingOverlay;
+//? if >=1.21.6
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.ReloadInstance;
 import net.minecraft.util.ARGB;
+//? if <1.21.9
+//import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -74,7 +80,7 @@ public abstract class MixinLoadingOverlay_LegacyLoadingScreen {
         textureManager.registerAndLoad(overflowanimations$MOJANG_LOGO, new LegacyLogoTexture(overflowanimations$MOJANG_LOGO));
     }
 
-    //? if 1.21.11 {
+    //? if <26.1 {
     /*@WrapOperation(method = "render", at = @At(value = "INVOKE", target = "Ljava/util/function/IntSupplier;getAsInt()I"))
     *///?} else {
     @WrapOperation(method = "extractRenderState", at = @At(value = "INVOKE", target = "Ljava/util/function/IntSupplier;getAsInt()I"))
@@ -88,6 +94,16 @@ public abstract class MixinLoadingOverlay_LegacyLoadingScreen {
     }
 
     // TODO/NOTE: It still doesn't feel instant, as the debug hud renders before the title screen does meaning theres still some time inbetween
+    //? if <1.21.9 {
+    /*@ModifyExpressionValue(method = "render", at = @At(value = "FIELD", target = "Lnet/minecraft/client/gui/screens/LoadingOverlay;fadeIn:Z", ordinal = 2))
+    private boolean overflowanimations$instantFadeOut(final boolean original) {
+        if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().screen.legacyLoadingScreen && this.reload.isDone()) {
+            return false; // Not fading in, so the fade out can start right away
+        } else {
+            return original;
+        }
+    }
+    *///?} else {
     @WrapOperation(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screens/LoadingOverlay;isReadyToFadeOut()Z"))
     private boolean overflowanimations$instantFadeOut(final LoadingOverlay instance, final Operation<Boolean> original) {
         if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().screen.legacyLoadingScreen && this.reload.isDone()) {
@@ -96,8 +112,9 @@ public abstract class MixinLoadingOverlay_LegacyLoadingScreen {
             return original.call(instance);
         }
     }
+    //?}
 
-    //? if 1.21.11 {
+    //? if <26.1 {
     /*@WrapOperation(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screens/LoadingOverlay;replaceAlpha(II)I"))
     *///?} else {
     @WrapOperation(method = "extractRenderState", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screens/LoadingOverlay;replaceAlpha(II)I"))
@@ -110,7 +127,17 @@ public abstract class MixinLoadingOverlay_LegacyLoadingScreen {
         }
     }
 
-    //? if 1.21.11 {
+    //? if <1.21.6 {
+    /*@WrapOperation(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphics;blit(Ljava/util/function/Function;Lnet/minecraft/resources/Identifier;IIFFIIIIIII)V", ordinal = 0))
+    private void overflowanimations$changeLogo(final GuiGraphics instance, final Function<Identifier, RenderType> renderType, final Identifier texture, final int x, final int y, final float u, final float v, final int width, final int height, final int srcWidth, final int srcHeight, final int textureWidth, final int textureHeight, final int color, final Operation<Void> original) {
+        if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().screen.legacyLoadingScreen) {
+            final int size = 256;
+            instance.blit(RenderType::guiTextured, overflowanimations$MOJANG_LOGO, (instance.guiWidth() - size) / 2, (instance.guiHeight() - size) / 2, 0, 0, size, size, size, size);
+        } else {
+            original.call(instance, renderType, texture, x, y, u, v, width, height, srcWidth, srcHeight, textureWidth, textureHeight, color);
+        }
+    }
+    *///?} elif <26.1 {
     /*@WrapOperation(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphics;blit(Lcom/mojang/blaze3d/pipeline/RenderPipeline;Lnet/minecraft/resources/Identifier;IIFFIIIIIII)V", ordinal = 0))
     private void overflowanimations$changeLogo(final GuiGraphics instance, final RenderPipeline renderPipeline, final Identifier texture, final int x, final int y, final float u, final float v, final int width, final int height, final int srcWidth, final int srcHeight, final int textureWidth, final int textureHeight, final int color, final Operation<Void> original) {
     *///?} elif >=26.1 <26.3 {
@@ -123,6 +150,7 @@ public abstract class MixinLoadingOverlay_LegacyLoadingScreen {
     //? if >=26.1 {
     private void overflowanimations$changeLogo(final GuiGraphicsExtractor instance, final RenderPipeline renderPipeline, final Identifier texture, final int x, final int y, final float u, final float v, final int width, final int height, final int srcWidth, final int srcHeight, final int textureWidth, final int textureHeight, final int color, final Operation<Void> original) {
     //?}
+    //? if >=1.21.6 {
         if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().screen.legacyLoadingScreen) {
             final int size = 256;
             instance.blit(RenderPipelines.GUI_TEXTURED, overflowanimations$MOJANG_LOGO, (instance.guiWidth() - size) / 2, (instance.guiHeight() - size) / 2, 0, 0, size, size, size, size, size, size);
@@ -130,8 +158,12 @@ public abstract class MixinLoadingOverlay_LegacyLoadingScreen {
             original.call(instance, renderPipeline, texture, x, y, u, v, width, height, srcWidth, srcHeight, textureWidth, textureHeight, color);
         }
     }
+    //?}
 
-    //? if 1.21.11 {
+    //? if <1.21.6 {
+    /*@WrapWithCondition(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphics;blit(Ljava/util/function/Function;Lnet/minecraft/resources/Identifier;IIFFIIIIIII)V", ordinal = 1))
+    private boolean overflowanimations$disableSecondLogoDraw(final GuiGraphics instance, final Function<Identifier, RenderType> renderType, final Identifier texture, final int x, final int y, final float u, final float v, final int width, final int height, final int srcWidth, final int srcHeight, final int textureWidth, final int textureHeight, final int color) {
+    *///?} elif <26.1 {
     /*@WrapWithCondition(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphics;blit(Lcom/mojang/blaze3d/pipeline/RenderPipeline;Lnet/minecraft/resources/Identifier;IIFFIIIIIII)V", ordinal = 1))
     private boolean overflowanimations$disableSecondLogoDraw(final GuiGraphics instance, final RenderPipeline renderPipeline, final Identifier texture, final int x, final int y, final float u, final float v, final int width, final int height, final int srcWidth, final int srcHeight, final int textureWidth, final int textureHeight, final int color) {
     *///?} elif >=26.1 <26.3 {
@@ -147,7 +179,7 @@ public abstract class MixinLoadingOverlay_LegacyLoadingScreen {
         return !OverflowAnimations.isEnabled() || !OverflowAnimationsConfig.instance().screen.legacyLoadingScreen;
     }
 
-    //? if 1.21.11 {
+    //? if <26.1 {
     /*@WrapWithCondition(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screens/LoadingOverlay;drawProgressBar(Lnet/minecraft/client/gui/GuiGraphics;IIIIF)V"))
     private boolean overflowanimations$disableProgressBar(final LoadingOverlay instance, final GuiGraphics graphics, final int x0, final int y0, final int x1, final int y1, final float fade) {
     *///?} else {
@@ -157,7 +189,7 @@ public abstract class MixinLoadingOverlay_LegacyLoadingScreen {
         return !OverflowAnimations.isEnabled() || !OverflowAnimationsConfig.instance().screen.legacyLoadingScreen || OverflowAnimationsConfig.instance().screen.legacyLoadingScreenProgressBar;
     }
 
-    //? if 1.21.11 {
+    //? if <26.1 {
     /*@WrapOperation(method = "drawProgressBar", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/ARGB;color(IIII)I"))
     *///?} else {
     @WrapOperation(method = "extractProgressBar", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/ARGB;color(IIII)I"))

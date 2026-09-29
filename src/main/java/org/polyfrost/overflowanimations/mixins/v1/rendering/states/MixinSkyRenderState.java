@@ -25,11 +25,12 @@
 
 package org.polyfrost.overflowanimations.mixins.v1.rendering.states;
 
-//? if 1.21.11 {
+//? if >=1.21.9 <26.1 {
 /*import net.minecraft.client.renderer.state.SkyRenderState;
-*///?} else {
+*///?} elif >=26.1 {
 import net.minecraft.client.renderer.state.level.SkyRenderState;
 //?}
+//? if >=1.21.9 {
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.polyfrost.overflowanimations.util.states.SkyUtilityState;
@@ -49,3 +50,4 @@ public abstract class MixinSkyRenderState implements SkyUtilityState {
         this.overflowanimations$height = height;
     }
 }
+//?}

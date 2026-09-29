@@ -25,6 +25,8 @@
 
 package org.polyfrost.overflowanimations.handler.rendering.lighting.lightmap
 
+// Built on the GPU device API (1.21.5) and dynamic uniforms / GUI render states (1.21.6)
+//? if >=1.21.6 {
 //? if <26.3 {
 /*import com.mojang.blaze3d.textures.GpuTextureView
 *///?} else {
@@ -82,3 +84,4 @@ class LegacyLightmapRenderer : AutoCloseable {
 
     override fun close() = this.lightmapInfoUniform.close()
 }
+//?}

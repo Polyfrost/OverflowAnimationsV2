@@ -25,6 +25,8 @@
 
 package org.polyfrost.overflowanimations.mixins.v1.rendering.fog;
 
+// Targets the fog environments added in 1.21.6
+//? if >=1.21.6 {
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.client.Camera;
@@ -49,7 +51,7 @@ import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig;
 @Mixin(WaterFogEnvironment.class)
 public abstract class MixinWaterFogEnvironment_OldWaterColor {
     @ModifyReturnValue(method = "getBaseColor", at = @At("RETURN"))
-    //? if 1.21.11 {
+    //? if <26.1 {
     /*private int overflowanimations$oldWaterFogColor(final int original, @Local(argsOnly = true, ordinal = 0) final Camera camera, @Local(argsOnly = true, ordinal = 0) final ClientLevel level) {
     *///?} elif >=26.1 <26.3 {
     /*private int overflowanimations$oldWaterFogColor(final int original, @Local(argsOnly = true, name = "camera") final Camera camera, @Local(argsOnly = true, name = "level") final ClientLevel level) {
@@ -58,7 +60,11 @@ public abstract class MixinWaterFogEnvironment_OldWaterColor {
     //?}
         if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().other.oldWaterColorFog) {
             float value = 0.0F;
+            //? if <1.21.11 {
+            /*if (camera.getEntity() instanceof LivingEntity livingEntity) {
+            *///?} else {
             if (camera.entity() instanceof LivingEntity livingEntity) {
+            //?}
                 value = EnchantmentHelper.getEnchantmentLevel(level.registryAccess().getOrThrow(Enchantments.RESPIRATION), livingEntity) * 0.2F;
                 if (livingEntity.hasEffect(MobEffects.WATER_BREATHING)) {
                     value *= 0.9F;
@@ -75,3 +81,4 @@ public abstract class MixinWaterFogEnvironment_OldWaterColor {
         }
     }
 }
+//?}

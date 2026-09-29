@@ -25,6 +25,8 @@
 
 package org.polyfrost.overflowanimations.renderer
 
+// Built on the GPU device API (1.21.5) and dynamic uniforms / GUI render states (1.21.6)
+//? if >=1.21.6 {
 import com.mojang.blaze3d.pipeline.RenderTarget
 //? if <26.3 {
 /*import com.mojang.blaze3d.systems.RenderPass
@@ -151,3 +153,4 @@ data class RenderDescriptor(
         }
     }
 }
+//?}

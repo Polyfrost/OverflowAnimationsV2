@@ -27,7 +27,7 @@ package org.polyfrost.overflowanimations.mixins.v1.gui.centered_widgets;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
-//? if 1.21.11 {
+//? if <26.1 {
 /*import net.minecraft.client.gui.GuiGraphics;
 *///?} else {
 import net.minecraft.client.gui.GuiGraphicsExtractor;
@@ -43,7 +43,10 @@ import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig;
 
 @Mixin(AbstractSelectionList.class)
 public abstract class MixinAbstractSelectionList<E extends AbstractSelectionList.Entry<E>> {
-    //? if 1.21.11 {
+    //? if <1.21.9 {
+    /*@Inject(method = "renderItem", at = @At("HEAD"))
+    private void overflowanimations$updateScroll(final GuiGraphics graphics, final int mouseX, final int mouseY, final float tickDelta, final int index, final int left, final int top, final int width, final int height, final CallbackInfo ci) {
+    *///?} elif <26.1 {
     /*@Inject(method = "renderItem", at = @At("HEAD"))
     private void overflowanimations$updateScroll(final GuiGraphics graphics, final int mouseX, final int mouseY, final float tickDelta, final E entry, final CallbackInfo ci) {
     *///?} else {
@@ -55,7 +58,7 @@ public abstract class MixinAbstractSelectionList<E extends AbstractSelectionList
         }
     }
 
-    //? if 1.21.11 {
+    //? if <26.1 {
     /*@WrapOperation(method = "renderItem", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/components/AbstractSelectionList;isFocused()Z"))
     *///?} else {
     @WrapOperation(method = "extractItem", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/components/AbstractSelectionList;isFocused()Z"))

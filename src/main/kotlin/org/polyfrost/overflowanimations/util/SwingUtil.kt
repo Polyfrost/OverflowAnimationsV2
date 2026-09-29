@@ -74,7 +74,11 @@ fun LocalPlayer.sendSwingPacket(hand: InteractionHand) {
     if (this.isNotSwinging() && level is ServerLevel) {
         val swingHand =
             if (hand == InteractionHand.MAIN_HAND) ClientboundAnimatePacket.SWING_MAIN_HAND else ClientboundAnimatePacket.SWING_OFF_HAND
+        //? if <1.21.9 {
+        /*level.chunkSource.broadcast(this, ClientboundAnimatePacket(this, swingHand))
+        *///?} else {
         level.chunkSource.sendToTrackingPlayers(this, ClientboundAnimatePacket(this, swingHand))
+        //?}
     }
 
     this.connection.send(ServerboundSwingPacket(hand))
@@ -123,7 +127,9 @@ fun LivingEntity.getItemSwingSpeed(animation: SwingAnimation, fallback: Int): In
 //?}
     val items = OverflowAnimationsConfig.instance().items
     if (OverflowAnimations.isEnabled() && items.customSwingSpeed) {
-        //? if <26.3 {
+        //? if <1.21.11 {
+        /*val swingDuration = 6 // Items have no swing animation component yet
+        *///?} elif <26.3 {
         /*val swingingHand = if (this.swingingArm != null) this.swingingArm!! else InteractionHand.MAIN_HAND
         val stack = this.getItemInHand(swingingHand)
         val swingDuration = stack.swingAnimation.duration()

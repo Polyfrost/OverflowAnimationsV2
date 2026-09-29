@@ -25,6 +25,8 @@
 
 package org.polyfrost.overflowanimations.renderer.impl
 
+// Built on the GPU device API (1.21.5) and dynamic uniforms / GUI render states (1.21.6)
+//? if >=1.21.6 {
 //? if <26.3 {
 /*import com.mojang.blaze3d.buffers.GpuBuffer
 import com.mojang.blaze3d.buffers.GpuBufferSlice
@@ -44,7 +46,9 @@ import com.mojang.blaze3d.buffers.GpuBufferSlice
 import com.mojang.blaze3d.pipeline.RenderPipeline
 //?}
 import com.mojang.blaze3d.systems.RenderSystem
-//? if <26.3 {
+//? if <1.21.11 {
+/*import com.mojang.blaze3d.textures.GpuTextureView
+*///?} elif <26.3 {
 /*import com.mojang.blaze3d.textures.GpuSampler
 import com.mojang.blaze3d.textures.GpuTextureView
 *///?} else {
@@ -115,7 +119,11 @@ abstract class AbstractRenderer : AutoCloseable {
         return this
     }
 
+    //? if <1.21.11 {
+    /*fun setTexture(name: String, textureView: GpuTextureView) = this.setTexture(name, TextureAndSampler(textureView))
+    *///?} else {
     fun setTexture(name: String, textureView: GpuTextureView, sampler: GpuSampler) = this.setTexture(name, TextureAndSampler(textureView, sampler))
+    //?}
 
     fun setTexture(name: String, location: Identifier) = this.setTexture(name, TextureAndSampler.get(location))
 
@@ -184,7 +192,9 @@ abstract class AbstractRenderer : AutoCloseable {
             for (entry in this.textures) {
                 val name = entry.key
                 if (samplers.contains(name)) {
-                    //? if <26.3 {
+                    //? if <1.21.11 {
+                    /*pass.bindSampler(name, entry.value.textureView)
+                    *///?} elif <26.3 {
                     /*pass.bindTexture(name, entry.value.textureView, entry.value.sampler)
                     *///?} else {
                     pass.setUniform(name, entry.value.textureView, entry.value.sampler)
@@ -202,3 +212,4 @@ abstract class AbstractRenderer : AutoCloseable {
         this.uniforms.clear()
     }
 }
+//?}

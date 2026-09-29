@@ -28,10 +28,13 @@ package org.polyfrost.overflowanimations
 import com.mojang.logging.LogUtils
 import net.minecraft.SharedConstants
 import net.minecraft.client.Minecraft
+//? if >=1.21.9
 import net.minecraft.client.gui.components.debug.DebugScreenEntries
 import net.minecraft.resources.Identifier
 import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig
+//? if >=1.21.6
 import org.polyfrost.overflowanimations.handler.rendering.lighting.LegacyDiffuseLighting
+//? if >=1.21.9
 import org.polyfrost.overflowanimations.handler.screen.debug.OverflowAnimationsDebugEntry
 import org.polyfrost.overflowanimations.util.config.GeneralConfigUtil
 import org.polyfrost.overflowanimations.util.reinitializeInventorySlots
@@ -57,6 +60,7 @@ object OverflowAnimations {
         *///?} else {
         minecraft.levelExtractor.allChanged()
         //?}
+        //? if >=1.21.6
         LegacyDiffuseLighting.refresh()
         reinitializeInventorySlots()
     }
@@ -82,6 +86,7 @@ object OverflowAnimations {
             LOGGER.error("Failed to load overflowanimations utility config, defaulting...")
         }
 
+        //? if >=1.21.9
         DebugScreenEntries.register(OverflowAnimationsDebugEntry.GROUP, OverflowAnimationsDebugEntry())
     }
 }

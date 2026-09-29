@@ -25,6 +25,8 @@
 
 package org.polyfrost.overflowanimations.mixins.v1.rendering.fog;
 
+// Targets the fog environments added in 1.21.6
+//? if >=1.21.6 {
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
@@ -51,7 +53,7 @@ public abstract class MixinFogRenderer_Darkness {
             @At(value = "INVOKE", target = "Lorg/joml/Vector3fc;z()F"),
             //?}
     })
-    //? if 1.21.11 {
+    //? if <26.1 {
     /*private float overflowanimations$applyFogDarkness(final int color, final Operation<Float> original, @Local(argsOnly = true, ordinal = 0) final float tickDelta) {
     *///?} elif >=26.1 <26.3 {
     /*private float overflowanimations$applyFogDarkness(final int color, final Operation<Float> original, @Local(argsOnly = true, name = "partialTicks") final float tickDelta) {
@@ -66,3 +68,4 @@ public abstract class MixinFogRenderer_Darkness {
         return component;
     }
 }
+//?}

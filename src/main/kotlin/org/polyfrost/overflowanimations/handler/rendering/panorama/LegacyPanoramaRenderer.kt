@@ -25,11 +25,16 @@
 
 package org.polyfrost.overflowanimations.handler.rendering.panorama
 
+// Built on the GPU device API (1.21.5) and dynamic uniforms / GUI render states (1.21.6)
+//? if >=1.21.6 {
 //? if 26.2 {
 /*import com.mojang.blaze3d.GpuFormat
 *///?}
 import com.mojang.blaze3d.pipeline.MainTarget
 import com.mojang.blaze3d.systems.RenderSystem
+//? if <1.21.11 {
+/*import com.mojang.blaze3d.textures.AddressMode
+*///?}
 //? if <26.3 {
 /*import com.mojang.blaze3d.textures.FilterMode
 import com.mojang.blaze3d.textures.GpuTexture
@@ -44,7 +49,7 @@ import com.mojang.renderpearl.api.textures.GpuTexture
 import com.mojang.renderpearl.api.textures.GpuTextureView
 //?}
 import net.minecraft.client.Minecraft
-//? if 1.21.11 {
+//? if <26.1 {
 /*import net.minecraft.client.gui.GuiGraphics
 *///?} else {
 import net.minecraft.client.gui.GuiGraphicsExtractor
@@ -126,6 +131,10 @@ class LegacyPanoramaRenderer : AutoCloseable {
             1,
             1
         )
+        //? if <1.21.11 {
+        /*this.backgroundTexture.setTextureFilter(FilterMode.LINEAR, false)
+        this.backgroundTexture.setAddressMode(AddressMode.CLAMP_TO_EDGE)
+        *///?}
         this.backgroundTextureView = device.createTextureView(this.backgroundTexture)
         device.createCommandEncoder().clearColorAndDepthTextures(
             this.panoramaTarget.getColorTexture()!!,
@@ -139,7 +148,11 @@ class LegacyPanoramaRenderer : AutoCloseable {
     fun render() {
         this.state?.let {
             profile("panorama") {
+                //? if <1.21.11 {
+                /*val xRot = Mth.sin(it.spin / 400.0F) * 25.0F + 20.0F
+                *///?} else {
                 val xRot = Mth.sin(it.spin / 400.0) * 25.0F + 20.0F
+                //?}
                 val yRot = -it.spin * 0.1F
                 this.renderCubeMap(xRot, yRot)
                 this.rotateAndBlurCubeMap(it.pose, it.width, it.height)
@@ -147,7 +160,7 @@ class LegacyPanoramaRenderer : AutoCloseable {
         }
     }
 
-    //? if 1.21.11 {
+    //? if <26.1 {
     /*fun extractRenderState(graphics: GuiGraphics, width: Int, height: Int, tickDelta: Float) {
         val panoramaSpeed = Minecraft.getInstance().options.panoramaSpeed().get()
     *///?} else {
@@ -163,7 +176,7 @@ class LegacyPanoramaRenderer : AutoCloseable {
         val newSpin = (lastSpin + (tickDelta * panoramaSpeed)).toFloat()
 
         this.state = LegacyPanoramaRenderState(graphics.pose(), width, height, newSpin)
-        //? if 1.21.11 {
+        //? if <26.1 {
         /*graphics.guiRenderState.submitGuiElement(
         *///?} else {
         graphics.guiRenderState.addGuiElement(
@@ -210,11 +223,15 @@ class LegacyPanoramaRenderer : AutoCloseable {
 
             DeferredRenderer.of(descriptor("Legacy Panorama Blur")).use { renderer ->
                 renderer.setPipeline(OverflowAnimationsPipelines.LEGACY_PANORAMA_BLUR)
+                //? if <1.21.11 {
+                /*renderer.setTexture("Sampler0", this.backgroundTextureView)
+                *///?} else {
                 renderer.setTexture(
                     "Sampler0",
                     this.backgroundTextureView,
                     RenderSystem.getSamplerCache().getClampToEdge(FilterMode.LINEAR)
                 )
+                //?}
                 renderer.drawGui(Geometry.texturedScreenQuad(pose, width, height))
             }
         }
@@ -232,3 +249,4 @@ class LegacyPanoramaRenderer : AutoCloseable {
         this.panoramaTarget.destroyBuffers()
     }
 }
+//?}

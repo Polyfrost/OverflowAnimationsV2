@@ -61,6 +61,8 @@ dependencies {
     modImplementation("dev.isxander:yet-another-config-lib:${sc.properties.get<String>("deps.yacl")}")
     include(modImplementation("net.fabricmc:fabric-language-kotlin:${sc.properties.get<String>("deps.fabric_language_kotlin")}")!!)
 
+    compileOnly("org.jspecify:jspecify:1.0.0") // Bundled by Minecraft from 1.21.11
+
     include(implementation("com.moulberry:mixinconstraints:${sc.properties.get<String>("deps.mixinconstraints")}")!!)
     include(implementation(annotationProcessor("com.github.bawnorton.mixinsquared:mixinsquared-fabric:${sc.properties.get<String>("deps.mixinsquared")}")!!)!!)
 
@@ -149,6 +151,14 @@ tasks {
         inputs.properties(props)
 
         filesMatching("fabric.mod.json") { expand(props) }
+
+        // The custom renderer is compiled out before 1.21.6, and older shader loaders choke on its includes
+        if (sc.current.parsed < "1.21.6") exclude("assets/$modid/shaders/**")
+
+        // The player head special model was split out of "head" in 1.21.5
+        if (sc.current.parsed < "1.21.5") filesMatching("**/items/player_skull.json") {
+            filter { it.replace("\"type\": \"minecraft:player_head\"", "\"type\": \"minecraft:head\", \"kind\": \"player\"") }
+        }
     }
 
     jar {

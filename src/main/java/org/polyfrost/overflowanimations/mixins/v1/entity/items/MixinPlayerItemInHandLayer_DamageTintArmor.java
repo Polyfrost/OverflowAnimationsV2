@@ -32,7 +32,19 @@ import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.HeadedModel;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.layers.PlayerItemInHandLayer;
+//? if <1.21.9 {
+/*import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
+import net.minecraft.client.renderer.entity.state.PlayerRenderState;
+import net.minecraft.client.renderer.item.ItemStackRenderState;
+import net.minecraft.world.entity.HumanoidArm;
+import org.spongepowered.asm.mixin.Unique;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+*///?} else {
 import net.minecraft.client.renderer.entity.state.AvatarRenderState;
+//?}
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -40,9 +52,25 @@ import org.polyfrost.overflowanimations.OverflowAnimations;
 import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig;
 
 @Mixin(PlayerItemInHandLayer.class)
+//? if <1.21.9 {
+/*public abstract class MixinPlayerItemInHandLayer_DamageTintArmor<S extends PlayerRenderState, M extends EntityModel<S> & ArmedModel & HeadedModel> {
+    // renderItemHeldToEye has no state parameter before 1.21.9, so capture it from the caller.
+    @Unique
+    private LivingEntityRenderState overflowanimations$state;
+
+    @Inject(method = "renderArmWithItem(Lnet/minecraft/client/renderer/entity/state/PlayerRenderState;Lnet/minecraft/client/renderer/item/ItemStackRenderState;Lnet/minecraft/world/entity/HumanoidArm;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V", at = @At("HEAD"))
+    private void overflowanimations$captureState(final S state, final ItemStackRenderState item, final HumanoidArm arm, final PoseStack poseStack, final MultiBufferSource bufferSource, final int packedLight, final CallbackInfo ci) {
+        this.overflowanimations$state = state;
+    }
+
+    @ModifyExpressionValue(method = "renderItemHeldToEye", at = @At(value = "FIELD", target = "Lnet/minecraft/client/renderer/texture/OverlayTexture;NO_OVERLAY:I", opcode = Opcodes.GETSTATIC))
+    private int overflowanimations$damageTintItems(final int original) {
+        final LivingEntityRenderState state = this.overflowanimations$state;
+*///?} else {
 public abstract class MixinPlayerItemInHandLayer_DamageTintArmor<S extends AvatarRenderState, M extends EntityModel<S> & ArmedModel<S> & HeadedModel> {
     @ModifyExpressionValue(method = "renderItemHeldToEye", at = @At(value = "FIELD", target = "Lnet/minecraft/client/renderer/texture/OverlayTexture;NO_OVERLAY:I", opcode = Opcodes.GETSTATIC))
     private int overflowanimations$damageTintItems(final int original, @Local(argsOnly = true, ordinal = 0) final S state) {
+//?}
         if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().other.damageTintItems) {
             return LivingEntityRenderer.getOverlayCoords(state, 0.0F);
         } else {

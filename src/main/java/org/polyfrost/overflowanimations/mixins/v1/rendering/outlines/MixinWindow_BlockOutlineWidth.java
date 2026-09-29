@@ -25,6 +25,7 @@
 
 package org.polyfrost.overflowanimations.mixins.v1.rendering.outlines;
 
+//? if >=1.21.11
 import com.mojang.blaze3d.platform.Window;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.Constant;
@@ -32,10 +33,19 @@ import org.spongepowered.asm.mixin.injection.ModifyConstant;
 import org.polyfrost.overflowanimations.OverflowAnimations;
 import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig;
 
+//? if <1.21.11 {
+/*@Mixin(targets = "net.minecraft.client.renderer.RenderStateShard$LineStateShard")
+*///?} else {
 @Mixin(Window.class)
+//?}
 public abstract class MixinWindow_BlockOutlineWidth {
+    //? if <1.21.11 {
+    /*@ModifyConstant(method = "*", constant = @Constant(floatValue = 2.5F)) // Line width lambda in the constructor
+    private static float overflowanimations$oldBlockOutline(final float lineWidth) {
+    *///?} else {
     @ModifyConstant(method = "getAppropriateLineWidth", constant = @Constant(floatValue = 2.5F))
     private float overflowanimations$oldBlockOutline(final float lineWidth) {
+    //?}
         if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().other.blockOutlineRendering) {
             return 2.0F;
         } else {

@@ -1,7 +1,9 @@
 {
 	"pack": {
-		"min_format": 65.0,
-		"max_format": 69420.0,
+		"pack_format": 46,
+		"supported_formats": [46, 69420],
+		"min_format": 46,
+		"max_format": 69420,
 		"description": "Restores some classic textures from the 1.8 era."
 	}
 }

@@ -25,6 +25,8 @@
 
 package org.polyfrost.overflowanimations.mixins.v1.rendering.fog;
 
+// Needs the 1.21.5 GPU API / 1.21.6 rendering changes; compiled out on older versions
+//? if >=1.21.6 {
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 //? if <26.2 {
@@ -66,7 +68,7 @@ import org.polyfrost.overflowanimations.handler.rendering.pipeline.OverflowAnima
 //? if <26.2 {
 /*import org.polyfrost.overflowanimations.handler.rendering.pipeline.OverflowAnimationsPipelines;
 *///?}
-//? if 1.21.11 {
+//? if <26.1 {
 /*import org.polyfrost.overflowanimations.handler.rendering.LegacySkyRenderer;
 *///?}
 
@@ -212,3 +214,4 @@ public abstract class MixinSkyRenderer_PlanarFogSky {
         }
     }
 }
+//?}

@@ -25,7 +25,9 @@
 
 package org.polyfrost.overflowanimations.mixins.v1.gui.screen_tweaks.panorama;
 
-//? if 1.21.11 {
+// Needs the 1.21.5 GPU API / 1.21.6 rendering changes; compiled out on older versions
+//? if >=1.21.6 {
+//? if <26.1 {
 /*import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
@@ -42,7 +44,7 @@ import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig;
 import org.polyfrost.overflowanimations.handler.rendering.panorama.LegacyPanoramaRenderer;
 *///?}
 
-//? if 1.21.11 {
+//? if <26.1 {
 /*@Mixin(PanoramaRenderer.class)
 public abstract class MixinPanoramaRenderer_LegacyPanorama {
     @WrapOperation(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/CubeMap;render(Lnet/minecraft/client/Minecraft;FF)V"))
@@ -56,7 +58,7 @@ public abstract class MixinPanoramaRenderer_LegacyPanorama {
     }
 *///?}
 
-//? if 1.21.11 {
+//? if <26.1 {
     /*@WrapOperation(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphics;blit(Lcom/mojang/blaze3d/pipeline/RenderPipeline;Lnet/minecraft/resources/Identifier;IIFFIIIIII)V"))
     private void overflowanimations$legacyPanorama(final GuiGraphics instance, final RenderPipeline renderPipeline, final Identifier texture, final int x, final int y, final float u, final float v, final int width, final int height, final int srcWidth, final int srcHeight, final int textureWidth, final int textureHeight, final Operation<Void> original) {
         if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().screen.panoramaRendering) {
@@ -68,3 +70,4 @@ public abstract class MixinPanoramaRenderer_LegacyPanorama {
     }
 }
 *///?}
+//?}

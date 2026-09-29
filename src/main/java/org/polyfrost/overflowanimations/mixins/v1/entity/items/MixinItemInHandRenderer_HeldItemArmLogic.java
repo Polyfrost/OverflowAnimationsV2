@@ -31,8 +31,6 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.ItemInHandRenderer;
-import net.minecraft.client.renderer.SubmitNodeCollector;
-import net.minecraft.client.renderer.entity.player.AvatarRenderer;
 import net.minecraft.world.entity.HumanoidArm;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -41,16 +39,27 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.polyfrost.overflowanimations.OverflowAnimations;
 import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig;
 *///?}
+//? if <1.21.9 {
+/*import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.entity.player.PlayerRenderer;
+*///?} elif <26.3 {
+/*import net.minecraft.client.renderer.SubmitNodeCollector;
+import net.minecraft.client.renderer.entity.player.AvatarRenderer;
+*///?}
 
 //? if <26.3 {
 /*@Mixin(ItemInHandRenderer.class)
 public abstract class MixinItemInHandRenderer_HeldItemArmLogic {
-    @Inject(method = "renderPlayerArm", at = @At(value = "INVOKE", target = "Lnet/minecraft/core/ClientAsset$Texture;texturePath()Lnet/minecraft/resources/Identifier;", shift = At.Shift.AFTER))
 *///?}
-    //? if 1.21.11 {
-    /*private void overflowanimations$extractArmState(final PoseStack poseStack, final SubmitNodeCollector submitNodeCollector, final int lightCoords, final float inverseArmHeight, final float attackValue, final HumanoidArm arm, final CallbackInfo ci, @Local(ordinal = 0) final AvatarRenderer<AbstractClientPlayer> avatarRenderer) {
+    //? if <1.21.9 {
+    /*@Inject(method = "renderPlayerArm", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/resources/PlayerSkin;texture()Lnet/minecraft/resources/Identifier;", shift = At.Shift.AFTER))
+    private void overflowanimations$extractArmState(final PoseStack poseStack, final MultiBufferSource bufferSource, final int lightCoords, final float inverseArmHeight, final float attackValue, final HumanoidArm arm, final CallbackInfo ci, @Local(ordinal = 0) final PlayerRenderer avatarRenderer) {
+    *///?} elif <26.1 {
+    /*@Inject(method = "renderPlayerArm", at = @At(value = "INVOKE", target = "Lnet/minecraft/core/ClientAsset$Texture;texturePath()Lnet/minecraft/resources/Identifier;", shift = At.Shift.AFTER))
+    private void overflowanimations$extractArmState(final PoseStack poseStack, final SubmitNodeCollector submitNodeCollector, final int lightCoords, final float inverseArmHeight, final float attackValue, final HumanoidArm arm, final CallbackInfo ci, @Local(ordinal = 0) final AvatarRenderer<AbstractClientPlayer> avatarRenderer) {
     *///?} elif >=26.1 <26.3 {
-    /*private void overflowanimations$extractArmState(final PoseStack poseStack, final SubmitNodeCollector submitNodeCollector, final int lightCoords, final float inverseArmHeight, final float attackValue, final HumanoidArm arm, final CallbackInfo ci, @Local(name = "avatarRenderer") final AvatarRenderer<AbstractClientPlayer> avatarRenderer) {
+    /*@Inject(method = "renderPlayerArm", at = @At(value = "INVOKE", target = "Lnet/minecraft/core/ClientAsset$Texture;texturePath()Lnet/minecraft/resources/Identifier;", shift = At.Shift.AFTER))
+    private void overflowanimations$extractArmState(final PoseStack poseStack, final SubmitNodeCollector submitNodeCollector, final int lightCoords, final float inverseArmHeight, final float attackValue, final HumanoidArm arm, final CallbackInfo ci, @Local(name = "avatarRenderer") final AvatarRenderer<AbstractClientPlayer> avatarRenderer) {
     *///?}
 //? if <26.3 {
         /*final Minecraft minecraft = Minecraft.getInstance();

@@ -38,7 +38,11 @@ fun ClientLevel.hasVoidFog(): Boolean {
 }
 
 fun ClientLevel.getLegacySkyDarken(): Float {
+    //? if <1.21.11 {
+    /*var value = 1.0F - (Mth.cos(this.getTimeOfDay(1.0F) * (Math.PI * 2).toFloat()) * 2.0F + 0.2F)
+    *///?} else {
     var value = 1.0F - (Mth.cos((this.getTimeOfDay(1.0F) * (Math.PI * 2).toFloat()).toDouble()) * 2.0F + 0.2F)
+    //?}
     value = Mth.clamp(value, 0.0F, 1.0F)
     value = 1.0F - value
     value *= 1.0F - this.getRainLevel(1.0F) * 5.0F / 16.0F
@@ -60,7 +64,7 @@ fun ClientLevel.getLegacyFixedTime(): Long? {
 }
 
 fun ClientLevel.getTimeOfDay(tickDelta: Float): Float {
-    //? if 1.21.11 {
+    //? if <26.1 {
     /*var dayTime = this.getLegacyFixedTime() ?: this.dayTime
     *///?} else {
     var dayTime = this.getLegacyFixedTime() ?: this.overworldClockTime

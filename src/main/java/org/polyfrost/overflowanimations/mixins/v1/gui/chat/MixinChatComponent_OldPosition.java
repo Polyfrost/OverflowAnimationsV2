@@ -40,7 +40,9 @@ public abstract class MixinChatComponent_OldPosition {
     private static final int overflowanimations$oldChatY = 28;
 
     @Expression("40")
-    //? if 1.21.11 {
+    //? if <1.21.11 {
+    /*@ModifyExpressionValue(method = "render(Lnet/minecraft/client/gui/GuiGraphics;IIIZ)V", at = @At("MIXINEXTRAS:EXPRESSION"))
+    *///?} elif <26.1 {
     /*@ModifyExpressionValue(method = "render(Lnet/minecraft/client/gui/components/ChatComponent$ChatGraphicsAccess;IIZ)V", at = @At("MIXINEXTRAS:EXPRESSION"))
     *///?} else {
     @ModifyExpressionValue(method = "extractRenderState(Lnet/minecraft/client/gui/components/ChatComponent$ChatGraphicsAccess;IILnet/minecraft/client/gui/components/ChatComponent$DisplayMode;)V", at = @At("MIXINEXTRAS:EXPRESSION"))

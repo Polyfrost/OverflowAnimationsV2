@@ -27,6 +27,7 @@ package org.polyfrost.overflowanimations.handler.rendering
 
 import com.mojang.blaze3d.platform.NativeImage
 import net.minecraft.client.Minecraft
+//? if >=1.21.11
 import net.minecraft.client.renderer.texture.MipmapStrategy
 import net.minecraft.client.renderer.texture.ReloadableTexture
 import net.minecraft.client.renderer.texture.TextureContents
@@ -42,9 +43,13 @@ class LegacyLogoTexture(id: Identifier) : ReloadableTexture(id) {
                 NativeImage.read(inputStream),
                 TextureMetadataSection(
                     TextureMetadataSection.DEFAULT_BLUR,
+                    //? if <1.21.11 {
+                    /*TextureMetadataSection.DEFAULT_CLAMP
+                    *///?} else {
                     TextureMetadataSection.DEFAULT_CLAMP,
                     MipmapStrategy.AUTO,
                     TextureMetadataSection.DEFAULT_ALPHA_CUTOFF_BIAS
+                    //?}
                 )
             )
         }

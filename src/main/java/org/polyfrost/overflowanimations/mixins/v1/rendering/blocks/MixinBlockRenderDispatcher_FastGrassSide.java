@@ -25,7 +25,9 @@
 
 package org.polyfrost.overflowanimations.mixins.v1.rendering.blocks;
 
-//? if 1.21.11 {
+// Extra block state models were added in 1.21.5
+//? if >=1.21.5 {
+//? if <26.1 {
 /*import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.minecraft.client.renderer.block.BlockModelShaper;
@@ -43,7 +45,7 @@ import org.polyfrost.overflowanimations.OverflowAnimationsConstants;
 import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig;
 *///?}
 
-//? if 1.21.11 {
+//? if <26.1 {
 /*@Mixin(BlockRenderDispatcher.class)
 public abstract class MixinBlockRenderDispatcher_FastGrassSide {
     @Shadow
@@ -51,7 +53,7 @@ public abstract class MixinBlockRenderDispatcher_FastGrassSide {
     private BlockModelShaper blockModelShaper;
 *///?}
 
-//? if 1.21.11 {
+//? if <26.1 {
     /*@WrapOperation(method = "getBlockModel", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/block/BlockModelShaper;getBlockModel(Lnet/minecraft/world/level/block/state/BlockState;)Lnet/minecraft/client/renderer/block/model/BlockStateModel;"))
     private BlockStateModel overflowanimations$fastGrass(final BlockModelShaper instance, final BlockState state, final Operation<BlockStateModel> original) {
         if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().other.fastGrass && (state.is(Blocks.GRASS_BLOCK) && !state.getValue(GrassBlock.SNOWY))) {
@@ -62,3 +64,4 @@ public abstract class MixinBlockRenderDispatcher_FastGrassSide {
     }
 }
 *///?}
+//?}

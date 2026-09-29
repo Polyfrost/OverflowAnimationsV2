@@ -28,15 +28,30 @@ package org.polyfrost.overflowanimations.mixins.v1.gui;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.minecraft.client.Minecraft;
+//? if <1.21.9
+//import net.minecraft.client.gui.screens.PauseScreen;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.polyfrost.overflowanimations.OverflowAnimations;
 import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig;
 
+// Before 1.21.9 the disconnect logic lives in PauseScreen
+//? if <1.21.9 {
+/*@Mixin(PauseScreen.class)
+*///?} else {
 @Mixin(Minecraft.class)
+//?}
 public abstract class MixinMinecraft_DisconnectToTitleScreen {
+    //? if <1.21.5 {
+    /*@WrapOperation(method = "onDisconnect", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/Minecraft;isLocalServer()Z"))
+    private boolean overflowanimations$disconnectServerToTitleScreen(final Minecraft instance, final Operation<Boolean> original) {
+    *///?} elif <1.21.9 {
+    /*@WrapOperation(method = "disconnectFromWorld", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/Minecraft;isLocalServer()Z"))
+    private static boolean overflowanimations$disconnectServerToTitleScreen(final Minecraft instance, final Operation<Boolean> original) {
+    *///?} else {
     @WrapOperation(method = "disconnectFromWorld", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/Minecraft;isLocalServer()Z"))
     private boolean overflowanimations$disconnectServerToTitleScreen(final Minecraft instance, final Operation<Boolean> original) {
+    //?}
         if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().screen.disconnectServerToTitleScreen) {
             return true;
         } else {

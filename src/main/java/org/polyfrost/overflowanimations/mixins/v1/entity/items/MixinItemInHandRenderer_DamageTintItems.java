@@ -43,7 +43,7 @@ import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig;
 public abstract class MixinItemInHandRenderer_DamageTintItems {
     @ModifyExpressionValue(method = "renderItem", at = @At(value = "FIELD", target = "Lnet/minecraft/client/renderer/texture/OverlayTexture;NO_OVERLAY:I", opcode = Opcodes.GETSTATIC))
 *///?}
-    //? if 1.21.11 {
+    //? if <26.1 {
     /*private int overflowanimations$damageTintItems(final int original, @Local(argsOnly = true, ordinal = 0) final LivingEntity mob) {
     *///?} elif >=26.1 <26.3 {
     /*private int overflowanimations$damageTintItems(final int original, @Local(argsOnly = true, name = "mob") final LivingEntity mob) {

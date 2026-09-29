@@ -32,7 +32,7 @@ import com.llamalad7.mixinextras.sugar.Local;
 //? if <26.2 {
 /*import net.minecraft.client.gui.Gui;
 *///?}
-//? if 1.21.11 {
+//? if <26.1 {
 /*import net.minecraft.client.gui.GuiGraphics;
 *///?} else {
 import net.minecraft.client.gui.GuiGraphicsExtractor;
@@ -51,7 +51,7 @@ import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig;
 @Mixin(Hud.class)
 //?}
 public abstract class MixinHud_OldCrosshairPosition {
-    //? if 1.21.11 {
+    //? if <26.1 {
     /*@Definition(id = "graphics", local = @Local(type = GuiGraphics.class, argsOnly = true))
     @Definition(id = "guiWidth", method = "Lnet/minecraft/client/gui/GuiGraphics;guiWidth()I")
     @Expression("(graphics.guiWidth() - 15) / 2")

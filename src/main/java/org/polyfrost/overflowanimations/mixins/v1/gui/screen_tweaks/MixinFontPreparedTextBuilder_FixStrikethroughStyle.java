@@ -25,6 +25,8 @@
 
 package org.polyfrost.overflowanimations.mixins.v1.gui.screen_tweaks;
 
+// Targets the glyph pipeline added in 1.21.9
+//? if >=1.21.9 {
 import com.moulberry.mixinconstraints.annotations.IfModAbsent;
 import net.minecraft.client.gui.Font;
 import org.spongepowered.asm.mixin.Mixin;
@@ -58,3 +60,4 @@ public abstract class MixinFontPreparedTextBuilder_FixStrikethroughStyle {
         }
     }
 }
+//?}

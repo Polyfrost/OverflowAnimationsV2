@@ -28,15 +28,26 @@ package org.polyfrost.overflowanimations.mixins.v1.entity.items;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.mojang.blaze3d.vertex.PoseStack;
+//? if <1.21.9 {
+/*import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.client.player.AbstractClientPlayer;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.entity.player.PlayerRenderer;
+import net.minecraft.client.renderer.entity.state.PlayerRenderState;
+*///?} else {
 import net.minecraft.client.entity.ClientAvatarEntity;
+//?}
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.player.PlayerModel;
+//? if >=1.21.9
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
+//? if >=1.21.9 {
 import net.minecraft.client.renderer.entity.player.AvatarRenderer;
 import net.minecraft.client.renderer.entity.state.AvatarRenderState;
+//?}
 import net.minecraft.client.renderer.rendertype.RenderType;
 //? if <26.3 {
 /*import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -44,8 +55,10 @@ import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.texture.UvMapping;
 //?}
 import net.minecraft.resources.Identifier;
+//? if >=1.21.9
 import net.minecraft.world.entity.Avatar;
 import net.minecraft.world.entity.HumanoidArm;
+//? if >=1.21.9
 import org.jspecify.annotations.NonNull;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
@@ -56,25 +69,41 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.polyfrost.overflowanimations.OverflowAnimations;
 import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig;
 
+//? if <1.21.9 {
+/*@Mixin(PlayerRenderer.class)
+public abstract class MixinAvatarRenderer_HeldItemArmLogic extends LivingEntityRenderer<AbstractClientPlayer, PlayerRenderState, PlayerModel> {
+    @Unique
+    private final ThreadLocal<PlayerRenderState> overflowanimations$renderState = ThreadLocal.withInitial(() -> null);
+*///?} else {
 @Mixin(AvatarRenderer.class)
 public abstract class MixinAvatarRenderer_HeldItemArmLogic<AvatarLikeEntity extends Avatar & ClientAvatarEntity> extends LivingEntityRenderer<@NonNull AvatarLikeEntity, AvatarRenderState, PlayerModel> {
     @Unique
     private final ThreadLocal<AvatarRenderState> overflowanimations$renderState = ThreadLocal.withInitial(() -> null);
+//?}
 
     public MixinAvatarRenderer_HeldItemArmLogic(final EntityRendererProvider.Context context, final PlayerModel model, final float shadowRadius) {
         super(context, model, shadowRadius);
     }
 
+    //? if <1.21.9 {
+    /*@Inject(method = "extractRenderState(Lnet/minecraft/client/player/AbstractClientPlayer;Lnet/minecraft/client/renderer/entity/state/PlayerRenderState;F)V", at = @At("TAIL"))
+    private void overflowanimations$storeAvatarState(final AbstractClientPlayer entity, final PlayerRenderState state, final float tickDelta, final CallbackInfo ci) {
+    *///?} else {
     @Inject(method = "extractRenderState(Lnet/minecraft/world/entity/Avatar;Lnet/minecraft/client/renderer/entity/state/AvatarRenderState;F)V", at = @At("TAIL"))
     private void overflowanimations$storeAvatarState(final AvatarLikeEntity entity, final AvatarRenderState state, final float tickDelta, final CallbackInfo ci) {
+    //?}
         overflowanimations$renderState.set(state);
     }
 
     @Inject(method = "renderHand", at = @At(value = "FIELD", target = "Lnet/minecraft/client/model/geom/ModelPart;visible:Z", ordinal = 2, opcode = Opcodes.PUTFIELD))
+    //? if <1.21.9 {
+    /*private void overflowanimations$heldItemArmLogic(final PoseStack poseStack, final MultiBufferSource bufferSource, final int lightCoords, final Identifier skinTexture, final ModelPart arm, final boolean hasSleeve, final CallbackInfo ci) {
+    *///?} else {
     private void overflowanimations$heldItemArmLogic(final PoseStack poseStack, final SubmitNodeCollector submitNodeCollector, final int lightCoords, final Identifier skinTexture, final ModelPart arm, final boolean hasSleeve, final CallbackInfo ci) {
+    //?}
         if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().other.heldItemArmLogic) {
             final HumanoidArm humanoidArm = arm == model.rightArm ? HumanoidArm.RIGHT : HumanoidArm.LEFT;
-            final AvatarRenderState avatarRenderState = overflowanimations$renderState.get();
+            final var avatarRenderState = overflowanimations$renderState.get();
             if (avatarRenderState != null && (avatarRenderState.mainArm == humanoidArm ? avatarRenderState.rightArmPose : avatarRenderState.leftArmPose) == HumanoidModel.ArmPose.ITEM) {
                 // Adapted from the ITEM arm pose rotations in HumanoidModel#poseRightArm/poseLeftArm
                 arm.xRot = arm.xRot * 0.5F - (float) (Math.PI / 10);
@@ -83,21 +112,26 @@ public abstract class MixinAvatarRenderer_HeldItemArmLogic<AvatarLikeEntity exte
         }
     }
 
-    //? if <26.3 {
+    //? if <1.21.9 {
+    /*@WrapOperation(method = "renderHand", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/model/geom/ModelPart;render(Lcom/mojang/blaze3d/vertex/PoseStack;Lcom/mojang/blaze3d/vertex/VertexConsumer;II)V"))
+    private void overflowanimations$damageTintArm(final ModelPart instance, final PoseStack poseStack, final VertexConsumer buffer, final int packedLight, final int packedOverlay, final Operation<Void> original) {
+    *///?} elif <26.3 {
     /*@WrapOperation(method = "renderHand", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/SubmitNodeCollector;submitModelPart(Lnet/minecraft/client/model/geom/ModelPart;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/rendertype/RenderType;IILnet/minecraft/client/renderer/texture/TextureAtlasSprite;)V"))
     private void overflowanimations$damageTintArm(final SubmitNodeCollector instance, final ModelPart modelPart, final PoseStack poseStack, final RenderType renderType, final int packedLight, final int packedOverlay, final TextureAtlasSprite textureAtlasSprite, final Operation<Void> original) {
     *///?} else {
     @WrapOperation(method = "renderHand", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/SubmitNodeCollector;submitModelPart(Lnet/minecraft/client/model/geom/ModelPart;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/rendertype/RenderType;IILnet/minecraft/client/renderer/texture/UvMapping;)V"))
     private void overflowanimations$damageTintArm(final SubmitNodeCollector instance, final ModelPart modelPart, final PoseStack poseStack, final RenderType renderType, final int packedLight, final int packedOverlay, final UvMapping uvMapping, final Operation<Void> original) {
     //?}
-        final AvatarRenderState avatarRenderState = overflowanimations$renderState.get();
+        final var avatarRenderState = overflowanimations$renderState.get();
 
         int overlay = packedOverlay;
         if (OverflowAnimations.isEnabled() && avatarRenderState != null && OverflowAnimationsConfig.instance().other.damageTintItems) {
             overlay = LivingEntityRenderer.getOverlayCoords(avatarRenderState, 0.0F);
         }
 
-        //? if <26.3 {
+        //? if <1.21.9 {
+        /*original.call(instance, poseStack, buffer, packedLight, overlay);
+        *///?} elif <26.3 {
         /*original.call(instance, modelPart, poseStack, renderType, packedLight, overlay, textureAtlasSprite);
         *///?} else {
         original.call(instance, modelPart, poseStack, renderType, packedLight, overlay, uvMapping);

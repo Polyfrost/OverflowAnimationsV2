@@ -25,6 +25,8 @@
 
 package org.polyfrost.overflowanimations.handler.rendering
 
+// Built on the GPU device API (1.21.5) and dynamic uniforms / GUI render states (1.21.6)
+//? if >=1.21.6 {
 import com.mojang.blaze3d.systems.RenderSystem
 import com.mojang.blaze3d.vertex.VertexConsumer
 //? if >=26.3 {
@@ -242,3 +244,4 @@ object LegacySkyRenderer {
         BOTTOM_GEOMETRY.close()
     }
 }
+//?}

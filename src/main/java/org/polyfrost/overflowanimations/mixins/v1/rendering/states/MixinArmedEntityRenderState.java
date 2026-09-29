@@ -40,11 +40,19 @@ import org.polyfrost.overflowanimations.util.states.UtilityRenderState;
 
 @Mixin(ArmedEntityRenderState.class)
 public abstract class MixinArmedEntityRenderState implements UtilityRenderState {
+    //? if <1.21.11 {
+    /*@Unique
+    private ItemStack leftHandItemStack = ItemStack.EMPTY;
+
+    @Unique
+    private ItemStack rightHandItemStack = ItemStack.EMPTY;
+    *///?} else {
     @Shadow
     public ItemStack leftHandItemStack;
 
     @Shadow
     public ItemStack rightHandItemStack;
+    //?}
 
     @Unique
     private boolean overflowanimations$isFishing = false;
@@ -56,7 +64,13 @@ public abstract class MixinArmedEntityRenderState implements UtilityRenderState 
     private EntityDimensions overflowanimations$standingDimensions = null;
 
     @Inject(method = "extractArmedEntityRenderState", at = @At("TAIL"))
+    //? if <1.21.11 {
+    /*private static void overflowanimations$storeData(final LivingEntity entity, final ArmedEntityRenderState state, final ItemModelResolver itemModelResolver, final CallbackInfo ci) {
+        state.overflowanimations$setItemHeldByArm(HumanoidArm.LEFT, entity.getItemHeldByArm(HumanoidArm.LEFT).copy());
+        state.overflowanimations$setItemHeldByArm(HumanoidArm.RIGHT, entity.getItemHeldByArm(HumanoidArm.RIGHT).copy());
+    *///?} else {
     private static void overflowanimations$storeData(final LivingEntity entity, final ArmedEntityRenderState state, final ItemModelResolver itemModelResolver, final float partialTicks, final CallbackInfo ci) {
+    //?}
         if (entity instanceof Player player && player.fishing != null) {
             state.overflowanimations$setFishing();
         }
@@ -65,9 +79,15 @@ public abstract class MixinArmedEntityRenderState implements UtilityRenderState 
             state.overflowanimations$setSleeping();
         }
 
+        //? if <1.21.9 {
+        /*if (entity instanceof Player player) {
+            state.overflowanimations$setStandingDimensions(player.getDefaultDimensions(Pose.STANDING));
+        }
+        *///?} else {
         if (entity instanceof Avatar avatar) {
             state.overflowanimations$setStandingDimensions(avatar.getDefaultDimensions(Pose.STANDING));
         }
+        //?}
     }
 
     @Override
@@ -80,6 +100,17 @@ public abstract class MixinArmedEntityRenderState implements UtilityRenderState 
             throw new UnsupportedOperationException();
         }
     }
+
+    //? if <1.21.11 {
+    /*@Override
+    public void overflowanimations$setItemHeldByArm(final HumanoidArm arm, final ItemStack stack) {
+        if (arm == HumanoidArm.LEFT) {
+            this.leftHandItemStack = stack;
+        } else {
+            this.rightHandItemStack = stack;
+        }
+    }
+    *///?}
 
     @Override
     public boolean overflowanimations$isFishing() {

@@ -30,7 +30,11 @@ import net.minecraft.client.Minecraft
 import net.minecraft.client.model.HumanoidModel
 import net.minecraft.client.multiplayer.ClientLevel
 import net.minecraft.client.renderer.entity.state.ArmedEntityRenderState
+//? if <1.21.9 {
+/*import net.minecraft.client.renderer.entity.state.PlayerRenderState
+*///?} else {
 import net.minecraft.client.renderer.entity.state.AvatarRenderState
+//?}
 import net.minecraft.client.renderer.entity.state.LivingEntityRenderState
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.entity.Entity
@@ -57,7 +61,11 @@ fun getHandMultiplier(player: Player): Int {
 fun getHandMultiplier(player: Player, hand: InteractionHand) =
     getArmMultiplier(if (hand == InteractionHand.MAIN_HAND) player.mainArm else player.mainArm.opposite)
 
+//? if <1.21.9 {
+/*fun getHandMultiplier(state: PlayerRenderState, hand: InteractionHand) =
+*///?} else {
 fun getHandMultiplier(state: AvatarRenderState, hand: InteractionHand) =
+//?}
     getArmMultiplier(if (hand == InteractionHand.MAIN_HAND) state.mainArm else state.mainArm.opposite)
 
 fun getArmMultiplier(arm: HumanoidArm) = if (arm == HumanoidArm.RIGHT) 1 else -1
@@ -76,7 +84,9 @@ fun applySwingWhilstMining(level: ClientLevel?, player: Player, hitResult: HitRe
         if (hitResult != null && hitResult.type == HitResult.Type.BLOCK) {
             val blockHitResult = hitResult as BlockHitResult
             if (OverflowAnimationsConfig.instance().items.usageSwingingParticles && level != null && !level.getBlockState(blockHitResult.blockPos).isAir && !ServerFeatureManager.isPresent(ServerFeatures.MINING_ITEM_USAGE)) {
-                //? if <26.3 {
+                //? if <1.21.9 {
+                /*Minecraft.getInstance().particleEngine.crack(blockHitResult.blockPos, blockHitResult.direction)
+                *///?} elif <26.3 {
                 /*level.addBreakingBlockEffect(blockHitResult.blockPos, blockHitResult.direction)
                 *///?} else {
                 level.addBreakingBlockEffects(blockHitResult.blockPos, blockHitResult.direction, false)
@@ -97,7 +107,11 @@ fun applySwingWhilstMining(level: ClientLevel?, player: Player, hitResult: HitRe
  */
 fun LivingEntityRenderState.isSelf(): Boolean {
     val player = Minecraft.getInstance().player
+    //? if <1.21.9 {
+    /*return player != null && this is PlayerRenderState && this.id == player.id
+    *///?} else {
     return player != null && this is AvatarRenderState && this.id == player.id
+    //?}
 }
 
 fun Entity?.isSelf(): Boolean {

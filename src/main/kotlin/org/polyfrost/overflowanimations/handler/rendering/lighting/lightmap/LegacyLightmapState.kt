@@ -25,6 +25,8 @@
 
 package org.polyfrost.overflowanimations.handler.rendering.lighting.lightmap
 
+// Built on the GPU device API (1.21.5) and dynamic uniforms / GUI render states (1.21.6)
+//? if >=1.21.6 {
 class LegacyLightmapState {
     var needsUpdate: Boolean = false
     var skyDarken: Float = 0.0F
@@ -34,3 +36,4 @@ class LegacyLightmapState {
     var gamma: Float = 0.0F
     var useBrightLightmap: Boolean = false
 }
+//?}

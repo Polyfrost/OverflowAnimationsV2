@@ -32,12 +32,36 @@ import org.polyfrost.overflowanimations.handler.config.bundle.entry.OptionEntryS
 import org.polyfrost.overflowanimations.handler.config.category.Category
 
 open class EntryBundle(protected val category: Category, private val name: String) : Bundle() {
+    companion object {
+        // Options whose feature does not exist on (or is compiled out of) this Minecraft version
+        private val UNSUPPORTED_OPTIONS = buildSet<String> {
+            // Built on the 1.21.5 GPU API and the 1.21.6 rendering/fog/GUI rewrites
+            //? if <1.21.6 {
+            /*addAll(listOf(
+                "panoramaRendering", "oldCloudRendering", "legacyLightmap", "legacyDiffuseLighting", "planarSkyFog",
+                "voidFog", "oldY0Height", "legacyFogDarkness", "oldWaterColorFog", "blueVoidSky", "playerVoidBox",
+                "fastGrass", "disableRandomBlockRotations", "disableInventoryEntityScissor", "thinFishingRodLineThickness"
+            ))
+            *///?}
+            //? if <1.21.9 {
+            /*add("fixTextStrikethroughStyle") // Fixes a bug in the 1.21.9 glyph pipeline
+            add("glintAffectsArmorTint") // Needs the render state that equipment layers get from 1.21.9
+            *///?}
+            //? if <1.21.11 {
+            /*add("fullWidthInventoryEffects") // Effects already use the full width before 1.21.11
+            add("legacySwingAnimation") // The item swap animation was added in 1.21.11
+            *///?}
+        }
+    }
+
     protected val entries = LinkedHashSet<OptionEntrySupplier<*>>()
     protected val groups = LinkedHashSet<GroupBundle>()
     protected val categoryClass = category::class.java
 
     override fun install(builder: ConfigCategory.Builder, defaults: Category, config: Category) {
         for (group in this.groups) {
+            if (group.entries.isEmpty()) continue
+
             val groupBuilder = OptionGroup.createBuilder()
             groupBuilder.name(Component.translatable("overflowanimations.category." + this.name + ".group." + group.name()))
             group.install(groupBuilder, defaults, config)
@@ -50,6 +74,7 @@ open class EntryBundle(protected val category: Category, private val name: Strin
     }
 
     override fun <T> entry(entry: OptionEntrySupplier<T>): Bundle {
+        if (entry.name() in UNSUPPORTED_OPTIONS) return this
         this.entries.add(OptionEntrySupplier.bootstrap(this.categoryClass, this.category, entry))
         return this
     }

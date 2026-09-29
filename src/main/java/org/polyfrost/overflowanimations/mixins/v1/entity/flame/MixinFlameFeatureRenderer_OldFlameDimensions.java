@@ -29,8 +29,14 @@ import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
+//? if <1.21.9 {
+/*import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
+import net.minecraft.client.renderer.entity.state.PlayerRenderState;
+*///?} else {
 import net.minecraft.client.renderer.entity.state.AvatarRenderState;
+//?}
 import net.minecraft.client.renderer.entity.state.EntityRenderState;
+//? if >=1.21.9
 import net.minecraft.client.renderer.feature.FlameFeatureRenderer;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
@@ -41,12 +47,16 @@ import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig;
 import org.polyfrost.overflowanimations.util.CameraUtilKt;
 import org.polyfrost.overflowanimations.util.enums.SneakAnimationSetting;
 
+//? if <1.21.9 {
+/*@Mixin(EntityRenderDispatcher.class)
+*///?} else {
 @Mixin(FlameFeatureRenderer.class)
+//?}
 public abstract class MixinFlameFeatureRenderer_OldFlameDimensions {
     //? if <26.2 {
     /*@ModifyExpressionValue(method = "renderFlame", at = @At(value = "FIELD", target = "Lnet/minecraft/client/renderer/entity/state/EntityRenderState;boundingBoxWidth:F", opcode = Opcodes.GETFIELD))
     *///?}
-    //? if 1.21.11 {
+    //? if <26.1 {
     /*private float overflowanimations$flameWidth(final float original, @Local(ordinal = 0, argsOnly = true) final EntityRenderState state) {
     *///?} elif >=26.2 {
     @ModifyExpressionValue(method = "prepare", at = @At(value = "FIELD", target = "Lnet/minecraft/client/renderer/entity/state/EntityRenderState;boundingBoxWidth:F", opcode = Opcodes.GETFIELD))
@@ -54,7 +64,11 @@ public abstract class MixinFlameFeatureRenderer_OldFlameDimensions {
     //? if >=26.1 {
     private float overflowanimations$flameWidth(final float original, @Local(name = "state") final EntityRenderState state) {
     //?}
+        //? if <1.21.9 {
+        /*if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().other.flameDimensions && state instanceof PlayerRenderState) {
+        *///?} else {
         if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().other.flameDimensions && state instanceof AvatarRenderState) {
+        //?}
             return 0.6F;
         } else {
             return original;
@@ -64,7 +78,7 @@ public abstract class MixinFlameFeatureRenderer_OldFlameDimensions {
     //? if <26.2 {
     /*@ModifyExpressionValue(method = "renderFlame", at = @At(value = "FIELD", target = "Lnet/minecraft/client/renderer/entity/state/EntityRenderState;boundingBoxHeight:F", opcode = Opcodes.GETFIELD))
     *///?}
-    //? if 1.21.11 {
+    //? if <26.1 {
     /*private float overflowanimations$flameHeight(final float original, @Local(ordinal = 0, argsOnly = true) final EntityRenderState state) {
     *///?} elif >=26.2 {
     @ModifyExpressionValue(method = "prepare", at = @At(value = "FIELD", target = "Lnet/minecraft/client/renderer/entity/state/EntityRenderState;boundingBoxHeight:F", opcode = Opcodes.GETFIELD))
@@ -72,17 +86,23 @@ public abstract class MixinFlameFeatureRenderer_OldFlameDimensions {
     //? if >=26.1 {
     private float overflowanimations$flameHeight(final float original, @Local(name = "state") final EntityRenderState state) {
     //?}
+        //? if <1.21.9 {
+        /*if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().other.flameDimensions && state instanceof PlayerRenderState) {
+        *///?} else {
         if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().other.flameDimensions && state instanceof AvatarRenderState) {
+        //?}
             return 1.8F;
         } else {
             return original;
         }
     }
 
-    //? if <26.2 {
+    //? if <1.21.9 {
+    /*@ModifyArg(method = "renderFlame", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/PoseStack;translate(FFF)V", ordinal = 0), index = 1)
+    *///?} elif <26.2 {
     /*@ModifyArg(method = "renderFlame", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/PoseStack$Pose;translate(FFF)Lorg/joml/Matrix4f;", ordinal = 0), index = 1)
     *///?}
-    //? if 1.21.11 {
+    //? if <26.1 {
     /*private float overflowanimations$flameOffset(final float original, @Local(ordinal = 0, argsOnly = true) final EntityRenderState state) {
     *///?} elif >=26.2 {
     @ModifyArg(method = "prepare", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/PoseStack$Pose;translate(FFF)Lorg/joml/Matrix4f;", ordinal = 0), index = 1)
@@ -91,7 +111,13 @@ public abstract class MixinFlameFeatureRenderer_OldFlameDimensions {
     private float overflowanimations$flameOffset(final float original, @Local(name = "state") final EntityRenderState state) {
     //?}
         final Camera camera = Minecraft.getInstance().getEntityRenderDispatcher().camera;
+        //? if <1.21.9 {
+        /*if (OverflowAnimations.isEnabled() && state instanceof PlayerRenderState avatarRenderState && camera != null && camera.getEntity().getId() == avatarRenderState.id) {
+        *///?} elif <1.21.11 {
+        /*if (OverflowAnimations.isEnabled() && state instanceof AvatarRenderState avatarRenderState && camera != null && camera.getEntity().getId() == avatarRenderState.id) {
+        *///?} else {
         if (OverflowAnimations.isEnabled() && state instanceof AvatarRenderState avatarRenderState && camera != null && camera.entity().getId() == avatarRenderState.id) {
+        //?}
             final boolean shouldSyncPlayerModelWithEyeHeight = OverflowAnimationsConfig.instance().movement.sneakAnimation == SneakAnimationSetting.V1_7;
 
             float value = original;

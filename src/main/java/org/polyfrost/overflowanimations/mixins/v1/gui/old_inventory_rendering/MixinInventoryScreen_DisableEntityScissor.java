@@ -25,15 +25,17 @@
 
 package org.polyfrost.overflowanimations.mixins.v1.gui.old_inventory_rendering;
 
+// Targets GUI render states added in 1.21.6
+//? if >=1.21.6 {
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
-//? if 1.21.11 {
+//? if <26.1 {
 /*import net.minecraft.client.gui.GuiGraphics;
 *///?} else {
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 //?}
 import net.minecraft.client.gui.navigation.ScreenRectangle;
-//? if 1.21.11 {
+//? if <26.1 {
 /*import net.minecraft.client.gui.render.state.pip.GuiEntityRenderState;
 *///?}
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
@@ -55,9 +57,13 @@ import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig;
 
 @Mixin(InventoryScreen.class)
 public abstract class MixinInventoryScreen_DisableEntityScissor {
-    //? if 1.21.11 {
+    //? if <1.21.11 {
+    /*@WrapOperation(method = "renderEntityInInventory", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphics;submitEntityRenderState(Lnet/minecraft/client/renderer/entity/state/EntityRenderState;FLorg/joml/Vector3f;Lorg/joml/Quaternionf;Lorg/joml/Quaternionf;IIII)V"))
+    *///?} elif <26.1 {
     /*@WrapOperation(method = "renderEntityInInventoryFollowsMouse", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphics;submitEntityRenderState(Lnet/minecraft/client/renderer/entity/state/EntityRenderState;FLorg/joml/Vector3f;Lorg/joml/Quaternionf;Lorg/joml/Quaternionf;IIII)V"))
-    private static void overflowanimations$disableEntityScissor(final GuiGraphics instance, final EntityRenderState renderState, final float scale, final Vector3f translation, final Quaternionf rotation, final Quaternionf overrideCameraAngle, final int x0, final int y0, final int x1, final int y1, final Operation<Void> original) {
+    *///?}
+    //? if <26.1 {
+    /*private static void overflowanimations$disableEntityScissor(final GuiGraphics instance, final EntityRenderState renderState, final float scale, final Vector3f translation, final Quaternionf rotation, final Quaternionf overrideCameraAngle, final int x0, final int y0, final int x1, final int y1, final Operation<Void> original) {
     *///?} elif 26.1 {
     /*@WrapOperation(method = "extractEntityInInventoryFollowsMouse", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphicsExtractor;entity(Lnet/minecraft/client/renderer/entity/state/EntityRenderState;FLorg/joml/Vector3f;Lorg/joml/Quaternionf;Lorg/joml/Quaternionf;IIII)V"))
     private static void overflowanimations$disableEntityScissor(final GuiGraphicsExtractor instance, final EntityRenderState renderState, final float scale, final Vector3f translation, final Quaternionf rotation, final Quaternionf overrideCameraAngle, final int x0, final int y0, final int x1, final int y1, final Operation<Void> original) {
@@ -68,7 +74,7 @@ public abstract class MixinInventoryScreen_DisableEntityScissor {
         if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().other.disableInventoryEntityScissor) {
             final ScreenRectangle bounds = new ScreenRectangle(0, 0, instance.guiWidth(), instance.guiHeight());
             final int expansion = 40;
-            //? if 1.21.11 {
+            //? if <26.1 {
             /*instance.guiRenderState.submitPicturesInPictureState(new GuiEntityRenderState(renderState, translation, rotation, overrideCameraAngle, x0 - expansion, y0 - expansion, x1 + expansion, y1 + expansion, scale, null, bounds));
             *///?} else {
             instance.guiRenderState.addPicturesInPictureState(new GuiEntityRenderState(renderState, translation, rotation, overrideCameraAngle, x0 - expansion, y0 - expansion, x1 + expansion, y1 + expansion, scale, null, bounds));
@@ -78,3 +84,4 @@ public abstract class MixinInventoryScreen_DisableEntityScissor {
         }
     }
 }
+//?}

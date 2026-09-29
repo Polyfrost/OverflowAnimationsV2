@@ -26,7 +26,7 @@
 package org.polyfrost.overflowanimations.handler.screen
 
 import net.minecraft.ChatFormatting
-//? if 1.21.11 {
+//? if <26.1 {
 /*import net.minecraft.client.gui.GuiGraphics
 *///?} else {
 import net.minecraft.client.gui.GuiGraphicsExtractor
@@ -34,6 +34,7 @@ import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.components.Button
 import net.minecraft.client.gui.components.Tooltip
 import net.minecraft.client.gui.screens.Screen
+//? if >=1.21.9
 import net.minecraft.client.input.MouseButtonEvent
 import net.minecraft.network.chat.CommonComponents
 import net.minecraft.network.chat.Component
@@ -53,7 +54,11 @@ class PresetsScreen(private val original: Screen?) :
     private val BUTTON_WIDTH = 100
 
     override fun init() {
+        //? if <1.21.11 {
+        /*this.original?.init(this.minecraft!!, this.width, this.height)
+        *///?} else {
         this.original?.init(this.width, this.height)
+        //?}
         this.presetVersion = GeneralConfigUtil.getEnum(GeneralConfigUtil.PRESET_VERSION_KEY, PresetVersion.VANILLA)
 
         this.setupVersionButtons()
@@ -62,8 +67,8 @@ class PresetsScreen(private val original: Screen?) :
             if (this.presetVersion != GeneralConfigUtil.getEnum(GeneralConfigUtil.PRESET_VERSION_KEY, PresetVersion.VANILLA)) {
                 GeneralConfigUtil.put(GeneralConfigUtil.PRESET_VERSION_KEY, this.presetVersion)
                 this.presetVersion.apply()
-                //? if 1.21.11 {
-                /*this.minecraft.gui.chat.addMessage(
+                //? if <26.1 {
+                /*this.minecraft!!.gui.chat.addMessage(
                 *///?} elif 26.1 {
                 /*this.minecraft.gui.chat.addClientSystemMessage(
                 *///?} else {
@@ -72,8 +77,8 @@ class PresetsScreen(private val original: Screen?) :
                     Component.literal("Applied preset " + this@PresetsScreen.presetVersion.name + "!").withColor(-0xFF0100)
                 )
             } else {
-                //? if 1.21.11 {
-                /*this.minecraft.gui.chat.addMessage(
+                //? if <26.1 {
+                /*this.minecraft!!.gui.chat.addMessage(
                 *///?} elif 26.1 {
                 /*this.minecraft.gui.chat.addClientSystemMessage(
                 *///?} else {
@@ -84,7 +89,7 @@ class PresetsScreen(private val original: Screen?) :
             }
 
             //? if <26.2 {
-            /*this.minecraft.setScreen(this.original)
+            /*this.minecraft!!.setScreen(this.original)
             *///?} else {
             this.minecraft.gui.setScreen(this.original)
             //?}
@@ -128,7 +133,7 @@ class PresetsScreen(private val original: Screen?) :
         this.updateVersionButtonState()
     }
 
-    //? if 1.21.11 {
+    //? if <26.1 {
     /*override fun render(graphics: GuiGraphics, mouseX: Int, mouseY: Int, tickDelta: Float) {
         this.original?.render(graphics, -999, -999, tickDelta)
     *///?} else {
@@ -136,8 +141,8 @@ class PresetsScreen(private val original: Screen?) :
         this.original?.extractRenderState(graphics, -999, -999, tickDelta)
     //?}
 
-        graphics.fill(0, 0, this.width, this.height, ARGB.color(0.35F, 0))
-        //? if 1.21.11 {
+        graphics.fill(0, 0, this.width, this.height, ARGB.color((0.35F * 255).toInt(), 0))
+        //? if <26.1 {
         /*super.render(graphics, mouseX, mouseY, tickDelta)
         *///?} else {
         super.extractRenderState(graphics, mouseX, mouseY, tickDelta)
@@ -150,7 +155,7 @@ class PresetsScreen(private val original: Screen?) :
             this.height / 4,
             2.0F
         )
-        //? if 1.21.11 {
+        //? if <26.1 {
         /*graphics.drawCenteredString(
         *///?} else {
         graphics.centeredText(
@@ -159,9 +164,9 @@ class PresetsScreen(private val original: Screen?) :
             "Hello! Thank you for downloading OverflowAnimations!",
             this.width / 2,
             (this.height / 2.8).toInt(),
-            ARGB.white(0xD6D6D6)
+            ARGB.color(0xD6, 0xFFFFFF)
         )
-        //? if 1.21.11 {
+        //? if <26.1 {
         /*graphics.drawCenteredString(
         *///?} else {
         graphics.centeredText(
@@ -170,9 +175,9 @@ class PresetsScreen(private val original: Screen?) :
             "Please select the version of visuals you would like to use!",
             this.width / 2,
             (this.height / 2.4).toInt(),
-            ARGB.white(0xD6D6D6)
+            ARGB.color(0xD6, 0xFFFFFF)
         )
-        //? if 1.21.11 {
+        //? if <26.1 {
         /*graphics.drawCenteredString(
         *///?} else {
         graphics.centeredText(
@@ -188,6 +193,18 @@ class PresetsScreen(private val original: Screen?) :
         )
     }
 
+    //? if <1.21.9 {
+    /*override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean =
+        if (this.v1_7Button!!.mouseClicked(mouseX, mouseY, button) ||
+            this.v1_8Button!!.mouseClicked(mouseX, mouseY, button) ||
+            this.modernButton!!.mouseClicked(mouseX, mouseY, button)
+        ) {
+            this.updateVersionButtonState()
+            true
+        } else {
+            super.mouseClicked(mouseX, mouseY, button)
+        }
+    *///?} else {
     override fun mouseClicked(event: MouseButtonEvent, doubleClick: Boolean): Boolean =
         if (this.v1_7Button!!.mouseClicked(event, doubleClick) ||
             this.v1_8Button!!.mouseClicked(event, doubleClick) ||
@@ -198,6 +215,7 @@ class PresetsScreen(private val original: Screen?) :
         } else {
             super.mouseClicked(event, doubleClick)
         }
+    //?}
 
     private fun updateVersionButtonState() {
         this.v1_7Button?.active = this.presetVersion != PresetVersion.V1_7

@@ -34,6 +34,7 @@ import org.polyfrost.overflowanimations.handler.config.bundle.EntryBundle;
 import org.polyfrost.overflowanimations.handler.config.bundle.GroupBundle;
 import org.polyfrost.overflowanimations.handler.config.category.Category;
 import org.polyfrost.overflowanimations.handler.rendering.RenderUtilsKt;
+//? if >=1.21.6
 import org.polyfrost.overflowanimations.handler.rendering.lighting.LegacyDiffuseLighting;
 import org.polyfrost.overflowanimations.util.enums.DamageTintSetting;
 import org.polyfrost.overflowanimations.util.enums.VoidFogSetting;
@@ -143,7 +144,11 @@ public final class OtherConfigCategory extends Category {
                 .booleanEntry("oldWaterColorEffects", (option, value) -> Minecraft.getInstance().levelExtractor.allChanged())
                 //?}
                 .booleanEntry("disableRandomBlockRotations")
+                //? if <1.21.6 {
+                /*.booleanEntry("legacyDiffuseLighting")
+                *///?} else {
                 .booleanEntry("legacyDiffuseLighting", (option, value) -> LegacyDiffuseLighting.refresh())
+                //?}
                 .booleanEntry("legacyLightmap")
                 .booleanEntry("legacyFogDarkness")
                 .booleanEntry("legacySplashPosition");

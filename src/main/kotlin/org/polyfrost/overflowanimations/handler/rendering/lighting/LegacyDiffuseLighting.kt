@@ -25,6 +25,8 @@
 
 package org.polyfrost.overflowanimations.handler.rendering.lighting
 
+// Lighting entries were added in 1.21.6
+//? if >=1.21.6 {
 import com.mojang.blaze3d.platform.Lighting
 import org.joml.Matrix4f
 import org.joml.Vector3f
@@ -91,3 +93,4 @@ object LegacyDiffuseLighting {
         //?}
     )
 }
+//?}

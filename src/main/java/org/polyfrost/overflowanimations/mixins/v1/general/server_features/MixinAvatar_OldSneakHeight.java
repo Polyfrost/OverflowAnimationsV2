@@ -27,9 +27,12 @@ package org.polyfrost.overflowanimations.mixins.v1.general.server_features;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+//? if >=1.21.9
 import net.minecraft.world.entity.Avatar;
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.Pose;
+//? if <1.21.9
+//import net.minecraft.world.entity.player.Player;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.polyfrost.overflowanimations.handler.server_features.ServerFeatureManager;
@@ -37,7 +40,11 @@ import org.polyfrost.overflowanimations.handler.server_features.ServerFeatures;
 
 import java.util.Map;
 
+//? if <1.21.9 {
+/*@Mixin(Player.class)
+*///?} else {
 @Mixin(Avatar.class)
+//?}
 public abstract class MixinAvatar_OldSneakHeight {
     @WrapOperation(method = "getDefaultDimensions", at = @At(value = "INVOKE", target = "Ljava/util/Map;getOrDefault(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;"))
     private <V> V overflowanimations$oldSneakHeight(final Map<Pose, EntityDimensions> instance, final Object pose, final V defaultValue, final Operation<EntityDimensions> original) {

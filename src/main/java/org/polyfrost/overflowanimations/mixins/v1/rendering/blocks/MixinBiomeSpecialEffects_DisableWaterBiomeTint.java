@@ -44,7 +44,11 @@ public abstract class MixinBiomeSpecialEffects_DisableWaterBiomeTint {
 
     @Definition(id = "waterColor", field = "Lnet/minecraft/world/level/biome/BiomeSpecialEffects;waterColor:I")
     @Expression("this.waterColor")
+    //? if <1.21.11 {
+    /*@ModifyExpressionValue(method = "getWaterColor", at = @At("MIXINEXTRAS:EXPRESSION"))
+    *///?} else {
     @ModifyExpressionValue(method = "waterColor", at = @At("MIXINEXTRAS:EXPRESSION"))
+    //?}
     private int overflowanimations$oldWaterColor(final int original) {
         if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().other.oldWaterColorEffects) {
             if (this.waterColor == 6388580/*Swamp Water Color*/) {

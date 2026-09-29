@@ -25,6 +25,8 @@
 
 package org.polyfrost.overflowanimations.handler.rendering.clouds
 
+// Built on the GPU device API (1.21.5) and dynamic uniforms / GUI render states (1.21.6)
+//? if >=1.21.6 {
 //? if 26.2 {
 /*import com.mojang.blaze3d.GpuFormat
 *///?}
@@ -70,7 +72,7 @@ data class CloudPipelineSet(
             val depthOnlyPipeline = RenderPipelines.register(
                 RenderPipeline.builder(snippet)
                     .withLocation(location("pipeline/${name}_depth_only"))
-                    //? if 1.21.11 {
+                    //? if <26.1 {
                     /*.withBlend(BlendFunction.TRANSLUCENT)
                     .withColorWrite(false)
                     *///?} else {
@@ -105,3 +107,4 @@ data class CloudPipelineSet(
     else
         flatPipeline
 }
+//?}

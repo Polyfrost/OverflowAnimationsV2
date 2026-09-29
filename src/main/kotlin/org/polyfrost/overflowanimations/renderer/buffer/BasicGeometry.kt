@@ -25,6 +25,8 @@
 
 package org.polyfrost.overflowanimations.renderer.buffer
 
+// Built on the GPU device API (1.21.5) and dynamic uniforms / GUI render states (1.21.6)
+//? if >=1.21.6 {
 //? if <26.3 {
 /*import com.mojang.blaze3d.systems.RenderPass
 *///?}
@@ -53,3 +55,4 @@ class BasicGeometry(val firstVertex: Int, val vertexCount: Int) : Geometry {
     override fun close() {
     }
 }
+//?}

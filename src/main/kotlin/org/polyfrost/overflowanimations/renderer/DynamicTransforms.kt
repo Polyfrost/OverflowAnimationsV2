@@ -25,6 +25,8 @@
 
 package org.polyfrost.overflowanimations.renderer
 
+// Built on the GPU device API (1.21.5) and dynamic uniforms / GUI render states (1.21.6)
+//? if >=1.21.6 {
 import com.mojang.blaze3d.systems.RenderSystem
 //? if >=26.3 {
 import com.mojang.renderpearl.api.buffers.GpuBufferSlice
@@ -90,7 +92,13 @@ object DynamicTransforms {
             //?}
             this.shaderColor,
             this.modelOffset,
+            //? if <1.21.11 {
+            /*this.textureMatrix ?: Matrix4f(),
+            RenderSystem.getShaderLineWidth()
+            *///?} else {
             this.textureMatrix ?: Matrix4f()
+            //?}
         )
     }
 }
+//?}

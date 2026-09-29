@@ -36,7 +36,11 @@ import org.polyfrost.overflowanimations.handler.server_features.ServerFeatures;
 
 @Mixin(Entity.class)
 public abstract class MixinEntity_ClientSideMovement {
+    //? if <1.21.5 {
+    /*@Inject(method = "isControlledByLocalInstance", at = @At("HEAD"), cancellable = true)
+    *///?} else {
     @Inject(method = "isLocalInstanceAuthoritative", at = @At("HEAD"), cancellable = true)
+    //?}
     private void overflowanimations$clientSideEntityMovement(final CallbackInfoReturnable<Boolean> cir) {
         if (ServerFeatureManager.isPresent(ServerFeatures.CLIENTSIDE_ENTITIES) && !(((Entity) (Object) this) instanceof Player)) {
             cir.setReturnValue(true);

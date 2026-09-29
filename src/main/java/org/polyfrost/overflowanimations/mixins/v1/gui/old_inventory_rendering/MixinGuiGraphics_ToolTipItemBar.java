@@ -28,7 +28,7 @@ package org.polyfrost.overflowanimations.mixins.v1.gui.old_inventory_rendering;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
-//? if 1.21.11 {
+//? if <26.1 {
 /*import net.minecraft.client.gui.GuiGraphics;
 *///?} else {
 import net.minecraft.client.gui.GuiGraphicsExtractor;
@@ -46,13 +46,16 @@ import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig;
 import org.polyfrost.overflowanimations.handler.rendering.RenderUtilsKt;
 import org.polyfrost.overflowanimations.util.ItemUtilKt;
 
-//? if 1.21.11 {
+//? if <26.1 {
 /*@Mixin(GuiGraphics.class)
 *///?} else {
 @Mixin(GuiGraphicsExtractor.class)
 //?}
 public abstract class MixinGuiGraphics_ToolTipItemBar {
-    //? if 1.21.11 {
+    //? if <1.21.6 {
+    /*@WrapOperation(method = "renderTooltipInternal", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screens/inventory/tooltip/TooltipRenderUtil;renderTooltipBackground(Lnet/minecraft/client/gui/GuiGraphics;IIIIILnet/minecraft/resources/Identifier;)V"))
+    private void overflowanimations$tooltipStyleRendering(final GuiGraphics graphics, final int x, final int y, final int w, final int h, final int z, final Identifier style, final Operation<Void> original) {
+    *///?} elif <26.1 {
     /*@WrapOperation(method = "renderTooltip", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screens/inventory/tooltip/TooltipRenderUtil;renderTooltipBackground(Lnet/minecraft/client/gui/GuiGraphics;IIIILnet/minecraft/resources/Identifier;)V"))
     private void overflowanimations$tooltipStyleRendering(final GuiGraphics graphics, final int x, final int y, final int w, final int h, final Identifier style, final Operation<Void> original) {
     *///?} else {
@@ -66,18 +69,31 @@ public abstract class MixinGuiGraphics_ToolTipItemBar {
             int q = h + 6;
             // TODO/NOTE: Figure out good names for these variables LOL
             final int lineColor = -267386864;
+            //? if <1.21.6 {
+            /*graphics.pose().pushPose();
+            graphics.pose().translate(0.0F, 0.0F, z);
+            *///?}
             RenderUtilsKt.fillHorizontalLine(graphics, n, o - 1, p, lineColor);
             RenderUtilsKt.fillHorizontalLine(graphics, n, o + q, p, lineColor);
             RenderUtilsKt.fillRectangle(graphics, n, o, p, q, lineColor);
             RenderUtilsKt.fillVerticalLine(graphics, n - 1, o, q, lineColor);
             RenderUtilsKt.fillVerticalLine(graphics, n + p, o, q, lineColor);
             RenderUtilsKt.fillFrameGradient(graphics, n, o + 1, p, q, 0x505000FF, 0x5028007F);
+            //? if <1.21.6
+            //graphics.pose().popPose();
         } else {
+            //? if <1.21.6 {
+            /*original.call(graphics, x, y, w, h, z, style);
+            *///?} else {
             original.call(graphics, x, y, w, h, style);
+            //?}
         }
     }
 
-    //? if 1.21.11 {
+    //? if <1.21.6 {
+    /*@Inject(method = "renderItemBar", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphics;fill(Lnet/minecraft/client/renderer/rendertype/RenderType;IIIIII)V", ordinal = 0, shift = At.Shift.AFTER))
+    private void overflowanimations$oldDurabilityBar(final ItemStack itemStack, final int x, final int y, final CallbackInfo ci, @Local(ordinal = 2) final int left, final @Local(ordinal = 3) int top) {
+    *///?} elif <26.1 {
     /*@Inject(method = "renderItemBar", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphics;fill(Lcom/mojang/blaze3d/pipeline/RenderPipeline;IIIII)V", ordinal = 0, shift = At.Shift.AFTER))
     private void overflowanimations$oldDurabilityBar(final ItemStack itemStack, final int x, final int y, final CallbackInfo ci, @Local(ordinal = 2) final int left, final @Local(ordinal = 3) int top) {
     *///?} elif >=26.1 <26.3 {
@@ -92,7 +108,13 @@ public abstract class MixinGuiGraphics_ToolTipItemBar {
     //?}
         if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().items.durabilityBarColors && !(itemStack.getItem() instanceof BundleItem)) {
             final int color = ARGB.opaque(ARGB.color((255 - ItemUtilKt.getLegacyDurabilityColorValue(itemStack)) / 4, 64, 0));
-            //? if 1.21.11 {
+            //? if <1.21.6 {
+            /*final GuiGraphics graphics = (GuiGraphics) (Object) this;
+            graphics.pose().pushPose();
+            graphics.pose().translate(0.0F, 0.0F, 200.0F);
+            RenderUtilsKt.fillRectangle(graphics, left, top, 12, 1, color);
+            graphics.pose().popPose();
+            *///?} elif <26.1 {
             /*RenderUtilsKt.fillRectangle((GuiGraphics) (Object) this, left, top, 12, 1, color);
             *///?} else {
             RenderUtilsKt.fillRectangle((GuiGraphicsExtractor) (Object) this, left, top, 12, 1, color);

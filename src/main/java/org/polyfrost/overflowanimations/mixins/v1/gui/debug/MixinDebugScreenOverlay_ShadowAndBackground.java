@@ -26,7 +26,7 @@
 package org.polyfrost.overflowanimations.mixins.v1.gui.debug;
 
 import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
-//? if 1.21.11 {
+//? if <26.1 {
 /*import net.minecraft.client.gui.GuiGraphics;
 *///?} else {
 import net.minecraft.client.gui.GuiGraphicsExtractor;
@@ -40,7 +40,7 @@ import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig;
 
 @Mixin(DebugScreenOverlay.class)
 public abstract class MixinDebugScreenOverlay_ShadowAndBackground {
-    //? if 1.21.11 {
+    //? if <26.1 {
     /*@WrapWithCondition(method = "renderLines", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphics;fill(IIIII)V"))
     private boolean overflowanimations$removeDebugBackground(final GuiGraphics instance, final int x0, final int y0, final int x1, final int y1, final int col) {
     *///?} else {
@@ -50,7 +50,9 @@ public abstract class MixinDebugScreenOverlay_ShadowAndBackground {
         return !OverflowAnimations.isEnabled() || !OverflowAnimationsConfig.instance().screen.disableDebugHudBackground;
     }
 
-    //? if 1.21.11 {
+    //? if <1.21.6 {
+    /*@ModifyArg(method = "renderLines", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphics;drawString(Lnet/minecraft/client/gui/Font;Ljava/lang/String;IIIZ)I"), index = 5)
+    *///?} elif <26.1 {
     /*@ModifyArg(method = "renderLines", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphics;drawString(Lnet/minecraft/client/gui/Font;Ljava/lang/String;IIIZ)V"), index = 5)
     *///?} else {
     @ModifyArg(method = "extractLines", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphicsExtractor;text(Lnet/minecraft/client/gui/Font;Ljava/lang/String;IIIZ)V"), index = 5)

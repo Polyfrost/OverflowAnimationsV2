@@ -34,7 +34,7 @@ import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig;
 
 @Mixin(SplashRenderer.class)
 public abstract class MixinSplashRenderer_LegacySplashPosition {
-    //? if 1.21.11 {
+    //? if <26.1 {
     /*@ModifyExpressionValue(method = "render", at = @At(value = "CONSTANT", args = "floatValue=123.0"))
     *///?} else {
     @ModifyExpressionValue(method = "extractRenderState", at = @At(value = "CONSTANT", args = "floatValue=123.0"))

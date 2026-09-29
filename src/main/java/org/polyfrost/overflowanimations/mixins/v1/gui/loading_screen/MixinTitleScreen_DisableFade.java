@@ -35,7 +35,7 @@ import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig;
 
 @Mixin(TitleScreen.class)
 public abstract class MixinTitleScreen_DisableFade {
-    //? if 1.21.11 {
+    //? if <26.1 {
     /*@ModifyExpressionValue(method = "render", at = @At(value = "FIELD", target = "Lnet/minecraft/client/gui/screens/TitleScreen;fading:Z", opcode = Opcodes.GETFIELD))
     *///?} else {
     @ModifyExpressionValue(method = "extractRenderState", at = @At(value = "FIELD", target = "Lnet/minecraft/client/gui/screens/TitleScreen;fading:Z", opcode = Opcodes.GETFIELD))

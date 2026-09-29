@@ -25,7 +25,11 @@
 
 package org.polyfrost.overflowanimations.util.config
 
+//? if <1.21.11 {
+/*import net.minecraft.client.GraphicsStatus
+*///?} else {
 import net.minecraft.client.GraphicsPreset
+//?}
 import net.minecraft.client.Minecraft
 import org.polyfrost.overflowanimations.OverflowAnimations
 import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig
@@ -122,7 +126,11 @@ enum class PresetVersion(private val applier: Runnable) {
         other.flameOffset = true
         other.persistentBlockOutline = true
         other.oldCloudRendering = true
+        //? if <1.21.11 {
+        /*other.fastGrass = Minecraft.getInstance().options.graphicsMode().get() == GraphicsStatus.FAST
+        *///?} else {
         other.fastGrass = Minecraft.getInstance().options.graphicsPreset().get() == GraphicsPreset.FAST
+        //?}
         other.voidFog = VoidFogSetting.PARTICLES
         other.oldWaterOverlayOpacity = true
         other.oldWaterColorFog = true

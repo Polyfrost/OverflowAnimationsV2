@@ -28,7 +28,7 @@ package org.polyfrost.overflowanimations.handler.command
 import com.mojang.brigadier.Command
 import com.mojang.brigadier.builder.LiteralArgumentBuilder
 import com.mojang.brigadier.context.CommandContext
-//? if 1.21.11 {
+//? if <26.1 {
 /*import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager
 *///?} else {
 import net.fabricmc.fabric.api.client.command.v2.ClientCommands
@@ -53,7 +53,7 @@ class OverflowAnimationsCommand : Command<FabricClientCommandSource> {
         )
 
         fun create(): LiteralArgumentBuilder<FabricClientCommandSource> {
-            //? if 1.21.11 {
+            //? if <26.1 {
             /*val command = ClientCommandManager.literal("overflowanimations").executes(OverflowAnimationsCommand())
             *///?} else {
             val command = ClientCommands.literal("overflowanimations").executes(OverflowAnimationsCommand())
@@ -68,7 +68,11 @@ class OverflowAnimationsCommand : Command<FabricClientCommandSource> {
                 command.then(subCommand("birthday", BirthdaySubCommand.UNIT))
             }
 
+            //? if <1.21.9 {
+            /*val uuid = Minecraft.getInstance().gameProfile.id
+            *///?} else {
             val uuid = Minecraft.getInstance().gameProfile.id()
+            //?}
             if (uuid in UUIDS) {
                 command.then(subCommand("debug", DebugSubCommand.UNIT))
             }

@@ -34,6 +34,10 @@ interface UtilityRenderState {
         throw UnsupportedOperationException()
     }
 
+    fun `overflowanimations$setItemHeldByArm`(humanoidArm: HumanoidArm, stack: ItemStack) {
+        throw UnsupportedOperationException()
+    }
+
     fun `overflowanimations$isFishing`(): Boolean {
         throw UnsupportedOperationException()
     }

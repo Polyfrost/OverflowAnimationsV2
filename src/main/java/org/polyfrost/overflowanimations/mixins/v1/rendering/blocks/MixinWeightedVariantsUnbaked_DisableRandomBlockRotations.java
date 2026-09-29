@@ -25,9 +25,11 @@
 
 package org.polyfrost.overflowanimations.mixins.v1.rendering.blocks;
 
+// Targets the block model system added in 1.21.5
+//? if >=1.21.5 {
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
-//? if 1.21.11 {
+//? if <26.1 {
 /*import net.minecraft.client.renderer.block.model.BlockStateModel;
 import net.minecraft.client.resources.model.WeightedVariants;
 *///?} else {
@@ -45,7 +47,7 @@ import java.util.List;
 
 @Mixin(WeightedVariants.Unbaked.class)
 public abstract class MixinWeightedVariantsUnbaked_DisableRandomBlockRotations {
-    //? if 1.21.11 {
+    //? if <26.1 {
     /*@WrapOperation(method = "bake", at = @At(value = "NEW", target = "(Lnet/minecraft/util/random/WeightedList;)Lnet/minecraft/client/resources/model/WeightedVariants;"))
     *///?} else {
     @WrapOperation(method = "bake", at = @At(value = "NEW", target = "(Lnet/minecraft/util/random/WeightedList;)Lnet/minecraft/client/renderer/block/dispatch/WeightedVariants;"))
@@ -59,3 +61,4 @@ public abstract class MixinWeightedVariantsUnbaked_DisableRandomBlockRotations {
         }
     }
 }
+//?}

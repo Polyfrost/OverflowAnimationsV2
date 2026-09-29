@@ -26,9 +26,9 @@
 package org.polyfrost.overflowanimations.util
 
 import net.minecraft.client.Camera
-//? if 1.21.11 {
+//? if >=1.21.9 <26.1 {
 /*import net.minecraft.client.renderer.state.CameraRenderState
-*///?} else {
+*///?} elif >=26.1 {
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.state.level.CameraRenderState
 //?}
@@ -38,7 +38,7 @@ import org.polyfrost.overflowanimations.mixins.accessor.CameraAccessor
 fun Camera.getPositionLerped(): Float {
     val cameraAccessor = this as CameraAccessor
     return Mth.lerp(
-        //? if 1.21.11 {
+        //? if <26.1 {
         /*this.partialTickTime,
         *///?} else {
         this.getCameraEntityPartialTicks(Minecraft.getInstance().deltaTracker),
@@ -48,8 +48,10 @@ fun Camera.getPositionLerped(): Float {
     )
 }
 
+//? if >=1.21.9 {
 fun CameraRenderState.getPositionLerped() = Mth.lerp(
     this.`overflowanimations$getPartialTickTime`(),
     this.`overflowanimations$getOldEyeHeight`(),
     this.`overflowanimations$getEyeHeight`()
 )
+//?}

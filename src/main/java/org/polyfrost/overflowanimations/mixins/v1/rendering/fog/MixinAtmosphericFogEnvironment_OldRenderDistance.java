@@ -25,14 +25,24 @@
 
 package org.polyfrost.overflowanimations.mixins.v1.rendering.fog;
 
+// Targets the fog environments added in 1.21.6
+//? if >=1.21.6 {
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
+//? if <1.21.11 {
+/*import net.minecraft.client.renderer.fog.environment.AirBasedFogEnvironment;
+*///?} else {
 import net.minecraft.client.renderer.fog.environment.AtmosphericFogEnvironment;
+//?}
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.polyfrost.overflowanimations.OverflowAnimations;
 import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig;
 
+//? if <1.21.11 {
+/*@Mixin(AirBasedFogEnvironment.class)
+*///?} else {
 @Mixin(AtmosphericFogEnvironment.class)
+//?}
 public abstract class MixinAtmosphericFogEnvironment_OldRenderDistance {
     @ModifyExpressionValue(method = "getBaseColor", at = @At(value = "CONSTANT", args = "floatValue=32.0"))
     private float overflowanimations$voidFog$useOldRenderDistanceCalculation(final float original) {
@@ -43,3 +53,4 @@ public abstract class MixinAtmosphericFogEnvironment_OldRenderDistance {
         }
     }
 }
+//?}

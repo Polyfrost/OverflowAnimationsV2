@@ -33,6 +33,10 @@ import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.FishingHookRenderer;
 import net.minecraft.client.renderer.entity.state.FishingHookRenderState;
+//? if >=1.21.6 <1.21.11 {
+/*import net.minecraft.client.renderer.rendertype.RenderType;
+import org.polyfrost.overflowanimations.handler.rendering.pipeline.OverflowAnimationsRenderTypes;
+*///?}
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.player.Player;
@@ -71,11 +75,35 @@ public abstract class MixinFishingHookRenderer extends EntityRenderer<FishingHoo
         }
     }
 
-    //? if 1.21.11 {
+    // Before 1.21.11 the line width is part of the render type; older than 1.21.6 is not supported
+    //? if >=1.21.6 <1.21.9 {
+    /*@WrapOperation(method = "render(Lnet/minecraft/client/renderer/entity/state/FishingHookRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/rendertype/RenderType;lineStrip()Lnet/minecraft/client/renderer/rendertype/RenderType;"))
+    private RenderType overflowanimations$fishingRodLineThickness(final Operation<RenderType> original) {
+        if (OverflowAnimationsConfig.instance().items.thinFishingRodLineThickness) {
+            return OverflowAnimationsRenderTypes.FISHING_LINE_THIN;
+        } else if (OverflowAnimationsConfig.instance().items.fishingRodVersion.ordinal() <= FishingRodVersionSetting.V1_13.ordinal()) {
+            return OverflowAnimationsRenderTypes.FISHING_LINE_LEGACY;
+        } else {
+            return original.call();
+        }
+    }
+    *///?} elif >=1.21.9 <1.21.11 {
+    /*@WrapOperation(method = "submit(Lnet/minecraft/client/renderer/entity/state/FishingHookRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;Lnet/minecraft/client/renderer/state/CameraRenderState;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/rendertype/RenderType;lines()Lnet/minecraft/client/renderer/rendertype/RenderType;"))
+    private RenderType overflowanimations$fishingRodLineThickness(final Operation<RenderType> original) {
+        if (OverflowAnimationsConfig.instance().items.thinFishingRodLineThickness) {
+            return OverflowAnimationsRenderTypes.FISHING_LINE_THIN;
+        } else if (OverflowAnimationsConfig.instance().items.fishingRodVersion.ordinal() <= FishingRodVersionSetting.V1_13.ordinal()) {
+            return OverflowAnimationsRenderTypes.FISHING_LINE_LEGACY;
+        } else {
+            return original.call();
+        }
+    }
+    *///?} elif >=1.21.11 <26.1 {
     /*@ModifyArg(method = "method_72983", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/entity/FishingHookRenderer;stringVertex(FFFLcom/mojang/blaze3d/vertex/VertexConsumer;Lcom/mojang/blaze3d/vertex/PoseStack$Pose;FFF)V"), index = 7)
-    *///?} else {
+    *///?} elif >=26.1 {
     @ModifyArg(method = "lambda$submit$1", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/entity/FishingHookRenderer;stringVertex(FFFLcom/mojang/blaze3d/vertex/VertexConsumer;Lcom/mojang/blaze3d/vertex/PoseStack$Pose;FFF)V"), index = 7)
     //?}
+    //? if >=1.21.11 {
     private static float overflowanimations$fishingRodLineThickness(final float lineWidth) {
         if (OverflowAnimationsConfig.instance().items.thinFishingRodLineThickness) {
             return 1.0F;
@@ -85,6 +113,8 @@ public abstract class MixinFishingHookRenderer extends EntityRenderer<FishingHoo
             return lineWidth;
         }
     }
+    //?}
+
 
     @WrapOperation(method = "getPlayerHandPos", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/player/Player;getEyePosition(F)Lnet/minecraft/world/phys/Vec3;"))
     private Vec3 overflowanimations$fishingRodLineInterpolation(final Player instance, final float tickDelta, final Operation<Vec3> original) {

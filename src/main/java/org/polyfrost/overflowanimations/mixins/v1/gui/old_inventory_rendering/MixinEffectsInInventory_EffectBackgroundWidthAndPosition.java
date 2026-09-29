@@ -53,7 +53,9 @@ public abstract class MixinEffectsInInventory_EffectBackgroundWidthAndPosition {
     @Final
     private AbstractContainerScreen<?> screen;
 
-    //? if 1.21.11 {
+    // Older versions already draw effects at full width
+    //? if >=1.21.11 {
+    //? if >=1.21.11 <26.1 {
     /*@Expression("? - 7")
     @ModifyExpressionValue(method = "render", at = @At("MIXINEXTRAS:EXPRESSION"))
     *///?} else {
@@ -69,7 +71,7 @@ public abstract class MixinEffectsInInventory_EffectBackgroundWidthAndPosition {
         }
     }
 
-    //? if 1.21.11 {
+    //? if >=1.21.11 <26.1 {
     /*@WrapOperation(method = "renderBackground", at = @At(value = "INVOKE", target = "Ljava/lang/Math;min(II)I"))
     *///?} else {
     @WrapOperation(method = "extractBackground", at = @At(value = "INVOKE", target = "Ljava/lang/Math;min(II)I"))
@@ -81,8 +83,11 @@ public abstract class MixinEffectsInInventory_EffectBackgroundWidthAndPosition {
             return original.call(min, max);
         }
     }
+    //?}
 
-    //? if 1.21.11 {
+    //? if <1.21.11 {
+    /*@WrapOperation(method = "renderEffects", at = @At(value = "FIELD", target = "Lnet/minecraft/client/gui/screens/inventory/AbstractContainerScreen;imageWidth:I", opcode = Opcodes.GETFIELD))
+    *///?} elif <26.1 {
     /*@WrapOperation(method = "render", at = @At(value = "FIELD", target = "Lnet/minecraft/client/gui/screens/inventory/AbstractContainerScreen;imageWidth:I", opcode = Opcodes.GETFIELD))
     *///?} else {
     @WrapOperation(method = "extractRenderState", at = @At(value = "FIELD", target = "Lnet/minecraft/client/gui/screens/inventory/AbstractContainerScreen;imageWidth:I", opcode = Opcodes.GETFIELD))
@@ -96,7 +101,9 @@ public abstract class MixinEffectsInInventory_EffectBackgroundWidthAndPosition {
         }
     }
 
-    //? if 1.21.11 {
+    //? if <1.21.11 {
+    /*@ModifyExpressionValue(method = "renderEffects", at = @At(value = "CONSTANT", args = "intValue=2"))
+    *///?} elif <26.1 {
     /*@ModifyExpressionValue(method = "render", at = @At(value = "CONSTANT", args = "intValue=2"))
     *///?} else {
     @ModifyExpressionValue(method = "extractRenderState", at = @At(value = "CONSTANT", args = "intValue=2"))

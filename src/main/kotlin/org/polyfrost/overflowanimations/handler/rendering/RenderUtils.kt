@@ -26,24 +26,31 @@
 package org.polyfrost.overflowanimations.handler.rendering
 
 import com.mojang.blaze3d.systems.RenderSystem
-//? if <26.3 {
+//? if >=1.21.6 <26.3 {
 /*import com.mojang.blaze3d.textures.GpuTexture
-*///?} else {
+*///?} elif >=26.3 {
 import com.mojang.renderpearl.api.textures.GpuTexture
 //?}
+import com.mojang.blaze3d.vertex.VertexConsumer
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.Font
-//? if 1.21.11 {
+//? if <26.1 {
 /*import net.minecraft.client.gui.GuiGraphics
 *///?} else {
 import net.minecraft.client.gui.GuiGraphicsExtractor
 //?}
 import net.minecraft.client.renderer.texture.OverlayTexture
+//? if <1.21.9 {
+/*import net.minecraft.client.renderer.entity.state.LivingEntityRenderState
+import net.minecraft.resources.Identifier
+*///?}
 import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig
 import org.polyfrost.overflowanimations.mixins.accessor.GameRendererAccessor
 import org.polyfrost.overflowanimations.mixins.accessor.OverlayTextureAccessor
 import org.polyfrost.overflowanimations.util.enums.DamageTintSetting
+import org.joml.Matrix3x2f
 
+//? if >=1.21.6 {
 fun copyTextureToTexture(source: GpuTexture, destination: GpuTexture) =
     RenderSystem.getDevice().createCommandEncoder().copyTextureToTexture(
         source,
@@ -53,8 +60,9 @@ fun copyTextureToTexture(source: GpuTexture, destination: GpuTexture) =
         0, 0,
         source.getWidth(0), source.getHeight(0)
     )
+//?}
 
-//? if 1.21.11 {
+//? if <26.1 {
 /*fun GuiGraphics.fillVerticalLine(
 *///?} else {
 fun GuiGraphicsExtractor.fillVerticalLine(
@@ -64,7 +72,7 @@ fun GuiGraphicsExtractor.fillVerticalLine(
     color: Int
 ) = this.fill(x, y, x + 1, y + length, color)
 
-//? if 1.21.11 {
+//? if <26.1 {
 /*fun GuiGraphics.fillVerticalGradientLine(
 *///?} else {
 fun GuiGraphicsExtractor.fillVerticalGradientLine(
@@ -75,7 +83,7 @@ fun GuiGraphicsExtractor.fillVerticalGradientLine(
     endColor: Int
 ) = this.fillGradient(x, y, x + 1, y + length, startColor, endColor)
 
-//? if 1.21.11 {
+//? if <26.1 {
 /*fun GuiGraphics.fillHorizontalLine(
 *///?} else {
 fun GuiGraphicsExtractor.fillHorizontalLine(
@@ -85,7 +93,7 @@ fun GuiGraphicsExtractor.fillHorizontalLine(
     color: Int
 ) = this.fill(x, y, x + length, y + 1, color)
 
-//? if 1.21.11 {
+//? if <26.1 {
 /*fun GuiGraphics.fillRectangle(
 *///?} else {
 fun GuiGraphicsExtractor.fillRectangle(
@@ -95,7 +103,7 @@ fun GuiGraphicsExtractor.fillRectangle(
     color: Int
 ) = this.fill(x, y, x + width, y + height, color)
 
-//? if 1.21.11 {
+//? if <26.1 {
 /*fun GuiGraphics.fillFrameGradient(
 *///?} else {
 fun GuiGraphicsExtractor.fillFrameGradient(
@@ -113,24 +121,33 @@ fun GuiGraphicsExtractor.fillFrameGradient(
     this.fillHorizontalLine(x, y - 1 + height - 1, width, endColor)
 }
 
-//? if 1.21.11 {
+//? if <26.1 {
 /*fun GuiGraphics.drawScaledText(font: Font, text: String, x: Int, y: Int, scale: Float) {
 *///?} else {
 fun GuiGraphicsExtractor.drawScaledText(font: Font, text: String, x: Int, y: Int, scale: Float) {
 //?}
     val stack = this.pose()
+    //? if <1.21.6 {
+    /*stack.pushPose()
+    stack.scale(scale, scale, 1.0F)
+    *///?} else {
     stack.pushMatrix()
     val originX = stack.m20
     val originY = stack.m21
     stack.setTranslation(0.0F, 0.0F)
     stack.scale(scale, scale)
     stack.setTranslation(originX, originY)
-    //? if 1.21.11 {
+    //?}
+    //? if <26.1 {
     /*this.drawCenteredString(font, text, (x / scale).toInt(), (y / scale).toInt(), 0xFFFFFFFF.toInt())
     *///?} else {
     this.centeredText(font, text, (x / scale).toInt(), (y / scale).toInt(), 0xFFFFFFFF.toInt())
     //?}
+    //? if <1.21.6 {
+    /*stack.popPose()
+    *///?} else {
     stack.popMatrix()
+    //?}
 }
 
 /**
@@ -146,7 +163,7 @@ fun setOverlayColor(color: Int) {
     val overlayTexture = Minecraft.getInstance().gameRenderer.overlayTexture()
     val dynamicTexture = (overlayTexture as OverlayTextureAccessor).`overflowanimations$getDynamicTexture`()
     val pixels = dynamicTexture.pixels
-    //? if 1.21.11 {
+    //? if <26.1 {
     /*if (pixels != null) {
         for (y in 0..<16) {
             for (x in 0..<16) {
@@ -165,7 +182,7 @@ fun setOverlayColor(color: Int) {
     }
     //?}
 
-    //? if 1.21.11 {
+    //? if <26.1 {
         /*dynamicTexture.upload()
     }
     *///?} else {
@@ -180,3 +197,28 @@ fun updateOverlayTint(style: DamageTintSetting = OverflowAnimationsConfig.instan
         setOverlayColor(style.getColor(1.0F))
     }
 }
+
+// GUI vertices lost their z coordinate in 1.21.9
+//? if >=1.21.6 {
+fun VertexConsumer.addVertex2D(pose: Matrix3x2f, x: Float, y: Float): VertexConsumer =
+    //? if <1.21.9 {
+    /*this.addVertexWith2DPose(pose, x, y, 0.0F)
+    *///?} else {
+    this.addVertexWith2DPose(pose, x, y)
+    //?}
+//?}
+
+// Before 1.21.9 equipment layers don't get the entity render state, so the armor layers store it here while rendering
+//? if <1.21.9 {
+/*@JvmField
+var currentArmorRenderState: LivingEntityRenderState? = null
+
+fun isVanillaArmorProportions(location: Identifier): Boolean {
+    //? if <1.21.5 {
+    /*return true // ponytail: no texture size query before the 1.21.5 GPU API; non-2:1 armor textures may show a broken overlay
+    *///?} else {
+    val texture = Minecraft.getInstance().textureManager.getTexture(location).texture
+    return texture.getWidth(0) == texture.getHeight(0) * 2
+    //?}
+}
+*///?}

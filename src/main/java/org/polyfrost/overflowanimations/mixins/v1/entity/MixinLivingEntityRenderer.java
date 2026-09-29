@@ -30,13 +30,17 @@ import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
+//? if <1.21.9 {
+/*import net.minecraft.client.renderer.MultiBufferSource;
+*///?} else {
 import net.minecraft.client.renderer.SubmitNodeCollector;
+//?}
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.state.ArmedEntityRenderState;
 import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
-//? if 1.21.11 {
+//? if >=1.21.9 <26.1 {
 /*import net.minecraft.client.renderer.state.CameraRenderState;
-*///?} else {
+*///?} elif >=26.1 {
 import net.minecraft.client.renderer.state.level.CameraRenderState;
 //?}
 import net.minecraft.world.entity.EntityDimensions;
@@ -54,12 +58,17 @@ import org.polyfrost.overflowanimations.util.enums.SneakAnimationSetting;
 @Mixin(LivingEntityRenderer.class)
 public abstract class MixinLivingEntityRenderer<S extends LivingEntityRenderState> {
     // TODO/MOVE
-    //? if 1.21.11 {
+    //? if <1.21.9 {
+    /*@Inject(method = "render(Lnet/minecraft/client/renderer/entity/state/LivingEntityRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/PoseStack;translate(FFF)V", ordinal = 1))
+    private void overflowanimations$syncPlayerModelWithEyeHeight(final S livingEntityRenderState, final PoseStack poseStack, final MultiBufferSource bufferSource, final int packedLight, final CallbackInfo ci) {
+    *///?} elif <26.1 {
     /*@Inject(method = "submit(Lnet/minecraft/client/renderer/entity/state/LivingEntityRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;Lnet/minecraft/client/renderer/state/CameraRenderState;)V", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/PoseStack;translate(FFF)V", ordinal = 1))
     *///?} else {
     @Inject(method = "submit(Lnet/minecraft/client/renderer/entity/state/LivingEntityRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;Lnet/minecraft/client/renderer/state/level/CameraRenderState;)V", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/PoseStack;translate(FFF)V", ordinal = 1))
     //?}
+    //? if >=1.21.9 {
     private void overflowanimations$syncPlayerModelWithEyeHeight(final S livingEntityRenderState, final PoseStack poseStack, final SubmitNodeCollector submitNodeCollector, final CameraRenderState cameraRenderState, final CallbackInfo ci) {
+    //?}
         if (OverflowAnimations.isEnabled()
                 && OverflowAnimationsConfig.instance().movement.sneakAnimation == SneakAnimationSetting.V1_7
                 && livingEntityRenderState instanceof ArmedEntityRenderState armedEntityRenderState
@@ -72,7 +81,11 @@ public abstract class MixinLivingEntityRenderer<S extends LivingEntityRenderStat
                 //?}
             final EntityDimensions standingDimensions = armedEntityRenderState.overflowanimations$getStandingDimensions();
             if (standingDimensions != null) {
+                //? if <1.21.9 {
+                /*final float cameraLerpValue = CameraUtilKt.getPositionLerped(Minecraft.getInstance().gameRenderer.getMainCamera());
+                *///?} else {
                 final float cameraLerpValue = CameraUtilKt.getPositionLerped(cameraRenderState);
+                //?}
                 poseStack.translate(0.0F, (standingDimensions.eyeHeight() * livingEntityRenderState.scale) - cameraLerpValue, 0.0F);
             }
         }
@@ -87,12 +100,17 @@ public abstract class MixinLivingEntityRenderer<S extends LivingEntityRenderStat
         }
     }
 
-    //? if 1.21.11 {
+    //? if <1.21.9 {
+    /*@WrapMethod(method = "render(Lnet/minecraft/client/renderer/entity/state/LivingEntityRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V")
+    private void overflowanimations$disableModelWhilstSleeping(final S state, final PoseStack poseStack, final MultiBufferSource bufferSource, final int packedLight, final Operation<Void> original) {
+    *///?} elif <26.1 {
     /*@WrapMethod(method = "submit(Lnet/minecraft/client/renderer/entity/state/LivingEntityRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;Lnet/minecraft/client/renderer/state/CameraRenderState;)V")
     *///?} else {
     @WrapMethod(method = "submit(Lnet/minecraft/client/renderer/entity/state/LivingEntityRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;Lnet/minecraft/client/renderer/state/level/CameraRenderState;)V")
     //?}
+    //? if >=1.21.9 {
     private void overflowanimations$disableModelWhilstSleeping(final S state, final PoseStack poseStack, final SubmitNodeCollector submitNodeCollector, final CameraRenderState camera, final Operation<Void> original) {
+    //?}
         if (OverflowAnimations.isEnabled()
                 && OverflowAnimationsConfig.instance().other.disableModelWhilstSleeping
                 && state instanceof ArmedEntityRenderState armedEntityRenderState
@@ -102,6 +120,10 @@ public abstract class MixinLivingEntityRenderer<S extends LivingEntityRenderStat
             return;
         }
 
+        //? if <1.21.9 {
+        /*original.call(state, poseStack, bufferSource, packedLight);
+        *///?} else {
         original.call(state, poseStack, submitNodeCollector, camera);
+        //?}
     }
 }

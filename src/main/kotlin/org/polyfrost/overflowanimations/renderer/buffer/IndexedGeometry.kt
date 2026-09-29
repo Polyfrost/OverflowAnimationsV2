@@ -25,6 +25,8 @@
 
 package org.polyfrost.overflowanimations.renderer.buffer
 
+// Built on the GPU device API (1.21.5) and dynamic uniforms / GUI render states (1.21.6)
+//? if >=1.21.6 {
 //? if <26.3 {
 /*import com.mojang.blaze3d.buffers.GpuBuffer
 import com.mojang.blaze3d.systems.RenderPass
@@ -104,3 +106,4 @@ data class IndexedGeometry(
 
     override fun close() = vertexBuffer.close()
 }
+//?}

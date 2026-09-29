@@ -84,8 +84,12 @@ fun isBlockItemBlacklisted(stack: ItemStack): Boolean {
 fun isItemBlacklisted(stack: ItemStack) =
     isShieldItem(stack) ||
             isBlockItemBlacklisted(stack) ||
+            //? if <1.21.11 {
+            /*stack.`is`(Items.CROSSBOW)
+            *///?} else {
             stack.`is`(Items.CROSSBOW) ||
             stack.`is`(ItemTags.SPEARS)
+            //?}
 
 fun isSwingItemBlacklisted(stack: ItemStack) =
     stack.item is ProjectileItem ||
@@ -115,7 +119,7 @@ fun shouldApplyItemPositionsInThirdPerson(armedEntityRenderState: ArmedEntityRen
     if (OverflowAnimationsConfig.instance().items.itemPositionsInThirdPerson) {
         hasLegacyThirdPersonTransform(stack, useBlockLight)
     } else if (OverflowAnimationsConfig.instance().items.fishingRodVersion == FishingRodVersionSetting.V1_7) {
-        isFishingRodItem(armedEntityRenderState.mainHandItemStack)
+        isFishingRodItem(armedEntityRenderState.`overflowanimations$getItemHeldByArm`(armedEntityRenderState.mainArm))
     } else {
         OverflowAnimationsConfig.instance().other.thirdPersonSwordBlockingPosition && isBlockingArm(
             armedEntityRenderState.mainArm,

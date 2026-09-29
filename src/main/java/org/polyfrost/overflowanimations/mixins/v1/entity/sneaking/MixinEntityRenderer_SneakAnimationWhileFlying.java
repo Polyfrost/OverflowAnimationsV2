@@ -41,7 +41,9 @@ import org.polyfrost.overflowanimations.util.enums.SneakAnimationSetting;
 @Mixin(EntityRenderer.class)
 public abstract class MixinEntityRenderer_SneakAnimationWhileFlying {
     // TODO: Make match isInstantResponse handling
-    //? if 1.21.11 {
+    //? if <1.21.9 {
+    /*@WrapOperation(method = "renderNameTag", at = @At(value = "FIELD", target = "Lnet/minecraft/client/renderer/entity/state/EntityRenderState;isDiscrete:Z", opcode = Opcodes.GETFIELD))
+    *///?} elif <26.1 {
     /*@WrapOperation(method = "submitNameTag", at = @At(value = "FIELD", target = "Lnet/minecraft/client/renderer/entity/state/EntityRenderState;isDiscrete:Z", opcode = Opcodes.GETFIELD))
     *///?} else {
     @WrapOperation(method = "submitNameDisplay(Lnet/minecraft/client/renderer/entity/state/EntityRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;Lnet/minecraft/client/renderer/state/level/CameraRenderState;I)V", at = @At(value = "FIELD", target = "Lnet/minecraft/client/renderer/entity/state/EntityRenderState;isDiscrete:Z", opcode = Opcodes.GETFIELD))

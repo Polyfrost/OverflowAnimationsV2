@@ -60,7 +60,7 @@ public abstract class MixinLivingEntity_Particles extends Entity {
     }
 
     @WrapOperation(method = "tickEffects", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/Level;addParticle(Lnet/minecraft/core/particles/ParticleOptions;DDDDDD)V"))
-    //? if 1.21.11 {
+    //? if <26.1 {
     /*private void overflowanimations$blendPotionParticleColors(final Level instance, final ParticleOptions particle, final double x, final double y, final double z, final double velocityX, final double velocityY, final double velocityZ, final Operation<Void> original, @Local(ordinal = 0) final boolean hasAmbience) {
     *///?} else {
     private void overflowanimations$blendPotionParticleColors(final Level instance, final ParticleOptions particle, final double x, final double y, final double z, final double velocityX, final double velocityY, final double velocityZ, final Operation<Void> original, @Local(name = "isAmbient") final boolean hasAmbience) {
@@ -81,7 +81,7 @@ public abstract class MixinLivingEntity_Particles extends Entity {
                 return; // No potion particles are visible
             }
 
-            options = ColorParticleOption.create(ParticleTypes.ENTITY_EFFECT, ARGB.color(hasAmbience ? 0.15F : 1.0F, color));
+            options = ColorParticleOption.create(ParticleTypes.ENTITY_EFFECT, ARGB.color((int) ((hasAmbience ? 0.15F : 1.0F) * 255), color));
             red = ARGB.redFloat(color);
             green = ARGB.greenFloat(color);
             blue = ARGB.blueFloat(color);

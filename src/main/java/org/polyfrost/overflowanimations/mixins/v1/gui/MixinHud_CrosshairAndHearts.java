@@ -29,7 +29,10 @@ import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
-//? if 26.3 {
+//? if <1.21.6 {
+/*import net.minecraft.client.renderer.rendertype.RenderType;
+import java.util.function.Function;
+*///?} elif 26.3 {
 /*import com.mojang.renderpearl.api.pipeline.RenderPipeline;
 *///?} else {
 import com.mojang.blaze3d.pipeline.RenderPipeline;
@@ -38,7 +41,7 @@ import net.minecraft.client.CameraType;
 //? if <26.2 {
 /*import net.minecraft.client.gui.Gui;
 *///?}
-//? if 1.21.11 {
+//? if <26.1 {
 /*import net.minecraft.client.gui.GuiGraphics;
 *///?} else {
 import net.minecraft.client.gui.GuiGraphicsExtractor;
@@ -58,7 +61,7 @@ import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig;
 @Mixin(Hud.class)
 //?}
 public abstract class MixinHud_CrosshairAndHearts {
-    //? if 1.21.11 {
+    //? if <26.1 {
     /*@WrapOperation(method = "renderCrosshair", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/CameraType;isFirstPerson()Z"))
     *///?} else {
     @WrapOperation(method = "extractCrosshair", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/CameraType;isFirstPerson()Z"))
@@ -71,7 +74,10 @@ public abstract class MixinHud_CrosshairAndHearts {
         }
     }
 
-    //? if 1.21.11 {
+    //? if <1.21.6 {
+    /*@WrapWithCondition(method = "renderCrosshair", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphics;blitSprite(Ljava/util/function/Function;Lnet/minecraft/resources/Identifier;IIII)V", ordinal = 2))
+    private boolean overflowanimations$fixHighAttackSpeedIndicator(final GuiGraphics instance, final Function<Identifier, RenderType> renderType, final Identifier location, final int x, final int y, final int width, final int height, @Local(ordinal = 0) final float attackStrengthScale) {
+    *///?} elif <26.1 {
     /*@WrapWithCondition(method = "renderCrosshair", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphics;blitSprite(Lcom/mojang/blaze3d/pipeline/RenderPipeline;Lnet/minecraft/resources/Identifier;IIII)V", ordinal = 2))
     private boolean overflowanimations$fixHighAttackSpeedIndicator(final GuiGraphics instance, final RenderPipeline renderPipeline, final Identifier location, final int x, final int y, final int width, final int height, @Local(ordinal = 0) final float attackStrengthScale) {
     *///?} else {
@@ -89,7 +95,7 @@ public abstract class MixinHud_CrosshairAndHearts {
         }
     }
 
-    //? if 1.21.11 {
+    //? if <26.1 {
     /*@WrapWithCondition(method = "renderHearts", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/Gui;renderHeart(Lnet/minecraft/client/gui/GuiGraphics;Lnet/minecraft/client/gui/Gui$HeartType;IIZZZ)V"))
     private boolean overflowanimations$heartFlash(final Gui instance, final GuiGraphics graphics, final Gui.HeartType type, final int xo, final int yo, final boolean isHardcore, final boolean blinks, final boolean half) {
         return !OverflowAnimations.isEnabled() || !OverflowAnimationsConfig.instance().screen.disableHeartFlash || !blinks || type == Gui.HeartType.CONTAINER;

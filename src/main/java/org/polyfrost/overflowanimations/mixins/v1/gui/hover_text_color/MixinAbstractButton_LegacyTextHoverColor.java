@@ -32,6 +32,10 @@ import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.network.chat.Component;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
+//? if <1.21.11 {
+/*import org.spongepowered.asm.mixin.injection.Constant;
+import org.spongepowered.asm.mixin.injection.ModifyConstant;
+*///?}
 import org.polyfrost.overflowanimations.OverflowAnimations;
 import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig;
 
@@ -41,7 +45,26 @@ public abstract class MixinAbstractButton_LegacyTextHoverColor extends AbstractW
         super(x, y, width, height, message);
     }
 
-    //? if 1.21.11 {
+    //? if <1.21.5 {
+    /*@ModifyConstant(method = "renderWidget", constant = @Constant(intValue = 16777215))
+    private int overflowanimations$renderWidget$old$textColor(final int constant) {
+        if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().screen.legacyWidgetHoverTextColor) {
+            return this.isHoveredOrFocused() ? 0xFFFFA0 : 0xE0E0E0;
+        } else {
+            return constant;
+        }
+    }
+    *///?} elif <1.21.11 {
+    /*@ModifyConstant(method = "renderWidget", constant = @Constant(intValue = -1))
+    private int overflowanimations$renderWidget$old$textColor(final int constant) {
+        if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().screen.legacyWidgetHoverTextColor) {
+            return this.isHoveredOrFocused() ? 0xFFFFFFA0 : 0xFFE0E0E0;
+        } else {
+            return constant;
+        }
+    }
+    *///?} else {
+    //? if >=1.21.11 <26.1 {
     /*@WrapOperation(method = "renderDefaultLabel", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/components/AbstractButton;getMessage()Lnet/minecraft/network/chat/Component;"))
     *///?} else {
     @WrapOperation(method = "extractDefaultLabel", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/components/AbstractButton;getMessage()Lnet/minecraft/network/chat/Component;"))
@@ -54,4 +77,5 @@ public abstract class MixinAbstractButton_LegacyTextHoverColor extends AbstractW
             return component;
         }
     }
+    //?}
 }

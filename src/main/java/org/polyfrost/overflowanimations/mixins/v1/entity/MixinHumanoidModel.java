@@ -115,7 +115,11 @@ public abstract class MixinHumanoidModel<T extends HumanoidRenderState> extends 
         }
     }
 
+    //? if <1.21.11 {
+    /*@ModifyExpressionValue(method = "setupAttackAnimation", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/Mth;sin(F)F", ordinal = 5))
+    *///?} else {
     @ModifyExpressionValue(method = "setupAttackAnimation", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/Mth;sin(D)F", ordinal = 5))
+    //?}
     public float overflowanimations$fixMirrorArmSwing$sin(final float original, @Local(argsOnly = true, ordinal = 0) final T state) {
         if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().fixes.fixMirrorArmSwing) {
             //? if <26.3 {

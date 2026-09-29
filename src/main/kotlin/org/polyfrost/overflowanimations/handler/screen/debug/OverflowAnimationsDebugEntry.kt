@@ -25,6 +25,8 @@
 
 package org.polyfrost.overflowanimations.handler.screen.debug
 
+// The debug screen entry API was added in 1.21.9
+//? if >=1.21.9 {
 import net.minecraft.client.gui.components.debug.DebugEntryCategory
 import net.minecraft.client.gui.components.debug.DebugScreenDisplayer
 import net.minecraft.client.gui.components.debug.DebugScreenEntry
@@ -66,3 +68,4 @@ class OverflowAnimationsDebugEntry : DebugScreenEntry {
 
     override fun category() = CATEGORY
 }
+//?}

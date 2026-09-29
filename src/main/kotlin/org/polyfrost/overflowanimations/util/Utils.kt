@@ -53,7 +53,11 @@ fun isSingleplayer(): Boolean {
 
 fun reinitializeInventorySlots() {
     val player = Minecraft.getInstance().player
+    //? if <1.21.5 {
+    /*if (player != null && !player.isCreative) {
+    *///?} else {
     if (player != null && player.gameMode() != GameType.CREATIVE) {
+    //?}
         // Re-initialize the inventory, to reset the slot positions modified by "Old Crafting Slots Position"
         (player as PlayerAccessor).`overflowanimations$setInventoryMenu`(
             InventoryMenu(

@@ -26,7 +26,7 @@
 package org.polyfrost.overflowanimations.mixins.v1.rendering.fog;
 
 import net.minecraft.client.Camera;
-//? if 1.21.11 {
+//? if <26.1 {
 /*import net.minecraft.client.Minecraft;
 *///?}
 import net.minecraft.client.renderer.GameRenderer;
@@ -50,7 +50,7 @@ public abstract class MixinGameRenderer_TickDarkness {
 
     @Shadow
     @Final
-    //? if 1.21.11 {
+    //? if <26.1 {
     /*private Minecraft minecraft;
     *///?} else {
     private GameRenderState gameRenderState;
@@ -58,9 +58,13 @@ public abstract class MixinGameRenderer_TickDarkness {
 
     @Inject(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/Camera;tick()V", shift = At.Shift.AFTER))
     private void overflowanimations$tickFogDarkness(final CallbackInfo ci) {
+        //? if <1.21.11 {
+        /*final Entity entity = this.mainCamera.getEntity();
+        *///?} else {
         final Entity entity = this.mainCamera.entity();
+        //?}
         if (entity != null) {
-            //? if 1.21.11 {
+            //? if <26.1 {
             /*LegacyFogDarkness.tick(entity, this.minecraft.options.renderDistance().get());
             *///?} else {
             LegacyFogDarkness.tick(entity, this.gameRenderState.optionsRenderState.renderDistance);

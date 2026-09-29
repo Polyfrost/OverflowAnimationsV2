@@ -25,6 +25,8 @@
 
 package org.polyfrost.overflowanimations.handler.rendering.pipeline
 
+// Built on the GPU device API (1.21.5) and dynamic uniforms / GUI render states (1.21.6)
+//? if >=1.21.6 {
 //? if 26.2 {
 /*import com.mojang.blaze3d.pipeline.BindGroupLayout
 *///?}
@@ -89,7 +91,7 @@ fun RenderPipeline.builderIgnoreDefines(vararg ignoreDefines: String) = RenderPi
 //?}
 
     this.withPolygonMode(polygonMode)
-    //? if 1.21.11 {
+    //? if <26.1 {
     /*this.withColorWrite(isWriteColor, isWriteAlpha)
     this.withDepthWrite(isWriteDepth)
     this.withDepthTestFunction(depthTestFunction)
@@ -108,7 +110,7 @@ fun RenderPipeline.builderIgnoreDefines(vararg ignoreDefines: String) = RenderPi
     this.withVertexFormat(vertexFormat, vertexFormatMode)
     *///?}
 
-    //? if 1.21.11 {
+    //? if <26.1 {
     /*if (blendFunction.isPresent) {
         this.withBlend(blendFunction.get())
     } else {
@@ -158,3 +160,4 @@ fun RenderPipeline.builderIgnoreDefines(vararg ignoreDefines: String) = RenderPi
     //?}
     }
 }
+//?}

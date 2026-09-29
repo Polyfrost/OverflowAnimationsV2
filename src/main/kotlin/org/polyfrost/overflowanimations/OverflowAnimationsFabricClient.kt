@@ -28,10 +28,17 @@ package org.polyfrost.overflowanimations
 import dev.kikugie.fletching_table.annotation.fabric.Entrypoint
 import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback
+//? if >=1.21.5 {
 import net.fabricmc.fabric.api.client.model.loading.v1.ModelLoadingPlugin
 import net.fabricmc.fabric.api.client.model.loading.v1.SimpleUnbakedExtraModel
+//?}
+//? if <1.21.11 {
+/*import net.fabricmc.fabric.api.resource.ResourceManagerHelper
+import net.fabricmc.fabric.api.resource.ResourcePackActivationType
+*///?} else {
 import net.fabricmc.fabric.api.resource.v1.ResourceLoader
 import net.fabricmc.fabric.api.resource.v1.pack.PackActivationType
+//?}
 import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.client.Minecraft
 import org.polyfrost.overflowanimations.handler.OverflowAnimationsKeybinds
@@ -47,15 +54,21 @@ class OverflowAnimationsFabricClient : ClientModInitializer {
         val modContainer = FabricLoader.getInstance().getModContainer(OverflowAnimationsConstants.MOD_ID)
             .orElseThrow({ RuntimeException("Mod container data could not be found for OverflowAnimations!") })
         for (pack in listOf("classic_textures", "classic_panorama", "classic_water")) {
+            //? if <1.21.11 {
+            /*ResourceManagerHelper.registerBuiltinResourcePack(OverflowAnimations.location(pack), modContainer, ResourcePackActivationType.NORMAL)
+            *///?} else {
             ResourceLoader.registerBuiltinPack(OverflowAnimations.location(pack), modContainer, PackActivationType.NORMAL)
+            //?}
         }
 
+        //? if >=1.21.5 {
         ModelLoadingPlugin.register { context ->
             context.addModel(
                 OverflowAnimationsConstants.FAST_GRASS_MODEL_KEY,
                 SimpleUnbakedExtraModel.blockStateModel(OverflowAnimationsConstants.FAST_GRASS_MODEL_LOCATION)
             )
         }
+        //?}
 
         ClientCommandRegistrationCallback.EVENT.register { dispatcher, _ -> dispatcher.register(OverflowAnimationsCommand.create()) }
 

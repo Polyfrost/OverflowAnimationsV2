@@ -41,7 +41,7 @@ public abstract class MixinFishingHookRenderer_HideFirstPersonBobber {
     //? if <26.3 {
     /*@ModifyReturnValue(method = "shouldRender(Lnet/minecraft/world/entity/projectile/FishingHook;Lnet/minecraft/client/renderer/culling/Frustum;DDD)Z", at = @At("RETURN"))
     *///?}
-    //? if 1.21.11 {
+    //? if <26.1 {
     /*private boolean overflowanimations$hideBobberAttachedToSelf(final boolean original, @Local(argsOnly = true, ordinal = 0) final FishingHook entity) {
     *///?} elif >=26.3 {
     @ModifyReturnValue(method = "shouldRender(Lnet/minecraft/world/entity/projectile/FishingHook;Lnet/minecraft/client/renderer/culling/Frustum;DDDF)Z", at = @At("RETURN"))

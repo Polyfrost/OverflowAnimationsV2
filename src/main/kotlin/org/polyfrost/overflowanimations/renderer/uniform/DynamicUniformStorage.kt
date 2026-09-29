@@ -25,6 +25,8 @@
 
 package org.polyfrost.overflowanimations.renderer.uniform
 
+// Built on the GPU device API (1.21.5) and dynamic uniforms / GUI render states (1.21.6)
+//? if >=1.21.6 {
 //? if <26.3 {
 /*import com.mojang.blaze3d.buffers.GpuBuffer
 *///?}
@@ -61,7 +63,11 @@ class DynamicUniformStorage : UniformStorage, AutoCloseable {
         /*this.buffer = RenderSystem.getDevice().createBuffer(
             { "$name Uniform Buffer" },
             GpuBuffer.USAGE_UNIFORM or GpuBuffer.USAGE_MAP_WRITE,
+            //? if <1.21.11 {
+            /*this.size
+            *///?} else {
             this.size.toLong()
+            //?}
         )
         *///?}
     }
@@ -140,3 +146,4 @@ class DynamicUniformStorage : UniformStorage, AutoCloseable {
         }
     }
 }
+//?}

@@ -25,7 +25,11 @@
 
 package org.polyfrost.overflowanimations.renderer.texture
 
-//? if <26.3 {
+// Built on the GPU device API (1.21.5) and dynamic uniforms / GUI render states (1.21.6)
+//? if >=1.21.6 {
+//? if <1.21.11 {
+/*import com.mojang.blaze3d.textures.GpuTextureView
+*///?} elif <26.3 {
 /*import com.mojang.blaze3d.textures.GpuSampler
 import com.mojang.blaze3d.textures.GpuTextureView
 *///?} else {
@@ -35,12 +39,22 @@ import com.mojang.renderpearl.api.textures.GpuTextureView
 import net.minecraft.client.Minecraft
 import net.minecraft.resources.Identifier
 
+// Samplers were split out of textures in 1.21.11; before that the filter/wrap state lives on the texture itself
+//? if <1.21.11 {
+/*data class TextureAndSampler(val textureView: GpuTextureView?) {
+*///?} else {
 data class TextureAndSampler(val textureView: GpuTextureView?, val sampler: GpuSampler?) {
+//?}
     companion object {
         @JvmStatic
         fun get(location: Identifier): TextureAndSampler {
             val texture = Minecraft.getInstance().textureManager.getTexture(location)
+            //? if <1.21.11 {
+            /*return TextureAndSampler(texture.getTextureView())
+            *///?} else {
             return TextureAndSampler(texture.getTextureView(), texture.getSampler())
+            //?}
         }
     }
 }
+//?}

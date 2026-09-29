@@ -25,6 +25,9 @@
 
 package org.polyfrost.overflowanimations.handler.rendering.panorama
 
+// Built on the GPU device API (1.21.5) and dynamic uniforms / GUI render states (1.21.6)
+//? if >=1.21.6 {
 import org.joml.Matrix3x2f
 
 data class LegacyPanoramaRenderState(val pose: Matrix3x2f, val width: Int, val height: Int, val spin: Float)
+//?}

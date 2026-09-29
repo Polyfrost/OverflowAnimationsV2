@@ -25,6 +25,8 @@
 
 package org.polyfrost.overflowanimations.renderer.buffer
 
+// Built on the GPU device API (1.21.5) and dynamic uniforms / GUI render states (1.21.6)
+//? if >=1.21.6 {
 //? if <26.3 {
 /*import com.mojang.blaze3d.systems.RenderPass
 *///?}
@@ -34,6 +36,7 @@ import com.mojang.renderpearl.api.commands.RenderPass
 //?}
 import org.joml.Matrix3x2f
 import org.polyfrost.overflowanimations.renderer.vertex.VertexLayouts
+import org.polyfrost.overflowanimations.handler.rendering.addVertex2D
 
 interface Geometry : AutoCloseable {
     companion object {
@@ -41,10 +44,10 @@ interface Geometry : AutoCloseable {
         fun texturedScreenQuad(pose: Matrix3x2f, width: Int, height: Int): IndexedGeometry =
             IndexedGeometry.compile(VertexLayouts.POSITION_TEX_QUAD, 4) { vertexConsumer ->
                 vertexConsumer.apply {
-                    addVertexWith2DPose(pose, width.toFloat(), height.toFloat()).setUv(0.0F, 1.0F)
-                    addVertexWith2DPose(pose, width.toFloat(), 0.0F).setUv(1.0F, 1.0F)
-                    addVertexWith2DPose(pose, 0.0F, 0.0F).setUv(1.0F, 0.0F)
-                    addVertexWith2DPose(pose, 0.0F, height.toFloat()).setUv(0.0F, 0.0F)
+                    addVertex2D(pose, width.toFloat(), height.toFloat()).setUv(0.0F, 1.0F)
+                    addVertex2D(pose, width.toFloat(), 0.0F).setUv(1.0F, 1.0F)
+                    addVertex2D(pose, 0.0F, 0.0F).setUv(1.0F, 0.0F)
+                    addVertex2D(pose, 0.0F, height.toFloat()).setUv(0.0F, 0.0F)
                 }
             }
     }
@@ -59,3 +62,4 @@ interface Geometry : AutoCloseable {
 
     override fun close()
 }
+//?}

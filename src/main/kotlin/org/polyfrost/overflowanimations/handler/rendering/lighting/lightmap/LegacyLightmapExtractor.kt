@@ -25,6 +25,8 @@
 
 package org.polyfrost.overflowanimations.handler.rendering.lighting.lightmap
 
+// Built on the GPU device API (1.21.5) and dynamic uniforms / GUI render states (1.21.6)
+//? if >=1.21.6 {
 import net.minecraft.client.Minecraft
 import net.minecraft.client.multiplayer.ClientLevel
 import net.minecraft.client.renderer.GameRenderer
@@ -51,7 +53,7 @@ class LegacyLightmapExtractor {
             profiler.push("lightmap")
             state.skyDarken = level.getLegacySkyDarken()
             state.blockLightRed = this.blockLightRed
-            //? if 1.21.11 {
+            //? if <26.1 {
             /*state.skyDarkness = minecraft.gameRenderer.getDarkenWorldAmount(tickDelta)
             *///?} elif 26.1 {
             /*state.skyDarkness = minecraft.gameRenderer.getBossOverlayWorldDarkening(tickDelta)
@@ -74,3 +76,4 @@ class LegacyLightmapExtractor {
         }
     }
 }
+//?}

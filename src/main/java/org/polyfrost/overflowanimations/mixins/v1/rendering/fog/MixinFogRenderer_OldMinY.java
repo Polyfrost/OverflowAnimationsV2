@@ -25,6 +25,8 @@
 
 package org.polyfrost.overflowanimations.mixins.v1.rendering.fog;
 
+// Targets the fog environments added in 1.21.6
+//? if >=1.21.6 {
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -45,3 +47,4 @@ public abstract class MixinFogRenderer_OldMinY {
         }
     }
 }
+//?}

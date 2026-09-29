@@ -55,7 +55,7 @@ public abstract class MixinCamera_Sneaking {
     @Shadow
     private Entity entity;
 
-    //? if 1.21.11 {
+    //? if <26.1 {
     /*@Inject(method = "setup", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/Camera;setRotation(FF)V", shift = At.Shift.AFTER))
     *///?} else {
     @Inject(method = "alignWithEntity", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/Camera;setRotation(FF)V", shift = At.Shift.AFTER))

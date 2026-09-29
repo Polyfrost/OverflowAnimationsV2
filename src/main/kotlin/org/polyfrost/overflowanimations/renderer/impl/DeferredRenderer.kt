@@ -25,6 +25,8 @@
 
 package org.polyfrost.overflowanimations.renderer.impl
 
+// Built on the GPU device API (1.21.5) and dynamic uniforms / GUI render states (1.21.6)
+//? if >=1.21.6 {
 import com.mojang.blaze3d.ProjectionType
 import com.mojang.blaze3d.pipeline.RenderTarget
 import com.mojang.blaze3d.systems.RenderSystem
@@ -34,7 +36,7 @@ import com.mojang.blaze3d.systems.RenderSystem
 import com.mojang.renderpearl.api.textures.GpuTextureView
 //?}
 import net.minecraft.client.Minecraft
-//? if 1.21.11 {
+//? if <26.1 {
 /*import net.minecraft.client.renderer.PerspectiveProjectionMatrixBuffer
 *///?} else {
 import net.minecraft.client.renderer.ProjectionMatrixBuffer
@@ -83,7 +85,7 @@ class DeferredRenderer(private val descriptor: RenderDescriptor) : AbstractRende
     // Data
     private val name: String = descriptor.name.get()
     private var projectionMatrix: Matrix4f? = null
-    //? if 1.21.11 {
+    //? if <26.1 {
     /*private var projectionMatrixBuffer: PerspectiveProjectionMatrixBuffer? = null
     *///?} else {
     private var projectionMatrixBuffer: ProjectionMatrixBuffer? = null
@@ -91,7 +93,7 @@ class DeferredRenderer(private val descriptor: RenderDescriptor) : AbstractRende
 
     fun setProjectionMatrix(matrix4f: Matrix4f): AbstractRenderer {
         if (this.projectionMatrixBuffer == null) {
-            //? if 1.21.11 {
+            //? if <26.1 {
             /*this.projectionMatrixBuffer = PerspectiveProjectionMatrixBuffer("Immediate Projection Buffer for " + this.name)
             *///?} else {
             this.projectionMatrixBuffer = ProjectionMatrixBuffer("Immediate Projection Buffer for " + this.name)
@@ -143,7 +145,7 @@ class DeferredRenderer(private val descriptor: RenderDescriptor) : AbstractRende
                 window.height.toFloat() / window.guiScale.toFloat(),
                 0.0F,
                 1000.0F,
-                //? if 1.21.11 {
+                //? if <26.1 {
                 /*11000.0F
                 *///?} else {
                 11000.0F,
@@ -172,3 +174,4 @@ class DeferredRenderer(private val descriptor: RenderDescriptor) : AbstractRende
         }
     }
 }
+//?}

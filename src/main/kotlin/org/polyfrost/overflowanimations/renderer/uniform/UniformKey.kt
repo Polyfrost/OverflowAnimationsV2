@@ -25,6 +25,8 @@
 
 package org.polyfrost.overflowanimations.renderer.uniform
 
+// Built on the GPU device API (1.21.5) and dynamic uniforms / GUI render states (1.21.6)
+//? if >=1.21.6 {
 class UniformKey<T> {
     companion object {
         @JvmStatic
@@ -72,3 +74,4 @@ class UniformKey<T> {
         this.serializer = serializer
     }
 }
+//?}

@@ -28,7 +28,12 @@ package org.polyfrost.overflowanimations.mixins.v1.rendering.outlines;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.minecraft.client.renderer.LevelRenderer;
-//? if 1.21.11 {
+//? if <1.21.9 {
+/*import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.shapes.CollisionContext;
+*///?} elif <26.1 {
 /*import net.minecraft.client.renderer.state.BlockOutlineRenderState;
 *///?} else {
 import net.minecraft.client.renderer.state.level.BlockOutlineRenderState;
@@ -42,15 +47,21 @@ import org.polyfrost.overflowanimations.util.UtilsKt;
 
 @Mixin(LevelRenderer.class)
 public abstract class MixinLevelRenderer_BlockOutlineExpansion {
-    //? if 1.21.11 {
+    //? if <1.21.9 {
+    /*@WrapOperation(method = "renderHitOutline", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/state/BlockState;getShape(Lnet/minecraft/world/level/BlockGetter;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/phys/shapes/CollisionContext;)Lnet/minecraft/world/phys/shapes/VoxelShape;"))
+    private VoxelShape overflowanimations$blockOutlineRendering(final BlockState instance, final BlockGetter level, final BlockPos pos, final CollisionContext context, final Operation<VoxelShape> original) {
+        final VoxelShape shape = original.call(instance, level, pos, context);
+    *///?} elif <26.1 {
     /*@WrapOperation(method = "renderHitOutline", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/state/BlockOutlineRenderState;shape()Lnet/minecraft/world/phys/shapes/VoxelShape;"))
     *///?} elif 26.1 {
     /*@WrapOperation(method = "renderHitOutline", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/state/level/BlockOutlineRenderState;shape()Lnet/minecraft/world/phys/shapes/VoxelShape;"))
     *///?} else {
     @WrapOperation(method = "submitHitOutline", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/state/level/BlockOutlineRenderState;shape()Lnet/minecraft/world/phys/shapes/VoxelShape;"))
     //?}
+    //? if >=1.21.9 {
     private VoxelShape overflowanimations$blockOutlineRendering(final BlockOutlineRenderState instance, final Operation<VoxelShape> original) {
         final VoxelShape shape = original.call(instance);
+    //?}
         if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().other.blockOutlineRendering) {
             return UtilsKt.expandVoxelShape(shape, 0.0020000000949949026D); // Value sourced from older minecraft version
         } else {

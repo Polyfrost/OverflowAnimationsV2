@@ -25,14 +25,23 @@
 
 package org.polyfrost.overflowanimations.mixins.v1.rendering.sky;
 
+// Needs the 1.21.5 GPU API / 1.21.6 rendering changes; compiled out on older versions
+//? if >=1.21.6 {
 //? if <26.3 {
 /*import com.mojang.blaze3d.buffers.GpuBufferSlice;
 import net.minecraft.client.renderer.LevelRenderer;
 *///?}
+//? if <1.21.11 {
+/*import net.minecraft.client.renderer.DimensionSpecialEffects;
+*///?}
+//? if <1.21.9 {
+/*import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ClientLevel;
+*///?}
 //? if <26.2 {
 /*import net.minecraft.client.renderer.SkyRenderer;
 *///?}
-//? if 1.21.11 {
+//? if >=1.21.9 <26.1 {
 /*import net.minecraft.client.renderer.state.SkyRenderState;
 *///?} elif >=26.1 <26.3 {
 /*import net.minecraft.client.renderer.state.level.SkyRenderState;
@@ -53,7 +62,13 @@ import org.polyfrost.overflowanimations.util.states.SkyUtilityState;
 /*@Mixin(LevelRenderer.class)
 public abstract class MixinLevelRenderer_SkyAdditions {
 *///?}
-    //? if 1.21.11 {
+    //? if <1.21.9 {
+    /*@Inject(method = "method_62215", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/SkyRenderer;renderDarkDisc()V", shift = At.Shift.AFTER))
+    private void overflowanimations$voidBox(final GpuBufferSlice skyFog, final DimensionSpecialEffects.SkyType skyType, final float partialTick, final DimensionSpecialEffects effects, final CallbackInfo ci) {
+    *///?} elif <1.21.11 {
+    /*@Inject(method = "method_62215", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/SkyRenderer;renderDarkDisc()V", shift = At.Shift.AFTER))
+    private void overflowanimations$voidBox(final GpuBufferSlice skyFog, final SkyRenderState state, final CallbackInfo ci) {
+    *///?} elif <26.1 {
     /*@Inject(method = "method_62215", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/SkyRenderer;renderDarkDisc()V", shift = At.Shift.AFTER))
     private static void overflowanimations$voidBox(final GpuBufferSlice gpuBufferSlice, final SkyRenderState state, final SkyRenderer skyRenderer, final CallbackInfo ci) {
     *///?} elif >=26.1 <26.3 {
@@ -64,28 +79,46 @@ public abstract class MixinLevelRenderer_SkyAdditions {
     *///?} elif 26.2 {
     /*private void overflowanimations$voidBox(final GpuBufferSlice skyFog, final SkyRenderState state, final CallbackInfo ci) {
     *///?}
-    //? if <26.3 {
+    //? if <1.21.9 {
+        /*if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().other.playerVoidBox) {
+            LegacySkyRenderer.renderVoidBox(LegacySkyRenderer.getHorizonEyeHeight(Minecraft.getInstance().level, partialTick));
+        }
+    }
+    *///?} elif <26.3 {
         /*if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().other.playerVoidBox) {
             LegacySkyRenderer.renderVoidBox(((SkyUtilityState) state).overflowanimations$getHorizonHeight());
         }
     }
     *///?}
 
-    //? if 1.21.11 {
+    //? if <26.1 {
     /*@Inject(method = "method_62215", at = @At("TAIL"))
     *///?} elif >=26.1 <26.3 {
     /*@Inject(method = "lambda$addSkyPass$0", at = @At("TAIL"))
     *///?}
-    //? if <26.2 {
+    //? if <1.21.9 {
+    /*private void overflowanimations$blueVoid(final GpuBufferSlice skyFog, final DimensionSpecialEffects.SkyType skyType, final float partialTick, final DimensionSpecialEffects effects, final CallbackInfo ci) {
+    *///?} elif <1.21.11 {
+    /*private void overflowanimations$blueVoid(final GpuBufferSlice skyFog, final SkyRenderState state, final CallbackInfo ci) {
+    *///?} elif <26.2 {
     /*private static void overflowanimations$blueVoid(final GpuBufferSlice skyFog, final SkyRenderState state, final SkyRenderer skyRenderer, final CallbackInfo ci) {
     *///?}
     //? if 26.2 {
     /*private static void overflowanimations$blueVoid(final GpuBufferSlice skyFog, final SkyRenderState state, final CallbackInfo ci) {
     *///?}
-        //? if <26.3 {
+        //? if <1.21.9 {
+        /*if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().other.blueVoidSky && skyType == DimensionSpecialEffects.SkyType.OVERWORLD) {
+        *///?} elif <1.21.11 {
+        /*if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().other.blueVoidSky && state.skyType == DimensionSpecialEffects.SkyType.OVERWORLD) {
+        *///?} elif <26.3 {
         /*if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().other.blueVoidSky && state.skybox == DimensionType.Skybox.OVERWORLD) {
         *///?}
-    //? if <26.3 {
+    //? if <1.21.9 {
+            /*final ClientLevel level = Minecraft.getInstance().level;
+            LegacySkyRenderer.renderBlueVoid(level.getSkyColor(Minecraft.getInstance().gameRenderer.getMainCamera().getPosition(), partialTick), LegacySkyRenderer.getHorizonEyeHeight(level, partialTick));
+        }
+    }
+    *///?} elif <26.3 {
             /*LegacySkyRenderer.renderBlueVoid(state.skyColor, ((SkyUtilityState) state).overflowanimations$getHorizonHeight());
         }
     }
@@ -98,3 +131,4 @@ public abstract class MixinLevelRenderer_SkyAdditions {
     }
 }
 *///?}
+//?}

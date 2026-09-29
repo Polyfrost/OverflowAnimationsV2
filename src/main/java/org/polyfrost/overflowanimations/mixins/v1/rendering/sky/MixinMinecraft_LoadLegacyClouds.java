@@ -25,6 +25,8 @@
 
 package org.polyfrost.overflowanimations.mixins.v1.rendering.sky;
 
+// Needs the 1.21.5 GPU API / 1.21.6 rendering changes; compiled out on older versions
+//? if >=1.21.6 {
 import com.llamalad7.mixinextras.expression.Definition;
 import com.llamalad7.mixinextras.expression.Expression;
 import net.minecraft.client.Minecraft;
@@ -59,3 +61,4 @@ public abstract class MixinMinecraft_LoadLegacyClouds {
         this.resourceManager.registerReloadListener(LegacyCloudRenderer.INSTANCE);
     }
 }
+//?}

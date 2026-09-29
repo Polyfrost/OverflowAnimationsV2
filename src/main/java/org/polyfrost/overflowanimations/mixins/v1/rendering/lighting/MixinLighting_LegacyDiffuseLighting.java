@@ -25,6 +25,8 @@
 
 package org.polyfrost.overflowanimations.mixins.v1.rendering.lighting;
 
+// Needs the 1.21.5 GPU API / 1.21.6 rendering changes; compiled out on older versions
+//? if >=1.21.6 {
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.blaze3d.platform.Lighting;
@@ -72,7 +74,7 @@ public abstract class MixinLighting_LegacyDiffuseLighting {
 
     // Use old "setupGui3DDiffuseLighting" calculation w/ normal diffuse lighting
     @Inject(method = "<init>", at = @At("TAIL"))
-    //? if 1.21.11 {
+    //? if <26.1 {
     /*private void overflowanimations$legacyDiffuseLighting(final CallbackInfo ci, @Local(ordinal = 1) final Matrix4f item3DPose) {
     *///?} else {
     private void overflowanimations$legacyDiffuseLighting(final CallbackInfo ci, @Local(name = "item3DPose") final Matrix4f item3DPose) {
@@ -113,3 +115,4 @@ public abstract class MixinLighting_LegacyDiffuseLighting {
         }
     }
 }
+//?}

@@ -28,12 +28,14 @@ package org.polyfrost.overflowanimations.mixins.v1.gui.old_inventory_rendering;
 import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
-//? if 1.21.11 {
+//? if <26.1 {
 /*import net.minecraft.client.gui.GuiGraphics;
 *///?} else {
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 //?}
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+//? if <1.21.6
+//import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.world.inventory.Slot;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
@@ -48,7 +50,10 @@ public abstract class MixinAbstractContainerScreen {
     @Nullable
     protected Slot hoveredSlot;
 
-    //? if 1.21.11 {
+    //? if <1.21.6 {
+    /*@WrapWithCondition(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screens/inventory/AbstractContainerScreen;renderSlotHighlightBack(Lnet/minecraft/client/gui/GuiGraphics;)V"))
+    private boolean overflowanimations$slotHoverStyleRendering$disableBack(final AbstractContainerScreen<?> instance, final GuiGraphics graphics) {
+    *///?} elif <26.1 {
     /*@WrapWithCondition(method = "renderContents", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screens/inventory/AbstractContainerScreen;renderSlotHighlightBack(Lnet/minecraft/client/gui/GuiGraphics;)V"))
     private boolean overflowanimations$slotHoverStyleRendering$disableBack(final AbstractContainerScreen<?> instance, final GuiGraphics graphics) {
     *///?} else {
@@ -58,7 +63,10 @@ public abstract class MixinAbstractContainerScreen {
         return !OverflowAnimations.isEnabled() || !OverflowAnimationsConfig.instance().screen.slotHoverStyleRendering;
     }
 
-    //? if 1.21.11 {
+    //? if <1.21.6 {
+    /*@WrapOperation(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screens/inventory/AbstractContainerScreen;renderSlotHighlightFront(Lnet/minecraft/client/gui/GuiGraphics;)V"))
+    private void overflowanimations$slotHoverStyleRendering(final AbstractContainerScreen<?> instance, final GuiGraphics graphics, final Operation<Void> original) {
+    *///?} elif <26.1 {
     /*@WrapOperation(method = "renderContents", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screens/inventory/AbstractContainerScreen;renderSlotHighlightFront(Lnet/minecraft/client/gui/GuiGraphics;)V"))
     private void overflowanimations$slotHoverStyleRendering(final AbstractContainerScreen<?> instance, final GuiGraphics graphics, final Operation<Void> original) {
     *///?} else {
@@ -67,7 +75,11 @@ public abstract class MixinAbstractContainerScreen {
     //?}
         final Slot slot = this.hoveredSlot;
         if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().screen.slotHoverStyleRendering && slot != null && slot.isHighlightable()) {
+            //? if <1.21.6 {
+            /*graphics.fillGradient(RenderType.guiOverlay(), slot.x, slot.y, slot.x + 16, slot.y + 16, -2130706433, -2130706433, 0);
+            *///?} else {
             graphics.fillGradient(slot.x, slot.y, slot.x + 16, slot.y + 16, -2130706433, -2130706433);
+            //?}
         } else {
             original.call(instance, graphics);
         }

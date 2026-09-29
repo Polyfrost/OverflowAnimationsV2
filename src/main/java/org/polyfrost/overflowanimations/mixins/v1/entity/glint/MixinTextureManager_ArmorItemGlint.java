@@ -25,7 +25,7 @@
 
 package org.polyfrost.overflowanimations.mixins.v1.entity.glint;
 
-//? if 1.21.11 {
+//? if <26.1 {
 /*import net.minecraft.client.renderer.entity.ItemRenderer;
 *///?} else {
 import net.minecraft.client.renderer.feature.ItemFeatureRenderer;
@@ -40,13 +40,16 @@ import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig;
 
 @Mixin(TextureManager.class)
 public abstract class MixinTextureManager_ArmorItemGlint {
-    //? if 1.21.11 {
+    //? if <26.1 {
     /*@ModifyVariable(method = "getTexture", at = @At("HEAD"), argsOnly = true, ordinal = 0)
     *///?} else {
     @ModifyVariable(method = "getTexture", at = @At("HEAD"), argsOnly = true, name = "location")
     //?}
     private Identifier overflowanimations$useItemGlint(final Identifier location) {
-        //? if 1.21.11 {
+        //? if <1.21.5 {
+        /*if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().other.itemGlintOnEntity && location == ItemRenderer.ENCHANTED_GLINT_ENTITY) {
+            return ItemRenderer.ENCHANTED_GLINT_ITEM;
+        *///?} elif <26.1 {
         /*if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().other.itemGlintOnEntity && location == ItemRenderer.ENCHANTED_GLINT_ARMOR) {
             return ItemRenderer.ENCHANTED_GLINT_ITEM;
         *///?} else {

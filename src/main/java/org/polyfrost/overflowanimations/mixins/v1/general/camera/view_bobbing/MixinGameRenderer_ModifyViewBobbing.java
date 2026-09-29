@@ -27,10 +27,12 @@ package org.polyfrost.overflowanimations.mixins.v1.general.camera.view_bobbing;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+//? if <1.21.5
+//import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
-//? if 1.21.11 {
+//? if >=1.21.9 <26.1 {
 /*import net.minecraft.client.entity.ClientAvatarState;
 *///?}
 import net.minecraft.client.player.AbstractClientPlayer;
@@ -41,7 +43,7 @@ import net.minecraft.client.renderer.state.level.CameraRenderState;
 //?}
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
-//? if 1.21.11 {
+//? if <26.1 {
 /*import net.minecraft.world.entity.LivingEntity;
 *///?}
 import org.objectweb.asm.Opcodes;
@@ -61,7 +63,7 @@ public abstract class MixinGameRenderer_ModifyViewBobbing {
     @Final
     private Minecraft minecraft;
 
-    //? if 1.21.11 {
+    //? if <26.1 {
     /*@WrapOperation(method = "bobHurt", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;getHurtDir()F"))
     private float overflowanimations$damageTilt(final LivingEntity instance, final Operation<Float> original) {
     *///?} else {
@@ -75,7 +77,7 @@ public abstract class MixinGameRenderer_ModifyViewBobbing {
         }
     }
 
-    //? if 1.21.11 {
+    //? if <26.1 {
     /*@WrapOperation(method = "bobHurt", at = @At(value = "FIELD", target = "Lnet/minecraft/world/entity/LivingEntity;hurtTime:I", opcode = Opcodes.GETFIELD))
     private int overflowanimations$offsetHurtTime(final LivingEntity instance, final Operation<Integer> original) {
         final int hurtTime = original.call(instance);
@@ -92,13 +94,13 @@ public abstract class MixinGameRenderer_ModifyViewBobbing {
     }
 
     @Inject(method = "bobView", at = @At("TAIL"))
-    //? if 1.21.11 {
+    //? if <26.1 {
     /*private void overflowanimations$fixVerticalBobbingTilt(final PoseStack poseStack, final float tickDelta, final CallbackInfo ci) {
     *///?} else {
     private void overflowanimations$fixVerticalBobbingTilt(final CameraRenderState cameraState, final PoseStack poseStack, final CallbackInfo ci) {
     //?}
         if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().fixes.fixVerticalBobbingTilt && this.minecraft.getCameraEntity() instanceof AbstractClientPlayer player) {
-            //? if 1.21.11 {
+            //? if <26.1 {
             /*final float fallDist = Mth.lerp(tickDelta, player.overflowanimations$getPreviousBobbingTilt(), player.overflowanimations$getBobbingTilt());
             *///?} else {
             final float fallDist = Mth.lerp(cameraState.overflowanimations$getPartialTickTime(), player.overflowanimations$getPreviousBobbingTilt(), player.overflowanimations$getBobbingTilt());
@@ -111,39 +113,67 @@ public abstract class MixinGameRenderer_ModifyViewBobbing {
         }
     }
 
-    //? if 1.21.11 {
+    //? if <1.21.9 {
+    /*@WrapOperation(method = "bobView", at = @At(value = "FIELD", target = "Lnet/minecraft/client/player/AbstractClientPlayer;walkDist:F", opcode = Opcodes.GETFIELD))
+    private float overflowanimations$viewBobbing$changeDistance(final AbstractClientPlayer instance, final Operation<Float> original) {
+        if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().movement.handViewBobbingMovement) {
+            return instance.overflowanimations$getHorizontalSpeed();
+        } else {
+            return original.call(instance);
+        }
+    }
+
+    @WrapOperation(method = "bobView", at = @At(value = "FIELD", target = "Lnet/minecraft/client/player/AbstractClientPlayer;walkDistO:F", opcode = Opcodes.GETFIELD))
+    private float overflowanimations$viewBobbing$changePreviousDistance(final AbstractClientPlayer instance, final Operation<Float> original) {
+        if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().movement.handViewBobbingMovement) {
+            return instance.overflowanimations$getPreviousHorizontalSpeed();
+        } else {
+            return original.call(instance);
+        }
+    }
+    *///?} elif <26.1 {
     /*@WrapOperation(method = "bobView", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/entity/ClientAvatarState;getBackwardsInterpolatedWalkDistance(F)F"))
     private float overflowanimations$viewBobbing$changeDistance(final ClientAvatarState instance, final float tickDelta, final Operation<Float> original) {
-    *///?} else {
-    @WrapOperation(method = "bobView", at = @At(value = "FIELD", target = "Lnet/minecraft/client/renderer/state/level/CameraEntityRenderState;backwardsInterpolatedWalkDistance:F", opcode = Opcodes.GETFIELD))
-    private float overflowanimations$viewBobbing$changeDistance(final CameraEntityRenderState instance, final Operation<Float> original) {
-    //?}
         final Entity bobbingStorage = this.minecraft.getCameraEntity();
         if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().movement.handViewBobbingMovement && bobbingStorage != null) {
             final float walkDist = bobbingStorage.overflowanimations$getHorizontalSpeed();
             final float walkDistO = bobbingStorage.overflowanimations$getPreviousHorizontalSpeed();
-            //? if 1.21.11 {
-            /*return -(walkDist + (walkDist - walkDistO) * tickDelta);
-            *///?} else {
-            return -(walkDist + (walkDist - walkDistO) * Minecraft.getInstance().getDeltaTracker().getGameTimeDeltaPartialTick(true));
-            //?}
+            return -(walkDist + (walkDist - walkDistO) * tickDelta);
         } else {
-            //? if 1.21.11 {
-            /*return original.call(instance, tickDelta);
-            *///?} else {
-            return original.call(instance);
-            //?}
+            return original.call(instance, tickDelta);
         }
     }
+    *///?} else {
+    @WrapOperation(method = "bobView", at = @At(value = "FIELD", target = "Lnet/minecraft/client/renderer/state/level/CameraEntityRenderState;backwardsInterpolatedWalkDistance:F", opcode = Opcodes.GETFIELD))
+    private float overflowanimations$viewBobbing$changeDistance(final CameraEntityRenderState instance, final Operation<Float> original) {
+        final Entity bobbingStorage = this.minecraft.getCameraEntity();
+        if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().movement.handViewBobbingMovement && bobbingStorage != null) {
+            final float walkDist = bobbingStorage.overflowanimations$getHorizontalSpeed();
+            final float walkDistO = bobbingStorage.overflowanimations$getPreviousHorizontalSpeed();
+            return -(walkDist + (walkDist - walkDistO) * Minecraft.getInstance().getDeltaTracker().getGameTimeDeltaPartialTick(true));
+        } else {
+            return original.call(instance);
+        }
+    }
+    //?}
 
     // TODO/MOVE
-    //? if 1.21.11 {
+    //? if <1.21.5 {
+    /*@Inject(method = "render", at = @At("HEAD"))
+    private void overflowanimations$forceMaxGlintStrength(final CallbackInfo ci) {
+        final boolean maxGlint = OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().other.maxGlintProperties;
+        RenderSystem.setShaderGlintAlpha(maxGlint ? 1.0 : this.minecraft.options.glintStrength().get());
+    }
+    *///?} elif <1.21.11 {
+    /*@ModifyArg(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GlobalSettingsUniform;update(IIDJLnet/minecraft/client/DeltaTracker;I)V"), index = 2)
+    *///?} elif <26.1 {
     /*@ModifyArg(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GlobalSettingsUniform;update(IIDJLnet/minecraft/client/DeltaTracker;ILnet/minecraft/client/Camera;Z)V"), index = 2)
     *///?} elif >=26.1 <26.3 {
     /*@ModifyArg(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GlobalSettingsUniform;update(IIDJLnet/minecraft/client/DeltaTracker;ILnet/minecraft/world/phys/Vec3;Z)V"), index = 2)
     *///?} else {
     @ModifyArg(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GlobalSettingsUniform;update(IIDJFILnet/minecraft/world/phys/Vec3;Z)V"), index = 2)
     //?}
+    //? if >=1.21.5 {
     private double overflowanimations$forceMaxGlintStrength(final double original) {
         if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().other.maxGlintProperties) {
             // 100% glint strength
@@ -152,4 +182,5 @@ public abstract class MixinGameRenderer_ModifyViewBobbing {
             return original;
         }
     }
+    //?}
 }

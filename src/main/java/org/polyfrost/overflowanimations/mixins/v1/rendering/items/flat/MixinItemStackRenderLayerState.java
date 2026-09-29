@@ -25,9 +25,15 @@
 
 package org.polyfrost.overflowanimations.mixins.v1.rendering.items.flat;
 
+// Targets the item model rendering from 1.21.5 (quad lists, record item transforms)
+//? if >=1.21.5 {
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
-//? if 1.21.11 {
+//? if <1.21.9 {
+/*import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.renderer.block.model.ItemTransform;
+*///?} elif <26.1 {
 /*import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.ItemTransform;
@@ -62,13 +68,13 @@ import java.util.stream.Collectors;
 @Mixin(ItemStackRenderState.LayerRenderState.class)
 public abstract class MixinItemStackRenderLayerState {
     @Shadow
-    //? if 1.21.11 {
+    //? if <26.1 {
     /*ItemTransform transform;
     *///?} else {
     private ItemTransform itemTransform;
     //?}
 
-    //? if 1.21.11 {
+    //? if <26.1 {
     /*@Shadow(aliases = "field_55345")
     *///?} else {
     @Shadow(aliases = "this$0")
@@ -77,13 +83,15 @@ public abstract class MixinItemStackRenderLayerState {
     ItemStackRenderState itemStackRenderState;
 
     @Shadow
-    //? if 1.21.11 {
+    //? if <26.1 {
     /*boolean usesBlockLight;
     *///?} else {
     private boolean usesBlockLight;
     //?}
 
-    //? if 1.21.11 {
+    //? if <1.21.9 {
+    /*@ModifyArg(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/entity/ItemRenderer;renderItem(Lnet/minecraft/world/item/ItemDisplayContext;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;II[ILjava/util/List;Lnet/minecraft/client/renderer/rendertype/RenderType;Lnet/minecraft/client/renderer/item/ItemStackRenderState$FoilType;)V"), index = 6)
+    *///?} elif <26.1 {
     /*@ModifyArg(method = "submit", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/SubmitNodeCollector;submitItem(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/world/item/ItemDisplayContext;III[ILjava/util/List;Lnet/minecraft/client/renderer/rendertype/RenderType;Lnet/minecraft/client/renderer/item/ItemStackRenderState$FoilType;)V"), index = 6)
     *///?} elif >=26.1 <26.3 {
     /*@ModifyArg(method = "submit", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/SubmitNodeCollector;submitItem(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/world/item/ItemDisplayContext;III[ILjava/util/List;Lnet/minecraft/client/renderer/item/ItemStackRenderState$FoilType;)V"), index = 6)
@@ -105,7 +113,9 @@ public abstract class MixinItemStackRenderLayerState {
         }
     }
 
-    //? if 1.21.11 {
+    //? if <1.21.9 {
+    /*@ModifyArg(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/entity/ItemRenderer;renderItem(Lnet/minecraft/world/item/ItemDisplayContext;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;II[ILjava/util/List;Lnet/minecraft/client/renderer/rendertype/RenderType;Lnet/minecraft/client/renderer/item/ItemStackRenderState$FoilType;)V"), index = 8)
+    *///?} elif <26.1 {
     /*@ModifyArg(method = "submit", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/SubmitNodeCollector;submitItem(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/world/item/ItemDisplayContext;III[ILjava/util/List;Lnet/minecraft/client/renderer/rendertype/RenderType;Lnet/minecraft/client/renderer/item/ItemStackRenderState$FoilType;)V"), index = 8)
     *///?} elif >=26.1 <26.3 {
     /*@ModifyArg(method = "submit", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/SubmitNodeCollector;submitItem(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/world/item/ItemDisplayContext;III[ILjava/util/List;Lnet/minecraft/client/renderer/item/ItemStackRenderState$FoilType;)V"), index = 7)
@@ -132,7 +142,10 @@ public abstract class MixinItemStackRenderLayerState {
     }
 
     // TODO/MOVE
-    //? if 1.21.11 {
+    //? if <1.21.9 {
+    /*@Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/block/model/ItemTransform;apply(ZLcom/mojang/blaze3d/vertex/PoseStack$Pose;)V"))
+    private void overflowanimations$itemPositions(final PoseStack poseStack, final MultiBufferSource bufferSource, final int packedLight, final int packedOverlay, final CallbackInfo ci) {
+    *///?} elif <26.1 {
     /*@Inject(method = "submit", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/block/model/ItemTransform;apply(ZLcom/mojang/blaze3d/vertex/PoseStack$Pose;)V"))
     private void overflowanimations$itemPositions(final PoseStack poseStack, final SubmitNodeCollector nodeCollector, final int packedLight, final int packedOverlay, final int outlineColor, final CallbackInfo ci) {
     *///?} else {
@@ -142,14 +155,14 @@ public abstract class MixinItemStackRenderLayerState {
         if (OverflowAnimations.isEnabled()) {
             final ItemStack stack = this.itemStackRenderState.overflowanimations$getItemStack();
             if (!stack.isEmpty()) {
-                //? if 1.21.11 {
+                //? if <26.1 {
                 /*final PoseStack.Pose localPose = poseStack.last();
                 *///?}
                 final ItemDisplayContext itemDisplayContext = this.itemStackRenderState.displayContext;
                 final boolean isGui = itemDisplayContext == ItemDisplayContext.GUI;
                 final boolean isFirstPerson = itemDisplayContext == ItemDisplayContext.FIRST_PERSON_LEFT_HAND || itemDisplayContext == ItemDisplayContext.FIRST_PERSON_RIGHT_HAND;
                 final boolean isThirdPerson = itemDisplayContext == ItemDisplayContext.THIRD_PERSON_LEFT_HAND || itemDisplayContext == ItemDisplayContext.THIRD_PERSON_RIGHT_HAND;
-                //? if 1.21.11 {
+                //? if <26.1 {
                 /*final ItemTransform transform = this.transform;
                 *///?} else {
                 final ItemTransform transform = this.itemTransform;
@@ -209,3 +222,4 @@ public abstract class MixinItemStackRenderLayerState {
         return (itemDrops2D && this.itemStackRenderState.displayContext == ItemDisplayContext.GROUND) || (itemFramed2D && this.itemStackRenderState.displayContext == ItemDisplayContext.FIXED);
     }
 }
+//?}

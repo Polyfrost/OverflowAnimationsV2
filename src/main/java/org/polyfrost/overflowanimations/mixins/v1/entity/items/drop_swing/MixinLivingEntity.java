@@ -30,6 +30,8 @@ import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
+//? if <1.21.5
+//import net.minecraft.world.entity.player.Player;
 //? if >=26.3 {
 import net.minecraft.world.item.component.SwingAnimation;
 //?}
@@ -39,9 +41,17 @@ import org.polyfrost.overflowanimations.OverflowAnimations;
 import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig;
 import org.polyfrost.overflowanimations.util.SwingUtilKt;
 
+// Before 1.21.5 drop(ItemStack, boolean, boolean) lives in Player
+//? if <1.21.5 {
+/*@Mixin(Player.class)
+*///?} else {
 @Mixin(LivingEntity.class)
+//?}
 public abstract class MixinLivingEntity {
-    //? if <26.3 {
+    //? if <1.21.5 {
+    /*@WrapOperation(method = "drop(Lnet/minecraft/world/item/ItemStack;ZZ)Lnet/minecraft/world/entity/item/ItemEntity;", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/player/Player;swing(Lnet/minecraft/world/InteractionHand;)V"))
+    private void overflowanimations$swingOnDropInventory(final Player instance, final InteractionHand hand, final Operation<Void> original) {
+    *///?} elif <26.3 {
     /*@WrapOperation(method = "drop(Lnet/minecraft/world/item/ItemStack;ZZ)Lnet/minecraft/world/entity/item/ItemEntity;", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;swing(Lnet/minecraft/world/InteractionHand;)V"))
     private void overflowanimations$swingOnDropInventory(final LivingEntity instance, final InteractionHand hand, final Operation<Void> original) {
     *///?} else {

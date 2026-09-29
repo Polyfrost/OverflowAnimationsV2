@@ -25,6 +25,8 @@
 
 package org.polyfrost.overflowanimations.mixins.v1.rendering.fog;
 
+// Targets the fog environments added in 1.21.6
+//? if >=1.21.6 {
 import com.llamalad7.mixinextras.expression.Definition;
 import com.llamalad7.mixinextras.expression.Expression;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
@@ -50,8 +52,16 @@ public abstract class MixinFogRenderer_VoidFog {
     @Definition(id = "renderDistance", local = @Local(type = int.class, argsOnly = true))
     @Expression("(float) (renderDistance * 16)")
     @ModifyExpressionValue(method = "setupFog", at = @At("MIXINEXTRAS:EXPRESSION"))
+    //? if <1.21.11 {
+    /*private float overflowanimations$voidFog(final float original, final Camera camera, final int renderDistanceInChunks, final boolean renderDistanceFog, final DeltaTracker deltaTracker, final float darkenWorldAmount, final ClientLevel level) {
+    *///?} else {
     private float overflowanimations$voidFog(final float original, final Camera camera, final int renderDistanceInChunks, final DeltaTracker deltaTracker, final float darkenWorldAmount, final ClientLevel level) {
+    //?}
+        //? if <1.21.11 {
+        /*final Entity entity = camera.getEntity();
+        *///?} else {
         final Entity entity = camera.entity();
+        //?}
         final boolean isVoidFogAllowed = entity instanceof Player player && !(player.isCreative() || player.isSpectator());
         if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().other.voidFog.hasFog() && LevelUtilKt.hasVoidFog(level) && isVoidFogAllowed) {
             final double light = level.getLightEngine().getLayerListener(LightLayer.SKY).getLightValue(entity.blockPosition()) / 16.0;
@@ -64,3 +74,4 @@ public abstract class MixinFogRenderer_VoidFog {
         return original;
     }
 }
+//?}

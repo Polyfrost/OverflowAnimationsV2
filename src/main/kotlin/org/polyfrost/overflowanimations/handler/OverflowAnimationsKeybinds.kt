@@ -27,7 +27,7 @@ package org.polyfrost.overflowanimations.handler
 
 import com.mojang.blaze3d.platform.InputConstants
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents
-//? if 1.21.11 {
+//? if <26.1 {
 /*import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper
 *///?} else {
 import net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper
@@ -41,7 +41,11 @@ import java.util.function.Consumer
 
 object OverflowAnimationsKeybinds {
     private val REGISTRY = arrayListOf<Binding>()
+    //? if <1.21.9 {
+    /*private const val OVERFLOWANIMATIONS_CATEGORY = "key.category.overflowanimations.common"
+    *///?} else {
     private val OVERFLOWANIMATIONS_CATEGORY = KeyMapping.Category(location("common"))
+    //?}
 
     val CONFIG_SCREEN = create(
         "Open Mod Configuration",
@@ -60,7 +64,7 @@ object OverflowAnimationsKeybinds {
     fun bootstrap() {
         ClientTickEvents.END_CLIENT_TICK.register { tick(it) }
         for (binding in REGISTRY) {
-            //? if 1.21.11 {
+            //? if <26.1 {
             /*KeyBindingHelper.registerKeyBinding(binding.mapping)
             *///?} else {
             KeyMappingHelper.registerKeyMapping(binding.mapping)

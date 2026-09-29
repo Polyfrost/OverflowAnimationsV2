@@ -90,7 +90,7 @@ public abstract class MixinMinecraft_EquipUseLogic {
     public GameRenderer gameRenderer;
     *///?}
 
-    //? if 1.21.11 {
+    //? if <26.1 {
     /*@ModifyVariable(method = "startUseItem", at = @At("STORE"), ordinal = 0)
     *///?} else {
     @ModifyVariable(method = "startUseItem", at = @At("STORE"), name = "heldItem")
@@ -107,7 +107,7 @@ public abstract class MixinMinecraft_EquipUseLogic {
     //? if <26.3 {
     /*@WrapOperation(method = "startUseItem", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/LocalPlayer;swing(Lnet/minecraft/world/InteractionHand;)V", ordinal = 2))
     *///?}
-    //? if 1.21.11 {
+    //? if <26.1 {
     /*private void overflowanimations$swingOnUse(final LocalPlayer instance, final InteractionHand hand, final Operation<Void> original, @Local(ordinal = 0) final ItemStack heldItem) {
     *///?} elif >=26.1 <26.3 {
     /*private void overflowanimations$swingOnUse(final LocalPlayer instance, final InteractionHand hand, final Operation<Void> original, @Local(name = "heldItem") final ItemStack heldItem) {
@@ -191,7 +191,7 @@ public abstract class MixinMinecraft_EquipUseLogic {
         }
     }
 
-    //? if 1.21.11 {
+    //? if <26.1 {
     /*@Definition(id = "useResult", local = @Local(type = InteractionResult.class, ordinal = 1))
     *///?} else {
     @Definition(id = "useResult", local = @Local(type = InteractionResult.class, name = "useResult"))
@@ -199,7 +199,7 @@ public abstract class MixinMinecraft_EquipUseLogic {
     @Definition(id = "Fail", type = InteractionResult.Fail.class)
     @Expression("useResult instanceof Fail")
     @Inject(method = "startUseItem", at = @At(value = "MIXINEXTRAS:EXPRESSION", shift = At.Shift.BEFORE))
-    //? if 1.21.11 {
+    //? if <26.1 {
     /*private void overflowanimations$oldEquipUse(final CallbackInfo ci, @Local(ordinal = 0) final ItemStack heldItem, @Local(ordinal = 0) final int oldCount, @Local(ordinal = 0) final InteractionHand hand) {
     *///?} else {
     private void overflowanimations$oldEquipUse(final CallbackInfo ci, @Local(name = "heldItem") final ItemStack heldItem, @Local(name = "oldCount") final int oldCount, @Local(name = "hand") final InteractionHand hand) {

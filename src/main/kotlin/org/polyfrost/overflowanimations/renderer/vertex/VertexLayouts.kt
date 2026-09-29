@@ -25,6 +25,8 @@
 
 package org.polyfrost.overflowanimations.renderer.vertex
 
+// Built on the GPU device API (1.21.5) and dynamic uniforms / GUI render states (1.21.6)
+//? if >=1.21.6 {
 //? if 26.2 {
 /*import com.mojang.blaze3d.PrimitiveTopology
 *///?}
@@ -60,3 +62,4 @@ object VertexLayouts {
     private fun quads(vertexFormat: VertexFormat) = VertexLayout(vertexFormat, PrimitiveTopology.QUADS)
     //?}
 }
+//?}

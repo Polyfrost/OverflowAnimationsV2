@@ -25,13 +25,17 @@
 
 package org.polyfrost.overflowanimations.mixins.v1.entity.glint;
 
-//? if 1.21.11 {
+//? if <26.1 {
 /*import com.llamalad7.mixinextras.expression.Definition;
 import com.llamalad7.mixinextras.expression.Expression;
 *///?}
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
+//? if <1.21.11 {
+/*import net.minecraft.client.renderer.RenderStateShard;
+*///?} else {
 import net.minecraft.client.renderer.rendertype.TextureTransform;
+//?}
 //? if >=26.1 {
 import org.objectweb.asm.Opcodes;
 //?}
@@ -40,9 +44,13 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.polyfrost.overflowanimations.OverflowAnimations;
 import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig;
 
+//? if <1.21.11 {
+/*@Mixin(RenderStateShard.class)
+*///?} else {
 @Mixin(TextureTransform.class)
+//?}
 public abstract class MixinTextureTransform_GlintSpeeds {
-    //? if 1.21.11 {
+    //? if <26.1 {
     /*@Definition(id = "Double", type = Double.class)
     @Definition(id = "getInstance", method = "Lnet/minecraft/client/Minecraft;getInstance()Lnet/minecraft/client/Minecraft;")
     @Definition(id = "options", field = "Lnet/minecraft/client/Minecraft;options:Lnet/minecraft/client/Options;")

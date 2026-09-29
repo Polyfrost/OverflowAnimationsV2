@@ -40,8 +40,14 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.ItemInHandRenderer;
-import net.minecraft.client.renderer.SubmitNodeCollector;
-import net.minecraft.client.renderer.item.ItemModelResolver;
+*///?}
+//? if <1.21.9 {
+/*import net.minecraft.client.renderer.MultiBufferSource;
+*///?} elif <26.3 {
+/*import net.minecraft.client.renderer.SubmitNodeCollector;
+*///?}
+//? if <26.3 {
+/*import net.minecraft.client.renderer.item.ItemModelResolver;
 import net.minecraft.client.renderer.item.ItemStackRenderState;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.HumanoidArm;
@@ -172,7 +178,7 @@ public abstract class MixinItemInHandRenderer_FirstPersonItemPositions {
     //? if <26.2 {
     /*@WrapOperation(method = "renderArmWithItem", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/PoseStack;scale(FFF)V", ordinal = 1))
     *///?}
-    //? if 1.21.11 {
+    //? if <26.1 {
     /*private void overflowanimations$postBowTransform(final PoseStack instance, final float xScale, final float yScale, final float zScale, final Operation<Void> original, @Local(argsOnly = true, ordinal = 0) final AbstractClientPlayer player, @Local(argsOnly = true, ordinal = 0) final InteractionHand hand) {
     *///?} elif 26.2 {
     /*@WrapOperation(method = "submitArmWithItem", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/PoseStack;scale(FFF)V", ordinal = 1))
@@ -206,7 +212,7 @@ public abstract class MixinItemInHandRenderer_FirstPersonItemPositions {
     //? if <26.2 {
     /*@ModifyExpressionValue(method = "renderArmWithItem", at = @At("MIXINEXTRAS:EXPRESSION"))
     *///?}
-    //? if 1.21.11 {
+    //? if <26.1 {
     /*private boolean overflowanimations$oldFirstPersonSwordBlock(final boolean original, @Local(argsOnly = true, ordinal = 0) final AbstractClientPlayer player, @Local(argsOnly = true, ordinal = 0) final InteractionHand hand, @Local(argsOnly = true, ordinal = 0) final ItemStack itemStack, @Local(argsOnly = true, ordinal = 0) final PoseStack poseStack) {
     *///?} elif 26.2 {
     /*@ModifyExpressionValue(method = "submitArmWithItem", at = @At("MIXINEXTRAS:EXPRESSION"))
@@ -231,14 +237,22 @@ public abstract class MixinItemInHandRenderer_FirstPersonItemPositions {
     }
     *///?}
 
-    //? if <26.2 {
+    //? if <1.21.5 {
+    /*@Inject(method = "renderArmWithItem", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/ItemInHandRenderer;renderItem(Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/item/ItemDisplayContext;ZLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V"))
+    *///?} elif <1.21.9 {
+    /*@Inject(method = "renderArmWithItem", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/ItemInHandRenderer;renderItem(Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/item/ItemDisplayContext;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V"))
+    *///?} elif <26.2 {
     /*@Inject(method = "renderArmWithItem", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/ItemInHandRenderer;renderItem(Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/item/ItemDisplayContext;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;I)V"))
     *///?} elif 26.2 {
     /*@Inject(method = "submitArmWithItem", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/ItemInHandRenderer;renderItem(Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/item/ItemDisplayContext;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;I)V"))
     *///?}
-    //? if <26.3 {
+    //? if <1.21.9 {
+    /*private void overflowanimations$itemPositions(final AbstractClientPlayer player, final float tickDelta, final float pitch, final InteractionHand hand, final float swingProgress, final ItemStack itemStack, final float equippedProgress, final PoseStack poseStack, final MultiBufferSource bufferSource, final int lightCoords, final CallbackInfo ci) {
+    *///?} elif <26.3 {
     /*private void overflowanimations$itemPositions(final AbstractClientPlayer player, final float tickDelta, final float pitch, final InteractionHand hand, final float swingProgress, final ItemStack itemStack, final float equippedProgress, final PoseStack poseStack, final SubmitNodeCollector submitNodeCollector, final int lightCoords, final CallbackInfo ci) {
-        final int direction = EntityUtilKt.getHandMultiplier(player, hand);
+    *///?}
+    //? if <26.3 {
+    /*final int direction = EntityUtilKt.getHandMultiplier(player, hand);
         if (OverflowAnimations.isEnabled()) {
             if (OverflowAnimationsConfig.instance().items.fishingRodVersion == FishingRodVersionSetting.V1_7 && ItemUtilKt.isFishingRodItem(itemStack)) {
                 poseStack.mulPose(Axis.YP.rotationDegrees(direction * 180.0F));
@@ -252,6 +266,8 @@ public abstract class MixinItemInHandRenderer_FirstPersonItemPositions {
                     itemStackRenderState,
                     itemStack,
                     displayContext,
+                    //? if <1.21.5
+                    //displayContext == ItemDisplayContext.FIRST_PERSON_LEFT_HAND,
                     player.level(),
                     player,
                     lightCoords
@@ -333,7 +349,9 @@ public abstract class MixinItemInHandRenderer_FirstPersonItemPositions {
                     to = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/ItemInHandRenderer;applyItemArmTransform(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/world/entity/HumanoidArm;F)V", ordinal = 4)
             ))
             *///?}
-    //? if 1.21.11 {
+    //? if <1.21.9 {
+    /*private void overflowanimations$itemUsageSwinging(final AbstractClientPlayer player, final float tickDelta, final float pitch, final InteractionHand hand, final float swingProgress, final ItemStack itemStack, final float equippedProgress, final PoseStack poseStack, final MultiBufferSource bufferSource, final int lightCoords, final CallbackInfo ci, @Local(ordinal = 0) final HumanoidArm arm) {
+    *///?} elif <26.1 {
     /*private void overflowanimations$itemUsageSwinging(final AbstractClientPlayer player, final float tickDelta, final float pitch, final InteractionHand hand, final float swingProgress, final ItemStack itemStack, final float equippedProgress, final PoseStack poseStack, final SubmitNodeCollector submitNodeCollector, final int lightCoords, final CallbackInfo ci, @Local(ordinal = 0) final HumanoidArm arm) {
     *///?} elif >=26.1 <26.3 {
     /*private void overflowanimations$itemUsageSwinging(final AbstractClientPlayer player, final float tickDelta, final float pitch, final InteractionHand hand, final float swingProgress, final ItemStack itemStack, final float equippedProgress, final PoseStack poseStack, final SubmitNodeCollector submitNodeCollector, final int lightCoords, final CallbackInfo ci, @Local(name = "arm") final HumanoidArm arm) {
@@ -352,7 +370,8 @@ public abstract class MixinItemInHandRenderer_FirstPersonItemPositions {
     }
     *///?}
 
-    //? if <26.3 {
+    // The item swap scale was added in 1.21.11
+    //? if >=1.21.11 <26.3 {
     /*@WrapOperation(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/LocalPlayer;getItemSwapScale(F)F"))
     private float overflowanimations$legacySwingAnimation(final LocalPlayer instance, final float delta, final Operation<Float> original) {
         if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().items.legacySwingAnimation) {
@@ -364,7 +383,9 @@ public abstract class MixinItemInHandRenderer_FirstPersonItemPositions {
     *///?}
 
     // Equip Animation Stuff
-    //? if <26.2 {
+    //? if <1.21.9 {
+    /*@ModifyArg(method = "renderHandsWithItems", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/ItemInHandRenderer;renderArmWithItem(Lnet/minecraft/client/player/AbstractClientPlayer;FFLnet/minecraft/world/InteractionHand;FLnet/minecraft/world/item/ItemStack;FLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V", ordinal = 0), index = 5)
+    *///?} elif <26.2 {
     /*@ModifyArg(method = "renderHandsWithItems", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/ItemInHandRenderer;renderArmWithItem(Lnet/minecraft/client/player/AbstractClientPlayer;FFLnet/minecraft/world/InteractionHand;FLnet/minecraft/world/item/ItemStack;FLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;I)V", ordinal = 0), index = 5)
     *///?} elif 26.2 {
     /*@ModifyArg(method = "submitHandsWithItems", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/ItemInHandRenderer;submitArmWithItem(Lnet/minecraft/client/player/AbstractClientPlayer;FFLnet/minecraft/world/InteractionHand;FLnet/minecraft/world/item/ItemStack;FLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;I)V", ordinal = 0), index = 5)
@@ -401,7 +422,7 @@ public abstract class MixinItemInHandRenderer_FirstPersonItemPositions {
     /*// Fixes MC-262560
     @ModifyArg(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/Mth;clamp(FFF)F", ordinal = 2), index = 0)
     *///?}
-    //? if 1.21.11 {
+    //? if <26.1 {
     /*private float overflowanimations$handleEquipLogic(final float original, @Local(ordinal = 0) float attackAnim) {
     *///?} elif >=26.1 <26.3 {
     /*private float overflowanimations$handleEquipLogic(final float original, @Local(name = "attackAnim") float attackAnim) {

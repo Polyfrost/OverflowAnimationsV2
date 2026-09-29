@@ -25,10 +25,11 @@
 
 package org.polyfrost.overflowanimations
 
+//? if >=1.21.5
 import net.fabricmc.fabric.api.client.model.loading.v1.ExtraModelKey
-//? if 1.21.11 {
+//? if >=1.21.5 <26.1 {
 /*import net.minecraft.client.renderer.block.model.BlockStateModel
-*///?} else {
+*///?} elif >=26.1 {
 import net.minecraft.client.renderer.block.dispatch.BlockStateModel
 //?}
 import org.polyfrost.overflowanimations.handler.networking.payloads.InfoPayload
@@ -49,9 +50,12 @@ object OverflowAnimationsConstants {
     @JvmField
     val FAST_GRASS_MODEL_LOCATION = OverflowAnimations.location("block/fast_grass_block")
 
+    // Block state models and extra model keys arrived in 1.21.5
+    //? if >=1.21.5 {
     @JvmField
     val FAST_GRASS_MODEL_KEY: ExtraModelKey<BlockStateModel> =
         ExtraModelKey.create(FAST_GRASS_MODEL_LOCATION::toString)
+    //?}
 
     @JvmField
     val INFO_PAYLOAD =

@@ -32,8 +32,10 @@ import net.minecraft.client.model.player.PlayerCapeModel;
 //? if <26.2 {
 /*import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.OutlineBufferSource;
-import net.minecraft.client.renderer.SubmitNodeStorage;
 *///?}
+//? if >=1.21.9 <26.2
+//import net.minecraft.client.renderer.SubmitNodeStorage;
+//? if >=1.21.9
 import net.minecraft.client.renderer.feature.ModelFeatureRenderer;
 //? if <26.2 {
 /*import net.minecraft.client.renderer.rendertype.RenderType;
@@ -45,17 +47,21 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.polyfrost.overflowanimations.OverflowAnimations;
 import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig;
 
+//? if >=1.21.9 {
 @Mixin(ModelFeatureRenderer.class)
 public abstract class MixinModelFeatureRenderer_CapeSwinging {
-    //? if <26.2 {
+//?}
+    //? if >=1.21.9 <26.2 {
     /*@Inject(method = "renderModel", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/model/Model;setupAnim(Ljava/lang/Object;)V", shift = At.Shift.AFTER))
     private <S> void overflowanimations$capeSwingRotation(final SubmitNodeStorage.ModelSubmit<S> submit, final RenderType renderType, final VertexConsumer buffer, final OutlineBufferSource outlineBufferSource, final MultiBufferSource.BufferSource crumblingBufferSource, final CallbackInfo ci) {
-    *///?} else {
+    *///?} elif >=26.2 {
     @Inject(method = "prepareModel", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/model/Model;setupAnim(Ljava/lang/Object;)V", shift = At.Shift.AFTER))
     private <S> void overflowanimations$capeSwingRotation(final ModelFeatureRenderer.Submit<S> submit, final CallbackInfo ci) {
     //?}
+//? if >=1.21.9 {
         if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().movement.disableCapeSwingRotation && submit.model() instanceof PlayerCapeModel playerCapeModel) {
             playerCapeModel.body.yRot = 0;
         }
     }
 }
+//?}

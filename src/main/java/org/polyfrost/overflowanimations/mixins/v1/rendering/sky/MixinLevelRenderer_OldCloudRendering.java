@@ -25,6 +25,8 @@
 
 package org.polyfrost.overflowanimations.mixins.v1.rendering.sky;
 
+// Needs the 1.21.5 GPU API / 1.21.6 rendering changes; compiled out on older versions
+//? if >=1.21.6 {
 import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
@@ -88,7 +90,10 @@ public abstract class MixinLevelRenderer_OldCloudRendering {
         }
     }
 
-    //? if 1.21.11 {
+    //? if <1.21.11 {
+    /*@WrapOperation(method = "method_62205", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/CloudRenderer;render(ILnet/minecraft/client/CloudStatus;FLnet/minecraft/world/phys/Vec3;F)V"))
+    private void overflowanimations$renderLegacyClouds(final CloudRenderer instance, final int color, final CloudStatus cloudStatus, final float bottomY, final Vec3 cameraPosition, final float tickDelta, final Operation<Void> original) {
+    *///?} elif <26.1 {
     /*@WrapOperation(method = "method_62205", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/CloudRenderer;render(ILnet/minecraft/client/CloudStatus;FLnet/minecraft/world/phys/Vec3;JF)V"))
     private void overflowanimations$renderLegacyClouds(final CloudRenderer instance, final int color, final CloudStatus cloudStatus, final float bottomY, final Vec3 cameraPosition, final long gameTime, final float tickDelta, final Operation<Void> original) {
     *///?} elif >=26.1 <26.3 {
@@ -105,7 +110,9 @@ public abstract class MixinLevelRenderer_OldCloudRendering {
             LegacyCloudRenderer.INSTANCE.prepare(color, cloudStatus, bottomY, cameraPosition, tickDelta);
             //?}
         } else {
-            //? if 1.21.11 {
+            //? if <1.21.11 {
+            /*original.call(instance, color, cloudStatus, bottomY, cameraPosition, tickDelta);
+            *///?} elif <26.1 {
             /*original.call(instance, color, cloudStatus, bottomY, cameraPosition, gameTime, tickDelta);
             *///?} else {
             original.call(instance, color, cloudStatus, bottomY, range, cameraPosition, gameTime, tickDelta);
@@ -136,3 +143,4 @@ public abstract class MixinLevelRenderer_OldCloudRendering {
         return !OverflowAnimations.isEnabled() || !OverflowAnimationsConfig.instance().other.oldCloudRendering;
     }
 }
+//?}

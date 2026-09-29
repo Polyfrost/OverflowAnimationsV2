@@ -31,9 +31,9 @@ import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 //?}
 import net.minecraft.client.renderer.GameRenderer;
-//? if 1.21.11 {
+//? if >=1.21.9 <26.1 {
 /*import net.minecraft.client.renderer.state.CameraRenderState;
-*///?} else {
+*///?} elif >=26.1 {
 import net.minecraft.client.renderer.state.level.CameraRenderState;
 //?}
 import org.spongepowered.asm.mixin.Final;
@@ -56,17 +56,26 @@ public abstract class MixinGameRenderer {
     private Minecraft minecraft;
     //?}
 
+    //? if >=1.21.9
     @Inject(method = "extractCamera", at = @At("TAIL"))
-    //? if 1.21.11 {
+    //? if >=1.21.9 <26.1 {
     /*private void overflowanimations$setupCameraState(final CallbackInfo ci, @Local(ordinal = 0) final CameraRenderState cameraState) {
         cameraState.overflowanimations$setPartialTickTime(this.mainCamera.getPartialTickTime());
-    *///?} else {
+    *///?} elif >=26.1 {
     private void overflowanimations$setupCameraState(final CallbackInfo ci, @Local(name = "cameraState") final CameraRenderState cameraState) {
         cameraState.overflowanimations$setPartialTickTime(this.mainCamera.getCameraEntityPartialTicks(this.minecraft.getDeltaTracker()));
     //?}
+    //? if >=1.21.9 {
         cameraState.overflowanimations$setOldEyeHeight(((CameraAccessor) this.mainCamera).overflowanimations$getOldEyeHeight());
         cameraState.overflowanimations$setEyeHeight(((CameraAccessor) this.mainCamera).overflowanimations$getEyeHeight());
+    //?}
+        //? if >=1.21.9 <1.21.11 {
+        /*cameraState.overflowanimations$setYRot(this.mainCamera.getYRot());
+        cameraState.overflowanimations$setXRot(this.mainCamera.getXRot());
+        *///?} elif >=1.21.11 {
         cameraState.overflowanimations$setYRot(this.mainCamera.yRot());
         cameraState.overflowanimations$setXRot(this.mainCamera.xRot());
+        //?}
+    //? if >=1.21.9
     }
 }

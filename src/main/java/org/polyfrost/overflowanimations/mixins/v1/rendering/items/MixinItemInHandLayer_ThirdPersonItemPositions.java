@@ -29,15 +29,22 @@ import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
-import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.entity.layers.ItemInHandLayer;
 import net.minecraft.client.renderer.entity.state.ArmedEntityRenderState;
+//? if <1.21.9 {
+/*import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.entity.state.PlayerRenderState;
+*///?} else {
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.entity.state.AvatarRenderState;
+//?}
 import net.minecraft.client.renderer.item.ItemStackRenderState;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-//? if <26.3 {
+//? if <1.21.5 {
+/*import org.joml.Quaternionf;
+*///?} elif <26.3 {
 /*import org.joml.Quaternionfc;
 *///?}
 import org.spongepowered.asm.mixin.Mixin;
@@ -54,10 +61,14 @@ import org.polyfrost.overflowanimations.util.enums.FishingRodVersionSetting;
 
 @Mixin(ItemInHandLayer.class)
 public abstract class MixinItemInHandLayer_ThirdPersonItemPositions<S extends ArmedEntityRenderState> {
+    //? if <1.21.9 {
+    /*@ModifyArgs(method = "renderArmWithItem", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/PoseStack;translate(FFF)V"))
+    *///?} else {
     @ModifyArgs(method = "submitArmWithItem", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/PoseStack;translate(FFF)V"))
+    //?}
     private void overflowanimations$oldTransformTranslation(
             final Args args,
-            //? if 1.21.11 {
+            //? if <26.1 {
             /*@Local(argsOnly = true, ordinal = 0) final S state,
             @Local(argsOnly = true, ordinal = 0) final ItemStackRenderState item,
             @Local(argsOnly = true, ordinal = 0) final HumanoidArm arm
@@ -73,17 +84,23 @@ public abstract class MixinItemInHandLayer_ThirdPersonItemPositions<S extends Ar
         }
     }
 
-    //? if <26.3 {
+    //? if <1.21.5 {
+    /*@WrapWithCondition(method = "renderArmWithItem", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/PoseStack;mulPose(Lorg/joml/Quaternionf;)V"))
+    *///?} elif <1.21.9 {
+    /*@WrapWithCondition(method = "renderArmWithItem", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/PoseStack;mulPose(Lorg/joml/Quaternionfc;)V"))
+    *///?} elif <26.3 {
     /*@WrapWithCondition(method = "submitArmWithItem", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/PoseStack;mulPose(Lorg/joml/Quaternionfc;)V"))
     *///?} else {
     @WrapWithCondition(method = "submitArmWithItem", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/PoseStack;rotateDegrees(Lcom/mojang/math/Axis;F)V"))
     //?}
     private boolean overflowanimations$removeTransformMultiply(
             final PoseStack instance,
-            //? if <26.3 {
+            //? if <1.21.5 {
+            /*final Quaternionf by,
+            *///?} elif <26.3 {
             /*final Quaternionfc by,
             *///?}
-            //? if 1.21.11 {
+            //? if <26.1 {
             /*@Local(argsOnly = true, ordinal = 0) final S state,
             @Local(argsOnly = true, ordinal = 0) final ItemStackRenderState item,
             @Local(argsOnly = true, ordinal = 0) final HumanoidArm arm
@@ -101,8 +118,16 @@ public abstract class MixinItemInHandLayer_ThirdPersonItemPositions<S extends Ar
         return !OverflowAnimations.isEnabled() || !ItemUtilKt.shouldApplyItemPositionsInThirdPerson(state, stack, item.usesBlockLight()) || ItemUtilKt.isItemBlacklisted(stack);
     }
 
+    //? if <1.21.9 {
+    /*@Inject(method = "renderArmWithItem", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/item/ItemStackRenderState;render(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;II)V"))
+    private void overflowanimations$itemPositionsThird(final S state, final ItemStackRenderState item, final HumanoidArm arm, final PoseStack poseStack, final MultiBufferSource bufferSource, final int lightCoords, final CallbackInfo ci) {
+    *///?} elif <1.21.11 {
+    /*@Inject(method = "submitArmWithItem", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/item/ItemStackRenderState;submit(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;III)V"))
+    private void overflowanimations$itemPositionsThird(final S state, final ItemStackRenderState item, final HumanoidArm arm, final PoseStack poseStack, final SubmitNodeCollector submitNodeCollector, final int lightCoords, final CallbackInfo ci) {
+    *///?} else {
     @Inject(method = "submitArmWithItem", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/item/ItemStackRenderState;submit(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;III)V"))
     private void overflowanimations$itemPositionsThird(final S state, final ItemStackRenderState item, final ItemStack itemStack, final HumanoidArm arm, final PoseStack poseStack, final SubmitNodeCollector submitNodeCollector, final int lightCoords, final CallbackInfo ci) {
+    //?}
         if (OverflowAnimations.isEnabled()) {
             final int direction = EntityUtilKt.getArmMultiplier(arm);
             final ItemStack stack = state.overflowanimations$getItemHeldByArm(arm);
@@ -110,7 +135,11 @@ public abstract class MixinItemInHandLayer_ThirdPersonItemPositions<S extends Ar
                 final boolean isStickRod = OverflowAnimations.isEnabled() &&
                         OverflowAnimationsConfig.instance().items.fishingRodVersion == FishingRodVersionSetting.V1_7 &&
                         stack.is(Items.FISHING_ROD) &&
+                        //? if <1.21.9 {
+                        /*(state instanceof PlayerRenderState && state.overflowanimations$isFishing());
+                        *///?} else {
                         (state instanceof AvatarRenderState && state.overflowanimations$isFishing());
+                        //?}
                 final boolean usesBlockLight = item.usesBlockLight();
                 if (ItemUtilKt.shouldApplyItemPositionsInThirdPerson(state, stack, usesBlockLight)) {
                     if (ItemUtilKt.isBlock3d(stack, usesBlockLight)) {

@@ -39,8 +39,13 @@ import org.polyfrost.overflowanimations.OverflowAnimations;
 import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig;
 
 @Mixin(ItemInHandLayer.class)
+//? if <1.21.9 {
+/*public abstract class MixinItemInHandLayer_DamageTintItems<S extends ArmedEntityRenderState, M extends EntityModel<S> & ArmedModel> {
+    @ModifyExpressionValue(method = "renderArmWithItem", at = @At(value = "FIELD", target = "Lnet/minecraft/client/renderer/texture/OverlayTexture;NO_OVERLAY:I", opcode = Opcodes.GETSTATIC))
+*///?} else {
 public abstract class MixinItemInHandLayer_DamageTintItems<S extends ArmedEntityRenderState, M extends EntityModel<S> & ArmedModel<S>> {
     @ModifyExpressionValue(method = "submitArmWithItem", at = @At(value = "FIELD", target = "Lnet/minecraft/client/renderer/texture/OverlayTexture;NO_OVERLAY:I", opcode = Opcodes.GETSTATIC))
+//?}
     private int overflowanimations$damageTintItems(final int original, @Local(argsOnly = true, ordinal = 0) final S state) {
         if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().other.damageTintItems) {
             return LivingEntityRenderer.getOverlayCoords(state, 0.0F);

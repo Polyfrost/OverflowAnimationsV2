@@ -41,7 +41,11 @@ public abstract class MixinLocalPlayer_FixSprinting extends AbstractClientPlayer
         super(clientLevel, gameProfile);
     }
 
+    //? if <1.21.9 {
+    /*@ModifyReturnValue(method = "canStartSprinting", at = @At("RETURN"))
+    *///?} else {
     @ModifyReturnValue(method = "isSprintingPossible", at = @At("RETURN"))
+    //?}
     private boolean overflowanimations$fixItemUseSprinting(final boolean original) {
         if ((ServerFeatureManager.isPresent(ServerFeatures.FIX_SPRINT_ITEM_USE) && this.isUsingItem())
                 || (ServerFeatureManager.isPresent(ServerFeatures.FIX_SPRINT_SNEAKING) && this.isCrouching())) {

@@ -25,6 +25,70 @@
 
 package org.polyfrost.overflowanimations.mixins.v1.entity.armor_hurt;
 
+// Before 1.21.9 renderLayers has no render state; MixinArmorLayers_StoreRenderState provides it
+//? if <1.21.9 {
+/*import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import com.llamalad7.mixinextras.sugar.Local;
+import com.moulberry.mixinconstraints.annotations.IfModAbsent;
+import net.minecraft.client.renderer.entity.layers.EquipmentLayerRenderer;
+import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
+import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.resources.Identifier;
+import org.objectweb.asm.Opcodes;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
+import org.spongepowered.asm.mixin.injection.At;
+import org.polyfrost.overflowanimations.OverflowAnimations;
+import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig;
+import org.polyfrost.overflowanimations.handler.rendering.RenderUtilsKt;
+
+@IfModAbsent("ichor")
+@Mixin(EquipmentLayerRenderer.class)
+public abstract class MixinEquipmentLayerRenderer_DamageTintArmor {
+    @Unique
+    private static final String RENDER_LAYERS_TARGET = "renderLayers(Lnet/minecraft/client/resources/model/EquipmentClientInfo$LayerType;Lnet/minecraft/resources/ResourceKey;Lnet/minecraft/client/model/Model;Lnet/minecraft/world/item/ItemStack;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;ILnet/minecraft/resources/Identifier;)V";
+
+    @Unique
+    private static final int overflowanimations$DAMAGE_UV = 196608;
+
+    @WrapOperation(method = RENDER_LAYERS_TARGET, at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/rendertype/RenderType;armorCutoutNoCull(Lnet/minecraft/resources/Identifier;)Lnet/minecraft/client/renderer/rendertype/RenderType;"))
+    private RenderType overflowanimations$renderLayerArmorTint(final Identifier texture, final Operation<RenderType> original) {
+        if (overflowanimations$isArmorHurt() && RenderUtilsKt.isVanillaArmorProportions(texture)) {
+            return RenderType.entityCutoutNoCullZOffset(texture);
+        } else {
+            return original.call(texture);
+        }
+    }
+
+    @WrapOperation(method = RENDER_LAYERS_TARGET, at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/Sheets;armorTrimsSheet(Z)Lnet/minecraft/client/renderer/rendertype/RenderType;"))
+    private RenderType overflowanimations$renderLayerArmorTrimTint(final boolean decal, final Operation<RenderType> original, @Local(ordinal = 0) final TextureAtlasSprite sprite) {
+        if (overflowanimations$isArmorHurt() && !decal) {
+            return RenderType.entityCutoutNoCullZOffset(sprite.atlasLocation());
+        } else {
+            return original.call(decal);
+        }
+    }
+
+    @ModifyExpressionValue(method = RENDER_LAYERS_TARGET, at = @At(value = "FIELD", target = "Lnet/minecraft/client/renderer/texture/OverlayTexture;NO_OVERLAY:I", opcode = Opcodes.GETSTATIC))
+    private int overflowanimations$applyOverlayUV(final int original) {
+        return overflowanimations$isArmorHurt() ? overflowanimations$DAMAGE_UV : original;
+    }
+
+    @Unique
+    private static boolean overflowanimations$isArmorHurt() {
+        final LivingEntityRenderState state = RenderUtilsKt.currentArmorRenderState;
+        return OverflowAnimations.isEnabled() &&
+                OverflowAnimationsConfig.instance().other.damageTintArmor &&
+                state != null &&
+                state.hasRedOverlay;
+    }
+}
+*///?}
+
+//? if >=1.21.9 {
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
@@ -37,6 +101,9 @@ import com.mojang.renderpearl.api.textures.GpuTexture;
 //?}
 import com.moulberry.mixinconstraints.annotations.IfModAbsent;
 import net.minecraft.client.Minecraft;
+//? if <1.21.11 {
+/*import net.minecraft.client.GraphicsStatus;
+*///?}
 //? if >=26.3 {
 import net.minecraft.client.model.Model;
 import net.minecraft.client.renderer.OrderedSubmitNodeCollector;
@@ -44,6 +111,7 @@ import net.minecraft.client.renderer.OrderedSubmitNodeCollector;
 import net.minecraft.client.renderer.entity.layers.EquipmentLayerRenderer;
 import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
 import net.minecraft.client.renderer.rendertype.RenderType;
+//? if >=1.21.11
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 //? if <26.3 {
 /*import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -76,10 +144,16 @@ public abstract class MixinEquipmentLayerRenderer_DamageTintArmor {
     @Unique
     private static final int overflowanimations$DAMAGE_UV = 196608;
 
+    //? if <1.21.11 {
+    /*@WrapOperation(method = RENDER_LAYERS_TARGET, at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/rendertype/RenderType;armorCutoutNoCull(Lnet/minecraft/resources/Identifier;)Lnet/minecraft/client/renderer/rendertype/RenderType;"))
+    *///?} else {
     @WrapOperation(method = RENDER_LAYERS_TARGET, at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/rendertype/RenderTypes;armorCutoutNoCull(Lnet/minecraft/resources/Identifier;)Lnet/minecraft/client/renderer/rendertype/RenderType;"))
+    //?}
     private <S> RenderType overflowanimations$renderLayerArmorTint(final Identifier texture, final Operation<RenderType> original, @Local(argsOnly = true, ordinal = 0) final S state) {
         if (this.overflowanimations$isArmorHurt(state) && this.overflowanimations$isVanillaProportions(texture)) {
-            //? if 1.21.11 {
+            //? if <1.21.11 {
+            /*return RenderType.entityCutoutNoCullZOffset(texture);
+            *///?} elif <26.1 {
             /*return RenderTypes.entityCutoutNoCullZOffset(texture);
             *///?} else {
             return RenderTypes.entityCutoutZOffset(texture);
@@ -92,7 +166,7 @@ public abstract class MixinEquipmentLayerRenderer_DamageTintArmor {
     //? if <26.3 {
     /*@WrapOperation(method = RENDER_LAYERS_TARGET, at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/Sheets;armorTrimsSheet(Z)Lnet/minecraft/client/renderer/rendertype/RenderType;"))
     *///?}
-    //? if 1.21.11 {
+    //? if <26.1 {
     /*private <S> RenderType overflowanimations$renderLayerArmorTrimTint(final boolean decal, final Operation<RenderType> original, @Local(ordinal = 0) final TextureAtlasSprite sprite, @Local(argsOnly = true, ordinal = 0) final S state) {
     *///?} elif >=26.1 <26.3 {
     /*private <S> RenderType overflowanimations$renderLayerArmorTrimTint(final boolean decal, final Operation<RenderType> original, @Local(name = "sprite") final TextureAtlasSprite sprite, @Local(argsOnly = true, ordinal = 0) final S state) {
@@ -101,7 +175,9 @@ public abstract class MixinEquipmentLayerRenderer_DamageTintArmor {
     private <S> RenderType overflowanimations$renderLayerArmorTrimTint(final Identifier texture, final boolean decal, final Operation<RenderType> original, @Local(argsOnly = true, ordinal = 0) final S state) {
     //?}
         if (this.overflowanimations$isArmorHurt(state) && !decal) {
-            //? if 1.21.11 {
+            //? if <1.21.11 {
+            /*return RenderType.entityCutoutNoCullZOffset(sprite.atlasLocation());
+            *///?} elif <26.1 {
             /*return RenderTypes.entityCutoutNoCullZOffset(sprite.atlasLocation());
             *///?} elif >=26.1 <26.3 {
             /*return RenderTypes.entityCutoutZOffset(sprite.atlasLocation());
@@ -117,11 +193,21 @@ public abstract class MixinEquipmentLayerRenderer_DamageTintArmor {
         }
     }
 
-    //? if <26.3 {
+    //? if <1.21.11 {
+    /*@WrapOperation(method = RENDER_LAYERS_TARGET, at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/rendertype/RenderType;armorEntityGlint()Lnet/minecraft/client/renderer/rendertype/RenderType;"))
+    *///?} elif <26.3 {
     /*@WrapOperation(method = RENDER_LAYERS_TARGET, at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/rendertype/RenderTypes;armorEntityGlint()Lnet/minecraft/client/renderer/rendertype/RenderType;"))
-    private <S> RenderType overflowanimations$useOverlayArmorGlint(final Operation<RenderType> original, @Local(argsOnly = true, ordinal = 0) final S state) {
-        if (this.overflowanimations$isArmorHurt(state) && OverflowAnimationsConfig.instance().other.glintAffectsArmorTint && !Minecraft.getInstance().options.improvedTransparency().get()) {
-            return OverflowAnimationsRenderTypes.ARMOR_GLINT;
+    *///?}
+    //? if <26.3 {
+    /*private <S> RenderType overflowanimations$useOverlayArmorGlint(final Operation<RenderType> original, @Local(argsOnly = true, ordinal = 0) final S state) {
+    *///?}
+    //? if <1.21.11 {
+    /*if (this.overflowanimations$isArmorHurt(state) && OverflowAnimationsConfig.instance().other.glintAffectsArmorTint && Minecraft.getInstance().options.graphicsMode().get() != GraphicsStatus.FABULOUS) {
+    *///?} elif <26.3 {
+    /*if (this.overflowanimations$isArmorHurt(state) && OverflowAnimationsConfig.instance().other.glintAffectsArmorTint && !Minecraft.getInstance().options.improvedTransparency().get()) {
+    *///?}
+    //? if <26.3 {
+            /*return OverflowAnimationsRenderTypes.ARMOR_GLINT;
     *///?} else {
     @WrapOperation(method = RENDER_LAYERS_TARGET, at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/rendertype/RenderTypes;armorCutoutNoCullGlint(Lnet/minecraft/resources/Identifier;)Lnet/minecraft/client/renderer/rendertype/RenderType;"))
     private <S> RenderType overflowanimations$disableVanillaGlint(final Identifier texture, final Operation<RenderType> original, @Local(argsOnly = true, ordinal = 0) final S state) {
@@ -169,3 +255,4 @@ public abstract class MixinEquipmentLayerRenderer_DamageTintArmor {
         return texture.getWidth(0) == texture.getHeight(0) * 2;
     }
 }
+//?}

@@ -25,6 +25,8 @@
 
 package org.polyfrost.overflowanimations.mixins.v1.rendering.sky;
 
+// Needs the 1.21.5 GPU API / 1.21.6 rendering changes; compiled out on older versions
+//? if >=1.21.6 {
 //? if >=26.3 {
 import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.renderpearl.api.buffers.GpuBufferSlice;
@@ -33,15 +35,17 @@ import com.mojang.renderpearl.api.commands.RenderPass;
 import net.minecraft.client.Camera;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.SkyRenderer;
-//? if 1.21.11 {
+//? if >=1.21.9 <26.1 {
 /*import net.minecraft.client.renderer.state.SkyRenderState;
-*///?} else {
+*///?} elif >=26.1 {
 import net.minecraft.client.renderer.state.level.SkyRenderState;
 //?}
 //? if >=26.3 {
 import net.minecraft.util.ARGB;
 import net.minecraft.world.level.dimension.DimensionType;
 //?}
+//? if <1.21.11
+//import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -55,10 +59,17 @@ import org.polyfrost.overflowanimations.util.states.SkyUtilityState;
 
 @Mixin(SkyRenderer.class)
 public abstract class MixinSkyRenderer_SkyAdditions {
+    //? if >=1.21.9
     @Inject(method = "extractRenderState", at = @At("TAIL"))
+    //? if >=1.21.9 <1.21.11 {
+    /*private void overflowanimations$extractHorizonHeight(final ClientLevel level, final float tickDelta, final Vec3 cameraPosition, final SkyRenderState state, final CallbackInfo ci) {
+    *///?} elif >=1.21.11 {
     private void overflowanimations$extractHorizonHeight(final ClientLevel level, final float tickDelta, final Camera camera, final SkyRenderState state, final CallbackInfo ci) {
+    //?}
+    //? if >=1.21.9 {
         ((SkyUtilityState) state).overflowanimations$setHorizonHeight(LegacySkyRenderer.getHorizonEyeHeight(level, tickDelta));
     }
+    //?}
 
     //? if >=26.3 {
     @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/SkyRenderer;renderDarkDisc(Lcom/mojang/renderpearl/api/commands/RenderPass;)V", shift = At.Shift.AFTER))
@@ -82,3 +93,4 @@ public abstract class MixinSkyRenderer_SkyAdditions {
     }
     //?}
 }
+//?}

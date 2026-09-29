@@ -25,6 +25,8 @@
 
 package org.polyfrost.overflowanimations.handler.rendering.pipeline
 
+// Built on the GPU device API (1.21.5) and dynamic uniforms / GUI render states (1.21.6)
+//? if >=1.21.6 {
 //? if <26.2 {
 /*import com.mojang.blaze3d.pipeline.BlendFunction
 *///?}
@@ -35,7 +37,7 @@ import com.mojang.blaze3d.pipeline.DepthStencilState
 //? if <26.2 {
 /*import com.mojang.blaze3d.pipeline.RenderPipeline
 *///?}
-//? if 1.21.11 {
+//? if <26.1 {
 /*import com.mojang.blaze3d.platform.DepthTestFunction
 *///?} elif 26.2 {
 /*import com.mojang.blaze3d.GpuFormat
@@ -83,7 +85,7 @@ import java.util.*
 
 object OverflowAnimationsPipelines {
     @JvmField
-    //? if 1.21.11 {
+    //? if <26.1 {
     /*val NO_DEPTH_WRITE = RenderPipeline.builder()
         .withDepthTestFunction(DepthTestFunction.LEQUAL_DEPTH_TEST)
         .withDepthWrite(false)
@@ -144,7 +146,7 @@ object OverflowAnimationsPipelines {
     val LEGACY_PANORAMA_SNIPPET = RenderPipeline.builder(TEXTURED_QUAD)
         .withVertexShader(location("core/legacy_panorama"))
         .withFragmentShader(location("core/legacy_panorama"))
-        //? if 1.21.11 {
+        //? if <26.1 {
         /*.withDepthTestFunction(DepthTestFunction.NO_DEPTH_TEST) // Required by 1.21.11 to render
         .withDepthWrite(false)
         *///?}
@@ -160,7 +162,7 @@ object OverflowAnimationsPipelines {
     val LEGACY_PANORAMA_1 = RenderPipelines.register(
         RenderPipeline.builder(LEGACY_PANORAMA_SNIPPET)
             .withLocation(location("pipeline/legacy_panorama_1"))
-            //? if 1.21.11 {
+            //? if <26.1 {
             /*.withBlend(PANORAMA_BLEND)
             *///?} else {
             .withColorTargetState(panoramaBlendState(ColorTargetState.WRITE_ALL))
@@ -172,7 +174,7 @@ object OverflowAnimationsPipelines {
     val LEGACY_PANORAMA_2 = RenderPipelines.register(
         RenderPipeline.builder(LEGACY_PANORAMA_SNIPPET)
             .withLocation(location("pipeline/legacy_panorama_2"))
-            //? if 1.21.11 {
+            //? if <26.1 {
             /*.withBlend(PANORAMA_BLEND)
             .withColorWrite(true, false)
             *///?} else {
@@ -187,7 +189,7 @@ object OverflowAnimationsPipelines {
             .withLocation(location("pipeline/legacy_panorama_blur"))
             .withVertexShader(location("core/legacy_panorama_blur"))
             .withFragmentShader(location("core/legacy_panorama_blur"))
-            //? if 1.21.11 {
+            //? if <26.1 {
             /*.withDepthTestFunction(DepthTestFunction.NO_DEPTH_TEST) // Required by 1.21.11 to render
             .withDepthWrite(false)
             .withBlend(PANORAMA_BLEND)
@@ -206,7 +208,7 @@ object OverflowAnimationsPipelines {
     // Sky
     @JvmField
     val VOID_BOX_SNIPPET =
-        //? if 1.21.11 {
+        //? if <26.1 {
         /*RenderPipeline.builder(RenderPipelines.MATRICES_FOG_SNIPPET, NO_DEPTH_WRITE)
         *///?} else {
         RenderPipeline.builder(RenderPipelines.MATRICES_FOG_SNIPPET)
@@ -236,7 +238,7 @@ object OverflowAnimationsPipelines {
 
     @JvmField
     val LEGACY_SKY_SNIPPET =
-        //? if 1.21.11 {
+        //? if <26.1 {
         /*RenderPipeline.builder(RenderPipelines.MATRICES_FOG_SNIPPET, NO_DEPTH_WRITE)
         *///?} else {
         RenderPipeline.builder(RenderPipelines.MATRICES_FOG_SNIPPET)
@@ -286,7 +288,7 @@ object OverflowAnimationsPipelines {
     val LEGACY_CLOUDS_SNIPPET = RenderPipeline.builder(RenderPipelines.MATRICES_FOG_SNIPPET)
         .withVertexShader(location("core/legacy_clouds"))
         .withFragmentShader(location("core/legacy_clouds"))
-        //? if 1.21.11 {
+        //? if <26.1 {
         /*.withBlend(BlendFunction.TRANSLUCENT)
         *///?} else {
         .withDepthStencilState(DepthStencilState.DEFAULT)
@@ -378,3 +380,4 @@ object OverflowAnimationsPipelines {
         //?}
         .build()
 }
+//?}

@@ -28,13 +28,23 @@ package org.polyfrost.overflowanimations.mixins.v1.entity.cape.movement;
 import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+//? if <1.21.9 {
+/*import net.minecraft.client.player.AbstractClientPlayer;
+*///?} else {
 import net.minecraft.client.entity.ClientAvatarEntity;
+//?}
 import net.minecraft.client.model.player.PlayerModel;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
+//? if <1.21.9 {
+/*import net.minecraft.client.renderer.entity.player.PlayerRenderer;
+import net.minecraft.client.renderer.entity.state.PlayerRenderState;
+*///?} else {
 import net.minecraft.client.renderer.entity.player.AvatarRenderer;
 import net.minecraft.client.renderer.entity.state.AvatarRenderState;
+//?}
 import net.minecraft.util.Mth;
+//? if >=1.21.9
 import net.minecraft.world.entity.Avatar;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
@@ -43,8 +53,13 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.polyfrost.overflowanimations.OverflowAnimations;
 import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig;
 
+//? if <1.21.9 {
+/*@Mixin(PlayerRenderer.class)
+public abstract class MixinAvatarRenderer_CapeRotation extends LivingEntityRenderer<AbstractClientPlayer, PlayerRenderState, PlayerModel> {
+*///?} else {
 @Mixin(AvatarRenderer.class)
 public abstract class MixinAvatarRenderer_CapeRotation<AvatarLikeEntity extends Avatar & ClientAvatarEntity> extends LivingEntityRenderer<AvatarLikeEntity, AvatarRenderState, PlayerModel> {
+//?}
     public MixinAvatarRenderer_CapeRotation(final EntityRendererProvider.Context context, final PlayerModel model, final float shadow) {
         super(context, model, shadow);
     }
@@ -67,13 +82,23 @@ public abstract class MixinAvatarRenderer_CapeRotation<AvatarLikeEntity extends 
         }
     }
 
+    //? if <1.21.9 {
+    /*@WrapWithCondition(method = "extractCapeState", at = @At(value = "FIELD", target = "Lnet/minecraft/client/renderer/entity/state/PlayerRenderState;capeLean:F", ordinal = 1, opcode = Opcodes.PUTFIELD))
+    private static boolean overflowanimations$dontAssignLeanField(final PlayerRenderState instance, final float value) {
+    *///?} else {
     @WrapWithCondition(method = "extractCapeState", at = @At(value = "FIELD", target = "Lnet/minecraft/client/renderer/entity/state/AvatarRenderState;capeLean:F", ordinal = 1, opcode = Opcodes.PUTFIELD))
     private static boolean overflowanimations$dontAssignLeanField(final AvatarRenderState instance, final float value) {
+    //?}
         return !OverflowAnimations.isEnabled() || !OverflowAnimationsConfig.instance().movement.oldCapeMovement;
     }
 
+    //? if <1.21.9 {
+    /*@WrapWithCondition(method = "extractCapeState", at = @At(value = "FIELD", target = "Lnet/minecraft/client/renderer/entity/state/PlayerRenderState;capeLean2:F", ordinal = 1, opcode = Opcodes.PUTFIELD))
+    private static boolean overflowanimations$dontAssignLean2Field(final PlayerRenderState instance, final float value) {
+    *///?} else {
     @WrapWithCondition(method = "extractCapeState", at = @At(value = "FIELD", target = "Lnet/minecraft/client/renderer/entity/state/AvatarRenderState;capeLean2:F", ordinal = 1, opcode = Opcodes.PUTFIELD))
     private static boolean overflowanimations$dontAssignLean2Field(final AvatarRenderState instance, final float value) {
+    //?}
         return !OverflowAnimations.isEnabled() || !OverflowAnimationsConfig.instance().movement.oldCapeMovement;
     }
 }

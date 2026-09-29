@@ -40,7 +40,7 @@ object OverflowAnimationsNetworking {
         ClientPlayConnectionEvents.DISCONNECT.register { _, _ -> ServerFeatureManager.ENABLED_SERVER_FEATURES.clear() }
 
         for (type in InfoPayload.TYPES) {
-            //? if 1.21.11 {
+            //? if <26.1 {
             /*PayloadTypeRegistry.playC2S()
             *///?} else {
             PayloadTypeRegistry.serverboundPlay()
@@ -55,7 +55,7 @@ object OverflowAnimationsNetworking {
         }
 
         for (type in SetServerFeaturesPayload.TYPES) {
-            //? if 1.21.11 {
+            //? if <26.1 {
             /*PayloadTypeRegistry.configurationS2C()
             *///?} else {
             PayloadTypeRegistry.clientboundConfiguration()
@@ -68,7 +68,7 @@ object OverflowAnimationsNetworking {
                 }
             }
 
-            //? if 1.21.11 {
+            //? if <26.1 {
             /*PayloadTypeRegistry.playS2C()
             *///?} else {
             PayloadTypeRegistry.clientboundPlay()

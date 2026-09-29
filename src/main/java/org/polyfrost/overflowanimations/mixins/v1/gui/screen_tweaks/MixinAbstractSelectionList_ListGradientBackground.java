@@ -25,7 +25,7 @@
 
 package org.polyfrost.overflowanimations.mixins.v1.gui.screen_tweaks;
 
-//? if 1.21.11 {
+//? if <26.1 {
 /*import net.minecraft.client.gui.GuiGraphics;
 *///?} else {
 import net.minecraft.client.gui.GuiGraphicsExtractor;
@@ -42,7 +42,7 @@ import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig;
 
 @Mixin(AbstractSelectionList.class)
 public abstract class MixinAbstractSelectionList_ListGradientBackground extends AbstractContainerWidget {
-    //? if 1.21.11 {
+    //? if <26.1 {
     /*public MixinAbstractSelectionList_ListGradientBackground(final int x, final int y, final int width, final int height, final Component message) {
         super(x, y, width, height, message);
     *///?} else {
@@ -51,7 +51,10 @@ public abstract class MixinAbstractSelectionList_ListGradientBackground extends 
     //?}
     }
 
-    //? if 1.21.11 {
+    //? if <1.21.6 {
+    /*@Inject(method = "renderListBackground", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphics;blit(Ljava/util/function/Function;Lnet/minecraft/resources/Identifier;IIFFIIII)V", shift = At.Shift.AFTER))
+    private void overflowanimations$renderListBackgroundGradient(final GuiGraphics graphics, final CallbackInfo ci) {
+    *///?} elif <26.1 {
     /*@Inject(method = "renderListBackground", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphics;blit(Lcom/mojang/blaze3d/pipeline/RenderPipeline;Lnet/minecraft/resources/Identifier;IIFFIIII)V", shift = At.Shift.AFTER))
     private void overflowanimations$renderListBackgroundGradient(final GuiGraphics graphics, final CallbackInfo ci) {
     *///?} elif >=26.1 <26.3 {
