@@ -31,12 +31,19 @@ package org.polyfrost.overflowanimations.mixins.v1.entity.armor_hurt;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.moulberry.mixinconstraints.annotations.IfModAbsent;
+import net.minecraft.client.GraphicsStatus;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.model.Model;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.layers.EquipmentLayerRenderer;
 import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.resources.Identifier;
+import net.minecraft.world.item.ItemStack;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -44,6 +51,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.polyfrost.overflowanimations.OverflowAnimations;
 import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig;
 import org.polyfrost.overflowanimations.handler.rendering.RenderUtilsKt;
+//? if >=1.21.6
+import org.polyfrost.overflowanimations.handler.rendering.pipeline.OverflowAnimationsRenderTypes;
 
 @IfModAbsent("ichor")
 @Mixin(EquipmentLayerRenderer.class)
@@ -76,6 +85,26 @@ public abstract class MixinEquipmentLayerRenderer_DamageTintArmor {
     private int overflowanimations$applyOverlayUV(final int original) {
         return overflowanimations$isArmorHurt() ? overflowanimations$DAMAGE_UV : original;
     }
+
+    //? if >=1.21.6 {
+    @WrapOperation(method = RENDER_LAYERS_TARGET, at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/entity/ItemRenderer;getArmorFoilBuffer(Lnet/minecraft/client/renderer/MultiBufferSource;Lnet/minecraft/client/renderer/rendertype/RenderType;Z)Lcom/mojang/blaze3d/vertex/VertexConsumer;"))
+    private VertexConsumer overflowanimations$disableVanillaGlint(final MultiBufferSource bufferSource, final RenderType renderType, final boolean hasFoil, final Operation<VertexConsumer> original) {
+        return original.call(bufferSource, renderType, hasFoil && !overflowanimations$glintAffectsTint());
+    }
+
+    @WrapOperation(method = RENDER_LAYERS_TARGET, at = @At(value = "INVOKE", target = "Lnet/minecraft/client/model/Model;renderToBuffer(Lcom/mojang/blaze3d/vertex/PoseStack;Lcom/mojang/blaze3d/vertex/VertexConsumer;III)V"))
+    private void overflowanimations$useOverlayArmorGlint(final Model model, final PoseStack poseStack, final VertexConsumer buffer, final int light, final int overlay, final int color, final Operation<Void> original, @Local(argsOnly = true) final ItemStack itemStack, @Local(argsOnly = true) final MultiBufferSource bufferSource) {
+        original.call(model, poseStack, buffer, light, overlay, color);
+        if (itemStack.hasFoil() && overflowanimations$glintAffectsTint()) {
+            original.call(model, poseStack, bufferSource.getBuffer(OverflowAnimationsRenderTypes.ARMOR_GLINT), light, overlay, color);
+        }
+    }
+
+    @Unique
+    private static boolean overflowanimations$glintAffectsTint() {
+        return overflowanimations$isArmorHurt() && OverflowAnimationsConfig.instance().other.glintAffectsArmorTint && Minecraft.getInstance().options.graphicsMode().get() != GraphicsStatus.FABULOUS;
+    }
+    //?}
 
     @Unique
     private static boolean overflowanimations$isArmorHurt() {

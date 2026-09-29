@@ -40,12 +40,12 @@ open class EntryBundle(protected val category: Category, private val name: Strin
             /*addAll(listOf(
                 "panoramaRendering", "oldCloudRendering", "legacyLightmap", "legacyDiffuseLighting", "planarSkyFog",
                 "voidFog", "oldY0Height", "legacyFogDarkness", "oldWaterColorFog", "blueVoidSky", "playerVoidBox",
-                "fastGrass", "disableRandomBlockRotations", "disableInventoryEntityScissor", "thinFishingRodLineThickness"
+                "fastGrass", "disableRandomBlockRotations", "disableInventoryEntityScissor", "thinFishingRodLineThickness",
+                "glintAffectsArmorTint"
             ))
             *///?}
             //? if <1.21.9 {
             /*add("fixTextStrikethroughStyle") // Fixes a bug in the 1.21.9 glyph pipeline
-            add("glintAffectsArmorTint") // Needs the render state that equipment layers get from 1.21.9
             *///?}
             //? if <1.21.11 {
             /*add("fullWidthInventoryEffects") // Effects already use the full width before 1.21.11
