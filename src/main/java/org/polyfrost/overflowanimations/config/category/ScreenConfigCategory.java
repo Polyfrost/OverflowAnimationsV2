@@ -28,6 +28,7 @@ package org.polyfrost.overflowanimations.config.category;
 import org.jspecify.annotations.NonNull;
 import org.polyfrost.overflowanimations.handler.config.bundle.EntryBundle;
 import org.polyfrost.overflowanimations.handler.config.category.Category;
+//? if >1.8.9
 import org.polyfrost.overflowanimations.util.UtilsKt;
 import org.polyfrost.overflowanimations.util.enums.CameraVersionSetting;
 
@@ -78,7 +79,10 @@ public final class ScreenConfigCategory extends Category {
         bundle.booleanEntry("oldChatPosition");
         bundle.booleanEntry("oldCrosshairPosition");
         bundle.booleanEntry("disconnectServerToTitleScreen");
+        //? if >1.8.9 {
         bundle.booleanEntry("oldCraftingSlotsPosition", event -> UtilsKt.reinitializeInventorySlots());
+        //?} else
+        //bundle.booleanEntry("oldCraftingSlotsPosition");
 
         return bundle;
     }

@@ -12,7 +12,7 @@ stonecutter tasks {
 stonecutter parameters {
     replacements {
         // 1.21.11 renamed ResourceLocation to Identifier and moved many classes into subpackages
-        string(current.parsed < "1.21.11") {
+        string(current.parsed < "1.21.11" && current.parsed > "1.8.9") {
             replace("Identifier", "ResourceLocation")
             replace("net.minecraft.client.renderer.rendertype.RenderType;", "net.minecraft.client.renderer.RenderType;")
             replace("net/minecraft/client/renderer/rendertype/RenderType;", "net/minecraft/client/renderer/RenderType;")
@@ -31,7 +31,7 @@ stonecutter parameters {
         }
 
         // 1.21.5 renamed some mob effects and made the selected inventory slot private
-        string(current.parsed < "1.21.5") {
+        string(current.parsed < "1.21.5" && current.parsed > "1.8.9") {
             replace("MobEffects.MINING_FATIGUE", "MobEffects.DIG_SLOWDOWN")
             replace("getInventory().getSelectedSlot()", "getInventory().selected")
             replace("getInventory().getSelectedItem()", "getInventory().getSelected()")
