@@ -39,7 +39,7 @@ public final class MovementConfigCategory extends Category {
     public boolean capeChestplateTranslation = false;
     public boolean capeSneakPosition = false;
     // (Movement) Other
-    public SneakAnimationSetting sneakAnimation = SneakAnimationSetting.VANILLA;
+    public SneakAnimationSetting sneakAnimation = SneakAnimationSetting.MODERN;
     public boolean longUnsneak = false;
     public boolean fakeOldSneakEyeHeight = false;
     public boolean rotateBackwardsWalking = false;
@@ -51,10 +51,10 @@ public final class MovementConfigCategory extends Category {
     public boolean legacyDamageTilt = false;
     public boolean offsetHurtTiltTime = false;
 
-    public boolean modernBackwardsWalking = false;
-    public boolean smoothHeadYaw = false;
-    public boolean modernViewBobbing = false;
-    public boolean directionalDamageTilt = false;
+    public boolean modernBackwardsWalking = true;
+    public boolean smoothHeadYaw = true;
+    public boolean modernViewBobbing = true;
+    public boolean directionalDamageTilt = true;
     public boolean modernSneakEyeHeight = false;
     public boolean disableHurtCamera = false;
     public boolean dinnerboneMode = false;

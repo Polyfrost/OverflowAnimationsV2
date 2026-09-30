@@ -35,7 +35,7 @@ import org.polyfrost.overflowanimations.util.enums.DebugCrosshairSetting;
 import org.polyfrost.overflowanimations.util.enums.CameraVersionSetting;
 
 public final class ScreenConfigCategory extends Category {
-    public CameraVersionSetting cameraVersion = CameraVersionSetting.VANILLA;
+    public CameraVersionSetting cameraVersion = CameraVersionSetting.MODERN;
     public boolean crosshairInThirdPerson = false;
     public boolean disableHeartFlash = false;
     public boolean centerScrollableListWidgets = false;
@@ -57,13 +57,10 @@ public final class ScreenConfigCategory extends Category {
     public boolean disconnectServerToTitleScreen = false;
     public boolean oldCraftingSlotsPosition = false;
 
-    //? if >1.8.9 {
-    public DebugCrosshairSetting debugCrosshairStyle = DebugCrosshairSetting.V1_12;
-    //?} else
-    //public DebugCrosshairSetting debugCrosshairStyle = DebugCrosshairSetting.V1_8;
+    public DebugCrosshairSetting debugCrosshairStyle = DebugCrosshairSetting.VANILLA;
     public TabListSetting tabListStyle = TabListSetting.V1_8;
     public boolean legacyDebugScreen = false;
-    public boolean hideCrosshairInThirdPerson = false;
+    public boolean hideCrosshairInThirdPerson = true;
 
     @Override
     public @NonNull EntryBundle bundle() {

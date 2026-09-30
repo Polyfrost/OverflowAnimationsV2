@@ -29,5 +29,6 @@ package org.polyfrost.overflowanimations.util.enums
 enum class DebugCrosshairSetting {
     V1_7,
     V1_8,
-    V1_12
+    V1_12,
+    VANILLA
 }
