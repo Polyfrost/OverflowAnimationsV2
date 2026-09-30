@@ -27,7 +27,6 @@ package org.polyfrost.overflowanimations.config.category;
 
 import net.minecraft.client.Minecraft;
 import org.jspecify.annotations.NonNull;
-import org.polyfrost.compose.render.PolyColor;
 import org.polyfrost.overflowanimations.handler.compatibility.ModsKt;
 import org.polyfrost.overflowanimations.handler.config.bundle.EntryBundle;
 import org.polyfrost.overflowanimations.handler.config.bundle.GroupBundle;
@@ -55,7 +54,6 @@ public final class OtherConfigCategory extends Category {
     public boolean damageTintItems = false;
     public boolean damageTintCape = false;
     public DamageTintSetting damageTintStyle = DamageTintSetting.VANILLA;
-    public PolyColor customTintColor = new PolyColor(0x4DFF0000); // Vanilla color as of 26.2
     // Other
     public boolean restoreParticleBlending = false;
     public boolean lockBlockingArmRotation = false;
@@ -104,11 +102,9 @@ public final class OtherConfigCategory extends Category {
                 .booleanEntry("damageTintCape");
         if (!ModsKt.HAS_LUNAR_CLIENT) {
             //? if >1.8.9 {
-            damageTint.enumEntry("damageTintStyle", DamageTintSetting.class, value -> RenderUtilsKt.updateOverlayTint(value))
-                    .colorEntry("customTintColor", value -> RenderUtilsKt.updateOverlayTint(this.damageTintStyle));
+            damageTint.enumEntry("damageTintStyle", DamageTintSetting.class, value -> RenderUtilsKt.updateOverlayTint(value));
             //?} else {
-            /*damageTint.enumEntry("damageTintStyle", DamageTintSetting.class)
-                    .colorEntry("customTintColor");
+            /*damageTint.enumEntry("damageTintStyle", DamageTintSetting.class);
             *///?}
         }
 
