@@ -42,13 +42,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class MixinClientPlayNetworkHandler_DirectionalDamageTilt {
     @Inject(method = "handleEntityVelocity", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;lerpVelocity(DDD)V"))
     private void overflowanimations$directionalDamageTilt(final EntityVelocityS2CPacket packet, final CallbackInfo ci, @Local final Entity entity) {
-        if (!OverflowAnimationsConfig.instance().movement.directionalDamageTilt || entity != Minecraft.getInstance().player || ((LivingEntity) entity).damagedTimer <= 0) {
+        if (!OverflowAnimationsConfig.instance().movement.directionalDamageTilt || entity != Minecraft.getInstance().player || ((LivingEntity) entity).damagedTimer < 9) {
             return;
         }
 
-        final double pushX = packet.getVelocityX() / 8000.0 - entity.velocityX * 0.5;
-        final double pushZ = packet.getVelocityZ() / 8000.0 - entity.velocityZ * 0.5;
-        if (pushX * pushX + pushZ * pushZ > 1.0E-4) {
+        final double pushX = packet.getVelocityX() / 8000.0;
+        final double pushZ = packet.getVelocityZ() / 8000.0;
+        if (pushX * pushX + pushZ * pushZ > 0.2 * 0.2) {
             ((LivingEntity) entity).damagedSwingDir = (float) (MathHelper.fastAtan2(-pushZ, -pushX) * 180.0 / Math.PI - entity.yaw);
         }
     }

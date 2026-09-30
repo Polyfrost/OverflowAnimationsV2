@@ -36,6 +36,7 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 public abstract class MixinPlayerRenderer_OldSneak {
     @ModifyArg(method = "render(Lnet/minecraft/client/entity/living/player/ClientPlayerEntity;DDDFF)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/entity/LivingEntityRenderer;render(Lnet/minecraft/entity/living/LivingEntity;DDDFF)V"), index = 2)
     private double overflowanimations$followEyeHeight(final LivingEntity entity, final double dx, final double dy, final double dz, final float yaw, final float tickDelta) {
-        return dy - LegacyEyeHeight.modelOffset(entity, tickDelta);
+        final double oldSneak = LegacyEyeHeight.isV1_13LocalSneak(entity) ? 0.125 : 0.0;
+        return dy - LegacyEyeHeight.modelOffset(entity, tickDelta) - oldSneak;
     }
 }

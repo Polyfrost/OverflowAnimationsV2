@@ -39,6 +39,8 @@ public final class LegacyEyeHeight {
 
     private static float lastEyeHeight = Float.NaN;
     private static float eyeHeight;
+    private static Entity lastCamera;
+    private static boolean lastSleeping;
 
     private LegacyEyeHeight() {
     }
@@ -53,7 +55,7 @@ public final class LegacyEyeHeight {
     }
 
     public static float target(final Entity entity) {
-        if (config().modernSneakEyeHeight && entity instanceof PlayerEntity && entity.isSneaking() && !((PlayerEntity) entity).isSleeping()) {
+        if (config().modernSneakEyeHeight && entity instanceof PlayerEntity && entity.isSneaking() && !((PlayerEntity) entity).isSleeping() && !((PlayerEntity) entity).abilities.flying) {
             return 1.27F;
         }
 
@@ -62,9 +64,12 @@ public final class LegacyEyeHeight {
 
     public static void tick(final Entity camera) {
         final float target = target(camera);
-        if (Float.isNaN(lastEyeHeight)) {
+        final boolean sleeping = camera instanceof PlayerEntity && ((PlayerEntity) camera).isSleeping();
+        if (Float.isNaN(lastEyeHeight) || camera != lastCamera || sleeping != lastSleeping) {
             eyeHeight = target;
         }
+        lastCamera = camera;
+        lastSleeping = sleeping;
 
         lastEyeHeight = eyeHeight;
         switch (config().sneakAnimation) {
@@ -89,6 +94,10 @@ public final class LegacyEyeHeight {
 
     public static boolean isOldSneakModel() {
         return config().sneakAnimation == SneakAnimationSetting.V1_7;
+    }
+
+    public static boolean isV1_13LocalSneak(final Entity entity) {
+        return config().sneakAnimation == SneakAnimationSetting.V1_13 && entity == Minecraft.getInstance().player && entity.isSneaking();
     }
 
     public static float modelOffset(final Entity entity, final float tickDelta) {
