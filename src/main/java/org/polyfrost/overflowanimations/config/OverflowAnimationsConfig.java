@@ -118,6 +118,7 @@ public final class OverflowAnimationsConfig extends Config {
         }
 
         migrateExtras(root);
+        migrateSneakBobbing(root);
         return root;
     }
 
@@ -163,6 +164,12 @@ public final class OverflowAnimationsConfig extends Config {
         moveEntries(extras, root, "other", "damage_tint_items", "damage_tint_cape", "old_water_color_effects");
         moveEntries(extras, root, "screen", "legacy_loading_screen_progress_bar");
         moveEntries(extras, root, "items", "item_scale_x", "item_scale_y", "item_scale_z", "item_offset_x", "item_offset_y", "item_offset_z", "item_rotation_x", "item_rotation_y", "item_rotation_z", "apply_customization_to_block_items", "custom_swing_speed", "item_swing_speed", "haste_swing_speed", "mining_fatigue_swing_speed", "ignore_haste_speed", "ignore_mining_fatigue_speed", "offhand_usage_swinging", "always_usage_swing", "fake_miss_penalty_swing", "disable_swing_translate", "disable_swing_pivot", "legacy_swing_animation");
+    }
+
+    private static void migrateSneakBobbing(final JsonObject root) {
+        if (root.get("movement") instanceof JsonObject movement && movement.remove("hand_view_bobbing_movement") instanceof JsonElement value && value.getAsBoolean()) {
+            movement.addProperty("sneak_bobbing", "V1_21_1");
+        }
     }
 
     private static void moveEntries(final JsonObject from, final JsonObject root, final String category, final String... keys) {
