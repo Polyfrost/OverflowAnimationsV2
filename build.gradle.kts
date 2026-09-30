@@ -225,7 +225,8 @@ publishMods {
             minecraftVersions.addAll(releases)
 
             requires("fabric-api")
-            requires("yacl")
+            requires("fabric-language-kotlin")
+            requires("oneconfig")
             optional("modmenu")
         }
     }
@@ -239,7 +240,8 @@ publishMods {
             client = true
 
             requires("fabric-api")
-            requires("yacl")
+            requires("fabric-language-kotlin")
+            requires("oneconfig")
             optional("modmenu")
         }
     }
