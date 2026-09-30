@@ -23,7 +23,6 @@
  * "MINECRAFT" LINKING EXCEPTION TO THE GPL
  */
 
-
 package org.polyfrost.overflowanimations.handler.config.bundle
 
 import org.polyfrost.oneconfig.api.config.v1.Visualizer
