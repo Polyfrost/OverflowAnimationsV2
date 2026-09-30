@@ -42,6 +42,7 @@ public final class MovementConfigCategory extends Category {
     // (Movement) Other
     public SneakAnimationSetting sneakAnimation = SneakAnimationSetting.MODERN;
     public boolean longUnsneak = false;
+    public boolean longUnsneakLegacyOnly = true;
     public boolean fakeOldSneakEyeHeight = false;
     public boolean rotateBackwardsWalking = false;
     public boolean uncapBlockingHeadRotation = false;
@@ -76,6 +77,7 @@ public final class MovementConfigCategory extends Category {
         bundle.group("other")
                 .enumEntry("sneakAnimation", SneakAnimationSetting.class)
                 .booleanEntry("longUnsneak")
+                .booleanEntry("longUnsneakLegacyOnly")
                 .booleanEntry("fakeOldSneakEyeHeight")
                 .booleanEntry("rotateBackwardsWalking")
                 .booleanEntry("uncapBlockingHeadRotation")
