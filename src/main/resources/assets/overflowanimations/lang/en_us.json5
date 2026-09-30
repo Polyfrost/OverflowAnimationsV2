@@ -51,7 +51,7 @@
 	"overflowanimations.crosshairInThirdPerson": "[1.8] Show Third-Person Crosshair",
 	"overflowanimations.crosshairInThirdPerson.description": "Show crosshair whilst in third-person like in <=1.8.x.",
 	"overflowanimations.disableHeartFlash": "[1.7] Disable Heart Flashing",
-	"overflowanimations.disableHeartFlash.description": "Disables the heart texture blinking when losing or regaining health. 1.7 only blinked when taking damage.",
+	"overflowanimations.disableHeartFlash.description": "Makes the hearts blink like they did in 1.7, only briefly after taking damage instead of after every health change.",
 	"overflowanimations.centerScrollableListWidgets": "[1.7] Center Scrollable List Widgets",
 	"overflowanimations.centerScrollableListWidgets.description": "Center scrollable list widgets like <=1.7.x.",
 	"overflowanimations.listWidgetSelectedBorderColor": "[1.15] Legacy List Widget Selected Border Color",

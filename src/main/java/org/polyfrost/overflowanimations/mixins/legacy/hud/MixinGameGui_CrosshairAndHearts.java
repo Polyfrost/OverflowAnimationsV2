@@ -33,6 +33,7 @@ import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GameGui;
 import net.minecraft.client.render.Window;
+import net.minecraft.entity.living.player.PlayerEntity;
 import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig;
 import org.polyfrost.overflowanimations.legacy.hud.DebugCrosshair;
 import org.polyfrost.overflowanimations.util.enums.DebugCrosshairSetting;
@@ -50,7 +51,11 @@ public abstract class MixinGameGui_CrosshairAndHearts {
 
     @ModifyVariable(method = "renderStatusBars", at = @At("STORE"), ordinal = 0)
     private boolean overflowanimations$disableHeartFlash(final boolean blinking) {
-        return blinking && !OverflowAnimationsConfig.instance().screen.disableHeartFlash;
+        if (!OverflowAnimationsConfig.instance().screen.disableHeartFlash || !(this.minecraft.getCamera() instanceof PlayerEntity)) {
+            return blinking;
+        }
+        final int invulnerableTimer = ((PlayerEntity) this.minecraft.getCamera()).invulnerableTimer;
+        return invulnerableTimer >= 10 && invulnerableTimer / 3 % 2 == 1;
     }
 
     @ModifyExpressionValue(method = "hasCrosshair", at = @At(value = "FIELD", target = "Lnet/minecraft/client/options/GameOptions;debugEnabled:Z"))
@@ -66,7 +71,7 @@ public abstract class MixinGameGui_CrosshairAndHearts {
     @WrapOperation(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GameGui;hasCrosshair()Z"))
     private boolean overflowanimations$axisCrosshair(final GameGui instance, final Operation<Boolean> original, final float tickDelta, @Local final Window window) {
         final boolean hasCrosshair = original.call(instance);
-        if (hasCrosshair && OverflowAnimationsConfig.instance().screen.debugCrosshairStyle == DebugCrosshairSetting.V1_12 && DebugCrosshair.isDebugCrosshairVisible(this.minecraft)) {
+        if (hasCrosshair && OverflowAnimationsConfig.instance().screen.debugCrosshairStyle == DebugCrosshairSetting.V1_12 && DebugCrosshair.isDebugCrosshairVisible(this.minecraft) && this.minecraft.options.perspective == 0) {
             DebugCrosshair.render(this.minecraft, window, tickDelta);
             return false;
         }

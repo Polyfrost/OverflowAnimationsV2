@@ -25,6 +25,7 @@
 
 package org.polyfrost.overflowanimations.legacy.hud;
 
+import java.util.regex.Pattern;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiElement;
 import net.minecraft.client.entity.living.player.ClientPlayerEntity;
@@ -42,11 +43,13 @@ public final class LegacyDebugScreen {
     private static final int WHITE = 16777215;
     private static final int GRAY = 14737632;
 
+    private static final Pattern CHUNK_UPDATES = Pattern.compile(" \\((\\d+) chunk updates?\\).*");
+
     private LegacyDebugScreen() {
     }
 
     public static void drawGameInfo(final Minecraft minecraft, final TextRenderer textRenderer) {
-        final String fps = minecraft.fpsDebugInfo.replaceFirst(" \\((\\d+) chunk updates?\\).*", ", $1 chunk updates");
+        final String fps = CHUNK_UPDATES.matcher(minecraft.fpsDebugInfo).replaceFirst(", $1 chunk updates");
         draw(textRenderer, "Minecraft 1.8.9 (" + fps + ")", 2, 2, WHITE);
         draw(textRenderer, minecraft.worldRenderer.getChunkDebugInfo(), 2, 12, WHITE);
         draw(textRenderer, minecraft.worldRenderer.getEntityDebugInfo(), 2, 22, WHITE);

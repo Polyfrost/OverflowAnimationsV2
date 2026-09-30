@@ -56,7 +56,8 @@ public abstract class MixinGameRenderer_Fog {
         if (camera instanceof PlayerEntity && (((PlayerEntity) camera).abilities.creativeMode || ((PlayerEntity) camera).isSpectator())) {
             return renderDistance;
         }
-        double depth = ((camera.getLightLevel(tickDelta) & 0xF00000) >> 20) / 16.0 + (camera.prevY + (camera.y - camera.prevY) * tickDelta + 4.0) / 32.0;
+        final double eyeOffset = camera == this.minecraft.player ? camera.getEyeHeight() : 0.0;
+        double depth = ((camera.getLightLevel(tickDelta) & 0xF00000) >> 20) / 16.0 + (camera.prevY + (camera.y - camera.prevY) * tickDelta + eyeOffset + 4.0) / 32.0;
         if (depth >= 1.0) {
             return renderDistance;
         }
@@ -65,7 +66,7 @@ public abstract class MixinGameRenderer_Fog {
     }
 
     @ModifyArg(method = "setupFog", at = @At(value = "INVOKE", target = "Lorg/lwjgl/opengl/GL11;glFogi(II)V", remap = false), index = 1)
-    private int overflowanimations$planarSkyFog(final int distanceMode) {
-        return OverflowAnimationsConfig.instance().other.planarSkyFog ? GL_EYE_PLANE_ABSOLUTE_NV : distanceMode;
+    private int overflowanimations$planarSkyFog(final int distanceMode, @Local(argsOnly = true, ordinal = 0) final int mode) {
+        return mode == -1 && OverflowAnimationsConfig.instance().other.planarSkyFog ? GL_EYE_PLANE_ABSOLUTE_NV : distanceMode;
     }
 }

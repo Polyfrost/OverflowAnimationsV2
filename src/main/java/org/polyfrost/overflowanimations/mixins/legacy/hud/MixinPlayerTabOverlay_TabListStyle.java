@@ -73,7 +73,7 @@ public abstract class MixinPlayerTabOverlay_TabListStyle {
         final ClientPlayNetworkHandler networkHandler = this.minecraft.player.networkHandler;
         final List<PlayerInfo> players = PLAYER_ORDERING.sortedCopy(networkHandler.getOnlinePlayers());
         final TextRenderer textRenderer = this.minecraft.textRenderer;
-        final int slots = networkHandler.maxPlayerCount;
+        final int slots = Math.min(networkHandler.maxPlayerCount, 100);
         int rows = slots;
         int columns;
         for (columns = 1; rows > 20; rows = (slots + columns - 1) / columns) {
