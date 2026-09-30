@@ -91,7 +91,7 @@ public abstract class MixinCapeLayer_CapeMovement {
 
     @Unique
     private static boolean overflowanimations$modern() {
-        return OverflowAnimationsConfig.instance().movement.capeMovement == CapeMovementSetting.MODERN;
+        return OverflowAnimationsConfig.instance().movement.capeMovement == CapeMovementSetting.V1_13;
     }
 
     @Unique

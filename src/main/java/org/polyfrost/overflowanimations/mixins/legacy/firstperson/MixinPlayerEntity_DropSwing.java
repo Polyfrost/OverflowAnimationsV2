@@ -45,7 +45,7 @@ public abstract class MixinPlayerEntity_DropSwing {
     private void overflowanimations$dropItemSwing(final ItemStack stack, final boolean velocityFromPlayerDirection, final boolean thrownByPlayer, final CallbackInfoReturnable<ItemEntity> cir) {
         final PlayerEntity self = (PlayerEntity) (Object) this;
         final ItemsConfigCategory items = LegacyFirstPerson.items();
-        if (!items.dropItemSwing || !self.world.isClient || self != Minecraft.getInstance().player) {
+        if (items.dropSwing.isLegacy() || !self.world.isClient || self != Minecraft.getInstance().player) {
             return;
         }
         final Screen screen = Minecraft.getInstance().screen;

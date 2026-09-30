@@ -38,6 +38,6 @@ public abstract class MixinPlayerModel_CapeSneakPosition {
     @ModifyExpressionValue(method = "setupAnimation", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;isSneaking()Z"))
     private boolean overflowanimations$capeSneakPosition(final boolean original) {
         final MovementConfigCategory movement = OverflowAnimationsConfig.instance().movement;
-        return original && !movement.capeSneakPosition && movement.capeMovement != CapeMovementSetting.MODERN;
+        return original && !movement.capeSneakPosition && movement.capeMovement != CapeMovementSetting.V1_13;
     }
 }

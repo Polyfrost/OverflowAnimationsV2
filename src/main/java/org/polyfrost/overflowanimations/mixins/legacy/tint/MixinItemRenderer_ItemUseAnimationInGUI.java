@@ -44,7 +44,7 @@ public abstract class MixinItemRenderer_ItemUseAnimationInGUI {
     @WrapOperation(method = "renderGuiItemModel", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/item/ItemModelShaper;getModel(Lnet/minecraft/item/ItemStack;)Lnet/minecraft/client/render/model/block/BakedModel;"))
     private BakedModel overflowanimations$useModel(final ItemModelShaper shaper, final ItemStack item, final Operation<BakedModel> original) {
         final LocalClientPlayerEntity player = Minecraft.getInstance().player;
-        if (!OverflowAnimationsConfig.instance().items.itemUseAnimationInGUI || player == null) {
+        if (OverflowAnimationsConfig.instance().items.usingTextureInGUI.isLegacy() || player == null) {
             return original.call(shaper, item);
         }
 

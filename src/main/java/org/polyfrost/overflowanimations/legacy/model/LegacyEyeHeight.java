@@ -51,11 +51,11 @@ public final class LegacyEyeHeight {
 
     private static boolean isSmooth() {
         final SneakAnimationSetting setting = config().sneakAnimation;
-        return setting == SneakAnimationSetting.V1_7 || setting == SneakAnimationSetting.V1_13 || setting == SneakAnimationSetting.MODERN;
+        return setting == SneakAnimationSetting.V1_7 || setting == SneakAnimationSetting.V1_13 || setting == SneakAnimationSetting.V1_14;
     }
 
     public static float target(final Entity entity) {
-        if (config().modernSneakEyeHeight && entity instanceof PlayerEntity && entity.isSneaking() && !((PlayerEntity) entity).isSleeping() && !((PlayerEntity) entity).abilities.flying) {
+        if (!config().sneakEyeHeight.isLegacy() && entity instanceof PlayerEntity && entity.isSneaking() && !((PlayerEntity) entity).isSleeping() && !((PlayerEntity) entity).abilities.flying) {
             return 1.27F;
         }
 
@@ -75,7 +75,7 @@ public final class LegacyEyeHeight {
         final SneakAnimationSetting sneakAnimation = config().sneakAnimation;
         if (isSmooth() && config().longUnsneak && target > eyeHeight) {
             eyeHeight += (target - eyeHeight) * 0.6F;
-        } else if (sneakAnimation == SneakAnimationSetting.V1_13 || sneakAnimation == SneakAnimationSetting.MODERN) {
+        } else if (sneakAnimation == SneakAnimationSetting.V1_13 || sneakAnimation == SneakAnimationSetting.V1_14) {
             eyeHeight += (target - eyeHeight) * 0.5F;
         } else {
             eyeHeight = target;
@@ -87,7 +87,7 @@ public final class LegacyEyeHeight {
             return lastEyeHeight + (eyeHeight - lastEyeHeight) * tickDelta;
         }
 
-        return config().modernSneakEyeHeight ? target(camera) : vanillaEyeHeight;
+        return config().sneakEyeHeight.isLegacy() ? vanillaEyeHeight : target(camera);
     }
 
     public static boolean isOldSneakModel() {

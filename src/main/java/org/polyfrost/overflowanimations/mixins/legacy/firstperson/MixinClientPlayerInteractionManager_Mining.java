@@ -29,6 +29,7 @@ import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import net.minecraft.client.ClientPlayerInteractionManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.math.BlockPos;
+import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig;
 import org.polyfrost.overflowanimations.legacy.firstperson.LegacyFirstPerson;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -55,7 +56,7 @@ public abstract class MixinClientPlayerInteractionManager_Mining {
 
     @ModifyArg(method = "tickBlockMining", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/world/ClientWorld;updateBlockMiningProgress(ILnet/minecraft/util/math/BlockPos;I)V"), index = 2)
     private int overflowanimations$modernBlockBreaking(final int progress) {
-        if (LegacyFirstPerson.items().modernBlockBreaking) {
+        if (!OverflowAnimationsConfig.instance().other.blockMiningProgress.isLegacy()) {
             return this.miningProgress > 0.0F ? (int) (this.miningProgress * 10.0F) : -1;
         }
         return progress;

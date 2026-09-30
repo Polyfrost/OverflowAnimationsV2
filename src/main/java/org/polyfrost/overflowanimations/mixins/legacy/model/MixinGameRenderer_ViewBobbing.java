@@ -35,6 +35,6 @@ import org.spongepowered.asm.mixin.injection.At;
 public abstract class MixinGameRenderer_ViewBobbing {
     @WrapWithCondition(method = "applyViewBobbing", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/platform/GlStateManager;rotatef(FFFF)V", ordinal = 2))
     private boolean overflowanimations$modernViewBobbing(final float angle, final float x, final float y, final float z) {
-        return !OverflowAnimationsConfig.instance().movement.modernViewBobbing;
+        return OverflowAnimationsConfig.instance().fixes.viewBobbingTilt.isLegacy();
     }
 }

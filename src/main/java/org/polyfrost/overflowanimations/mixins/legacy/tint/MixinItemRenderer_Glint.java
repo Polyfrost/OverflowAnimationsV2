@@ -70,7 +70,7 @@ public abstract class MixinItemRenderer_Glint {
     private void overflowanimations$modifyGlint(final ItemRenderer instance, BakedModel model, final Operation<Void> original, @Local(argsOnly = true) final ItemStack item) {
         final ItemsConfigCategory config = OverflowAnimationsConfig.instance().items;
         final boolean potion = item.getItem() instanceof PotionItem;
-        if (potion && config.potionGlint == PotionGlintSetting.MODERN || LegacyGlint.renderingGui && config.itemGlint == ItemGlintSetting.V1_7 && GL11.glIsEnabled(GL11.GL_DEPTH_TEST)) {
+        if (potion && config.potionGlint == PotionGlintSetting.V1_19_4 || LegacyGlint.renderingGui && config.itemGlint == ItemGlintSetting.V1_7 && GL11.glIsEnabled(GL11.GL_DEPTH_TEST)) {
             return;
         }
 
@@ -78,7 +78,7 @@ public abstract class MixinItemRenderer_Glint {
             model = LegacyGlint.potionLiquid(model);
         }
 
-        if (config.itemGlint == ItemGlintSetting.MODERN) {
+        if (config.itemGlint == ItemGlintSetting.V1_15) {
             this.overflowanimations$renderGlint(model, true);
         } else if (config.itemGlint == ItemGlintSetting.V1_7 && !LegacyGlint.renderingGui) {
             this.overflowanimations$renderGlint(model, false);
@@ -133,7 +133,7 @@ public abstract class MixinItemRenderer_Glint {
     @Inject(method = "renderGuiItemModel", at = @At("TAIL"))
     private void overflowanimations$renderLegacyGuiGlint(final ItemStack item, final int x, final int y, final CallbackInfo ci) {
         final ItemsConfigCategory config = OverflowAnimationsConfig.instance().items;
-        if (config.itemGlint == ItemGlintSetting.V1_7 && item.hasEnchantmentGlint() && !(config.potionGlint == PotionGlintSetting.MODERN && item.getItem() instanceof PotionItem)) {
+        if (config.itemGlint == ItemGlintSetting.V1_7 && item.hasEnchantmentGlint() && !(config.potionGlint == PotionGlintSetting.V1_19_4 && item.getItem() instanceof PotionItem)) {
             this.textureManager.bind(ENCHANTMENT_GLINT_LOCATION);
             LegacyGlint.renderGuiGlint(x, y, 100.0F + this.zOffset);
             this.textureManager.bind(TextureAtlas.BLOCKS_LOCATION);

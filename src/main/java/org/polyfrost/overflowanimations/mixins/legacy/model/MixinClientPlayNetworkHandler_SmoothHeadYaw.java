@@ -38,7 +38,7 @@ import org.spongepowered.asm.mixin.injection.At;
 public abstract class MixinClientPlayNetworkHandler_SmoothHeadYaw {
     @WrapOperation(method = "handleEntityHeadAngles", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;setHeadYaw(F)V"))
     private void overflowanimations$smoothHeadYaw(final Entity entity, final float headYaw, final Operation<Void> original) {
-        if (OverflowAnimationsConfig.instance().movement.smoothHeadYaw && entity instanceof HeadYawLerp) {
+        if (!OverflowAnimationsConfig.instance().movement.headRotationInterpolation.isLegacy() && entity instanceof HeadYawLerp) {
             ((HeadYawLerp) entity).overflowanimations$lerpHeadTo(headYaw, 3);
         } else {
             original.call(entity, headYaw);

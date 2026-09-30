@@ -60,7 +60,7 @@ public abstract class MixinGameRenderer_CameraVersion {
             return 0.05F;
         } else if (version == CameraVersionSetting.V1_14_TO_V1_14_3) {
             return -0.05F;
-        } else if (version == CameraVersionSetting.MODERN) {
+        } else if (version == CameraVersionSetting.V1_14_4) {
             return 0.0F;
         } else {
             return original;

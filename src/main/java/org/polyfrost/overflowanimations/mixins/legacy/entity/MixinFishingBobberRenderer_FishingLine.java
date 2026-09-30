@@ -52,7 +52,7 @@ public abstract class MixinFishingBobberRenderer_FishingLine {
             baseX = -0.36 * scale;
             baseY = -0.045 * scale;
             baseZ = 0.4;
-        } else if (items.fishingRodVersion == FishingRodVersionSetting.MODERN) {
+        } else if (items.fishingRodVersion == FishingRodVersionSetting.V1_17) {
             final Minecraft minecraft = Minecraft.getInstance();
             final double fov = minecraft.options.fov;
             final double scale = 960.0 / fov;

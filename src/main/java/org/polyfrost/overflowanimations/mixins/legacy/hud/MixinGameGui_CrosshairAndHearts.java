@@ -66,7 +66,7 @@ public abstract class MixinGameGui_CrosshairAndHearts {
 
     @ModifyReturnValue(method = "hasCrosshair", at = @At("RETURN"))
     private boolean overflowanimations$hideCrosshairInThirdPerson(final boolean original) {
-        return original && !(OverflowAnimationsConfig.instance().screen.hideCrosshairInThirdPerson && this.minecraft.options.perspective != 0);
+        return original && (OverflowAnimationsConfig.instance().screen.thirdPersonCrosshair.isLegacy() || this.minecraft.options.perspective == 0);
     }
 
     @WrapOperation(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GameGui;hasCrosshair()Z"))

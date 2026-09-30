@@ -44,6 +44,7 @@ import net.minecraft.item.UseAction;
 import net.minecraft.network.packet.c2s.play.ArmSwingC2SPacket;
 import net.minecraft.world.HitResult;
 import org.polyfrost.overflowanimations.config.category.ItemsConfigCategory;
+import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig;
 import org.polyfrost.overflowanimations.legacy.firstperson.LegacyFirstPerson;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -141,14 +142,14 @@ public abstract class MixinMinecraft_Swinging {
 
     @Inject(method = "doUse", at = @At("TAIL"))
     private void overflowanimations$itemUseCooldownAnimation(final CallbackInfo ci, @Share("wasUsing") final LocalBooleanRef wasUsing) {
-        if (LegacyFirstPerson.items().itemUseCooldownAnimation && !wasUsing.get() && this.player.hasItemInUse()) {
+        if (!OverflowAnimationsConfig.instance().fixes.useEquipAnimation.isLegacy() && !wasUsing.get() && this.player.hasItemInUse()) {
             this.gameRenderer.itemInHandRenderer.onItemUsed();
         }
     }
 
     @Inject(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/entity/living/player/LocalClientPlayerEntity;dropItem(Z)Lnet/minecraft/entity/ItemEntity;"))
     private void overflowanimations$dropItemSwing(final CallbackInfo ci) {
-        if (LegacyFirstPerson.items().dropItemSwing && this.player.getItemInHand() != null) {
+        if (!LegacyFirstPerson.items().dropSwing.isLegacy() && this.player.getItemInHand() != null) {
             LegacyFirstPerson.fakeSwing(this.player);
         }
     }

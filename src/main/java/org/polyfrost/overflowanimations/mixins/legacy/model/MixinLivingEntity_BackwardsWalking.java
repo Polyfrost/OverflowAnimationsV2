@@ -43,7 +43,7 @@ public abstract class MixinLivingEntity_BackwardsWalking {
         final LivingEntity self = (LivingEntity) (Object) this;
         final double dx = self.x - self.lastX;
         final double dz = self.z - self.lastZ;
-        if (!OverflowAnimationsConfig.instance().movement.modernBackwardsWalking || (float) (dx * dx + dz * dz) <= 0.0025000002F || this.attackAnimationProgress > 0.0F) {
+        if (OverflowAnimationsConfig.instance().movement.backwardsWalking.isLegacy() || (float) (dx * dx + dz * dz) <= 0.0025000002F || this.attackAnimationProgress > 0.0F) {
             return bodyYaw;
         }
 
