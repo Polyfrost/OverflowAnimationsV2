@@ -50,6 +50,16 @@ public final class MovementConfigCategory extends Category {
     public boolean legacyDamageTilt = false;
     public boolean offsetHurtTiltTime = false;
 
+    public boolean modernBackwardsWalking = false;
+    public boolean smoothHeadYaw = false;
+    public boolean modernViewBobbing = false;
+    public boolean directionalDamageTilt = false;
+    public boolean modernSneakEyeHeight = false;
+    public boolean disableHurtCamera = false;
+    public boolean dinnerboneMode = false;
+    public boolean dinnerboneModeEntities = false;
+    public boolean wavyArms = false;
+
     @Override
     public @NonNull EntryBundle bundle() {
         final EntryBundle bundle = new EntryBundle(this, "movement");
@@ -73,6 +83,19 @@ public final class MovementConfigCategory extends Category {
                 .booleanEntry("bowArmMovement")
                 .booleanEntry("legacyDamageTilt")
                 .booleanEntry("offsetHurtTiltTime");
+
+        bundle.group("modern")
+                .booleanEntry("modernBackwardsWalking")
+                .booleanEntry("smoothHeadYaw")
+                .booleanEntry("modernViewBobbing")
+                .booleanEntry("directionalDamageTilt")
+                .booleanEntry("modernSneakEyeHeight")
+                .booleanEntry("disableHurtCamera");
+
+        bundle.group("fun")
+                .booleanEntry("dinnerboneMode")
+                .booleanEntry("dinnerboneModeEntities")
+                .booleanEntry("wavyArms");
 
         return bundle;
     }

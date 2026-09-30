@@ -88,6 +88,82 @@ public final class ItemsConfigCategory extends Category {
     public float itemRotationZ = 0.0F;
     public boolean applyCustomizationToBlockItems = true;
 
+    public boolean legacyGlint = false;
+    public boolean legacyGuiGlint = false;
+    public boolean legacyPotionGlint = false;
+    public boolean disablePotionGlint = false;
+    public boolean modernArmorGlint = false;
+    public boolean itemDrops2DColors = false;
+    public boolean legacyProjectiles = false;
+    public boolean xpOrbPosition = false;
+    public boolean fireballModel = false;
+    public boolean disableItemPickupAnimation = false;
+    public float itemPickupOffset = 0.0F;
+    public boolean entityItemPositions = true;
+    public boolean disableHandSway = false;
+    public float reequipSpeed = 0.4F;
+    public boolean smartSwingScaling = false;
+    public boolean itemUseAnimationInGUI = false;
+    public boolean dropItemSwing = false;
+    public boolean disableDropSwingInContainers = false;
+    public boolean itemUseCooldownAnimation = false;
+    public boolean modernBlockBreaking = false;
+    public boolean resetMiningOnUse = false;
+    public boolean disableAdventureSwing = false;
+    public boolean disableAdventureUsageSwinging = false;
+    public boolean disableAdventureUsageParticles = false;
+    public boolean lunarBlockHitPosition = false;
+    public boolean lunarItemPositions = false;
+    public boolean modernPotionColors = false;
+    public boolean coloredPotionBottles = false;
+    public boolean fishingRodLineFov = false;
+    public float fishingRodLineThickness = 0.0F;
+    public boolean customRodLine = false;
+    public float rodLinePositionX = -0.36F;
+    public float rodLinePositionY = 0.03F;
+    public float rodLinePositionZ = 0.35F;
+    public float swingPositionX = 0.0F;
+    public float swingPositionY = 0.0F;
+    public float swingPositionZ = 0.0F;
+    public float consumePositionX = 0.0F;
+    public float consumePositionY = 0.0F;
+    public float consumePositionZ = 0.0F;
+    public float consumeRotationX = 0.0F;
+    public float consumeRotationY = 0.0F;
+    public float consumeRotationZ = 0.0F;
+    public float consumeScale = 0.0F;
+    public float consumeIntensity = 0.0F;
+    public float consumeSpeed = 0.0F;
+    public boolean scaleConsumeWithItem = false;
+    public float blockingPositionX = 0.0F;
+    public float blockingPositionY = 0.0F;
+    public float blockingPositionZ = 0.0F;
+    public float blockingRotationX = 0.0F;
+    public float blockingRotationY = 0.0F;
+    public float blockingRotationZ = 0.0F;
+    public float blockingScale = 0.0F;
+    public float droppedPositionX = 0.0F;
+    public float droppedPositionY = 0.0F;
+    public float droppedPositionZ = 0.0F;
+    public float droppedRotationX = 0.0F;
+    public float droppedRotationY = 0.0F;
+    public float droppedRotationZ = 0.0F;
+    public float droppedScale = 0.0F;
+    public float projectilePositionX = 0.0F;
+    public float projectilePositionY = 0.0F;
+    public float projectilePositionZ = 0.0F;
+    public float projectileRotationX = 0.0F;
+    public float projectileRotationY = 0.0F;
+    public float projectileRotationZ = 0.0F;
+    public float projectileScale = 0.0F;
+    public float fireballPositionX = 0.0F;
+    public float fireballPositionY = 0.0F;
+    public float fireballPositionZ = 0.0F;
+    public float fireballRotationX = 0.0F;
+    public float fireballRotationY = 0.0F;
+    public float fireballRotationZ = 0.0F;
+    public float fireballScale = 0.0F;
+
     @Override
     public @NonNull EntryBundle bundle() {
         final EntryBundle bundle = new EntryBundle(this, "items");
@@ -152,6 +228,103 @@ public final class ItemsConfigCategory extends Category {
                 .booleanEntry("itemPickupPosition")
                 .booleanEntry("mobHeadIcons")
                 .booleanEntry("eggSnowballParticles");
+
+        bundle.group("legacy_glint")
+                .booleanEntry("legacyGlint")
+                .booleanEntry("legacyGuiGlint")
+                .booleanEntry("legacyPotionGlint")
+                .booleanEntry("disablePotionGlint")
+                .booleanEntry("modernArmorGlint");
+
+        bundle.group("legacy_drops")
+                .booleanEntry("itemDrops2DColors")
+                .booleanEntry("legacyProjectiles")
+                .booleanEntry("xpOrbPosition")
+                .booleanEntry("fireballModel")
+                .booleanEntry("disableItemPickupAnimation")
+                .floatRange("itemPickupOffset", -1.0F, 1.0F, 0.05F);
+
+        bundle.group("legacy_usage")
+                .booleanEntry("entityItemPositions")
+                .booleanEntry("disableHandSway")
+                .floatRange("reequipSpeed", 0.1F, 1.0F, 0.05F)
+                .booleanEntry("smartSwingScaling")
+                .booleanEntry("itemUseAnimationInGUI")
+                .booleanEntry("dropItemSwing")
+                .booleanEntry("disableDropSwingInContainers")
+                .booleanEntry("itemUseCooldownAnimation")
+                .booleanEntry("modernBlockBreaking")
+                .booleanEntry("resetMiningOnUse")
+                .booleanEntry("disableAdventureSwing")
+                .booleanEntry("disableAdventureUsageSwinging")
+                .booleanEntry("disableAdventureUsageParticles")
+                .booleanEntry("lunarBlockHitPosition")
+                .booleanEntry("lunarItemPositions");
+
+        bundle.group("legacy_potions")
+                .booleanEntry("modernPotionColors")
+                .booleanEntry("coloredPotionBottles");
+
+        bundle.group("legacy_fishing")
+                .booleanEntry("fishingRodLineFov")
+                .floatRange("fishingRodLineThickness", 0.0F, 10.0F, 0.5F)
+                .booleanEntry("customRodLine")
+                .floatRange("rodLinePositionX", -2.0F, 2.0F, 0.01F)
+                .floatRange("rodLinePositionY", -2.0F, 2.0F, 0.01F)
+                .floatRange("rodLinePositionZ", -2.0F, 2.0F, 0.01F);
+
+        bundle.group("swing_position")
+                .floatRange("swingPositionX", -2.0F, 2.0F, 0.01F)
+                .floatRange("swingPositionY", -2.0F, 2.0F, 0.01F)
+                .floatRange("swingPositionZ", -2.0F, 2.0F, 0.01F);
+
+        bundle.group("consume_position")
+                .floatRange("consumePositionX", -2.0F, 2.0F, 0.01F)
+                .floatRange("consumePositionY", -2.0F, 2.0F, 0.01F)
+                .floatRange("consumePositionZ", -2.0F, 2.0F, 0.01F)
+                .floatRange("consumeRotationX", -180.0F, 180.0F, 1.0F)
+                .floatRange("consumeRotationY", -180.0F, 180.0F, 1.0F)
+                .floatRange("consumeRotationZ", -180.0F, 180.0F, 1.0F)
+                .floatRange("consumeScale", -1.0F, 1.0F, 0.01F)
+                .floatRange("consumeIntensity", -1.0F, 1.0F, 0.05F)
+                .floatRange("consumeSpeed", -1.0F, 1.0F, 0.05F)
+                .booleanEntry("scaleConsumeWithItem");
+
+        bundle.group("blocking_position")
+                .floatRange("blockingPositionX", -2.0F, 2.0F, 0.01F)
+                .floatRange("blockingPositionY", -2.0F, 2.0F, 0.01F)
+                .floatRange("blockingPositionZ", -2.0F, 2.0F, 0.01F)
+                .floatRange("blockingRotationX", -180.0F, 180.0F, 1.0F)
+                .floatRange("blockingRotationY", -180.0F, 180.0F, 1.0F)
+                .floatRange("blockingRotationZ", -180.0F, 180.0F, 1.0F)
+                .floatRange("blockingScale", -1.0F, 1.0F, 0.01F);
+
+        bundle.group("dropped_position")
+                .floatRange("droppedPositionX", -2.0F, 2.0F, 0.01F)
+                .floatRange("droppedPositionY", -2.0F, 2.0F, 0.01F)
+                .floatRange("droppedPositionZ", -2.0F, 2.0F, 0.01F)
+                .floatRange("droppedRotationX", -180.0F, 180.0F, 1.0F)
+                .floatRange("droppedRotationY", -180.0F, 180.0F, 1.0F)
+                .floatRange("droppedRotationZ", -180.0F, 180.0F, 1.0F)
+                .floatRange("droppedScale", -1.0F, 1.0F, 0.01F);
+
+        bundle.group("projectile_position")
+                .floatRange("projectilePositionX", -2.0F, 2.0F, 0.01F)
+                .floatRange("projectilePositionY", -2.0F, 2.0F, 0.01F)
+                .floatRange("projectilePositionZ", -2.0F, 2.0F, 0.01F)
+                .floatRange("projectileRotationX", -180.0F, 180.0F, 1.0F)
+                .floatRange("projectileRotationY", -180.0F, 180.0F, 1.0F)
+                .floatRange("projectileRotationZ", -180.0F, 180.0F, 1.0F)
+                .floatRange("projectileScale", -1.0F, 1.0F, 0.01F);
+
+        bundle.group("fireball_position")
+                .floatRange("fireballPositionX", -2.0F, 2.0F, 0.01F)
+                .floatRange("fireballPositionY", -2.0F, 2.0F, 0.01F)
+                .floatRange("fireballPositionZ", -2.0F, 2.0F, 0.01F)
+                .floatRange("fireballRotationX", -180.0F, 180.0F, 1.0F)
+                .floatRange("fireballRotationY", -180.0F, 180.0F, 1.0F)
+                .floatRange("fireballRotationZ", -180.0F, 180.0F, 1.0F)
+                .floatRange("fireballScale", -1.0F, 1.0F, 0.01F);
 
         return bundle;
     }

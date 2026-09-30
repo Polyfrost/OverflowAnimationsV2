@@ -30,6 +30,8 @@ import org.polyfrost.overflowanimations.handler.config.bundle.EntryBundle;
 import org.polyfrost.overflowanimations.handler.config.category.Category;
 //? if >1.8.9
 import org.polyfrost.overflowanimations.util.UtilsKt;
+import org.polyfrost.overflowanimations.util.enums.TabListSetting;
+import org.polyfrost.overflowanimations.util.enums.DebugCrosshairSetting;
 import org.polyfrost.overflowanimations.util.enums.CameraVersionSetting;
 
 public final class ScreenConfigCategory extends Category {
@@ -54,6 +56,11 @@ public final class ScreenConfigCategory extends Category {
     public boolean oldCrosshairPosition = false;
     public boolean disconnectServerToTitleScreen = false;
     public boolean oldCraftingSlotsPosition = false;
+
+    public DebugCrosshairSetting debugCrosshairStyle = DebugCrosshairSetting.V1_8;
+    public TabListSetting tabListStyle = TabListSetting.V1_8;
+    public boolean legacyDebugScreen = false;
+    public boolean hideCrosshairInThirdPerson = false;
 
     @Override
     public @NonNull EntryBundle bundle() {
@@ -83,6 +90,12 @@ public final class ScreenConfigCategory extends Category {
         bundle.booleanEntry("oldCraftingSlotsPosition", event -> UtilsKt.reinitializeInventorySlots());
         //?} else
         //bundle.booleanEntry("oldCraftingSlotsPosition");
+
+        bundle.group("legacy_hud")
+                .enumEntry("debugCrosshairStyle", DebugCrosshairSetting.class)
+                .enumEntry("tabListStyle", TabListSetting.class)
+                .booleanEntry("legacyDebugScreen")
+                .booleanEntry("hideCrosshairInThirdPerson");
 
         return bundle;
     }

@@ -35,10 +35,57 @@ import java.util.function.Predicate
 
 open class EntryBundle(protected val category: Category, private val name: String) : Bundle() {
     companion object {
+        private val LEGACY_ONLY_OPTIONS = listOf(
+            "modernBackwardsWalking", "smoothHeadYaw", "modernViewBobbing", "directionalDamageTilt",
+            "modernSneakEyeHeight", "disableHurtCamera", "dinnerboneMode", "dinnerboneModeEntities", "wavyArms",
+            "legacyGlint", "legacyGuiGlint", "legacyPotionGlint", "disablePotionGlint", "modernArmorGlint",
+            "itemDrops2DColors", "legacyProjectiles", "xpOrbPosition", "fireballModel", "disableItemPickupAnimation",
+            "itemPickupOffset", "entityItemPositions", "disableHandSway", "reequipSpeed", "smartSwingScaling",
+            "itemUseAnimationInGUI", "dropItemSwing", "disableDropSwingInContainers", "itemUseCooldownAnimation",
+            "modernBlockBreaking", "resetMiningOnUse", "disableAdventureSwing", "disableAdventureUsageSwinging",
+            "disableAdventureUsageParticles", "lunarBlockHitPosition", "lunarItemPositions", "modernPotionColors",
+            "coloredPotionBottles", "fishingRodLineFov", "fishingRodLineThickness", "customRodLine",
+            "rodLinePositionX", "rodLinePositionY", "rodLinePositionZ", "swingPositionX", "swingPositionY",
+            "swingPositionZ", "consumePositionX", "consumePositionY", "consumePositionZ", "consumeRotationX",
+            "consumeRotationY", "consumeRotationZ", "consumeScale", "consumeIntensity", "consumeSpeed",
+            "scaleConsumeWithItem", "blockingPositionX", "blockingPositionY", "blockingPositionZ", "blockingRotationX",
+            "blockingRotationY", "blockingRotationZ", "blockingScale", "droppedPositionX", "droppedPositionY",
+            "droppedPositionZ", "droppedRotationX", "droppedRotationY", "droppedRotationZ", "droppedScale",
+            "projectilePositionX", "projectilePositionY", "projectilePositionZ", "projectileRotationX",
+            "projectileRotationY", "projectileRotationZ", "projectileScale", "fireballPositionX", "fireballPositionY",
+            "fireballPositionZ", "fireballRotationX", "fireballRotationY", "fireballRotationZ", "fireballScale",
+            "debugCrosshairStyle", "tabListStyle", "legacyDebugScreen", "hideCrosshairInThirdPerson"
+        )
+
         // Options whose feature does not exist on (or is compiled out of) this Minecraft version
         private val UNSUPPORTED_OPTIONS = buildSet<String> {
+            //? if <=1.8.9 {
+            /*addAll(listOf(
+                "oldCapeMovement", "disableCapeSwingRotation", "capeChestplateTranslation", "fakeOldSneakEyeHeight",
+                "rotateBackwardsWalking", "uncapBlockingHeadRotation", "handViewBobbingMovement", "legacyDamageTilt",
+                "legacyGlintSpeed", "skullPosition", "disableSwingOnUse", "disableSwingOnDrop",
+                "disableSwingOnEntityInteract", "disableItemUsingTextureInGUI", "durabilityBarColors",
+                "legacyItemRarities", "heldItemVisibilityInBoat", "offhandUsageSwinging", "legacySwingAnimation",
+                "crosshairInThirdPerson", "listWidgetSelectedBorderColor", "legacyWidgetHoverTextColor",
+                "disableCameraTransparentPassthrough", "tooltipStyleRendering", "slotHoverStyleRendering",
+                "listBackgroundGradient", "inventoryEffectsPosition", "fullWidthInventoryEffects", "panoramaRendering",
+                "legacyLoadingScreen", "legacyLoadingScreenProgressBar", "oldChatPosition", "oldCrosshairPosition",
+                "oldCraftingSlotsPosition", "fixSneakingFeetPosition", "fixVerticalBobbingTilt",
+                "oldSkyRenderingCheck", "smoothParticles", "fixMirrorArmSwing", "fixOffHandUsingPose",
+                "fixCastLineCheck", "fixCastLineSwing", "fixFireballClientsideVisual", "fixTextStrikethroughStyle",
+                "fixHighAttackSpeedIndicator", "upMinPixelTransparencyLimit", "fixDoubleUsageVisual", "blueVoidSky",
+                "cloudHeight", "playerVoidBox", "oldY0Height", "oldWaterOverlayOpacity", "oldWaterColorFog",
+                "oldWaterColorEffects", "oldCloudRendering", "legacyLightmap", "legacyFogDarkness",
+                "maxGlintProperties", "restoreParticleBlending", "disableInventoryEntityScissor",
+                "legacyBlockMiningProgress", "projectileAgeCheck", "blockOutlineRendering",
+                "disableModelWhilstSleeping", "flameDimensions", "itemGlintOnEntity", "heldItemArmLogic",
+                "legacySplashPosition", "legacyDiffuseLighting"
+            ))
+            *///?} else {
+            addAll(LEGACY_ONLY_OPTIONS)
+            //?}
             // Built on the 1.21.5 GPU API and the 1.21.6 rendering/fog/GUI rewrites
-            //? if <1.21.6 {
+            //? if >1.8.9 <1.21.6 {
             /*addAll(listOf(
                 "panoramaRendering", "oldCloudRendering", "legacyLightmap", "legacyDiffuseLighting", "planarSkyFog",
                 "voidFog", "oldY0Height", "legacyFogDarkness", "oldWaterColorFog", "blueVoidSky", "playerVoidBox",
