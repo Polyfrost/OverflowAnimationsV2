@@ -33,10 +33,10 @@ import com.llamalad7.mixinextras.sugar.Local;
 /*import net.minecraft.client.renderer.rendertype.RenderType;
 import java.util.function.Function;
 *///?} elif 26.3 {
-/*import com.mojang.renderpearl.api.pipeline.RenderPipeline;
-*///?} else {
-import com.mojang.blaze3d.pipeline.RenderPipeline;
-//?}
+import com.mojang.renderpearl.api.pipeline.RenderPipeline;
+//?} else {
+/*import com.mojang.blaze3d.pipeline.RenderPipeline;
+*///?}
 import net.minecraft.client.CameraType;
 //? if <26.2 {
 /*import net.minecraft.client.gui.Gui;
@@ -82,10 +82,10 @@ public abstract class MixinHud_CrosshairAndHearts {
     private boolean overflowanimations$fixHighAttackSpeedIndicator(final GuiGraphics instance, final RenderPipeline renderPipeline, final Identifier location, final int x, final int y, final int width, final int height, @Local(ordinal = 0) final float attackStrengthScale) {
     *///?} else {
     //? if 26.3 {
-    /*@WrapWithCondition(method = "extractCrosshair", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphicsExtractor;blitSprite(Lcom/mojang/renderpearl/api/pipeline/RenderPipeline;Lnet/minecraft/resources/Identifier;IIII)V", ordinal = 2))
-    *///?} else {
-    @WrapWithCondition(method = "extractCrosshair", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphicsExtractor;blitSprite(Lcom/mojang/blaze3d/pipeline/RenderPipeline;Lnet/minecraft/resources/Identifier;IIII)V", ordinal = 2))
-    //?}
+    @WrapWithCondition(method = "extractCrosshair", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphicsExtractor;blitSprite(Lcom/mojang/renderpearl/api/pipeline/RenderPipeline;Lnet/minecraft/resources/Identifier;IIII)V", ordinal = 2))
+    //?} else {
+    /*@WrapWithCondition(method = "extractCrosshair", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphicsExtractor;blitSprite(Lcom/mojang/blaze3d/pipeline/RenderPipeline;Lnet/minecraft/resources/Identifier;IIII)V", ordinal = 2))
+    *///?}
     private boolean overflowanimations$fixHighAttackSpeedIndicator(final GuiGraphicsExtractor instance, final RenderPipeline renderPipeline, final Identifier location, final int x, final int y, final int width, final int height, @Local(name = "attackStrengthScale") final float attackStrengthScale) {
     //?}
         if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().fixes.fixHighAttackSpeedIndicator) {

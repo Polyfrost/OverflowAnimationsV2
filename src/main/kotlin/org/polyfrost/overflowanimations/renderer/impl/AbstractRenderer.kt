@@ -43,8 +43,8 @@ import com.mojang.blaze3d.buffers.GpuBufferSlice
 //? if <26.3 {
 /*import com.mojang.blaze3d.systems.RenderPass
 *///?} elif 26.4 {
-import com.mojang.blaze3d.pipeline.RenderPipeline
-//?}
+/*import com.mojang.blaze3d.pipeline.RenderPipeline
+*///?}
 import com.mojang.blaze3d.systems.RenderSystem
 //? if <1.21.11 {
 /*import com.mojang.blaze3d.textures.GpuTextureView
@@ -58,8 +58,8 @@ import com.mojang.renderpearl.api.commands.RenderPass
 import com.mojang.renderpearl.api.pipeline.BindGroupLayout
 //?}
 //? if 26.3 {
-/*import com.mojang.renderpearl.api.pipeline.RenderPipeline
-*///?}
+import com.mojang.renderpearl.api.pipeline.RenderPipeline
+//?}
 //? if >=26.3 {
 import com.mojang.renderpearl.api.pipeline.UniformType
 import com.mojang.renderpearl.api.textures.GpuSampler

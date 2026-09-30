@@ -55,8 +55,8 @@ import com.mojang.blaze3d.platform.SourceFactor
 //? if <26.3 {
 /*import com.mojang.blaze3d.shaders.UniformType
 *///?} elif 26.4 {
-import com.mojang.blaze3d.pipeline.RenderPipeline
-//?}
+/*import com.mojang.blaze3d.pipeline.RenderPipeline
+*///?}
 import com.mojang.blaze3d.vertex.DefaultVertexFormat
 //? if <26.3 {
 /*import com.mojang.blaze3d.vertex.VertexFormat
@@ -64,15 +64,15 @@ import com.mojang.blaze3d.vertex.DefaultVertexFormat
 //? if <26.2 {
 /*import com.mojang.blaze3d.vertex.VertexFormatElement
 *///?} elif 26.4 {
-import com.mojang.blaze3d.vertex.VertexFormat
-//?}
+/*import com.mojang.blaze3d.vertex.VertexFormat
+*///?}
 //? if >=26.3 {
 import com.mojang.renderpearl.api.GpuFormat
 import com.mojang.renderpearl.api.pipeline.*
 //?}
 //? if 26.3 {
-/*import com.mojang.renderpearl.api.vertex.VertexFormat
-*///?}
+import com.mojang.renderpearl.api.vertex.VertexFormat
+//?}
 //? if >=26.2 {
 import net.minecraft.client.renderer.BindGroupLayouts
 //?}

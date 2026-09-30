@@ -38,14 +38,14 @@ import com.mojang.blaze3d.vertex.ByteBufferBuilder
 //? if <26.2 {
 /*import com.mojang.blaze3d.vertex.VertexFormat.Mode
 *///?} elif 26.4 {
-import com.mojang.blaze3d.vertex.VertexFormat
-//?}
+/*import com.mojang.blaze3d.vertex.VertexFormat
+*///?}
 //? if >=26.3 {
 import com.mojang.renderpearl.api.pipeline.PrimitiveTopology
 //?}
 //? if 26.3 {
-/*import com.mojang.renderpearl.api.vertex.VertexFormat
-*///?}
+import com.mojang.renderpearl.api.vertex.VertexFormat
+//?}
 
 //? if <26.2 {
 /*data class VertexLayout(val vertexFormat: VertexFormat, val primitiveTopology: Mode) {

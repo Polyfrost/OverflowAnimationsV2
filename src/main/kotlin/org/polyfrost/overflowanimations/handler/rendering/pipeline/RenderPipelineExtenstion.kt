@@ -36,21 +36,21 @@ package org.polyfrost.overflowanimations.handler.rendering.pipeline
 //? if 26.2 {
 /*import com.mojang.blaze3d.vertex.VertexFormat
 *///?} elif 26.4 {
-import com.mojang.blaze3d.pipeline.RenderPipeline
+/*import com.mojang.blaze3d.pipeline.RenderPipeline
 import com.mojang.blaze3d.vertex.VertexFormat
-//?}
+*///?}
 //? if >=26.3 {
 import com.mojang.renderpearl.api.pipeline.BindGroupLayout
 //?}
 //? if 26.3 {
-/*import com.mojang.renderpearl.api.pipeline.RenderPipeline
-*///?}
+import com.mojang.renderpearl.api.pipeline.RenderPipeline
+//?}
 //? if >=26.3 {
 import com.mojang.renderpearl.api.pipeline.ShaderType
 //?}
 //? if 26.3 {
-/*import com.mojang.renderpearl.api.vertex.VertexFormat
-*///?}
+import com.mojang.renderpearl.api.vertex.VertexFormat
+//?}
 //? if >=26.1 {
 import java.util.*
 //?}

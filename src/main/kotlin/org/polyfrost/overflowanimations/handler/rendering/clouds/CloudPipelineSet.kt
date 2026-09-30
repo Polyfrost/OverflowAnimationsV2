@@ -39,16 +39,16 @@ package org.polyfrost.overflowanimations.handler.rendering.clouds
 //? if <26.3 {
 /*import com.mojang.blaze3d.pipeline.RenderPipeline
 *///?} elif 26.4 {
-import com.mojang.blaze3d.pipeline.RenderPipeline
-//?}
+/*import com.mojang.blaze3d.pipeline.RenderPipeline
+*///?}
 //? if >=26.3 {
 import com.mojang.renderpearl.api.GpuFormat
 import com.mojang.renderpearl.api.pipeline.BlendFunction
 import com.mojang.renderpearl.api.pipeline.ColorTargetState
 //?}
 //? if 26.3 {
-/*import com.mojang.renderpearl.api.pipeline.RenderPipeline
-*///?}
+import com.mojang.renderpearl.api.pipeline.RenderPipeline
+//?}
 import net.minecraft.client.CloudStatus
 import net.minecraft.client.renderer.RenderPipelines
 import org.polyfrost.overflowanimations.OverflowAnimations.location

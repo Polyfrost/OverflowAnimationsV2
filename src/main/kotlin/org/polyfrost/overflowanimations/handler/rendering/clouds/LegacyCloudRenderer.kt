@@ -31,8 +31,8 @@ package org.polyfrost.overflowanimations.handler.rendering.clouds
 /*import com.mojang.blaze3d.buffers.GpuBuffer
 import com.mojang.blaze3d.pipeline.RenderPipeline
 *///?} elif 26.4 {
-import com.mojang.blaze3d.pipeline.RenderPipeline
-//?}
+/*import com.mojang.blaze3d.pipeline.RenderPipeline
+*///?}
 import com.mojang.blaze3d.platform.NativeImage
 import com.mojang.blaze3d.systems.RenderSystem
 import com.mojang.blaze3d.vertex.ByteBufferBuilder
@@ -43,8 +43,8 @@ import com.mojang.renderpearl.api.buffers.GpuBuffer
 import com.mojang.renderpearl.api.commands.RenderPass
 //?}
 //? if 26.3 {
-/*import com.mojang.renderpearl.api.pipeline.RenderPipeline
-*///?}
+import com.mojang.renderpearl.api.pipeline.RenderPipeline
+//?}
 import net.minecraft.client.CloudStatus
 //? if <26.3 {
 /*import net.minecraft.client.Minecraft

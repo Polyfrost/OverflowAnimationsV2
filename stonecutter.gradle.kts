@@ -3,7 +3,7 @@ plugins {
     id("com.diffplug.spotless") version "8.2.1"
 }
 
-stonecutter active "26.4" /* [SC] DO NOT EDIT */
+stonecutter active "26.3" /* [SC] DO NOT EDIT */
 
 stonecutter tasks {
     order("publishMods")

@@ -99,10 +99,10 @@ public abstract class MixinGuiGraphics_ToolTipItemBar {
     *///?} elif >=26.1 <26.3 {
     /*@Inject(method = "itemBar", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphicsExtractor;fill(Lcom/mojang/blaze3d/pipeline/RenderPipeline;IIIII)V", ordinal = 0, shift = At.Shift.AFTER))
     *///?} elif 26.3 {
-    /*@Inject(method = "itemBar", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphicsExtractor;fill(Lcom/mojang/renderpearl/api/pipeline/RenderPipeline;IIIII)V", ordinal = 0, shift = At.Shift.AFTER))
-    *///?} else {
-    @Inject(method = "itemBar", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphicsExtractor;fill(Lcom/mojang/blaze3d/pipeline/RenderPipeline;IIIII)V", ordinal = 0, shift = At.Shift.AFTER))
-    //?}
+    @Inject(method = "itemBar", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphicsExtractor;fill(Lcom/mojang/renderpearl/api/pipeline/RenderPipeline;IIIII)V", ordinal = 0, shift = At.Shift.AFTER))
+    //?} else {
+    /*@Inject(method = "itemBar", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphicsExtractor;fill(Lcom/mojang/blaze3d/pipeline/RenderPipeline;IIIII)V", ordinal = 0, shift = At.Shift.AFTER))
+    *///?}
     //? if >=26.1 {
     private void overflowanimations$oldDurabilityBar(final ItemStack itemStack, final int x, final int y, final CallbackInfo ci, @Local(name = "left") final int left, final @Local(name = "top") int top) {
     //?}

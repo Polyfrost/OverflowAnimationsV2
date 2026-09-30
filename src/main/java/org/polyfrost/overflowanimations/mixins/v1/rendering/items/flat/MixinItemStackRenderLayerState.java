@@ -255,12 +255,10 @@ public abstract class MixinItemStackRenderLayerState {
         localPose.translate(-translation.x(), -translation.y(), -translation.z());
     }
 
-    //? if >=1.21.5 {
     @Unique
     private boolean overflowanimations$isTransformationModeValid() {
         final boolean itemDrops2D = OverflowAnimationsConfig.instance().items.itemDrops2D;
         final boolean itemFramed2D = OverflowAnimationsConfig.instance().items.itemFramed2D;
         return (itemDrops2D && this.itemStackRenderState.displayContext == ItemDisplayContext.GROUND) || (itemFramed2D && this.itemStackRenderState.displayContext == ItemDisplayContext.FIXED);
     }
-    //?}
 }
