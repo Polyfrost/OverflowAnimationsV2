@@ -28,15 +28,30 @@ package org.polyfrost.overflowanimations.legacy
 
 import dev.kikugie.fletching_table.annotation.fabric.Entrypoint
 import net.fabricmc.api.ClientModInitializer
+import net.minecraft.client.options.KeyBinding
+import net.ornithemc.osl.keybinds.api.KeybindEvents
+import net.ornithemc.osl.keybinds.api.KeybindRegistry
 import net.ornithemc.osl.lifecycle.api.client.MinecraftClientEvents
 import org.apache.logging.log4j.LogManager
+import org.lwjgl.input.Keyboard
 import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig
 import org.spongepowered.asm.mixin.MixinEnvironment
 
 @Entrypoint
 class OverflowAnimationsLegacy : ClientModInitializer {
+    private lateinit var configKey: KeyBinding
+
     override fun onInitializeClient() {
         OverflowAnimationsConfig.load()
+
+        KeybindEvents.REGISTER_KEYBINDS.register {
+            configKey = KeybindRegistry.register("Open Mod Configuration", Keyboard.KEY_BACKSLASH, "key.category.overflowanimations.common")
+        }
+        MinecraftClientEvents.TICK_END.register { minecraft ->
+            var pressed = false
+            while (configKey.consumeClick()) pressed = true
+            if (pressed && minecraft.screen == null) OverflowAnimationsConfig.openScreen()
+        }
 
         val audit = System.getProperty("overflowanimations.audit")
         if (audit != null) {

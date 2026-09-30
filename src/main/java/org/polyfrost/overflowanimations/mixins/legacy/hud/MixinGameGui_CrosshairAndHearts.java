@@ -1,0 +1,75 @@
+/**
+ * OverflowAnimations
+ * The all-you-could-want legacy animations mod for modern minecraft versions.
+ * Brings back animations from the 1.7/1.8 era and more.
+ * <p>
+ * Copyright (C) 2024-2027 lowercasebtw
+ * Copyright (C) 2024-2027 mixces
+ * Copyright (C) 2024-2027 Contributors to the project retain their copyright
+ * <p>
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * <p>
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * <p>
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * <p>
+ * "MINECRAFT" LINKING EXCEPTION TO THE GPL
+ */
+
+package org.polyfrost.overflowanimations.mixins.legacy.hud;
+
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
+import com.llamalad7.mixinextras.injector.ModifyReturnValue;
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import com.llamalad7.mixinextras.sugar.Local;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GameGui;
+import net.minecraft.client.render.Window;
+import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig;
+import org.polyfrost.overflowanimations.legacy.hud.DebugCrosshair;
+import org.polyfrost.overflowanimations.util.enums.DebugCrosshairSetting;
+import org.spongepowered.asm.mixin.Final;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.ModifyVariable;
+
+@Mixin(GameGui.class)
+public abstract class MixinGameGui_CrosshairAndHearts {
+    @Shadow
+    @Final
+    private Minecraft minecraft;
+
+    @ModifyVariable(method = "renderStatusBars", at = @At("STORE"), ordinal = 0)
+    private boolean overflowanimations$disableHeartFlash(final boolean blinking) {
+        return blinking && !OverflowAnimationsConfig.instance().screen.disableHeartFlash;
+    }
+
+    @ModifyExpressionValue(method = "hasCrosshair", at = @At(value = "FIELD", target = "Lnet/minecraft/client/options/GameOptions;debugEnabled:Z"))
+    private boolean overflowanimations$debugCrosshairStyle(final boolean debugEnabled) {
+        return debugEnabled && OverflowAnimationsConfig.instance().screen.debugCrosshairStyle == DebugCrosshairSetting.V1_8;
+    }
+
+    @ModifyReturnValue(method = "hasCrosshair", at = @At("RETURN"))
+    private boolean overflowanimations$hideCrosshairInThirdPerson(final boolean original) {
+        return original && !(OverflowAnimationsConfig.instance().screen.hideCrosshairInThirdPerson && this.minecraft.options.perspective != 0);
+    }
+
+    @WrapOperation(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GameGui;hasCrosshair()Z"))
+    private boolean overflowanimations$axisCrosshair(final GameGui instance, final Operation<Boolean> original, final float tickDelta, @Local final Window window) {
+        final boolean hasCrosshair = original.call(instance);
+        if (hasCrosshair && OverflowAnimationsConfig.instance().screen.debugCrosshairStyle == DebugCrosshairSetting.V1_12 && DebugCrosshair.isDebugCrosshairVisible(this.minecraft)) {
+            DebugCrosshair.render(this.minecraft, window, tickDelta);
+            return false;
+        }
+        return hasCrosshair;
+    }
+}
