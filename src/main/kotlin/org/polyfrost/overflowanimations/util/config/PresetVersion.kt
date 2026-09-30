@@ -41,7 +41,7 @@ enum class PresetVersion(private val applier: Runnable) {
         val movement = OverflowAnimationsConfig.instance().movement
         movement.sneakAnimation = SneakAnimationSetting.V1_7
         movement.longUnsneak = true
-        movement.oldCapeMovement = true
+        movement.capeMovement = CapeMovementSetting.V1_12
         movement.disableCapeLean = false
         movement.disableCapeSwingRotation = true
         movement.capeChestplateTranslation = true
@@ -146,7 +146,7 @@ enum class PresetVersion(private val applier: Runnable) {
         val movement = OverflowAnimationsConfig.instance().movement
         movement.sneakAnimation = SneakAnimationSetting.V1_8
         movement.longUnsneak = false
-        movement.oldCapeMovement = true
+        movement.capeMovement = CapeMovementSetting.V1_12
         movement.disableCapeLean = false
         movement.disableCapeSwingRotation = true
         movement.capeChestplateTranslation = false
@@ -247,7 +247,11 @@ enum class PresetVersion(private val applier: Runnable) {
         val movement = OverflowAnimationsConfig.instance().movement
         movement.sneakAnimation = SneakAnimationSetting.VANILLA
         movement.longUnsneak = false
-        movement.oldCapeMovement = false
+        //? if <=1.8.9 {
+        /*movement.capeMovement = CapeMovementSetting.V1_12
+        *///?} else {
+        movement.capeMovement = CapeMovementSetting.MODERN
+        //?}
         movement.disableCapeLean = false
         movement.disableCapeSwingRotation = false
         movement.capeChestplateTranslation = false

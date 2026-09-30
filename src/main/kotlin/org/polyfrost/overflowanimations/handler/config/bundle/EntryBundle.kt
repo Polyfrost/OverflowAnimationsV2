@@ -48,7 +48,7 @@ open class EntryBundle(protected val category: Category, private val name: Strin
         private val UNSUPPORTED_OPTIONS = buildSet<String> {
             //? if <=1.8.9 {
             /*addAll(listOf(
-                "oldCapeMovement", "disableCapeSwingRotation", "capeChestplateTranslation", "fakeOldSneakEyeHeight",
+                "disableCapeSwingRotation", "capeChestplateTranslation", "fakeOldSneakEyeHeight",
                 "rotateBackwardsWalking", "uncapBlockingHeadRotation", "legacyDamageTilt",
                 "skullPosition", "disableSwingOnUse", "disableSwingOnDrop",
                 "disableSwingOnEntityInteract", "disableItemUsingTextureInGUI", "durabilityBarColors",

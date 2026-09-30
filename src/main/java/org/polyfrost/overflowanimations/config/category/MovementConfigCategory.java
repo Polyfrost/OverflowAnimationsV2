@@ -28,12 +28,13 @@ package org.polyfrost.overflowanimations.config.category;
 import org.jspecify.annotations.NonNull;
 import org.polyfrost.overflowanimations.handler.config.bundle.EntryBundle;
 import org.polyfrost.overflowanimations.handler.config.category.Category;
+import org.polyfrost.overflowanimations.util.enums.CapeMovementSetting;
 import org.polyfrost.overflowanimations.util.enums.SneakAnimationSetting;
 import org.polyfrost.overflowanimations.util.enums.SneakBobbingSetting;
 
 public final class MovementConfigCategory extends Category {
     // (Movement) Cape
-    public boolean oldCapeMovement = false;
+    public CapeMovementSetting capeMovement = CapeMovementSetting.MODERN;
     public boolean disableCapeLean = false;
     public boolean disableCapeSwingRotation = false;
     public boolean capeChestplateTranslation = false;
@@ -66,7 +67,7 @@ public final class MovementConfigCategory extends Category {
         final EntryBundle bundle = new EntryBundle(this, "movement");
 
         bundle.group("cape")
-                .booleanEntry("oldCapeMovement")
+                .enumEntry("capeMovement", CapeMovementSetting.class)
                 .booleanEntry("disableCapeLean")
                 .booleanEntry("disableCapeSwingRotation")
                 .booleanEntry("capeChestplateTranslation")

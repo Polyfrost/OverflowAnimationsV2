@@ -45,6 +45,7 @@ import org.polyfrost.overflowanimations.OverflowAnimationsConstants;
 import org.polyfrost.overflowanimations.config.category.*;
 import org.polyfrost.overflowanimations.util.enums.ArmorGlintSetting;
 import org.polyfrost.overflowanimations.util.enums.CameraVersionSetting;
+import org.polyfrost.overflowanimations.util.enums.CapeMovementSetting;
 import org.polyfrost.overflowanimations.util.enums.DebugCrosshairSetting;
 import org.polyfrost.overflowanimations.util.enums.FishingRodVersionSetting;
 import org.polyfrost.overflowanimations.util.enums.ItemGlintSetting;
@@ -106,6 +107,9 @@ public final class OverflowAnimationsConfig extends Config {
 
         if (this.configVersion < CONFIG_VERSION) {
             this.migrateGlint(savedConfig);
+            if (savedConfig != null && savedConfig.has("oldCapeMovement")) {
+                this.movement.capeMovement = isTrue(savedConfig, "oldCapeMovement") ? CapeMovementSetting.V1_12 : CapeMovementSetting.MODERN;
+            }
             this.migrateDefaults();
 
             this.configVersion = CONFIG_VERSION;
@@ -201,6 +205,7 @@ public final class OverflowAnimationsConfig extends Config {
 
         migrateExtras(root);
         migrateSneakBobbing(root);
+        migrateCapeMovement(root);
         migrateLegacyGlint(root);
         return root;
     }
@@ -252,6 +257,12 @@ public final class OverflowAnimationsConfig extends Config {
     private static void migrateSneakBobbing(final JsonObject root) {
         if (root.get("movement") instanceof JsonObject movement && movement.remove("hand_view_bobbing_movement") instanceof JsonElement value && value.getAsBoolean()) {
             movement.addProperty("sneak_bobbing", "V1_21_1");
+        }
+    }
+
+    private static void migrateCapeMovement(final JsonObject root) {
+        if (root.get("movement") instanceof JsonObject movement && movement.remove("old_cape_movement") instanceof JsonElement value) {
+            movement.addProperty("cape_movement", value.getAsBoolean() ? "V1_12" : "MODERN");
         }
     }
 
