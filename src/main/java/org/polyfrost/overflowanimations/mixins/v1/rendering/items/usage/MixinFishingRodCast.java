@@ -39,7 +39,7 @@ import org.polyfrost.overflowanimations.util.enums.FishingRodVersionSetting;
 public abstract class MixinFishingRodCast {
     @ModifyReturnValue(method = "get", at = @At(value = "RETURN", ordinal = 0))
     private boolean overflowanimations$getValue(final boolean original, @Local(argsOnly = true, ordinal = 0) final ItemDisplayContext displayContext) {
-        if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().items.disableItemUsingTextureInGUI && displayContext == ItemDisplayContext.GUI) {
+        if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().items.usingTextureInGUI.isLegacy() && displayContext == ItemDisplayContext.GUI) {
             return false;
         } else {
             return (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().items.fishingRodVersion.ordinal() <= FishingRodVersionSetting.V1_8.ordinal()) || original;

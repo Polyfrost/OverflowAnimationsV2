@@ -33,12 +33,14 @@ import org.polyfrost.overflowanimations.util.enums.EquipAnimationVersionSetting;
 import org.polyfrost.overflowanimations.util.enums.FishingRodVersionSetting;
 import org.polyfrost.overflowanimations.util.enums.ItemGlintSetting;
 import org.polyfrost.overflowanimations.util.enums.PotionGlintSetting;
+import org.polyfrost.overflowanimations.util.enums.DropSwingSetting;
+import org.polyfrost.overflowanimations.util.enums.UsingTextureInGUISetting;
 
 public final class ItemsConfigCategory extends Category {
     // (Items) Enchantment Glint
-    public ItemGlintSetting itemGlint = ItemGlintSetting.MODERN;
-    public ArmorGlintSetting armorGlint = ArmorGlintSetting.MODERN;
-    public PotionGlintSetting potionGlint = PotionGlintSetting.MODERN;
+    public ItemGlintSetting itemGlint = ItemGlintSetting.V1_15;
+    public ArmorGlintSetting armorGlint = ArmorGlintSetting.V1_19_4;
+    public PotionGlintSetting potionGlint = PotionGlintSetting.V1_19_4;
     public boolean glintOnItemDrops2D = false;
     public boolean glintOnItemFramed2D = false;
     // (Items) 2D Drops
@@ -58,9 +60,9 @@ public final class ItemsConfigCategory extends Category {
     public boolean itemUsageSwinging = true;
     public boolean usageSwingingParticles = true;
     public boolean disableSwingOnUse = false;
-    public boolean disableSwingOnDrop = false;
+    public DropSwingSetting dropSwing = DropSwingSetting.V1_15;
     public boolean disableSwingOnEntityInteract = false;
-    public boolean disableItemUsingTextureInGUI = false;
+    public UsingTextureInGUISetting usingTextureInGUI = UsingTextureInGUISetting.V1_9;
     public EquipAnimationVersionSetting equipAnimationVersion = EquipAnimationVersionSetting.VANILLA;
     public boolean durabilityBarColors = false;
     public boolean legacyItemRarities = false;
@@ -103,11 +105,7 @@ public final class ItemsConfigCategory extends Category {
     public boolean disableHandSway = false;
     public float reequipSpeed = 0.4F;
     public boolean smartSwingScaling = false;
-    public boolean itemUseAnimationInGUI = true;
-    public boolean dropItemSwing = true;
     public boolean disableDropSwingInContainers = false;
-    public boolean itemUseCooldownAnimation = false;
-    public boolean modernBlockBreaking = true;
     public boolean resetMiningOnUse = false;
     public boolean blockHitWhileMining = true;
     public boolean disableAdventureSwing = false;
@@ -221,9 +219,9 @@ public final class ItemsConfigCategory extends Category {
                 .booleanEntry("itemUsageSwinging")
                 .booleanEntry("usageSwingingParticles")
                 .booleanEntry("disableSwingOnUse")
-                .booleanEntry("disableSwingOnDrop")
+                .enumEntry("dropSwing", DropSwingSetting.class)
                 .booleanEntry("disableSwingOnEntityInteract")
-                .booleanEntry("disableItemUsingTextureInGUI")
+                .enumEntry("usingTextureInGUI", UsingTextureInGUISetting.class)
                 .enumEntry("equipAnimationVersion", EquipAnimationVersionSetting.class)
                 .booleanEntry("durabilityBarColors")
                 .booleanEntry("legacyItemRarities")
@@ -245,11 +243,7 @@ public final class ItemsConfigCategory extends Category {
                 .booleanEntry("disableHandSway")
                 .floatRange("reequipSpeed", 0.1F, 1.0F, 0.05F)
                 .booleanEntry("smartSwingScaling")
-                .booleanEntry("itemUseAnimationInGUI")
-                .booleanEntry("dropItemSwing")
                 .booleanEntry("disableDropSwingInContainers")
-                .booleanEntry("itemUseCooldownAnimation")
-                .booleanEntry("modernBlockBreaking")
                 .booleanEntry("resetMiningOnUse")
                 .booleanEntry("blockHitWhileMining")
                 .booleanEntry("disableAdventureSwing")

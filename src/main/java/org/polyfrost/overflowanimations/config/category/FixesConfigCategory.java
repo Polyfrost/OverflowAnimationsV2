@@ -29,6 +29,8 @@ import org.jspecify.annotations.NonNull;
 import org.polyfrost.overflowanimations.handler.compatibility.ModsKt;
 import org.polyfrost.overflowanimations.handler.config.bundle.EntryBundle;
 import org.polyfrost.overflowanimations.handler.config.category.Category;
+import org.polyfrost.overflowanimations.util.enums.UseEquipAnimationSetting;
+import org.polyfrost.overflowanimations.util.enums.ViewBobbingTiltSetting;
 
 public final class FixesConfigCategory extends Category {
     public boolean fixSneakingFeetPosition = true;
@@ -39,9 +41,9 @@ public final class FixesConfigCategory extends Category {
     public boolean fixFireballClientsideVisual = true;
     public boolean fixTextStrikethroughStyle = true;
     public boolean fixHighAttackSpeedIndicator = true;
-    public boolean fixVerticalBobbingTilt = true;
+    public ViewBobbingTiltSetting viewBobbingTilt = ViewBobbingTiltSetting.V1_14;
     public boolean upMinPixelTransparencyLimit = true;
-    public boolean fixEquipAnimationOnItemUse = true;
+    public UseEquipAnimationSetting useEquipAnimation = UseEquipAnimationSetting.V1_8;
     public boolean fixItemUsageVisualInGUI = true;
     public boolean fixDoubleUsageVisual = true;
     public boolean oldSkyRenderingCheck = true;
@@ -64,9 +66,9 @@ public final class FixesConfigCategory extends Category {
         }
 
         bundle.booleanEntry("fixHighAttackSpeedIndicator");
-        bundle.booleanEntry("fixVerticalBobbingTilt");
+        bundle.enumEntry("viewBobbingTilt", ViewBobbingTiltSetting.class);
         bundle.booleanEntry("upMinPixelTransparencyLimit");
-        bundle.booleanEntry("fixEquipAnimationOnItemUse");
+        bundle.enumEntry("useEquipAnimation", UseEquipAnimationSetting.class);
         bundle.booleanEntry("fixItemUsageVisualInGUI");
         bundle.booleanEntry("fixDoubleUsageVisual");
         bundle.booleanEntry("oldSkyRenderingCheck");

@@ -46,17 +46,17 @@ enum class PresetVersion(private val applier: Runnable) {
         movement.disableCapeSwingRotation = true
         movement.capeChestplateTranslation = true
         movement.capeSneakPosition = true
-        movement.rotateBackwardsWalking = true
+        movement.backwardsWalking = BackwardsWalkingSetting.V1_8
         movement.uncapBlockingHeadRotation = true
-        movement.disableHeadRotationInterpolation = true
+        movement.headRotationInterpolation = HeadRotationInterpolationSetting.V1_8
         movement.sneakBobbing = SneakBobbingSetting.V1_21_1
         movement.deathLimbs = true
         movement.bowArmMovement = true
-        movement.legacyDamageTilt = true
+        movement.damageTilt = DamageTiltSetting.V1_8
         movement.offsetHurtTiltTime = true
 
         val screen = OverflowAnimationsConfig.instance().screen
-        screen.crosshairInThirdPerson = true
+        screen.thirdPersonCrosshair = ThirdPersonCrosshairSetting.V1_8
         screen.disableHeartFlash = true
         screen.centerScrollableListWidgets = true
         screen.listWidgetSelectedBorderColor = true
@@ -95,9 +95,9 @@ enum class PresetVersion(private val applier: Runnable) {
         items.itemUsageSwinging = true
         items.equipAnimationVersion = EquipAnimationVersionSetting.V1_7
         items.disableSwingOnUse = true
-        items.disableSwingOnDrop = true
+        items.dropSwing = DropSwingSetting.V1_8
         items.disableSwingOnEntityInteract = true
-        items.disableItemUsingTextureInGUI = true
+        items.usingTextureInGUI = UsingTextureInGUISetting.V1_8
         items.durabilityBarColors = true
         items.legacyItemRarities = true
         items.heldItemVisibilityInBoat = true
@@ -113,7 +113,7 @@ enum class PresetVersion(private val applier: Runnable) {
         other.thirdPersonSwordBlockingPosition = true
         other.lockBlockingArmRotation = true
         other.projectileAgeCheck = true
-        other.legacyBlockMiningProgress = true
+        other.blockMiningProgress = BlockMiningProgressSetting.V1_8
         other.disableInventoryEntityScissor = true
         other.blockOutlineRendering = true
         other.disableModelWhilstSleeping = true
@@ -151,17 +151,17 @@ enum class PresetVersion(private val applier: Runnable) {
         movement.disableCapeSwingRotation = true
         movement.capeChestplateTranslation = false
         movement.capeSneakPosition = false
-        movement.rotateBackwardsWalking = true
+        movement.backwardsWalking = BackwardsWalkingSetting.V1_8
         movement.uncapBlockingHeadRotation = true
-        movement.disableHeadRotationInterpolation = false
+        movement.headRotationInterpolation = HeadRotationInterpolationSetting.V1_8
         movement.sneakBobbing = SneakBobbingSetting.V1_21_1
         movement.deathLimbs = true
         movement.bowArmMovement = false
-        movement.legacyDamageTilt = true
+        movement.damageTilt = DamageTiltSetting.V1_8
         movement.offsetHurtTiltTime = false
 
         val screen = OverflowAnimationsConfig.instance().screen
-        screen.crosshairInThirdPerson = true
+        screen.thirdPersonCrosshair = ThirdPersonCrosshairSetting.V1_8
         screen.disableHeartFlash = false
         screen.centerScrollableListWidgets = false
         screen.listWidgetSelectedBorderColor = true
@@ -200,9 +200,9 @@ enum class PresetVersion(private val applier: Runnable) {
         items.itemUsageSwinging = false
         items.equipAnimationVersion = EquipAnimationVersionSetting.V1_8
         items.disableSwingOnUse = true
-        items.disableSwingOnDrop = true
+        items.dropSwing = DropSwingSetting.V1_8
         items.disableSwingOnEntityInteract = true
-        items.disableItemUsingTextureInGUI = true
+        items.usingTextureInGUI = UsingTextureInGUISetting.V1_8
         items.durabilityBarColors = true
         items.legacyItemRarities = true
         items.heldItemVisibilityInBoat = true
@@ -218,7 +218,7 @@ enum class PresetVersion(private val applier: Runnable) {
         other.thirdPersonSwordBlockingPosition = false
         other.lockBlockingArmRotation = true
         other.projectileAgeCheck = true
-        other.legacyBlockMiningProgress = true
+        other.blockMiningProgress = BlockMiningProgressSetting.V1_8
         other.disableInventoryEntityScissor = true
         other.blockOutlineRendering = true
         other.disableModelWhilstSleeping = true
@@ -250,23 +250,23 @@ enum class PresetVersion(private val applier: Runnable) {
         //? if <=1.8.9 {
         /*movement.capeMovement = CapeMovementSetting.V1_12
         *///?} else {
-        movement.capeMovement = CapeMovementSetting.MODERN
+        movement.capeMovement = CapeMovementSetting.V1_13
         //?}
         movement.disableCapeLean = false
         movement.disableCapeSwingRotation = false
         movement.capeChestplateTranslation = false
         movement.capeSneakPosition = false
-        movement.rotateBackwardsWalking = false
+        movement.backwardsWalking = BackwardsWalkingSetting.VANILLA
         movement.uncapBlockingHeadRotation = false
-        movement.disableHeadRotationInterpolation = false
+        movement.headRotationInterpolation = HeadRotationInterpolationSetting.VANILLA
         movement.sneakBobbing = SneakBobbingSetting.VANILLA
         movement.deathLimbs = false
         movement.bowArmMovement = false
-        movement.legacyDamageTilt = false
+        movement.damageTilt = DamageTiltSetting.VANILLA
         movement.offsetHurtTiltTime = false
 
         val screen = OverflowAnimationsConfig.instance().screen
-        screen.crosshairInThirdPerson = false
+        screen.thirdPersonCrosshair = ThirdPersonCrosshairSetting.VANILLA
         screen.disableHeartFlash = false
         screen.centerScrollableListWidgets = false
         screen.listWidgetSelectedBorderColor = false
@@ -305,9 +305,9 @@ enum class PresetVersion(private val applier: Runnable) {
         items.itemUsageSwinging = false
         items.equipAnimationVersion = EquipAnimationVersionSetting.VANILLA
         items.disableSwingOnUse = false
-        items.disableSwingOnDrop = false
+        items.dropSwing = DropSwingSetting.VANILLA
         items.disableSwingOnEntityInteract = false
-        items.disableItemUsingTextureInGUI = false
+        items.usingTextureInGUI = UsingTextureInGUISetting.VANILLA
         items.durabilityBarColors = false
         items.legacyItemRarities = false
         items.heldItemVisibilityInBoat = false
@@ -323,7 +323,7 @@ enum class PresetVersion(private val applier: Runnable) {
         other.thirdPersonSwordBlockingPosition = false
         other.lockBlockingArmRotation = false
         other.projectileAgeCheck = false
-        other.legacyBlockMiningProgress = false
+        other.blockMiningProgress = BlockMiningProgressSetting.VANILLA
         other.disableInventoryEntityScissor = false
         other.blockOutlineRendering = false
         other.disableModelWhilstSleeping = false

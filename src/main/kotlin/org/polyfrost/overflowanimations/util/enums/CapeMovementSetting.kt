@@ -27,5 +27,5 @@ package org.polyfrost.overflowanimations.util.enums
 
 enum class CapeMovementSetting {
     V1_12,
-    MODERN
+    V1_13
 }

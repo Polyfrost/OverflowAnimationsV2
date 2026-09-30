@@ -49,7 +49,7 @@ public abstract class MixinLivingEntity extends Entity {
 
     @WrapOperation(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/Mth;abs(F)F"))
     private float overflowanimations$rotateBackwardsWalking(final float value, final Operation<Float> original) {
-        if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().movement.rotateBackwardsWalking) {
+        if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().movement.backwardsWalking.isLegacy()) {
             return 0F;
         } else {
             return original.call(value);
@@ -59,7 +59,7 @@ public abstract class MixinLivingEntity extends Entity {
     // TODO/NOTE: Might can be improved/shortened
     @WrapOperation(method = "tickHeadTurn", at = @At(value = "INVOKE", target = "Ljava/lang/Math;abs(F)F"))
     private float overflowanimations$backwardsWalkingHeadRotation(final float value, final Operation<Float> original) {
-        if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().movement.rotateBackwardsWalking) {
+        if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().movement.backwardsWalking.isLegacy()) {
             final float rotation = Mth.clamp(value, -75.0F, 75.0F);
             this.yBodyRot = this.getYRot() - rotation;
             if (Math.abs(rotation) > 50.0F) {
@@ -74,7 +74,7 @@ public abstract class MixinLivingEntity extends Entity {
 
     @WrapOperation(method = "lerpHeadRotationStep", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/Mth;rotLerp(DDD)D"))
     public double overflowanimations$disableHeadRotationInterpolation(final double delta, final double start, final double end, final Operation<Double> original) {
-        if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().movement.disableHeadRotationInterpolation) {
+        if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().movement.headRotationInterpolation.isLegacy()) {
             return end;
         } else {
             return original.call(delta, start, end);

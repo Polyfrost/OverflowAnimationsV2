@@ -135,7 +135,7 @@ public abstract class MixinFishingHookRenderer extends EntityRenderer<FishingHoo
             float eyeHeight;
             if (OverflowAnimationsConfig.instance().items.fishingRodVersion.ordinal() <= FishingRodVersionSetting.V1_13.ordinal()) {
                 eyeHeight = Mth.lerp(tickDelta, cameraAccessor.overflowanimations$getOldEyeHeight(), cameraAccessor.overflowanimations$getEyeHeight());
-            } else if (OverflowAnimationsConfig.instance().movement.fakeOldSneakEyeHeight) {
+            } else if (OverflowAnimationsConfig.instance().movement.sneakEyeHeight.isLegacy()) {
                 // Non-lerped eyeheight trick
                 eyeHeight = cameraAccessor.overflowanimations$getEyeHeight();
             } else {

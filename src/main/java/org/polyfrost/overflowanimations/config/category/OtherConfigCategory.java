@@ -38,6 +38,7 @@ import org.polyfrost.overflowanimations.handler.rendering.RenderUtilsKt;
 import org.polyfrost.overflowanimations.handler.rendering.lighting.LegacyDiffuseLighting;
 import org.polyfrost.overflowanimations.util.enums.DamageTintSetting;
 import org.polyfrost.overflowanimations.util.enums.VoidFogSetting;
+import org.polyfrost.overflowanimations.util.enums.BlockMiningProgressSetting;
 
 
 public final class OtherConfigCategory extends Category {
@@ -58,7 +59,7 @@ public final class OtherConfigCategory extends Category {
     // Other
     public boolean restoreParticleBlending = false;
     public boolean lockBlockingArmRotation = false;
-    public boolean legacyBlockMiningProgress = false;
+    public BlockMiningProgressSetting blockMiningProgress = BlockMiningProgressSetting.V1_20;
     public boolean projectileAgeCheck = false;
     public boolean blockOutlineRendering = false;
     public boolean disableModelWhilstSleeping = false;
@@ -114,7 +115,7 @@ public final class OtherConfigCategory extends Category {
         bundle.group("other")
                 .booleanEntry("restoreParticleBlending")
                 .booleanEntry("lockBlockingArmRotation")
-                .booleanEntry("legacyBlockMiningProgress")
+                .enumEntry("blockMiningProgress", BlockMiningProgressSetting.class)
                 .booleanEntry("projectileAgeCheck")
                 .booleanEntry("blockOutlineRendering")
                 .booleanEntry("disableModelWhilstSleeping")

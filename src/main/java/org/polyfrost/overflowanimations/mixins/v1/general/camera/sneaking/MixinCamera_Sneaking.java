@@ -70,7 +70,7 @@ public abstract class MixinCamera_Sneaking {
 
     @WrapOperation(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;getEyeHeight()F"))
     private float overflowanimations$useOldEyeHeight(final Entity instance, final Operation<Float> original) {
-        if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().movement.fakeOldSneakEyeHeight) {
+        if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().movement.sneakEyeHeight.isLegacy()) {
             return this.overflowanimations$getSneakingEyeHeight();
         } else {
             return original.call(instance);
@@ -80,7 +80,7 @@ public abstract class MixinCamera_Sneaking {
     @WrapOperation(method = "tick", at = @At(value = "FIELD", opcode = Opcodes.PUTFIELD, target = "Lnet/minecraft/client/Camera;eyeHeight:F"))
     private void overflowanimations$oldSneakAnimationInterpolation(final Camera instance, final float value, final Operation<Void> original) {
         final SneakAnimationSetting sneakAnimation = OverflowAnimationsConfig.instance().movement.sneakAnimation;
-        if (OverflowAnimations.isEnabled() && sneakAnimation != SneakAnimationSetting.VANILLA && sneakAnimation != SneakAnimationSetting.MODERN && this.entity.isCrouching()) {
+        if (OverflowAnimations.isEnabled() && sneakAnimation != SneakAnimationSetting.VANILLA && sneakAnimation != SneakAnimationSetting.V1_14 && this.entity.isCrouching()) {
             if (sneakAnimation == SneakAnimationSetting.V1_7 && this.entity.getEyeHeight() < this.eyeHeight) {
                 this.eyeHeight = this.overflowanimations$getSneakingEyeHeight();
                 return;
@@ -108,7 +108,7 @@ public abstract class MixinCamera_Sneaking {
     private float overflowanimations$getSneakingEyeHeight() {
         final float currentEyeHeight = this.entity.getEyeHeight();
         if (OverflowAnimations.isEnabled() &&
-                OverflowAnimationsConfig.instance().movement.fakeOldSneakEyeHeight &&
+                OverflowAnimationsConfig.instance().movement.sneakEyeHeight.isLegacy() &&
                 this.entity.hasPose(Pose.CROUCHING) &&
                 this.entity instanceof Player player &&
                 ((PlayerAccessor) player).overflowanimations$canChangeIntoPose(Pose.STANDING)) {

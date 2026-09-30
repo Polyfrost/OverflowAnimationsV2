@@ -40,7 +40,7 @@ import org.polyfrost.overflowanimations.util.ItemUtilKt;
 public abstract class MixinIsUsingItem {
     @ModifyReturnValue(method = "get", at = @At(value = "RETURN"))
     private boolean overflowanimations$getValue(final boolean original, @Local(argsOnly = true, ordinal = 0) final ItemStack itemStack, @Local(argsOnly = true, ordinal = 0) final ItemDisplayContext displayContext) {
-        if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().items.disableItemUsingTextureInGUI && ItemUtilKt.isRangedWeaponItem(itemStack) && displayContext == ItemDisplayContext.GUI) {
+        if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().items.usingTextureInGUI.isLegacy() && ItemUtilKt.isRangedWeaponItem(itemStack) && displayContext == ItemDisplayContext.GUI) {
             return false;
         } else {
             return original;

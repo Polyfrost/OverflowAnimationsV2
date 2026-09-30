@@ -108,7 +108,7 @@ public final class OverflowAnimationsConfig extends Config {
         if (this.configVersion < CONFIG_VERSION) {
             this.migrateGlint(savedConfig);
             if (savedConfig != null && savedConfig.has("oldCapeMovement")) {
-                this.movement.capeMovement = isTrue(savedConfig, "oldCapeMovement") ? CapeMovementSetting.V1_12 : CapeMovementSetting.MODERN;
+                this.movement.capeMovement = isTrue(savedConfig, "oldCapeMovement") ? CapeMovementSetting.V1_12 : CapeMovementSetting.V1_13;
             }
             this.migrateDefaults();
 
@@ -139,38 +139,30 @@ public final class OverflowAnimationsConfig extends Config {
         }
 
         if (movement.sneakAnimation == SneakAnimationSetting.VANILLA) {
-            movement.sneakAnimation = SneakAnimationSetting.MODERN;
+            movement.sneakAnimation = SneakAnimationSetting.V1_14;
         }
 
         if (items.fishingRodVersion == FishingRodVersionSetting.VANILLA) {
-            items.fishingRodVersion = FishingRodVersionSetting.MODERN;
+            items.fishingRodVersion = FishingRodVersionSetting.V1_17;
         }
 
         if (screen.cameraVersion == CameraVersionSetting.VANILLA) {
-            screen.cameraVersion = CameraVersionSetting.MODERN;
+            screen.cameraVersion = CameraVersionSetting.V1_14_4;
         }
 
         if (screen.debugCrosshairStyle == DebugCrosshairSetting.V1_12 || screen.debugCrosshairStyle == DebugCrosshairSetting.V1_8) {
             screen.debugCrosshairStyle = DebugCrosshairSetting.VANILLA;
         }
 
-        movement.modernBackwardsWalking = true;
-        movement.smoothHeadYaw = true;
-        movement.modernViewBobbing = true;
-        movement.directionalDamageTilt = true;
         items.itemPickupPosition = false;
         items.fakeMissPenaltySwing = true;
         //? if <=1.8.9 {
-        /*items.itemGlint = ItemGlintSetting.MODERN;
-        items.armorGlint = ArmorGlintSetting.MODERN;
-        items.potionGlint = PotionGlintSetting.MODERN;
+        /*items.itemGlint = ItemGlintSetting.V1_15;
+        items.armorGlint = ArmorGlintSetting.V1_19_4;
+        items.potionGlint = PotionGlintSetting.V1_19_4;
         *///?}
-        items.itemUseAnimationInGUI = true;
-        items.dropItemSwing = true;
-        items.modernBlockBreaking = true;
         items.modernPotionColors = true;
         items.fishingRodLineFov = true;
-        screen.hideCrosshairInThirdPerson = true;
     }
 
     public static void load() {
@@ -207,6 +199,7 @@ public final class OverflowAnimationsConfig extends Config {
         migrateSneakBobbing(root);
         migrateCapeMovement(root);
         migrateLegacyGlint(root);
+        migrateVersionToggles(root);
         return root;
     }
 
@@ -262,7 +255,27 @@ public final class OverflowAnimationsConfig extends Config {
 
     private static void migrateCapeMovement(final JsonObject root) {
         if (root.get("movement") instanceof JsonObject movement && movement.remove("old_cape_movement") instanceof JsonElement value) {
-            movement.addProperty("cape_movement", value.getAsBoolean() ? "V1_12" : "MODERN");
+            movement.addProperty("cape_movement", value.getAsBoolean() ? "V1_12" : "V1_13");
+        }
+    }
+
+    private static void migrateVersionToggles(final JsonObject root) {
+        final String[][] toggles = {
+                {"movement", "rotate_backwards_walking", "backwards_walking"},
+                {"movement", "disable_head_rotation_interpolation", "head_rotation_interpolation"},
+                {"movement", "legacy_damage_tilt", "damage_tilt"},
+                {"movement", "fake_old_sneak_eye_height", "sneak_eye_height"},
+                {"fixes", "fix_vertical_bobbing_tilt", "view_bobbing_tilt"},
+                {"fixes", "fix_equip_animation_on_item_use", "use_equip_animation"},
+                {"items", "disable_swing_on_drop", "drop_swing"},
+                {"items", "disable_item_using_texture_in_g_u_i", "using_texture_in_g_u_i"},
+                {"other", "legacy_block_mining_progress", "block_mining_progress"},
+                {"screen", "crosshair_in_third_person", "third_person_crosshair"}
+        };
+        for (final String[] toggle : toggles) {
+            if (root.get(toggle[0]) instanceof JsonObject category && category.remove(toggle[1]) instanceof JsonElement value && value.getAsBoolean()) {
+                category.addProperty(toggle[2], "V1_8");
+            }
         }
     }
 

@@ -29,5 +29,5 @@ enum class PotionGlintSetting {
     V1_7,
     V1_8,
     VANILLA,
-    MODERN
+    V1_19_4
 }

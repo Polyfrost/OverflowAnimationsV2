@@ -71,7 +71,7 @@ public abstract class MixinGameRenderer_ModifyViewBobbing {
     @WrapOperation(method = "bobHurt", at = @At(value = "FIELD", target = "Lnet/minecraft/client/renderer/state/level/CameraEntityRenderState;hurtDir:F", opcode = Opcodes.GETFIELD))
     private float overflowanimations$damageTilt(final CameraEntityRenderState instance, final Operation<Float> original) {
     //?}
-        if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().movement.legacyDamageTilt) {
+        if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().movement.damageTilt.isLegacy()) {
             return 0.0F;
         } else {
             return original.call(instance);
@@ -100,7 +100,7 @@ public abstract class MixinGameRenderer_ModifyViewBobbing {
     *///?} else {
     private void overflowanimations$fixVerticalBobbingTilt(final CameraRenderState cameraState, final PoseStack poseStack, final CallbackInfo ci) {
     //?}
-        if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().fixes.fixVerticalBobbingTilt && this.minecraft.getCameraEntity() instanceof AbstractClientPlayer player) {
+        if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().fixes.viewBobbingTilt.isLegacy() && this.minecraft.getCameraEntity() instanceof AbstractClientPlayer player) {
             //? if <26.1 {
             /*final float fallDist = Mth.lerp(tickDelta, player.overflowanimations$getPreviousBobbingTilt(), player.overflowanimations$getBobbingTilt());
             *///?} else {
