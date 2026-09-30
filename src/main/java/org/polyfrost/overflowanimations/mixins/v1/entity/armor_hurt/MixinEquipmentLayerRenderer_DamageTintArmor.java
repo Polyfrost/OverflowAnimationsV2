@@ -52,6 +52,8 @@ import org.polyfrost.overflowanimations.OverflowAnimations;
 import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig;
 import org.polyfrost.overflowanimations.handler.rendering.RenderUtilsKt;
 //? if >=1.21.6
+import org.polyfrost.overflowanimations.handler.rendering.pipeline.ArmorGlint;
+//? if >=1.21.6
 import org.polyfrost.overflowanimations.handler.rendering.pipeline.OverflowAnimationsRenderTypes;
 
 @IfModAbsent("ichor")
@@ -95,7 +97,7 @@ public abstract class MixinEquipmentLayerRenderer_DamageTintArmor {
     @WrapOperation(method = RENDER_LAYERS_TARGET, at = @At(value = "INVOKE", target = "Lnet/minecraft/client/model/Model;renderToBuffer(Lcom/mojang/blaze3d/vertex/PoseStack;Lcom/mojang/blaze3d/vertex/VertexConsumer;III)V"))
     private void overflowanimations$useOverlayArmorGlint(final Model model, final PoseStack poseStack, final VertexConsumer buffer, final int light, final int overlay, final int color, final Operation<Void> original, @Local(argsOnly = true) final ItemStack itemStack, @Local(argsOnly = true) final MultiBufferSource bufferSource) {
         original.call(model, poseStack, buffer, light, overlay, color);
-        if (itemStack.hasFoil() && overflowanimations$glintAffectsTint()) {
+        if (itemStack.hasFoil() && overflowanimations$glintAffectsTint() && ArmorGlint.layers().isEmpty()) {
             original.call(model, poseStack, bufferSource.getBuffer(OverflowAnimationsRenderTypes.ARMOR_GLINT), light, overlay, color);
         }
     }
@@ -158,6 +160,7 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.polyfrost.overflowanimations.OverflowAnimations;
 import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig;
+import org.polyfrost.overflowanimations.handler.rendering.pipeline.ArmorGlint;
 import org.polyfrost.overflowanimations.handler.rendering.pipeline.OverflowAnimationsRenderTypes;
 
 @IfModAbsent("ichor")
@@ -256,7 +259,7 @@ public abstract class MixinEquipmentLayerRenderer_DamageTintArmor {
     @WrapOperation(method = RENDER_LAYERS_TARGET, at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/OrderedSubmitNodeCollector;submitModel(Lnet/minecraft/client/model/Model;Ljava/lang/Object;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/rendertype/RenderType;IIILnet/minecraft/client/renderer/texture/UvMapping;I)V", ordinal = 0))
     private <S> void overflowanimations$useOverlayArmorGlint(final OrderedSubmitNodeCollector instance, final Model<? super S> model, final S state, final PoseStack poseStack, final RenderType renderType, final int lightCoords, final int overlayCoords, final int color, final @Nullable UvMapping uvMapping, final int outlineColor, final Operation<Void> original, @Local(argsOnly = true, ordinal = 0) final ItemStack itemStack) {
         original.call(instance, model, state, poseStack, renderType, lightCoords, overlayCoords, color, uvMapping, outlineColor);
-        if (this.overflowanimations$isArmorHurt(state) && OverflowAnimationsConfig.instance().other.glintAffectsArmorTint && !Minecraft.getInstance().options.improvedTransparency().get() && itemStack.hasFoil()) {
+        if (this.overflowanimations$isArmorHurt(state) && OverflowAnimationsConfig.instance().other.glintAffectsArmorTint && !Minecraft.getInstance().options.improvedTransparency().get() && itemStack.hasFoil() && ArmorGlint.layers().isEmpty()) {
             original.call(instance, model, state, poseStack, OverflowAnimationsRenderTypes.ARMOR_GLINT, lightCoords, overlayCoords, color, uvMapping, outlineColor);
     //?}
         }

@@ -55,6 +55,27 @@ accessible field net/minecraft/world/entity/Avatar STANDING_DIMENSIONS Lnet/mine
 #accessible field net/minecraft/client/renderer/RenderStateShard OVERLAY Lnet/minecraft/client/renderer/RenderStateShard$OverlayStateShard;
 #?}
 
+#? if <1.21.6 {
+#accessible class net/minecraft/client/renderer/RenderType$CompositeState
+#accessible class net/minecraft/client/renderer/RenderType$CompositeRenderType
+#accessible method net/minecraft/client/renderer/RenderType create (Ljava/lang/String;Lcom/mojang/blaze3d/vertex/VertexFormat;Lcom/mojang/blaze3d/vertex/VertexFormat$Mode;ILnet/minecraft/client/renderer/RenderType$CompositeState;)Lnet/minecraft/client/renderer/RenderType$CompositeRenderType;
+#accessible class net/minecraft/client/renderer/RenderStateShard$ShaderStateShard
+#accessible class net/minecraft/client/renderer/RenderStateShard$EmptyTextureStateShard
+#accessible class net/minecraft/client/renderer/RenderStateShard$TextureStateShard
+#accessible class net/minecraft/client/renderer/RenderStateShard$WriteMaskStateShard
+#accessible class net/minecraft/client/renderer/RenderStateShard$CullStateShard
+#accessible class net/minecraft/client/renderer/RenderStateShard$DepthTestStateShard
+#accessible class net/minecraft/client/renderer/RenderStateShard$TransparencyStateShard
+#accessible class net/minecraft/client/renderer/RenderStateShard$TexturingStateShard
+#accessible class net/minecraft/client/renderer/RenderStateShard$LayeringStateShard
+#accessible field net/minecraft/client/renderer/RenderStateShard RENDERTYPE_ARMOR_ENTITY_GLINT_SHADER Lnet/minecraft/client/renderer/RenderStateShard$ShaderStateShard;
+#accessible field net/minecraft/client/renderer/RenderStateShard COLOR_WRITE Lnet/minecraft/client/renderer/RenderStateShard$WriteMaskStateShard;
+#accessible field net/minecraft/client/renderer/RenderStateShard NO_CULL Lnet/minecraft/client/renderer/RenderStateShard$CullStateShard;
+#accessible field net/minecraft/client/renderer/RenderStateShard EQUAL_DEPTH_TEST Lnet/minecraft/client/renderer/RenderStateShard$DepthTestStateShard;
+#accessible field net/minecraft/client/renderer/RenderStateShard GLINT_TRANSPARENCY Lnet/minecraft/client/renderer/RenderStateShard$TransparencyStateShard;
+#accessible field net/minecraft/client/renderer/RenderStateShard VIEW_OFFSET_Z_LAYERING Lnet/minecraft/client/renderer/RenderStateShard$LayeringStateShard;
+#?}
+
 accessible field net/minecraft/client/renderer/CloudRenderer TEXTURE_LOCATION Lnet/minecraft/resources/Identifier;
 accessible method net/minecraft/client/renderer/CloudRenderer packCellData (IZZZZ)J
 accessible method net/minecraft/client/renderer/CloudRenderer isCellEmpty (I)Z

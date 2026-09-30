@@ -66,7 +66,6 @@ public final class OtherConfigCategory extends Category {
     public boolean heldItemArmLogic = false;
     public boolean thirdPersonSwordBlockingPosition = true;
     public boolean disableInventoryEntityScissor = false;
-    public boolean itemGlintOnEntity = false;
     public boolean maxGlintProperties = false;
     public boolean flameOffset = false;
     public boolean persistentBlockOutline = false;
@@ -123,7 +122,6 @@ public final class OtherConfigCategory extends Category {
                 .booleanEntry("heldItemArmLogic")
                 .booleanEntry("thirdPersonSwordBlockingPosition")
                 .booleanEntry("disableInventoryEntityScissor")
-                .booleanEntry("itemGlintOnEntity")
                 .booleanEntry("maxGlintProperties")
                 .booleanEntry("flameOffset")
                 .booleanEntry("persistentBlockOutline")

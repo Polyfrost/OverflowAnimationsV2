@@ -39,7 +39,10 @@ void main() {
     if (color.a < 0.1) {
         discard;
     } else {
-        float fade = (1.0f - total_fog_value(sphericalVertexDistance, cylindricalVertexDistance, FogEnvironmentalStart, FogEnvironmentalEnd, FogRenderDistanceStart, FogRenderDistanceEnd)) * GlintAlpha;
+        float fade = 1.0f - total_fog_value(sphericalVertexDistance, cylindricalVertexDistance, FogEnvironmentalStart, FogEnvironmentalEnd, FogRenderDistanceStart, FogRenderDistanceEnd);
+#ifndef FULL_GLINT_STRENGTH
+        fade *= GlintAlpha;
+#endif
         fragColor = vec4(mix(overlayColor.rgb, color.rgb, overlayColor.a) * fade, color.a);
     }
 }

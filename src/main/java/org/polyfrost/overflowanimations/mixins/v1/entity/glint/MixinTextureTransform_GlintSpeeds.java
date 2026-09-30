@@ -40,9 +40,11 @@ import net.minecraft.client.renderer.rendertype.TextureTransform;
 import org.objectweb.asm.Opcodes;
 //?}
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.polyfrost.overflowanimations.OverflowAnimations;
 import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig;
+import org.polyfrost.overflowanimations.util.enums.ItemGlintSetting;
 
 //? if <1.21.11 {
 /*@Mixin(RenderStateShard.class)
@@ -73,7 +75,7 @@ public abstract class MixinTextureTransform_GlintSpeeds {
 
     @ModifyExpressionValue(method = "setupGlintTexturing", at = @At(value = "CONSTANT", args = "doubleValue=8.0"))
     private static double overflowanimations$glintSpeed(final double original, @Local(argsOnly = true, ordinal = 0) final float scale) {
-        if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().items.legacyGlintSpeed && scale == 8.0F) {
+        if (overflowanimations$legacyItemGlint() && scale == 8.0F) {
             // Value taken from 1.8
             return 1.0D;
         } else {
@@ -83,7 +85,7 @@ public abstract class MixinTextureTransform_GlintSpeeds {
 
     @ModifyExpressionValue(method = "setupGlintTexturing", at = @At(value = "CONSTANT", args = "floatValue=110000.0"))
     private static float overflowanimations$glintSpeed$horizontal(final float original, @Local(argsOnly = true, ordinal = 0) final float scale) {
-        if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().items.legacyGlintSpeed && scale == 8.0F) {
+        if (overflowanimations$legacyItemGlint() && scale == 8.0F) {
             // Value taken from 1.7/1.8
             return 4873.0F;
         } else {
@@ -93,11 +95,17 @@ public abstract class MixinTextureTransform_GlintSpeeds {
 
     @ModifyExpressionValue(method = "setupGlintTexturing", at = @At(value = "CONSTANT", args = "floatValue=30000.0"))
     private static float overflowanimations$glintSpeed$diagonal(final float original, @Local(argsOnly = true, ordinal = 0) final float scale) {
-        if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().items.legacyGlintSpeed && scale == 8.0F) {
+        if (overflowanimations$legacyItemGlint() && scale == 8.0F) {
             // Value taken from 1.7/1.8
             return 3000.0F;
         } else {
             return original;
         }
+    }
+
+    @Unique
+    private static boolean overflowanimations$legacyItemGlint() {
+        final ItemGlintSetting setting = OverflowAnimationsConfig.instance().items.itemGlint;
+        return OverflowAnimations.isEnabled() && (setting == ItemGlintSetting.V1_7 || setting == ItemGlintSetting.V1_8);
     }
 }

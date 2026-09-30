@@ -37,8 +37,7 @@ open class EntryBundle(protected val category: Category, private val name: Strin
     companion object {
         private val LEGACY_ONLY_OPTIONS = listOf(
             "modernBackwardsWalking", "smoothHeadYaw", "modernViewBobbing", "directionalDamageTilt",
-            "modernSneakEyeHeight", "disableHurtCamera", "legacyGlint", "legacyGuiGlint", "legacyPotionGlint",
-            "disablePotionGlint", "modernArmorGlint", "itemDrops2DColors", "fireballModel", "itemPickupOffset", "legacyProjectiles",
+            "modernSneakEyeHeight", "disableHurtCamera", "itemDrops2DColors", "fireballModel", "itemPickupOffset", "legacyProjectiles",
             "itemUseAnimationInGUI", "dropItemSwing", "disableDropSwingInContainers", "itemUseCooldownAnimation",
             "modernBlockBreaking", "resetMiningOnUse", "blockHitWhileMining", "disableAdventureSwing",
             "disableAdventureUsageSwinging", "disableAdventureUsageParticles", "modernPotionColors",
@@ -51,7 +50,7 @@ open class EntryBundle(protected val category: Category, private val name: Strin
             /*addAll(listOf(
                 "oldCapeMovement", "disableCapeSwingRotation", "capeChestplateTranslation", "fakeOldSneakEyeHeight",
                 "rotateBackwardsWalking", "uncapBlockingHeadRotation", "legacyDamageTilt",
-                "legacyGlintSpeed", "skullPosition", "disableSwingOnUse", "disableSwingOnDrop",
+                "skullPosition", "disableSwingOnUse", "disableSwingOnDrop",
                 "disableSwingOnEntityInteract", "disableItemUsingTextureInGUI", "durabilityBarColors",
                 "legacyItemRarities", "heldItemVisibilityInBoat", "offhandUsageSwinging", "legacySwingAnimation",
                 "crosshairInThirdPerson", "listWidgetSelectedBorderColor", "legacyWidgetHoverTextColor",
@@ -64,9 +63,9 @@ open class EntryBundle(protected val category: Category, private val name: Strin
                 "fixHighAttackSpeedIndicator", "upMinPixelTransparencyLimit", "fixDoubleUsageVisual", "blueVoidSky",
                 "cloudHeight", "playerVoidBox", "oldY0Height", "oldWaterOverlayOpacity", "oldWaterColorFog",
                 "oldWaterColorEffects", "oldCloudRendering", "legacyLightmap", "legacyFogDarkness",
-                "maxGlintProperties", "restoreParticleBlending", "disableInventoryEntityScissor",
+                "restoreParticleBlending", "disableInventoryEntityScissor",
                 "legacyBlockMiningProgress", "projectileAgeCheck", "blockOutlineRendering",
-                "disableModelWhilstSleeping", "flameDimensions", "itemGlintOnEntity", "heldItemArmLogic",
+                "disableModelWhilstSleeping", "flameDimensions", "heldItemArmLogic",
                 "legacySplashPosition", "legacyDiffuseLighting",
                 "fixEquipAnimationOnItemUse",
                 "disableCapeLean", "deathLimbs", "bowArmMovement", "lockBlockingArmRotation", "disableHeadRotationInterpolation"

@@ -30,6 +30,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 import net.fabricmc.loader.api.FabricLoader;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -42,9 +43,12 @@ import org.polyfrost.oneconfig.api.ui.v1.OneConfigUI;
 import org.polyfrost.oneconfig.internal.ui.navigation.graph.ModConfigRoute;
 import org.polyfrost.overflowanimations.OverflowAnimationsConstants;
 import org.polyfrost.overflowanimations.config.category.*;
+import org.polyfrost.overflowanimations.util.enums.ArmorGlintSetting;
 import org.polyfrost.overflowanimations.util.enums.CameraVersionSetting;
 import org.polyfrost.overflowanimations.util.enums.DebugCrosshairSetting;
 import org.polyfrost.overflowanimations.util.enums.FishingRodVersionSetting;
+import org.polyfrost.overflowanimations.util.enums.ItemGlintSetting;
+import org.polyfrost.overflowanimations.util.enums.PotionGlintSetting;
 import org.polyfrost.overflowanimations.util.enums.SneakAnimationSetting;
 
 import java.lang.reflect.Field;
@@ -60,6 +64,7 @@ public final class OverflowAnimationsConfig extends Config {
     private static final Path CONFIG_DIR = FabricLoader.getInstance().getConfigDir();
     private static final int CONFIG_VERSION = 1;
 
+    private static JsonObject savedConfig = readObject(CONFIG_DIR.resolve(ID));
     private static JsonObject legacyConfig = takeLegacyConfig();
     private static final OverflowAnimationsConfig INSTANCE = new OverflowAnimationsConfig();
 
@@ -100,10 +105,25 @@ public final class OverflowAnimationsConfig extends Config {
         }
 
         if (this.configVersion < CONFIG_VERSION) {
+            this.migrateGlint(savedConfig);
             this.migrateDefaults();
+
             this.configVersion = CONFIG_VERSION;
             this.save();
         }
+
+        savedConfig = null;
+    }
+
+    private void migrateGlint(final JsonObject saved) {
+        if (saved != null && saved.has("legacyGlintSpeed")) {
+            this.items.itemGlint = isTrue(saved, "legacyGlintSpeed") ? ItemGlintSetting.V1_8 : ItemGlintSetting.VANILLA;
+            this.items.armorGlint = isTrue(saved, "itemGlintOnEntity") ? ArmorGlintSetting.V1_8 : ArmorGlintSetting.VANILLA;
+        }
+    }
+
+    private static boolean isTrue(final JsonObject object, final String key) {
+        return object.get(key) instanceof JsonPrimitive value && value.getAsBoolean();
     }
 
     private void migrateDefaults() {
@@ -136,8 +156,11 @@ public final class OverflowAnimationsConfig extends Config {
         movement.directionalDamageTilt = true;
         items.itemPickupPosition = false;
         items.fakeMissPenaltySwing = true;
-        items.legacyGlint = true;
-        items.modernArmorGlint = true;
+        //? if <=1.8.9 {
+        /*items.itemGlint = ItemGlintSetting.MODERN;
+        items.armorGlint = ArmorGlintSetting.MODERN;
+        items.potionGlint = PotionGlintSetting.MODERN;
+        *///?}
         items.itemUseAnimationInGUI = true;
         items.dropItemSwing = true;
         items.modernBlockBreaking = true;
@@ -178,6 +201,7 @@ public final class OverflowAnimationsConfig extends Config {
 
         migrateExtras(root);
         migrateSneakBobbing(root);
+        migrateLegacyGlint(root);
         return root;
     }
 
@@ -229,6 +253,19 @@ public final class OverflowAnimationsConfig extends Config {
         if (root.get("movement") instanceof JsonObject movement && movement.remove("hand_view_bobbing_movement") instanceof JsonElement value && value.getAsBoolean()) {
             movement.addProperty("sneak_bobbing", "V1_21_1");
         }
+    }
+
+    private static void migrateLegacyGlint(final JsonObject root) {
+        final JsonObject items = root.get("items") instanceof JsonObject object ? object : new JsonObject();
+        if (items.remove("legacy_glint_speed") instanceof JsonElement value) {
+            items.addProperty("item_glint", value.getAsBoolean() ? "V1_8" : "VANILLA");
+        }
+
+        if (root.get("other") instanceof JsonObject other && other.remove("item_glint_on_entity") instanceof JsonElement value) {
+            items.addProperty("armor_glint", value.getAsBoolean() ? "V1_8" : "VANILLA");
+        }
+
+        root.add("items", items);
     }
 
     private static void moveEntries(final JsonObject from, final JsonObject root, final String category, final String... keys) {
