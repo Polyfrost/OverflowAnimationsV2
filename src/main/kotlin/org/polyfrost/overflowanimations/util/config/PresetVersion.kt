@@ -49,7 +49,7 @@ enum class PresetVersion(private val applier: Runnable) {
         movement.rotateBackwardsWalking = true
         movement.uncapBlockingHeadRotation = true
         movement.disableHeadRotationInterpolation = true
-        movement.handViewBobbingMovement = true
+        movement.sneakBobbing = SneakBobbingSetting.V1_21_1
         movement.deathLimbs = true
         movement.bowArmMovement = true
         movement.legacyDamageTilt = true
@@ -153,7 +153,7 @@ enum class PresetVersion(private val applier: Runnable) {
         movement.rotateBackwardsWalking = true
         movement.uncapBlockingHeadRotation = true
         movement.disableHeadRotationInterpolation = false
-        movement.handViewBobbingMovement = true
+        movement.sneakBobbing = SneakBobbingSetting.V1_21_1
         movement.deathLimbs = true
         movement.bowArmMovement = false
         movement.legacyDamageTilt = true
@@ -253,7 +253,7 @@ enum class PresetVersion(private val applier: Runnable) {
         movement.rotateBackwardsWalking = false
         movement.uncapBlockingHeadRotation = false
         movement.disableHeadRotationInterpolation = false
-        movement.handViewBobbingMovement = false
+        movement.sneakBobbing = SneakBobbingSetting.VANILLA
         movement.deathLimbs = false
         movement.bowArmMovement = false
         movement.legacyDamageTilt = false

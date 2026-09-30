@@ -36,6 +36,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.polyfrost.overflowanimations.OverflowAnimations;
 import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig;
+import org.polyfrost.overflowanimations.util.enums.SneakBobbingSetting;
 import org.polyfrost.overflowanimations.util.states.ViewBobbingStorage;
 
 @Mixin(Entity.class)
@@ -48,14 +49,14 @@ public abstract class MixinEntity_HorizontalViewBobbing implements ViewBobbingSt
 
     @Inject(method = "baseTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;handlePortal()V", shift = At.Shift.AFTER))
     private void overflowanimations$storePreviousHorizontalSpeed(final CallbackInfo ci) {
-        if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().movement.handViewBobbingMovement) {
+        if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().movement.sneakBobbing == SneakBobbingSetting.V1_21_1) {
             this.overflowanimations$previousHorizontalSpeed = this.overflowanimations$horizontalSpeed;
         }
     }
 
     @Inject(method = "applyMovementEmissionAndPlaySound", at = @At("HEAD"))
     private void overflowanimations$storeHorizontalSpeed(final Entity.MovementEmission emission, final Vec3 clippedMovement, final BlockPos effectPos, final BlockState effectState, final CallbackInfo ci) {
-        if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().movement.handViewBobbingMovement) {
+        if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().movement.sneakBobbing == SneakBobbingSetting.V1_21_1) {
             this.overflowanimations$horizontalSpeed = this.overflowanimations$horizontalSpeed + (float) clippedMovement.horizontalDistance() * 0.6F;
         }
     }

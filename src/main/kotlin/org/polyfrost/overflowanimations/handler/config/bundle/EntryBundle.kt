@@ -62,7 +62,7 @@ open class EntryBundle(protected val category: Category, private val name: Strin
             //? if <=1.8.9 {
             /*addAll(listOf(
                 "oldCapeMovement", "disableCapeSwingRotation", "capeChestplateTranslation", "fakeOldSneakEyeHeight",
-                "rotateBackwardsWalking", "uncapBlockingHeadRotation", "handViewBobbingMovement", "legacyDamageTilt",
+                "rotateBackwardsWalking", "uncapBlockingHeadRotation", "legacyDamageTilt",
                 "legacyGlintSpeed", "skullPosition", "disableSwingOnUse", "disableSwingOnDrop",
                 "disableSwingOnEntityInteract", "disableItemUsingTextureInGUI", "durabilityBarColors",
                 "legacyItemRarities", "heldItemVisibilityInBoat", "offhandUsageSwinging", "legacySwingAnimation",

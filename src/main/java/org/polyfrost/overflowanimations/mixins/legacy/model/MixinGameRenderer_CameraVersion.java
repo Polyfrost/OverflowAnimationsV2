@@ -26,16 +26,35 @@
 package org.polyfrost.overflowanimations.mixins.legacy.model;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.minecraft.client.render.GameRenderer;
 import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig;
 import org.polyfrost.overflowanimations.util.enums.CameraVersionSetting;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 
 @Mixin(GameRenderer.class)
 public abstract class MixinGameRenderer_CameraVersion {
+    @Unique
+    private boolean overflowanimations$renderingAxisIndicators;
+
+    @WrapOperation(method = "renderAxisIndicators", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/GameRenderer;transformCamera(F)V"))
+    private void overflowanimations$keepAxisIndicatorsOffset(final GameRenderer instance, final float tickDelta, final Operation<Void> original) {
+        this.overflowanimations$renderingAxisIndicators = true;
+        try {
+            original.call(instance, tickDelta);
+        } finally {
+            this.overflowanimations$renderingAxisIndicators = false;
+        }
+    }
+
     @ModifyExpressionValue(method = "transformCamera", at = @At(value = "CONSTANT", args = "floatValue=-0.1F"))
     private float overflowanimations$cameraVersion(final float original) {
+        if (this.overflowanimations$renderingAxisIndicators) {
+            return original;
+        }
         final CameraVersionSetting version = OverflowAnimationsConfig.instance().screen.cameraVersion;
         if (version == CameraVersionSetting.V1_9_TO_V1_13_2) {
             return 0.05F;

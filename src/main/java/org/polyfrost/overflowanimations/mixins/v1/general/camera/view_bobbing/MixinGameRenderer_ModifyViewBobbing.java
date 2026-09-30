@@ -56,6 +56,7 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.polyfrost.overflowanimations.OverflowAnimations;
 import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig;
+import org.polyfrost.overflowanimations.util.enums.SneakBobbingSetting;
 
 @Mixin(GameRenderer.class)
 public abstract class MixinGameRenderer_ModifyViewBobbing {
@@ -116,7 +117,7 @@ public abstract class MixinGameRenderer_ModifyViewBobbing {
     //? if <1.21.9 {
     /*@WrapOperation(method = "bobView", at = @At(value = "FIELD", target = "Lnet/minecraft/client/player/AbstractClientPlayer;walkDist:F", opcode = Opcodes.GETFIELD))
     private float overflowanimations$viewBobbing$changeDistance(final AbstractClientPlayer instance, final Operation<Float> original) {
-        if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().movement.handViewBobbingMovement) {
+        if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().movement.sneakBobbing == SneakBobbingSetting.V1_21_1) {
             return instance.overflowanimations$getHorizontalSpeed();
         } else {
             return original.call(instance);
@@ -125,7 +126,7 @@ public abstract class MixinGameRenderer_ModifyViewBobbing {
 
     @WrapOperation(method = "bobView", at = @At(value = "FIELD", target = "Lnet/minecraft/client/player/AbstractClientPlayer;walkDistO:F", opcode = Opcodes.GETFIELD))
     private float overflowanimations$viewBobbing$changePreviousDistance(final AbstractClientPlayer instance, final Operation<Float> original) {
-        if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().movement.handViewBobbingMovement) {
+        if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().movement.sneakBobbing == SneakBobbingSetting.V1_21_1) {
             return instance.overflowanimations$getPreviousHorizontalSpeed();
         } else {
             return original.call(instance);
@@ -135,7 +136,7 @@ public abstract class MixinGameRenderer_ModifyViewBobbing {
     /*@WrapOperation(method = "bobView", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/entity/ClientAvatarState;getBackwardsInterpolatedWalkDistance(F)F"))
     private float overflowanimations$viewBobbing$changeDistance(final ClientAvatarState instance, final float tickDelta, final Operation<Float> original) {
         final Entity bobbingStorage = this.minecraft.getCameraEntity();
-        if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().movement.handViewBobbingMovement && bobbingStorage != null) {
+        if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().movement.sneakBobbing == SneakBobbingSetting.V1_21_1 && bobbingStorage != null) {
             final float walkDist = bobbingStorage.overflowanimations$getHorizontalSpeed();
             final float walkDistO = bobbingStorage.overflowanimations$getPreviousHorizontalSpeed();
             return -(walkDist + (walkDist - walkDistO) * tickDelta);
@@ -147,7 +148,7 @@ public abstract class MixinGameRenderer_ModifyViewBobbing {
     @WrapOperation(method = "bobView", at = @At(value = "FIELD", target = "Lnet/minecraft/client/renderer/state/level/CameraEntityRenderState;backwardsInterpolatedWalkDistance:F", opcode = Opcodes.GETFIELD))
     private float overflowanimations$viewBobbing$changeDistance(final CameraEntityRenderState instance, final Operation<Float> original) {
         final Entity bobbingStorage = this.minecraft.getCameraEntity();
-        if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().movement.handViewBobbingMovement && bobbingStorage != null) {
+        if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().movement.sneakBobbing == SneakBobbingSetting.V1_21_1 && bobbingStorage != null) {
             final float walkDist = bobbingStorage.overflowanimations$getHorizontalSpeed();
             final float walkDistO = bobbingStorage.overflowanimations$getPreviousHorizontalSpeed();
             return -(walkDist + (walkDist - walkDistO) * Minecraft.getInstance().getDeltaTracker().getGameTimeDeltaPartialTick(true));

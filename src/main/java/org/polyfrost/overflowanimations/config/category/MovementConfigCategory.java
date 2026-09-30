@@ -29,6 +29,7 @@ import org.jspecify.annotations.NonNull;
 import org.polyfrost.overflowanimations.handler.config.bundle.EntryBundle;
 import org.polyfrost.overflowanimations.handler.config.category.Category;
 import org.polyfrost.overflowanimations.util.enums.SneakAnimationSetting;
+import org.polyfrost.overflowanimations.util.enums.SneakBobbingSetting;
 
 public final class MovementConfigCategory extends Category {
     // (Movement) Cape
@@ -44,7 +45,7 @@ public final class MovementConfigCategory extends Category {
     public boolean rotateBackwardsWalking = false;
     public boolean uncapBlockingHeadRotation = false;
     public boolean disableHeadRotationInterpolation = false;
-    public boolean handViewBobbingMovement = false;
+    public SneakBobbingSetting sneakBobbing = SneakBobbingSetting.VANILLA;
     public boolean deathLimbs = false;
     public boolean bowArmMovement = false;
     public boolean legacyDamageTilt = false;
@@ -78,7 +79,7 @@ public final class MovementConfigCategory extends Category {
                 .booleanEntry("rotateBackwardsWalking")
                 .booleanEntry("uncapBlockingHeadRotation")
                 .booleanEntry("disableHeadRotationInterpolation")
-                .booleanEntry("handViewBobbingMovement")
+                .enumEntry("sneakBobbing", SneakBobbingSetting.class)
                 .booleanEntry("deathLimbs")
                 .booleanEntry("bowArmMovement")
                 .booleanEntry("legacyDamageTilt")
