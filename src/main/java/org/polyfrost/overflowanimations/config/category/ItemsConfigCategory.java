@@ -28,12 +28,17 @@ package org.polyfrost.overflowanimations.config.category;
 import org.jspecify.annotations.NonNull;
 import org.polyfrost.overflowanimations.handler.config.bundle.EntryBundle;
 import org.polyfrost.overflowanimations.handler.config.category.Category;
+import org.polyfrost.overflowanimations.util.enums.ArmorGlintSetting;
 import org.polyfrost.overflowanimations.util.enums.EquipAnimationVersionSetting;
 import org.polyfrost.overflowanimations.util.enums.FishingRodVersionSetting;
+import org.polyfrost.overflowanimations.util.enums.ItemGlintSetting;
+import org.polyfrost.overflowanimations.util.enums.PotionGlintSetting;
 
 public final class ItemsConfigCategory extends Category {
     // (Items) Enchantment Glint
-    public boolean legacyGlintSpeed = false;
+    public ItemGlintSetting itemGlint = ItemGlintSetting.MODERN;
+    public ArmorGlintSetting armorGlint = ArmorGlintSetting.MODERN;
+    public PotionGlintSetting potionGlint = PotionGlintSetting.MODERN;
     public boolean glintOnItemDrops2D = false;
     public boolean glintOnItemFramed2D = false;
     // (Items) 2D Drops
@@ -88,11 +93,6 @@ public final class ItemsConfigCategory extends Category {
     public float itemRotationZ = 0.0F;
     public boolean applyCustomizationToBlockItems = true;
 
-    public boolean legacyGlint = true;
-    public boolean legacyGuiGlint = false;
-    public boolean legacyPotionGlint = false;
-    public boolean disablePotionGlint = false;
-    public boolean modernArmorGlint = true;
     public boolean itemDrops2DColors = false;
     public boolean legacyProjectiles = false;
     public boolean xpOrbPosition = false;
@@ -170,7 +170,9 @@ public final class ItemsConfigCategory extends Category {
         final EntryBundle bundle = new EntryBundle(this, "items");
 
         bundle.group("glint")
-                .booleanEntry("legacyGlintSpeed")
+                .enumEntry("itemGlint", ItemGlintSetting.class)
+                .enumEntry("armorGlint", ArmorGlintSetting.class)
+                .enumEntry("potionGlint", PotionGlintSetting.class)
                 .booleanEntry("glintOnItemDrops2D")
                 .booleanEntry("glintOnItemFramed2D");
 
@@ -229,13 +231,6 @@ public final class ItemsConfigCategory extends Category {
                 .booleanEntry("itemPickupPosition")
                 .booleanEntry("mobHeadIcons")
                 .booleanEntry("eggSnowballParticles");
-
-        bundle.group("legacy_glint")
-                .booleanEntry("legacyGlint")
-                .booleanEntry("legacyGuiGlint")
-                .booleanEntry("legacyPotionGlint")
-                .booleanEntry("disablePotionGlint")
-                .booleanEntry("modernArmorGlint");
 
         bundle.group("legacy_drops")
                 .booleanEntry("itemDrops2DColors")

@@ -41,7 +41,7 @@ enum class PresetVersion(private val applier: Runnable) {
         val movement = OverflowAnimationsConfig.instance().movement
         movement.sneakAnimation = SneakAnimationSetting.V1_7
         movement.longUnsneak = true
-        movement.oldCapeMovement = true
+        movement.capeMovement = CapeMovementSetting.V1_12
         movement.disableCapeLean = false
         movement.disableCapeSwingRotation = true
         movement.capeChestplateTranslation = true
@@ -78,7 +78,9 @@ enum class PresetVersion(private val applier: Runnable) {
 
         val items = OverflowAnimationsConfig.instance().items
         items.thinFishingRodLineThickness = false
-        items.legacyGlintSpeed = true
+        items.itemGlint = ItemGlintSetting.V1_7
+        items.armorGlint = ArmorGlintSetting.V1_8
+        items.potionGlint = PotionGlintSetting.V1_7
         items.glintOnItemDrops2D = true
         items.glintOnItemFramed2D = true
         items.itemDropsFaceCamera = true
@@ -118,7 +120,6 @@ enum class PresetVersion(private val applier: Runnable) {
         other.damageTintArmor = true
         other.glintAffectsArmorTint = false
         other.damageTintStyle = DamageTintSetting.V1_7
-        other.itemGlintOnEntity = true
         other.maxGlintProperties = true
         other.restoreParticleBlending = true
         other.heldItemArmLogic = false
@@ -145,7 +146,7 @@ enum class PresetVersion(private val applier: Runnable) {
         val movement = OverflowAnimationsConfig.instance().movement
         movement.sneakAnimation = SneakAnimationSetting.V1_8
         movement.longUnsneak = false
-        movement.oldCapeMovement = true
+        movement.capeMovement = CapeMovementSetting.V1_12
         movement.disableCapeLean = false
         movement.disableCapeSwingRotation = true
         movement.capeChestplateTranslation = false
@@ -182,7 +183,9 @@ enum class PresetVersion(private val applier: Runnable) {
 
         val items = OverflowAnimationsConfig.instance().items
         items.thinFishingRodLineThickness = false
-        items.legacyGlintSpeed = true
+        items.itemGlint = ItemGlintSetting.V1_8
+        items.armorGlint = ArmorGlintSetting.V1_8
+        items.potionGlint = PotionGlintSetting.V1_8
         items.glintOnItemDrops2D = false
         items.glintOnItemFramed2D = false
         items.itemDropsFaceCamera = false
@@ -222,7 +225,6 @@ enum class PresetVersion(private val applier: Runnable) {
         other.damageTintArmor = false
         other.glintAffectsArmorTint = true
         other.damageTintStyle = DamageTintSetting.VANILLA
-        other.itemGlintOnEntity = true
         other.maxGlintProperties = true
         other.restoreParticleBlending = true
         other.heldItemArmLogic = true
@@ -245,7 +247,11 @@ enum class PresetVersion(private val applier: Runnable) {
         val movement = OverflowAnimationsConfig.instance().movement
         movement.sneakAnimation = SneakAnimationSetting.VANILLA
         movement.longUnsneak = false
-        movement.oldCapeMovement = false
+        //? if <=1.8.9 {
+        /*movement.capeMovement = CapeMovementSetting.V1_12
+        *///?} else {
+        movement.capeMovement = CapeMovementSetting.MODERN
+        //?}
         movement.disableCapeLean = false
         movement.disableCapeSwingRotation = false
         movement.capeChestplateTranslation = false
@@ -282,7 +288,9 @@ enum class PresetVersion(private val applier: Runnable) {
 
         val items = OverflowAnimationsConfig.instance().items
         items.thinFishingRodLineThickness = false
-        items.legacyGlintSpeed = false
+        items.itemGlint = ItemGlintSetting.VANILLA
+        items.armorGlint = ArmorGlintSetting.VANILLA
+        items.potionGlint = PotionGlintSetting.VANILLA
         items.glintOnItemDrops2D = false
         items.glintOnItemFramed2D = false
         items.itemDropsFaceCamera = false
@@ -322,7 +330,6 @@ enum class PresetVersion(private val applier: Runnable) {
         other.damageTintArmor = false
         other.glintAffectsArmorTint = false
         other.damageTintStyle = DamageTintSetting.VANILLA
-        other.itemGlintOnEntity = false
         other.maxGlintProperties = false
         other.restoreParticleBlending = false
         other.heldItemArmLogic = false

@@ -40,6 +40,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.polyfrost.overflowanimations.OverflowAnimations;
 import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig;
+import org.polyfrost.overflowanimations.config.category.MovementConfigCategory;
 import org.polyfrost.overflowanimations.mixins.accessor.PlayerAccessor;
 import org.polyfrost.overflowanimations.util.EntityUtilKt;
 import org.polyfrost.overflowanimations.util.enums.SneakAnimationSetting;
@@ -83,13 +84,24 @@ public abstract class MixinCamera_Sneaking {
             if (sneakAnimation == SneakAnimationSetting.V1_7 && this.entity.getEyeHeight() < this.eyeHeight) {
                 this.eyeHeight = this.overflowanimations$getSneakingEyeHeight();
                 return;
-            } else if (!OverflowAnimationsConfig.instance().movement.longUnsneak && this.entity.getEyeHeight() > this.eyeHeight) {
+            } else if (!overflowanimations$isLongUnsneak() && this.entity.getEyeHeight() > this.eyeHeight) {
                 this.eyeHeight = this.entity.getEyeHeight(Pose.STANDING) * EntityUtilKt.getScale(this.entity);
                 return;
             }
         }
 
+        if (OverflowAnimations.isEnabled() && sneakAnimation.isSmooth() && overflowanimations$isLongUnsneak() && value > this.eyeHeight) {
+            original.call(instance, this.eyeHeight + (value - this.eyeHeight) * 1.2F);
+            return;
+        }
+
         original.call(instance, value);
+    }
+
+    @Unique
+    private boolean overflowanimations$isLongUnsneak() {
+        final MovementConfigCategory movement = OverflowAnimationsConfig.instance().movement;
+        return movement.longUnsneak && !movement.longUnsneakLegacyOnly;
     }
 
     @Unique

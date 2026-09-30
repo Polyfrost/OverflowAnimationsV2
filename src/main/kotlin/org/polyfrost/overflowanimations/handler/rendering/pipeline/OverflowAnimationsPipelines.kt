@@ -367,8 +367,13 @@ object OverflowAnimationsPipelines {
         .build()
 
     @JvmField
-    val ARMOR_GLINT = RenderPipelines.GLINT.builder()
-        .withLocation(location("pipeline/armor_glint"))
+    val ARMOR_GLINT = armorGlint("armor_glint").build()
+
+    @JvmField
+    val FULL_STRENGTH_ARMOR_GLINT = armorGlint("full_strength_armor_glint").withShaderDefine("FULL_GLINT_STRENGTH").build()
+
+    private fun armorGlint(name: String) = RenderPipelines.GLINT.builder()
+        .withLocation(location("pipeline/$name"))
         .withVertexShader(location("core/armor_glint"))
         .withFragmentShader(location("core/armor_glint"))
         //? if <26.2 {
@@ -378,6 +383,5 @@ object OverflowAnimationsPipelines {
         .withBindGroupLayout(BindGroupLayouts.SAMPLER1)
         .withVertexFormat(POSITION_TEX_OVERLAY)
         //?}
-        .build()
 }
 //?}

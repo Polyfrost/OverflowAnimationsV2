@@ -52,6 +52,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.polyfrost.overflowanimations.OverflowAnimations;
 import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig;
+import org.polyfrost.overflowanimations.util.enums.CapeMovementSetting;
 
 //? if <1.21.9 {
 /*@Mixin(PlayerRenderer.class)
@@ -66,7 +67,7 @@ public abstract class MixinAvatarRenderer_CapeRotation<AvatarLikeEntity extends 
 
     @WrapOperation(method = "extractCapeState", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/Mth;rotLerp(FFF)F"))
     private static float overflowanimations$changeLerpMethod(final float delta, final float start, final float end, final Operation<Float> original) {
-        if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().movement.oldCapeMovement) {
+        if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().movement.capeMovement == CapeMovementSetting.V1_12) {
             return Mth.lerp(delta, start, end);
         } else {
             return original.call(delta, start, end);
@@ -89,7 +90,7 @@ public abstract class MixinAvatarRenderer_CapeRotation<AvatarLikeEntity extends 
     @WrapWithCondition(method = "extractCapeState", at = @At(value = "FIELD", target = "Lnet/minecraft/client/renderer/entity/state/AvatarRenderState;capeLean:F", ordinal = 1, opcode = Opcodes.PUTFIELD))
     private static boolean overflowanimations$dontAssignLeanField(final AvatarRenderState instance, final float value) {
     //?}
-        return !OverflowAnimations.isEnabled() || !OverflowAnimationsConfig.instance().movement.oldCapeMovement;
+        return !OverflowAnimations.isEnabled() || OverflowAnimationsConfig.instance().movement.capeMovement != CapeMovementSetting.V1_12;
     }
 
     //? if <1.21.9 {
@@ -99,6 +100,6 @@ public abstract class MixinAvatarRenderer_CapeRotation<AvatarLikeEntity extends 
     @WrapWithCondition(method = "extractCapeState", at = @At(value = "FIELD", target = "Lnet/minecraft/client/renderer/entity/state/AvatarRenderState;capeLean2:F", ordinal = 1, opcode = Opcodes.PUTFIELD))
     private static boolean overflowanimations$dontAssignLean2Field(final AvatarRenderState instance, final float value) {
     //?}
-        return !OverflowAnimations.isEnabled() || !OverflowAnimationsConfig.instance().movement.oldCapeMovement;
+        return !OverflowAnimations.isEnabled() || OverflowAnimationsConfig.instance().movement.capeMovement != CapeMovementSetting.V1_12;
     }
 }
