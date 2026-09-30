@@ -57,7 +57,10 @@ public final class ScreenConfigCategory extends Category {
     public boolean disconnectServerToTitleScreen = false;
     public boolean oldCraftingSlotsPosition = false;
 
-    public DebugCrosshairSetting debugCrosshairStyle = DebugCrosshairSetting.V1_8;
+    //? if >1.8.9 {
+    public DebugCrosshairSetting debugCrosshairStyle = DebugCrosshairSetting.V1_12;
+    //?} else
+    //public DebugCrosshairSetting debugCrosshairStyle = DebugCrosshairSetting.V1_8;
     public TabListSetting tabListStyle = TabListSetting.V1_8;
     public boolean legacyDebugScreen = false;
     public boolean hideCrosshairInThirdPerson = false;

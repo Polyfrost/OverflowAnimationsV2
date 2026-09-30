@@ -37,24 +37,12 @@ open class EntryBundle(protected val category: Category, private val name: Strin
     companion object {
         private val LEGACY_ONLY_OPTIONS = listOf(
             "modernBackwardsWalking", "smoothHeadYaw", "modernViewBobbing", "directionalDamageTilt",
-            "modernSneakEyeHeight", "disableHurtCamera", "dinnerboneMode", "dinnerboneModeEntities", "wavyArms",
-            "legacyGlint", "legacyGuiGlint", "legacyPotionGlint", "disablePotionGlint", "modernArmorGlint",
-            "itemDrops2DColors", "legacyProjectiles", "xpOrbPosition", "fireballModel", "disableItemPickupAnimation",
-            "itemPickupOffset", "entityItemPositions", "disableHandSway", "reequipSpeed", "smartSwingScaling",
+            "modernSneakEyeHeight", "disableHurtCamera", "legacyGlint", "legacyGuiGlint", "legacyPotionGlint",
+            "disablePotionGlint", "modernArmorGlint", "itemDrops2DColors", "fireballModel", "itemPickupOffset", "legacyProjectiles",
             "itemUseAnimationInGUI", "dropItemSwing", "disableDropSwingInContainers", "itemUseCooldownAnimation",
-            "modernBlockBreaking", "resetMiningOnUse", "blockHitWhileMining", "disableAdventureSwing", "disableAdventureUsageSwinging",
-            "disableAdventureUsageParticles", "lunarBlockHitPosition", "lunarItemPositions", "modernPotionColors",
-            "coloredPotionBottles", "fishingRodLineFov", "fishingRodLineThickness", "customRodLine",
-            "rodLinePositionX", "rodLinePositionY", "rodLinePositionZ", "swingPositionX", "swingPositionY",
-            "swingPositionZ", "consumePositionX", "consumePositionY", "consumePositionZ", "consumeRotationX",
-            "consumeRotationY", "consumeRotationZ", "consumeScale", "consumeIntensity", "consumeSpeed",
-            "scaleConsumeWithItem", "blockingPositionX", "blockingPositionY", "blockingPositionZ", "blockingRotationX",
-            "blockingRotationY", "blockingRotationZ", "blockingScale", "droppedPositionX", "droppedPositionY",
-            "droppedPositionZ", "droppedRotationX", "droppedRotationY", "droppedRotationZ", "droppedScale",
-            "projectilePositionX", "projectilePositionY", "projectilePositionZ", "projectileRotationX",
-            "projectileRotationY", "projectileRotationZ", "projectileScale", "fireballPositionX", "fireballPositionY",
-            "fireballPositionZ", "fireballRotationX", "fireballRotationY", "fireballRotationZ", "fireballScale",
-            "debugCrosshairStyle", "tabListStyle", "legacyDebugScreen", "hideCrosshairInThirdPerson"
+            "modernBlockBreaking", "resetMiningOnUse", "blockHitWhileMining", "disableAdventureSwing",
+            "disableAdventureUsageSwinging", "disableAdventureUsageParticles", "modernPotionColors",
+            "fishingRodLineFov", "fishingRodLineThickness", "legacyDebugScreen", "hideCrosshairInThirdPerson"
         )
 
         // Options whose feature does not exist on (or is compiled out of) this Minecraft version

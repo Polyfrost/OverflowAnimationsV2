@@ -28,6 +28,11 @@ package org.polyfrost.overflowanimations.util
 import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.math.Axis
 import net.minecraft.client.renderer.entity.state.ArmedEntityRenderState
+//? if <1.21.9 {
+/*import net.minecraft.client.renderer.entity.state.PlayerRenderState
+*///?} else {
+import net.minecraft.client.renderer.entity.state.AvatarRenderState
+//?}
 import net.minecraft.resources.Identifier
 import net.minecraft.tags.ItemTags
 import net.minecraft.world.item.*
@@ -116,7 +121,13 @@ fun applyLegacyFirstPersonTransforms(poseStack: PoseStack, direction: Int, runna
 }
 
 fun shouldApplyItemPositionsInThirdPerson(armedEntityRenderState: ArmedEntityRenderState, stack: ItemStack, useBlockLight: Boolean) =
-    if (OverflowAnimationsConfig.instance().items.itemPositionsInThirdPerson) {
+    if (OverflowAnimationsConfig.instance().items.itemPositionsInThirdPerson &&
+        //? if <1.21.9 {
+        /*(OverflowAnimationsConfig.instance().items.entityItemPositions || armedEntityRenderState is PlayerRenderState)
+        *///?} else {
+        (OverflowAnimationsConfig.instance().items.entityItemPositions || armedEntityRenderState is AvatarRenderState)
+        //?}
+    ) {
         hasLegacyThirdPersonTransform(stack, useBlockLight)
     } else if (OverflowAnimationsConfig.instance().items.fishingRodVersion == FishingRodVersionSetting.V1_7) {
         isFishingRodItem(armedEntityRenderState.`overflowanimations$getItemHeldByArm`(armedEntityRenderState.mainArm))

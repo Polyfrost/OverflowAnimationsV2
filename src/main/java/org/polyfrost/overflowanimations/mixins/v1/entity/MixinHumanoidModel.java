@@ -35,6 +35,7 @@ import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.renderer.entity.state.HumanoidRenderState;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.resources.Identifier;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ShieldItem;
@@ -99,6 +100,18 @@ public abstract class MixinHumanoidModel<T extends HumanoidRenderState> extends 
             return false;
         } else {
             return original.call(instance);
+        }
+    }
+
+    @Inject(method = "setupAnim(Lnet/minecraft/client/renderer/entity/state/HumanoidRenderState;)V", at = @At(value = "FIELD", opcode = Opcodes.GETFIELD, target = "Lnet/minecraft/client/model/HumanoidModel;rightLeg:Lnet/minecraft/client/model/geom/ModelPart;", ordinal = 0))
+    private void overflowanimations$wavyArms(final T state, final CallbackInfo ci) {
+        if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().movement.wavyArms) {
+            final float position = state.walkAnimationPos;
+            final float speed = state.walkAnimationSpeed / state.speedValue;
+            this.rightArm.xRot = Mth.cos(position * 0.6662F + (float) Math.PI) * 2.0F * speed;
+            this.rightArm.zRot = (Mth.cos(position * 0.2312F) + 1.0F) * speed;
+            this.leftArm.xRot = Mth.cos(position * 0.6662F) * 2.0F * speed;
+            this.leftArm.zRot = (Mth.cos(position * 0.2812F) - 1.0F) * speed;
         }
     }
 
