@@ -23,7 +23,6 @@
  * "MINECRAFT" LINKING EXCEPTION TO THE GPL
  */
 
-
 package org.polyfrost.overflowanimations.util.enums
 
 enum class TabListSetting {
