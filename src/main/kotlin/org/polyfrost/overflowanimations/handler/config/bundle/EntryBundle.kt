@@ -79,7 +79,8 @@ open class EntryBundle(protected val category: Category, private val name: Strin
                 "maxGlintProperties", "restoreParticleBlending", "disableInventoryEntityScissor",
                 "legacyBlockMiningProgress", "projectileAgeCheck", "blockOutlineRendering",
                 "disableModelWhilstSleeping", "flameDimensions", "itemGlintOnEntity", "heldItemArmLogic",
-                "legacySplashPosition", "legacyDiffuseLighting"
+                "legacySplashPosition", "legacyDiffuseLighting",
+                "fixEquipAnimationOnItemUse"
             ))
             *///?} else {
             addAll(LEGACY_ONLY_OPTIONS)
