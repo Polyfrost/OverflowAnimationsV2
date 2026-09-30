@@ -136,6 +136,7 @@ public final class ThirdPersonItemTransforms {
             GlStateManager.rotatef(180.0F, 0.0F, 1.0F, 0.0F);
             GlStateManager.scalef(2.0F, 2.0F, 2.0F);
             undo(transformation);
+            GlStateManager.scalef(0.5F, 0.5F, 0.5F);
         }
     }
 

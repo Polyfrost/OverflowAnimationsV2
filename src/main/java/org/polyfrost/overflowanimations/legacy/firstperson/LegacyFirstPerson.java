@@ -143,6 +143,7 @@ public final class LegacyFirstPerson {
     }
 
     private static void applyLegacyItemTransform() {
+        GlStateManager.scalef(0.5F, 0.5F, 0.5F);
         GlStateManager.translatef(0.0F, -0.3F, 0.0F);
         GlStateManager.scalef(1.5F, 1.5F, 1.5F);
         GlStateManager.rotatef(50.0F, 0.0F, 1.0F, 0.0F);
