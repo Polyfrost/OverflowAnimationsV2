@@ -63,7 +63,7 @@ public final class OverflowAnimationsConfig extends Config {
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     private static final String ID = OverflowAnimationsConstants.MOD_ID + ".json";
     private static final Path CONFIG_DIR = FabricLoader.getInstance().getConfigDir();
-    private static final int CONFIG_VERSION = 1;
+    private static final int CONFIG_VERSION = 2;
 
     private static JsonObject savedConfig = readObject(CONFIG_DIR.resolve(ID));
     private static JsonObject legacyConfig = takeLegacyConfig();
@@ -106,11 +106,15 @@ public final class OverflowAnimationsConfig extends Config {
         }
 
         if (this.configVersion < CONFIG_VERSION) {
-            this.migrateGlint(savedConfig);
-            if (savedConfig != null && savedConfig.has("oldCapeMovement")) {
-                this.movement.capeMovement = isTrue(savedConfig, "oldCapeMovement") ? CapeMovementSetting.V1_12 : CapeMovementSetting.V1_13;
+            if (this.configVersion < 1) {
+                this.migrateGlint(savedConfig);
+                if (savedConfig != null && savedConfig.has("oldCapeMovement")) {
+                    this.movement.capeMovement = isTrue(savedConfig, "oldCapeMovement") ? CapeMovementSetting.V1_12 : CapeMovementSetting.V1_13;
+                }
+                this.migrateDefaults();
             }
-            this.migrateDefaults();
+
+            this.movement.longUnsneak = true;
 
             this.configVersion = CONFIG_VERSION;
             this.save();

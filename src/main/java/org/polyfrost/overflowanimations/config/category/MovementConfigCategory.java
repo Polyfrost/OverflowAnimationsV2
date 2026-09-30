@@ -45,7 +45,7 @@ public final class MovementConfigCategory extends Category {
     public boolean capeSneakPosition = false;
     // (Movement) Other
     public SneakAnimationSetting sneakAnimation = SneakAnimationSetting.V1_14;
-    public boolean longUnsneak = false;
+    public boolean longUnsneak = true;
     public boolean longUnsneakLegacyOnly = true;
     public SneakEyeHeightSetting sneakEyeHeight = SneakEyeHeightSetting.VANILLA;
     public BackwardsWalkingSetting backwardsWalking = BackwardsWalkingSetting.V1_12;
