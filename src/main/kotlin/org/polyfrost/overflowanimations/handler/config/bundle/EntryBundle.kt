@@ -80,7 +80,8 @@ open class EntryBundle(protected val category: Category, private val name: Strin
                 "legacyBlockMiningProgress", "projectileAgeCheck", "blockOutlineRendering",
                 "disableModelWhilstSleeping", "flameDimensions", "itemGlintOnEntity", "heldItemArmLogic",
                 "legacySplashPosition", "legacyDiffuseLighting",
-                "fixEquipAnimationOnItemUse"
+                "fixEquipAnimationOnItemUse",
+                "disableCapeLean", "deathLimbs", "bowArmMovement", "lockBlockingArmRotation", "disableHeadRotationInterpolation"
             ))
             *///?} else {
             addAll(LEGACY_ONLY_OPTIONS)
