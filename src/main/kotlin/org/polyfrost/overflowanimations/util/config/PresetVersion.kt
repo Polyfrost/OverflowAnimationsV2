@@ -81,8 +81,8 @@ enum class PresetVersion(private val applier: Runnable) {
         items.itemGlint = ItemGlintSetting.V1_7
         items.armorGlint = ArmorGlintSetting.V1_8
         items.potionGlint = PotionGlintSetting.V1_7
-        items.glintOnItemDrops2D = true
-        items.glintOnItemFramed2D = true
+        items.glintOnItemDrops2D = false
+        items.glintOnItemFramed2D = false
         items.itemDropsFaceCamera = true
         items.itemDropsFaceCameraRotationFix = false
         items.itemDrops2D = true
@@ -186,8 +186,8 @@ enum class PresetVersion(private val applier: Runnable) {
         items.itemGlint = ItemGlintSetting.V1_8
         items.armorGlint = ArmorGlintSetting.V1_8
         items.potionGlint = PotionGlintSetting.V1_8
-        items.glintOnItemDrops2D = false
-        items.glintOnItemFramed2D = false
+        items.glintOnItemDrops2D = true
+        items.glintOnItemFramed2D = true
         items.itemDropsFaceCamera = false
         items.itemDropsFaceCameraRotationFix = false
         items.itemDrops2D = false
@@ -291,8 +291,8 @@ enum class PresetVersion(private val applier: Runnable) {
         items.itemGlint = ItemGlintSetting.VANILLA
         items.armorGlint = ArmorGlintSetting.VANILLA
         items.potionGlint = PotionGlintSetting.VANILLA
-        items.glintOnItemDrops2D = false
-        items.glintOnItemFramed2D = false
+        items.glintOnItemDrops2D = true
+        items.glintOnItemFramed2D = true
         items.itemDropsFaceCamera = false
         items.itemDropsFaceCameraRotationFix = false
         items.itemDrops2D = false

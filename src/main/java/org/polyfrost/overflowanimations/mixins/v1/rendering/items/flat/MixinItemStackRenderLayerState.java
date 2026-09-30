@@ -145,7 +145,7 @@ public abstract class MixinItemStackRenderLayerState {
     private ItemStackRenderState.FoilType overflowanimations$disableGlintOn2DItems(final ItemStackRenderState.FoilType foilType) {
         final boolean glintDropped = !OverflowAnimationsConfig.instance().items.glintOnItemDrops2D;
         final boolean glintFramed = !OverflowAnimationsConfig.instance().items.glintOnItemFramed2D;
-        if (OverflowAnimations.isEnabled() && (
+        if (OverflowAnimations.isEnabled() && this.overflowanimations$isTransformationModeValid() && (
                 (glintDropped && this.itemStackRenderState.displayContext == ItemDisplayContext.GROUND) ||
                 (glintFramed && this.itemStackRenderState.displayContext == ItemDisplayContext.FIXED))) {
             return ItemStackRenderState.FoilType.NONE;
