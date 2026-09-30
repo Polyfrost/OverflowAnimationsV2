@@ -49,6 +49,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.polyfrost.overflowanimations.OverflowAnimations;
 import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig;
+import org.polyfrost.overflowanimations.config.category.ItemsConfigCategory;
+import org.polyfrost.overflowanimations.util.TransformUtilKt;
 import org.polyfrost.overflowanimations.util.UtilsKt;
 
 @Mixin(ItemEntityRenderer.class)
@@ -100,6 +102,11 @@ public abstract class MixinItemEntityRenderer {
             *///?} else {
             poseStack.rotate(Axis.XP.rotationDegrees(-camera.overflowanimations$getXRot()));
             //?}
+        }
+
+        if (OverflowAnimations.isEnabled()) {
+            final ItemsConfigCategory items = OverflowAnimationsConfig.instance().items;
+            TransformUtilKt.applyLegacyTransform(poseStack, items.droppedPositionX, items.droppedPositionY, items.droppedPositionZ, items.droppedRotationX, items.droppedRotationY, items.droppedRotationZ, items.droppedScale);
         }
     }
 }

@@ -28,6 +28,7 @@ package org.polyfrost.overflowanimations.mixins.v1.entity;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 //? if <1.21.9 {
@@ -44,13 +45,16 @@ import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
 import net.minecraft.client.renderer.state.level.CameraRenderState;
 //?}
 import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Pose;
+import net.minecraft.world.entity.player.Player;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.polyfrost.overflowanimations.OverflowAnimations;
 import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig;
+import org.polyfrost.overflowanimations.config.category.MovementConfigCategory;
 import org.polyfrost.overflowanimations.util.CameraUtilKt;
 import org.polyfrost.overflowanimations.util.EntityUtilKt;
 import org.polyfrost.overflowanimations.util.enums.SneakAnimationSetting;
@@ -95,6 +99,16 @@ public abstract class MixinLivingEntityRenderer<S extends LivingEntityRenderStat
     private boolean overflowanimations$deathLimbs(final boolean original) {
         if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().movement.deathLimbs) {
             return true;
+        } else {
+            return original;
+        }
+    }
+
+    @ModifyExpressionValue(method = "extractRenderState(Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/client/renderer/entity/state/LivingEntityRenderState;F)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/entity/LivingEntityRenderer;isEntityUpsideDown(Lnet/minecraft/world/entity/LivingEntity;)Z"))
+    private boolean overflowanimations$dinnerboneMode(final boolean original, @Local(argsOnly = true) final LivingEntity entity) {
+        if (OverflowAnimations.isEnabled()) {
+            final MovementConfigCategory movement = OverflowAnimationsConfig.instance().movement;
+            return original || movement.dinnerboneModeEntities || (movement.dinnerboneMode && entity instanceof Player);
         } else {
             return original;
         }

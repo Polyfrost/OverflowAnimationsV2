@@ -51,6 +51,7 @@ import org.spongepowered.asm.mixin.injection.ModifyArgs;
 import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 import org.polyfrost.overflowanimations.OverflowAnimations;
 import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig;
+import org.polyfrost.overflowanimations.config.category.ItemsConfigCategory;
 import org.polyfrost.overflowanimations.mixins.accessor.CameraAccessor;
 import org.polyfrost.overflowanimations.util.EntityUtilKt;
 import org.polyfrost.overflowanimations.util.enums.FishingRodVersionSetting;
@@ -115,6 +116,16 @@ public abstract class MixinFishingHookRenderer extends EntityRenderer<FishingHoo
     }
     //?}
 
+
+    @ModifyExpressionValue(method = "getPlayerHandPos", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/phys/Vec3;scale(D)Lnet/minecraft/world/phys/Vec3;"))
+    private Vec3 overflowanimations$customRodLine(final Vec3 original, @Local(argsOnly = true) final Player player, @Local(argsOnly = true, ordinal = 1) final float partialTicks, @Local final int invert) {
+        final ItemsConfigCategory items = OverflowAnimationsConfig.instance().items;
+        if (OverflowAnimations.isEnabled() && items.customRodLine) {
+            return new Vec3(items.rodLinePositionX * invert, items.rodLinePositionY, items.rodLinePositionZ).xRot(-player.getViewXRot(partialTicks) * Mth.DEG_TO_RAD).yRot(-player.getViewYRot(partialTicks) * Mth.DEG_TO_RAD);
+        } else {
+            return original;
+        }
+    }
 
     @WrapOperation(method = "getPlayerHandPos", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/player/Player;getEyePosition(F)Lnet/minecraft/world/phys/Vec3;"))
     private Vec3 overflowanimations$fishingRodLineInterpolation(final Player instance, final float tickDelta, final Operation<Vec3> original) {

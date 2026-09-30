@@ -23,23 +23,23 @@
  * "MINECRAFT" LINKING EXCEPTION TO THE GPL
  */
 
-package org.polyfrost.overflowanimations.util.enums
+package org.polyfrost.overflowanimations.util
 
-import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig
+import com.mojang.blaze3d.vertex.PoseStack
+import com.mojang.math.Axis
+import kotlin.math.exp
 
-enum class DamageTintSetting(private val colorGetter: (brightness: Float) -> Int) {
-    V1_7({ brightness -> argb(0.6F, brightness, 0.0F, 0.0F) }),
-    V1_8_ORANGE_MARSHALL(argb(0.5F, 1.0F, 0.0F, 0.0F)),
-    CUSTOM({ brightness ->
-        val color = OverflowAnimationsConfig.instance().other.customTintColor
-        argb(1.0F - (color.alpha / 255.0F), color.red / 255.0F, color.green / 255.0F, color.blue / 255.0F)
-    }),
-    VANILLA(-1);
-
-    constructor(color: Int) : this({ color })
-
-    fun getColor(brightness: Float) = this.colorGetter(brightness)
+fun applyLegacyTransform(poseStack: PoseStack, x: Float, y: Float, z: Float, rotationX: Float, rotationY: Float, rotationZ: Float, scale: Float) {
+    poseStack.translate(x, y, z)
+    //? if <26.3 {
+    /*poseStack.mulPose(Axis.XP.rotationDegrees(rotationX))
+    poseStack.mulPose(Axis.YP.rotationDegrees(rotationY))
+    poseStack.mulPose(Axis.ZP.rotationDegrees(rotationZ))
+    *///?} else {
+    poseStack.rotate(Axis.XP.rotationDegrees(rotationX))
+    poseStack.rotate(Axis.YP.rotationDegrees(rotationY))
+    poseStack.rotate(Axis.ZP.rotationDegrees(rotationZ))
+    //?}
+    val factor = exp(scale)
+    poseStack.scale(factor, factor, factor)
 }
-
-private fun argb(alpha: Float, red: Float, green: Float, blue: Float) =
-    ((alpha * 255.0F).toInt() shl 24) or ((red * 255.0F).toInt() shl 16) or ((green * 255.0F).toInt() shl 8) or (blue * 255.0F).toInt()

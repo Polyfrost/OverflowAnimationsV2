@@ -35,10 +35,47 @@ import java.util.function.Predicate
 
 open class EntryBundle(protected val category: Category, private val name: String) : Bundle() {
     companion object {
+        private val LEGACY_ONLY_OPTIONS = listOf(
+            "modernBackwardsWalking", "smoothHeadYaw", "modernViewBobbing", "directionalDamageTilt",
+            "modernSneakEyeHeight", "disableHurtCamera", "legacyGlint", "legacyGuiGlint", "legacyPotionGlint",
+            "disablePotionGlint", "modernArmorGlint", "itemDrops2DColors", "fireballModel", "itemPickupOffset", "legacyProjectiles",
+            "itemUseAnimationInGUI", "dropItemSwing", "disableDropSwingInContainers", "itemUseCooldownAnimation",
+            "modernBlockBreaking", "resetMiningOnUse", "blockHitWhileMining", "disableAdventureSwing",
+            "disableAdventureUsageSwinging", "disableAdventureUsageParticles", "modernPotionColors",
+            "fishingRodLineFov", "fishingRodLineThickness", "legacyDebugScreen", "hideCrosshairInThirdPerson"
+        )
+
         // Options whose feature does not exist on (or is compiled out of) this Minecraft version
         private val UNSUPPORTED_OPTIONS = buildSet<String> {
+            //? if <=1.8.9 {
+            /*addAll(listOf(
+                "oldCapeMovement", "disableCapeSwingRotation", "capeChestplateTranslation", "fakeOldSneakEyeHeight",
+                "rotateBackwardsWalking", "uncapBlockingHeadRotation", "legacyDamageTilt",
+                "legacyGlintSpeed", "skullPosition", "disableSwingOnUse", "disableSwingOnDrop",
+                "disableSwingOnEntityInteract", "disableItemUsingTextureInGUI", "durabilityBarColors",
+                "legacyItemRarities", "heldItemVisibilityInBoat", "offhandUsageSwinging", "legacySwingAnimation",
+                "crosshairInThirdPerson", "listWidgetSelectedBorderColor", "legacyWidgetHoverTextColor",
+                "disableCameraTransparentPassthrough", "tooltipStyleRendering", "slotHoverStyleRendering",
+                "listBackgroundGradient", "inventoryEffectsPosition", "fullWidthInventoryEffects", "panoramaRendering",
+                "legacyLoadingScreen", "legacyLoadingScreenProgressBar", "oldChatPosition", "oldCrosshairPosition",
+                "oldCraftingSlotsPosition", "fixSneakingFeetPosition", "fixVerticalBobbingTilt",
+                "oldSkyRenderingCheck", "smoothParticles", "fixMirrorArmSwing", "fixOffHandUsingPose",
+                "fixCastLineCheck", "fixCastLineSwing", "fixFireballClientsideVisual", "fixTextStrikethroughStyle",
+                "fixHighAttackSpeedIndicator", "upMinPixelTransparencyLimit", "fixDoubleUsageVisual", "blueVoidSky",
+                "cloudHeight", "playerVoidBox", "oldY0Height", "oldWaterOverlayOpacity", "oldWaterColorFog",
+                "oldWaterColorEffects", "oldCloudRendering", "legacyLightmap", "legacyFogDarkness",
+                "maxGlintProperties", "restoreParticleBlending", "disableInventoryEntityScissor",
+                "legacyBlockMiningProgress", "projectileAgeCheck", "blockOutlineRendering",
+                "disableModelWhilstSleeping", "flameDimensions", "itemGlintOnEntity", "heldItemArmLogic",
+                "legacySplashPosition", "legacyDiffuseLighting",
+                "fixEquipAnimationOnItemUse",
+                "disableCapeLean", "deathLimbs", "bowArmMovement", "lockBlockingArmRotation", "disableHeadRotationInterpolation"
+            ))
+            *///?} else {
+            addAll(LEGACY_ONLY_OPTIONS)
+            //?}
             // Built on the 1.21.5 GPU API and the 1.21.6 rendering/fog/GUI rewrites
-            //? if <1.21.6 {
+            //? if >1.8.9 <1.21.6 {
             /*addAll(listOf(
                 "panoramaRendering", "oldCloudRendering", "legacyLightmap", "legacyDiffuseLighting", "planarSkyFog",
                 "voidFog", "oldY0Height", "legacyFogDarkness", "oldWaterColorFog", "blueVoidSky", "playerVoidBox",

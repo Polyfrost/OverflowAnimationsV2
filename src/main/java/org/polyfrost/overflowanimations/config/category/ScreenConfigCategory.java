@@ -28,7 +28,10 @@ package org.polyfrost.overflowanimations.config.category;
 import org.jspecify.annotations.NonNull;
 import org.polyfrost.overflowanimations.handler.config.bundle.EntryBundle;
 import org.polyfrost.overflowanimations.handler.config.category.Category;
+//? if >1.8.9
 import org.polyfrost.overflowanimations.util.UtilsKt;
+import org.polyfrost.overflowanimations.util.enums.TabListSetting;
+import org.polyfrost.overflowanimations.util.enums.DebugCrosshairSetting;
 import org.polyfrost.overflowanimations.util.enums.CameraVersionSetting;
 
 public final class ScreenConfigCategory extends Category {
@@ -54,6 +57,14 @@ public final class ScreenConfigCategory extends Category {
     public boolean disconnectServerToTitleScreen = false;
     public boolean oldCraftingSlotsPosition = false;
 
+    //? if >1.8.9 {
+    public DebugCrosshairSetting debugCrosshairStyle = DebugCrosshairSetting.V1_12;
+    //?} else
+    //public DebugCrosshairSetting debugCrosshairStyle = DebugCrosshairSetting.V1_8;
+    public TabListSetting tabListStyle = TabListSetting.V1_8;
+    public boolean legacyDebugScreen = false;
+    public boolean hideCrosshairInThirdPerson = false;
+
     @Override
     public @NonNull EntryBundle bundle() {
         final EntryBundle bundle = new EntryBundle(this, "screen");
@@ -78,7 +89,16 @@ public final class ScreenConfigCategory extends Category {
         bundle.booleanEntry("oldChatPosition");
         bundle.booleanEntry("oldCrosshairPosition");
         bundle.booleanEntry("disconnectServerToTitleScreen");
+        //? if >1.8.9 {
         bundle.booleanEntry("oldCraftingSlotsPosition", event -> UtilsKt.reinitializeInventorySlots());
+        //?} else
+        //bundle.booleanEntry("oldCraftingSlotsPosition");
+
+        bundle.group("legacy_hud")
+                .enumEntry("debugCrosshairStyle", DebugCrosshairSetting.class)
+                .enumEntry("tabListStyle", TabListSetting.class)
+                .booleanEntry("legacyDebugScreen")
+                .booleanEntry("hideCrosshairInThirdPerson");
 
         return bundle;
     }

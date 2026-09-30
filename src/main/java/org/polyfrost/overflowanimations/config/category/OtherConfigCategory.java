@@ -32,6 +32,7 @@ import org.polyfrost.overflowanimations.handler.compatibility.ModsKt;
 import org.polyfrost.overflowanimations.handler.config.bundle.EntryBundle;
 import org.polyfrost.overflowanimations.handler.config.bundle.GroupBundle;
 import org.polyfrost.overflowanimations.handler.config.category.Category;
+//? if >1.8.9
 import org.polyfrost.overflowanimations.handler.rendering.RenderUtilsKt;
 //? if >=1.21.6
 import org.polyfrost.overflowanimations.handler.rendering.lighting.LegacyDiffuseLighting;
@@ -102,8 +103,13 @@ public final class OtherConfigCategory extends Category {
         damageTint.booleanEntry("damageTintItems")
                 .booleanEntry("damageTintCape");
         if (!ModsKt.HAS_LUNAR_CLIENT) {
+            //? if >1.8.9 {
             damageTint.enumEntry("damageTintStyle", DamageTintSetting.class, value -> RenderUtilsKt.updateOverlayTint(value))
                     .colorEntry("customTintColor", value -> RenderUtilsKt.updateOverlayTint(this.damageTintStyle));
+            //?} else {
+            /*damageTint.enumEntry("damageTintStyle", DamageTintSetting.class)
+                    .colorEntry("customTintColor");
+            *///?}
         }
 
         bundle.group("other")
@@ -121,7 +127,9 @@ public final class OtherConfigCategory extends Category {
                 .booleanEntry("maxGlintProperties")
                 .booleanEntry("flameOffset")
                 .booleanEntry("persistentBlockOutline")
-                //? if <26.2 {
+                //? if <=1.8.9 {
+                /*.booleanEntry("fastGrass", value -> Minecraft.getInstance().worldRenderer.reload())
+                *///?} elif <26.2 {
                 /*.booleanEntry("fastGrass", value -> Minecraft.getInstance().levelRenderer.allChanged())
                 *///?} else {
                 .booleanEntry("fastGrass", value -> Minecraft.getInstance().levelExtractor.allChanged())
@@ -129,11 +137,16 @@ public final class OtherConfigCategory extends Category {
                 .booleanEntry("oldY0Height")
                 .booleanEntry("oldWaterOverlayOpacity")
                 .booleanEntry("oldWaterColorFog")
-                //? if <26.2 {
+                //? if <=1.8.9 {
+                /*.booleanEntry("oldWaterColorEffects")
+                *///?} elif <26.2 {
                 /*.booleanEntry("oldWaterColorEffects", value -> Minecraft.getInstance().levelRenderer.allChanged())
                 *///?} else {
                 .booleanEntry("oldWaterColorEffects", value -> Minecraft.getInstance().levelExtractor.allChanged())
                 //?}
+                //? if <=1.8.9 {
+                /*.booleanEntry("disableRandomBlockRotations", value -> Minecraft.getInstance().worldRenderer.reload())
+                *///?} else
                 .booleanEntry("disableRandomBlockRotations")
                 //? if <1.21.6 {
                 /*.booleanEntry("legacyDiffuseLighting")

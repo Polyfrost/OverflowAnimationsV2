@@ -105,6 +105,13 @@ public abstract class MixinFirstPersonHandsAndItems_EquipAnimationChecks {
     //?}
 
     //? if >=26.3 {
+    @ModifyExpressionValue(method = "tick", at = {@At(value = "CONSTANT", args = "floatValue=0.4F"), @At(value = "CONSTANT", args = "floatValue=-0.4F")})
+    private float overflowanimations$reequipSpeed(final float original) {
+        return OverflowAnimations.isEnabled() ? Math.copySign(OverflowAnimationsConfig.instance().items.reequipSpeed, original) : original;
+    }
+    //?}
+
+    //? if >=26.3 {
     // Fixes MC-262560
     @ModifyArg(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/Mth;clamp(FFF)F", ordinal = 2), index = 0)
     private float overflowanimations$handleEquipLogic(final float value, @Local(argsOnly = true, name = "player") final LocalPlayer player, @Local(name = "attackAnim") float attackAnim) {
