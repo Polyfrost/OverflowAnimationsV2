@@ -27,9 +27,13 @@ package org.polyfrost.overflowanimations.mixins.v1.rendering.outlines;
 
 //? if >=1.21.11
 import com.mojang.blaze3d.platform.Window;
+//? if <1.21.11 {
+/*import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
+*///?} else {
+import com.llamalad7.mixinextras.injector.ModifyReturnValue;
+//?}
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.Constant;
-import org.spongepowered.asm.mixin.injection.ModifyConstant;
+import org.spongepowered.asm.mixin.injection.At;
 import org.polyfrost.overflowanimations.OverflowAnimations;
 import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig;
 
@@ -40,14 +44,14 @@ import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig;
 //?}
 public abstract class MixinWindow_BlockOutlineWidth {
     //? if <1.21.11 {
-    /*@ModifyConstant(method = "*", constant = @Constant(floatValue = 2.5F)) // Line width lambda in the constructor
+    /*@ModifyExpressionValue(method = "*", at = @At(value = "INVOKE", target = "Ljava/lang/Math;max(FF)F")) // Line width lambda in the constructor
     private static float overflowanimations$oldBlockOutline(final float lineWidth) {
     *///?} else {
-    @ModifyConstant(method = "getAppropriateLineWidth", constant = @Constant(floatValue = 2.5F))
+    @ModifyReturnValue(method = "getAppropriateLineWidth", at = @At("RETURN"))
     private float overflowanimations$oldBlockOutline(final float lineWidth) {
     //?}
         if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().other.blockOutlineRendering) {
-            return 2.0F;
+            return lineWidth * 0.8F;
         } else {
             return lineWidth;
         }

@@ -15,6 +15,7 @@ deps.devauth = "1.2.2"
 deps.mixinconstraints = "1.1.0"
 deps.mixinsquared = "0.2.0"
 deps.oneconfig = "1.2.8"
+deps.junit = "6.1.3"
 
 loomx.loom_version = "1.17-SNAPSHOT"
 
@@ -64,10 +65,3 @@ mod.mc_releases = ["26.3"]
 deps.fabric_api = "0.160.5+26.3"
 deps.fabric_language_kotlin = "1.14.1+kotlin.2.4.20"
 
-["26.4"]
-mod.mc_compat = "26.4-alpha.1"
-mod.mc_releases = ["26.4-alpha.1"]
-deps.minecraft = "26.4-snapshot-1"
-deps.fabric_api = "0.161.1+26.4"
-deps.fabric_language_kotlin = "1.14.1+kotlin.2.4.20"
-deps.oneconfig_platform = "26.3"

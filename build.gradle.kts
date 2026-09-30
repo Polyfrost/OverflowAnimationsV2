@@ -1,3 +1,4 @@
+import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
@@ -70,6 +71,9 @@ dependencies {
     include(implementation(annotationProcessor("com.github.bawnorton.mixinsquared:mixinsquared-fabric:${sc.properties.get<String>("deps.mixinsquared")}")!!)!!)
 
     modRuntimeOnly("me.djtheredstoner:DevAuth-fabric:${sc.properties.get<String>("deps.devauth")}")
+
+    testImplementation("org.junit.jupiter:junit-jupiter:${sc.properties.get<String>("deps.junit")}")
+    testImplementation("net.fabricmc:fabric-loader-junit:$loaderversion")
 }
 
 loom {
@@ -136,6 +140,19 @@ bloom {
 }
 
 tasks {
+    test {
+        useJUnitPlatform()
+        // The loader treats this as the game directory and fills it with mods/logs caches
+        workingDir = layout.buildDirectory.dir("test-run").get().asFile.apply { mkdirs() }
+        testLogging {
+            showStackTraces = true
+            exceptionFormat = TestExceptionFormat.FULL
+        }
+    }
+
+    // A second copy of the mod metadata lands here, and the loader then picks either copy at random
+    processTestResources { exclude("fabric.mod.json") }
+
     processResources {
         val props = mapOf(
             "id" to modid,
