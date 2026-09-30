@@ -60,7 +60,8 @@ public abstract class MixinGameGui_CrosshairAndHearts {
 
     @ModifyExpressionValue(method = "hasCrosshair", at = @At(value = "FIELD", target = "Lnet/minecraft/client/options/GameOptions;debugEnabled:Z"))
     private boolean overflowanimations$debugCrosshairStyle(final boolean debugEnabled) {
-        return debugEnabled && OverflowAnimationsConfig.instance().screen.debugCrosshairStyle == DebugCrosshairSetting.V1_8;
+        final DebugCrosshairSetting style = OverflowAnimationsConfig.instance().screen.debugCrosshairStyle;
+        return debugEnabled && (style == DebugCrosshairSetting.V1_8 || style == DebugCrosshairSetting.VANILLA);
     }
 
     @ModifyReturnValue(method = "hasCrosshair", at = @At("RETURN"))

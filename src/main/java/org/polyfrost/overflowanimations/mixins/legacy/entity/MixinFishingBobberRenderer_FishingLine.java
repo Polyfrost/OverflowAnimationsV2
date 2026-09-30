@@ -35,6 +35,7 @@ import net.minecraft.util.math.Vec3d;
 import org.lwjgl.opengl.GL11;
 import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig;
 import org.polyfrost.overflowanimations.config.category.ItemsConfigCategory;
+import org.polyfrost.overflowanimations.util.enums.FishingRodVersionSetting;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -45,16 +46,33 @@ public abstract class MixinFishingBobberRenderer_FishingLine {
     @WrapOperation(method = "render(Lnet/minecraft/entity/FishingBobberEntity;DDDFF)V", at = @At(value = "NEW", target = "(DDD)Lnet/minecraft/util/math/Vec3d;"))
     private Vec3d overflowanimations$fishingLinePosition(final double x, final double y, final double z, final Operation<Vec3d> original) {
         final ItemsConfigCategory items = OverflowAnimationsConfig.instance().items;
-        if (items.customRodLine) {
-            return original.call((double) items.rodLinePositionX, (double) items.rodLinePositionY, (double) items.rodLinePositionZ);
-        }
-
-        if (items.fishingRodLineFov) {
+        double baseX = x, baseY = y, baseZ = z;
+        if (items.fishingRodVersion == FishingRodVersionSetting.V1_13) {
+            final double scale = Minecraft.getInstance().options.fov / 100.0;
+            baseX = -0.36 * scale;
+            baseY = -0.045 * scale;
+            baseZ = 0.4;
+        } else if (items.fishingRodVersion == FishingRodVersionSetting.MODERN) {
+            final Minecraft minecraft = Minecraft.getInstance();
+            final double fov = minecraft.options.fov;
+            final double scale = 960.0 / fov;
+            final double planeHeight = Math.tan(Math.toRadians(fov) / 2.0) * 0.05;
+            final double planeWidth = planeHeight * minecraft.width / Math.max(minecraft.height, 1);
+            baseX = -0.525 * planeWidth * scale;
+            baseY = -0.1 * planeHeight * scale;
+            baseZ = 0.05 * scale;
+        } else if (items.fishingRodLineFov) {
             final double fov = Minecraft.getInstance().options.fov / 110.0;
-            return original.call(-fov + fov / 2.5 - fov / 8.0 + 0.16, 0.0, 0.4);
+            baseX = -fov + fov / 2.5 - fov / 8.0 + 0.16;
+            baseY = 0.0;
+            baseZ = 0.4;
         }
 
-        return original.call(x, y, z);
+        if (items.customRodLine) {
+            return original.call(baseX + items.rodLinePositionX, baseY + items.rodLinePositionY, baseZ + items.rodLinePositionZ);
+        }
+
+        return original.call(baseX, baseY, baseZ);
     }
 
     @Inject(method = "render(Lnet/minecraft/entity/FishingBobberEntity;DDDFF)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/vertex/BufferBuilder;begin(ILnet/minecraft/client/render/vertex/VertexFormat;)V", ordinal = 1))

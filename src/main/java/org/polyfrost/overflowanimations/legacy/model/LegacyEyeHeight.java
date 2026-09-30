@@ -51,7 +51,7 @@ public final class LegacyEyeHeight {
 
     private static boolean isSmooth() {
         final SneakAnimationSetting setting = config().sneakAnimation;
-        return setting == SneakAnimationSetting.V1_7 || setting == SneakAnimationSetting.V1_13;
+        return setting == SneakAnimationSetting.V1_7 || setting == SneakAnimationSetting.V1_13 || setting == SneakAnimationSetting.MODERN;
     }
 
     public static float target(final Entity entity) {
@@ -77,6 +77,7 @@ public final class LegacyEyeHeight {
                 eyeHeight = target < eyeHeight || !config().longUnsneak ? target : eyeHeight + (target - eyeHeight) * 0.6F;
                 break;
             case V1_13:
+            case MODERN:
                 eyeHeight += (target - eyeHeight) * 0.5F;
                 break;
             default:

@@ -37,7 +37,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class MixinGameRenderer_DebugCrosshair {
     @Inject(method = "renderAxisIndicators", at = @At("HEAD"), cancellable = true)
     private void overflowanimations$debugCrosshairStyle(final float tickDelta, final CallbackInfo ci) {
-        if (OverflowAnimationsConfig.instance().screen.debugCrosshairStyle != DebugCrosshairSetting.V1_8) {
+        if (OverflowAnimationsConfig.instance().screen.debugCrosshairStyle != DebugCrosshairSetting.V1_8 && OverflowAnimationsConfig.instance().screen.debugCrosshairStyle != DebugCrosshairSetting.VANILLA) {
             ci.cancel();
         }
     }
