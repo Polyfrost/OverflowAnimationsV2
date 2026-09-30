@@ -25,8 +25,6 @@
 
 package org.polyfrost.overflowanimations.config.category;
 
-import dev.isxander.yacl3.api.ConfigCategory;
-import net.minecraft.network.chat.Component;
 import org.jspecify.annotations.NonNull;
 import org.polyfrost.overflowanimations.handler.config.bundle.EntryBundle;
 import org.polyfrost.overflowanimations.handler.config.category.Category;
@@ -56,13 +54,6 @@ public final class ScreenConfigCategory extends Category {
     public boolean disconnectServerToTitleScreen = false;
     public boolean oldCraftingSlotsPosition = false;
 
-    public static ConfigCategory create(final ScreenConfigCategory defaults, final ScreenConfigCategory config) {
-        final ConfigCategory.Builder category = ConfigCategory.createBuilder();
-        category.name(Component.translatable("overflowanimations.category.screen"));
-        config.bundle().install(category, defaults, config);
-        return category.build();
-    }
-
     @Override
     public @NonNull EntryBundle bundle() {
         final EntryBundle bundle = new EntryBundle(this, "screen");
@@ -87,7 +78,7 @@ public final class ScreenConfigCategory extends Category {
         bundle.booleanEntry("oldChatPosition");
         bundle.booleanEntry("oldCrosshairPosition");
         bundle.booleanEntry("disconnectServerToTitleScreen");
-        bundle.booleanEntry("oldCraftingSlotsPosition", (option, event) -> UtilsKt.reinitializeInventorySlots());
+        bundle.booleanEntry("oldCraftingSlotsPosition", event -> UtilsKt.reinitializeInventorySlots());
 
         return bundle;
     }

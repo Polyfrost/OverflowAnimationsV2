@@ -25,8 +25,6 @@
 
 package org.polyfrost.overflowanimations.config.category;
 
-import dev.isxander.yacl3.api.ConfigCategory;
-import net.minecraft.network.chat.Component;
 import org.jspecify.annotations.NonNull;
 import org.polyfrost.overflowanimations.handler.config.bundle.EntryBundle;
 import org.polyfrost.overflowanimations.handler.config.category.Category;
@@ -51,13 +49,6 @@ public final class MovementConfigCategory extends Category {
     public boolean bowArmMovement = false;
     public boolean legacyDamageTilt = false;
     public boolean offsetHurtTiltTime = false;
-
-    public static ConfigCategory create(final MovementConfigCategory defaults, final MovementConfigCategory config) {
-        final ConfigCategory.Builder category = ConfigCategory.createBuilder();
-        category.name(Component.translatable("overflowanimations.category.movement"));
-        config.bundle().install(category, defaults, config);
-        return category.build();
-    }
 
     @Override
     public @NonNull EntryBundle bundle() {

@@ -50,11 +50,7 @@ object OverflowAnimationsKeybinds {
     val CONFIG_SCREEN = create(
         "Open Mod Configuration",
         InputConstants.KEY_BACKSLASH
-    //? if <26.2 {
-    /*) { client -> client.setScreen(OverflowAnimationsConfig.getConfigScreen(client.screen)) }
-    *///?} else {
-    ) { client -> client.gui.setScreen(OverflowAnimationsConfig.getConfigScreen(client.gui.screen())) }
-    //?}
+    ) { OverflowAnimationsConfig.openScreen() }
 
     val RELOAD = create(
         "Reload Mod",

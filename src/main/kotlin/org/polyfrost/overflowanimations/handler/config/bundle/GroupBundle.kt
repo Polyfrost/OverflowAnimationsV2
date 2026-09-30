@@ -23,21 +23,11 @@
  * "MINECRAFT" LINKING EXCEPTION TO THE GPL
  */
 
+
 package org.polyfrost.overflowanimations.handler.config.bundle
 
-import dev.isxander.yacl3.api.ConfigCategory
-import dev.isxander.yacl3.api.OptionAddable
 import org.polyfrost.overflowanimations.handler.config.category.Category
 
 class GroupBundle(category: Category, name: String) : EntryBundle(category, name) {
-    override fun install(builder: ConfigCategory.Builder, defaults: Category, config: Category) =
-        this.install(builder as OptionAddable, defaults, config)
-
-    fun install(builder: OptionAddable, defaults: Category, config: Category) {
-        for (entry in this.entries) {
-            builder.option(entry.create(defaults, config))
-        }
-    }
-
     override fun group(name: String) = throw UnsupportedOperationException("You cannot create child groups!")
 }

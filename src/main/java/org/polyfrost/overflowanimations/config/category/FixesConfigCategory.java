@@ -25,8 +25,6 @@
 
 package org.polyfrost.overflowanimations.config.category;
 
-import dev.isxander.yacl3.api.ConfigCategory;
-import net.minecraft.network.chat.Component;
 import org.jspecify.annotations.NonNull;
 import org.polyfrost.overflowanimations.handler.compatibility.ModsKt;
 import org.polyfrost.overflowanimations.handler.config.bundle.EntryBundle;
@@ -50,13 +48,6 @@ public final class FixesConfigCategory extends Category {
     //? if >=26.1 {
     public boolean smoothParticles = true;
     //?}
-
-    public static ConfigCategory create(final FixesConfigCategory defaults, final FixesConfigCategory config) {
-        final ConfigCategory.Builder category = ConfigCategory.createBuilder();
-        category.name(Component.translatable("overflowanimations.category.fixes"));
-        config.bundle().install(category, defaults, config);
-        return category.build();
-    }
 
     @Override
     public @NonNull EntryBundle bundle() {

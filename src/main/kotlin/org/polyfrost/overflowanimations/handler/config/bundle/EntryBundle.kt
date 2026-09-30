@@ -25,11 +25,13 @@
 
 package org.polyfrost.overflowanimations.handler.config.bundle
 
-import dev.isxander.yacl3.api.ConfigCategory
-import dev.isxander.yacl3.api.OptionGroup
-import net.minecraft.network.chat.Component
-import org.polyfrost.overflowanimations.handler.config.bundle.entry.OptionEntrySupplier
+import org.polyfrost.oneconfig.api.config.v1.Properties
+import org.polyfrost.oneconfig.api.config.v1.Property
+import org.polyfrost.oneconfig.api.config.v1.Tree
+import org.polyfrost.overflowanimations.OverflowAnimationsConstants
 import org.polyfrost.overflowanimations.handler.config.category.Category
+import java.util.function.Consumer
+import java.util.function.Predicate
 
 open class EntryBundle(protected val category: Category, private val name: String) : Bundle() {
     companion object {
@@ -53,28 +55,40 @@ open class EntryBundle(protected val category: Category, private val name: Strin
         }
     }
 
-    protected val entries = LinkedHashSet<OptionEntrySupplier<*>>()
-    protected val groups = LinkedHashSet<GroupBundle>()
-    protected val categoryClass = category::class.java
+    protected val entries = ArrayList<Entry>()
+    private val groups = ArrayList<GroupBundle>()
 
-    override fun install(builder: ConfigCategory.Builder, defaults: Category, config: Category) {
+    fun install(tree: Tree) {
+        val categoryKey = "${OverflowAnimationsConstants.MOD_ID}.category.${this.name}"
         for (group in this.groups) {
-            if (group.entries.isEmpty()) continue
-
-            val groupBuilder = OptionGroup.createBuilder()
-            groupBuilder.name(Component.translatable("overflowanimations.category." + this.name + ".group." + group.name()))
-            group.install(groupBuilder, defaults, config)
-            builder.group(groupBuilder.build())
+            group.installEntries(tree, categoryKey, "$categoryKey.group.${group.name()}")
         }
+        this.installEntries(tree, categoryKey, null)
+    }
 
+    internal fun installEntries(tree: Tree, categoryKey: String, subcategoryKey: String?) {
         for (entry in this.entries) {
-            builder.option(entry.create(defaults, config))
+            val key = "${OverflowAnimationsConstants.MOD_ID}.${entry.name}"
+            val field = this.category.javaClass.getField(entry.name)
+            val property: Property<Any?> = Properties.field(key, "$key.description", field, this.category)
+            property.addMetadata("visualizer", entry.visualizer)
+            property.addMetadata("category", categoryKey)
+            subcategoryKey?.let { property.addMetadata("subcategory", it) }
+            property.addMetadata(entry.metadata)
+            @Suppress("UNCHECKED_CAST")
+            (entry.listener as Consumer<Any?>?)?.let { listener ->
+                property.addCallback(Predicate { value ->
+                    field.set(this.category, value)
+                    listener.accept(value)
+                    false
+                })
+            }
+            tree.put(property)
         }
     }
 
-    override fun <T> entry(entry: OptionEntrySupplier<T>): Bundle {
-        if (entry.name() in UNSUPPORTED_OPTIONS) return this
-        this.entries.add(OptionEntrySupplier.bootstrap(this.categoryClass, this.category, entry))
+    override fun entry(entry: Entry): Bundle {
+        if (entry.name !in UNSUPPORTED_OPTIONS) this.entries.add(entry)
         return this
     }
 
@@ -82,15 +96,6 @@ open class EntryBundle(protected val category: Category, private val name: Strin
         val group = GroupBundle(this.category, name)
         this.groups.add(group)
         return group
-    }
-
-    fun entries(): Collection<OptionEntrySupplier<*>> {
-        val entries = ArrayList<OptionEntrySupplier<*>>(this.entries)
-        for (group in this.groups) {
-            entries.addAll(group.entries)
-        }
-
-        return entries
     }
 
     fun name() = this.name

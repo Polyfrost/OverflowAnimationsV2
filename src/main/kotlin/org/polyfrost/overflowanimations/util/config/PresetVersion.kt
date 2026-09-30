@@ -343,7 +343,7 @@ enum class PresetVersion(private val applier: Runnable) {
 
     fun apply(reload: Boolean = true) {
         this.applier.run()
-        OverflowAnimationsConfig.save()
+        OverflowAnimationsConfig.instance().save()
         if (reload) {
             OverflowAnimations.reload()
         }

@@ -25,102 +25,144 @@
 
 package org.polyfrost.overflowanimations.config;
 
+import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import com.mojang.logging.LogUtils;
-import dev.isxander.yacl3.api.YetAnotherConfigLib;
-import dev.isxander.yacl3.config.v2.api.ConfigClassHandler;
-import dev.isxander.yacl3.config.v2.api.SerialEntry;
-import dev.isxander.yacl3.config.v2.api.serializer.GsonConfigSerializerBuilder;
-import dev.isxander.yacl3.platform.YACLPlatform;
-import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.network.chat.Component;
-import org.jetbrains.annotations.Nullable;
-import org.slf4j.Logger;
+import net.fabricmc.loader.api.FabricLoader;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.polyfrost.compose.render.PolyColor;
+import org.polyfrost.oneconfig.api.config.v1.Config;
+import org.polyfrost.oneconfig.api.config.v1.Tree;
+import org.polyfrost.oneconfig.api.ui.v1.OneConfigUI;
+import org.polyfrost.oneconfig.internal.ui.navigation.graph.ModConfigRoute;
+import org.polyfrost.overflowanimations.OverflowAnimationsConstants;
 import org.polyfrost.overflowanimations.config.category.*;
 
-import java.io.IOException;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 
-public final class OverflowAnimationsConfig {
-    private static final Logger LOGGER = LogUtils.getLogger();
+public final class OverflowAnimationsConfig extends Config {
+    private static final Logger LOGGER = LogManager.getLogger("OverflowAnimations/Config");
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
-    public static final ConfigClassHandler<OverflowAnimationsConfig> HANDLER = ConfigClassHandler.createBuilder(OverflowAnimationsConfig.class)
-            .serializer((config) -> GsonConfigSerializerBuilder.create(config)
-                    .setPath(YACLPlatform.getConfigDir().resolve("overflowanimations.json"))
-                    .build()
-            ).build();
+    private static final String ID = OverflowAnimationsConstants.MOD_ID + ".json";
+    private static final Path CONFIG_DIR = FabricLoader.getInstance().getConfigDir();
 
-    @SerialEntry
-    public MovementConfigCategory movement = new MovementConfigCategory();
+    private static JsonObject legacyConfig = takeLegacyConfig();
+    private static final OverflowAnimationsConfig INSTANCE = new OverflowAnimationsConfig();
 
-    @SerialEntry
-    public ItemsConfigCategory items = new ItemsConfigCategory();
+    public final MovementConfigCategory movement = new MovementConfigCategory();
+    public final ItemsConfigCategory items = new ItemsConfigCategory();
+    public final ScreenConfigCategory screen = new ScreenConfigCategory();
+    public final FixesConfigCategory fixes = new FixesConfigCategory();
+    public final OtherConfigCategory other = new OtherConfigCategory();
 
-    @SerialEntry
-    public ScreenConfigCategory screen = new ScreenConfigCategory();
+    private OverflowAnimationsConfig() {
+        super(ID, "OverflowAnimations", Category.VISUALS);
+    }
 
-    @SerialEntry
-    public FixesConfigCategory fixes = new FixesConfigCategory();
+    @Override
+    protected Tree makeTree() {
+        final Tree tree = Tree.tree(ID);
+        this.movement.bundle().install(tree);
+        this.screen.bundle().install(tree);
+        this.items.bundle().install(tree);
+        this.fixes.bundle().install(tree);
+        this.other.bundle().install(tree);
+        return tree;
+    }
 
-    @SerialEntry
-    public OtherConfigCategory other = new OtherConfigCategory();
-
-    public static Screen getConfigScreen(@Nullable Screen parent) {
-        return YetAnotherConfigLib.create(HANDLER, (defaults, config, builder) -> {
-            builder.title(Component.translatable("overflowanimations.title"));
-            builder.category(MovementConfigCategory.create(defaults.movement, config.movement));
-            builder.category(ScreenConfigCategory.create(defaults.screen, config.screen));
-            builder.category(ItemsConfigCategory.create(defaults.items, config.items));
-            builder.category(FixesConfigCategory.create(defaults.fixes, config.fixes));
-            builder.category(OtherConfigCategory.create(defaults.other, config.other));
-            builder.save(HANDLER::save);
-            return builder;
-        }).generateScreen(parent);
+    @Override
+    protected void initialize(boolean byConfigManager) {
+        super.initialize(byConfigManager);
+        if (legacyConfig != null && this.getTree() != null) {
+            this.importLegacyConfig(legacyConfig);
+            legacyConfig = null;
+            this.save();
+        }
     }
 
     public static void load() {
-        final Path animatiumFilePath = YACLPlatform.getConfigDir().resolve("animatium3.json");
-        final Path filePath = YACLPlatform.getConfigDir().resolve("overflowanimations.json");
-        if (!Files.exists(filePath) && Files.exists(animatiumFilePath)) {
-            try {
-                Files.copy(animatiumFilePath, filePath);
-                LOGGER.info("Imported Animatium config file!");
-            } catch (final IOException exception) {
-                LOGGER.error("Failed to import Animatium config file!", exception);
+        INSTANCE.preload();
+    }
+
+    public static void openScreen() {
+        OneConfigUI.open(new ModConfigRoute(ID, null));
+    }
+
+    public static OverflowAnimationsConfig instance() {
+        return INSTANCE;
+    }
+
+    private static JsonObject takeLegacyConfig() {
+        final Path filePath = CONFIG_DIR.resolve(ID);
+        JsonObject root = readObject(filePath);
+        if (root != null) {
+            if (!(root.get("movement") instanceof JsonObject)) {
+                return null;
             }
+
+            try {
+                Files.move(filePath, CONFIG_DIR.resolve(ID + ".yacl"), StandardCopyOption.REPLACE_EXISTING);
+            } catch (final Exception exception) {
+                LOGGER.error("Failed to move the YACL config file!", exception);
+                return null;
+            }
+        } else if (Files.exists(filePath) || (root = readObject(CONFIG_DIR.resolve("animatium3.json"))) == null) {
+            return null;
         }
 
-        migrateExtras(filePath);
-        HANDLER.load();
+        migrateExtras(root);
+        return root;
+    }
+
+    private static JsonObject readObject(final Path path) {
+        try {
+            return Files.exists(path) ? GSON.fromJson(new String(Files.readAllBytes(path)), JsonObject.class) : null;
+        } catch (final Exception exception) {
+            return null;
+        }
+    }
+
+    private void importLegacyConfig(final JsonObject root) {
+        final Object[][] categories = {
+                {"movement", this.movement}, {"items", this.items}, {"screen", this.screen}, {"fixes", this.fixes}, {"other", this.other}
+        };
+        for (final Object[] category : categories) {
+            if (!(root.get((String) category[0]) instanceof JsonObject values)) {
+                continue;
+            }
+
+            for (final Field field : category[1].getClass().getFields()) {
+                final JsonElement value = values.get(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES.translateName(field));
+                if (value == null || Modifier.isStatic(field.getModifiers())) {
+                    continue;
+                }
+
+                try {
+                    field.set(category[1], field.getType() == PolyColor.class ? new PolyColor(value.getAsInt()) : GSON.fromJson(value, field.getGenericType()));
+                } catch (final Exception exception) {
+                    LOGGER.warn("Skipped importing config option {}", field.getName(), exception);
+                }
+            }
+        }
+        LOGGER.info("Imported YACL config file!");
     }
 
     // The Extras category was removed. Its surviving options moved to Other, Screen and Items, everything else was dropped.
-    private static void migrateExtras(final Path filePath) {
-        if (!Files.exists(filePath)) {
+    private static void migrateExtras(final JsonObject root) {
+        if (!(root.remove("extras") instanceof JsonObject extras)) {
             return;
         }
 
-        try {
-            final JsonObject root = JsonParser.parseString(Files.readString(filePath)).getAsJsonObject();
-            if (!(root.remove("extras") instanceof JsonObject extras)) {
-                return;
-            }
-
-            moveEntries(extras, root, "other", "damage_tint_items", "damage_tint_cape", "old_water_color_effects");
-            moveEntries(extras, root, "screen", "legacy_loading_screen_progress_bar");
-            moveEntries(extras, root, "items", "item_scale_x", "item_scale_y", "item_scale_z", "item_offset_x", "item_offset_y", "item_offset_z", "item_rotation_x", "item_rotation_y", "item_rotation_z", "apply_customization_to_block_items", "custom_swing_speed", "item_swing_speed", "haste_swing_speed", "mining_fatigue_swing_speed", "ignore_haste_speed", "ignore_mining_fatigue_speed", "offhand_usage_swinging", "always_usage_swing", "fake_miss_penalty_swing", "disable_swing_translate", "disable_swing_pivot", "legacy_swing_animation");
-            final Path tempPath = filePath.resolveSibling(filePath.getFileName() + ".tmp");
-            Files.writeString(tempPath, GSON.toJson(root));
-            Files.move(tempPath, filePath, StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.ATOMIC_MOVE);
-            LOGGER.info("Migrated Extras config category!");
-        } catch (final Exception exception) {
-            LOGGER.error("Failed to migrate Extras config category!", exception);
-        }
+        moveEntries(extras, root, "other", "damage_tint_items", "damage_tint_cape", "old_water_color_effects");
+        moveEntries(extras, root, "screen", "legacy_loading_screen_progress_bar");
+        moveEntries(extras, root, "items", "item_scale_x", "item_scale_y", "item_scale_z", "item_offset_x", "item_offset_y", "item_offset_z", "item_rotation_x", "item_rotation_y", "item_rotation_z", "apply_customization_to_block_items", "custom_swing_speed", "item_swing_speed", "haste_swing_speed", "mining_fatigue_swing_speed", "ignore_haste_speed", "ignore_mining_fatigue_speed", "offhand_usage_swinging", "always_usage_swing", "fake_miss_penalty_swing", "disable_swing_translate", "disable_swing_pivot", "legacy_swing_animation");
     }
 
     private static void moveEntries(final JsonObject from, final JsonObject root, final String category, final String... keys) {
@@ -130,15 +172,6 @@ public final class OverflowAnimationsConfig {
                 target.add(key, from.get(key));
             }
         }
-
         root.add(category, target);
-    }
-
-    public static void save() {
-        HANDLER.save();
-    }
-
-    public static OverflowAnimationsConfig instance() {
-        return HANDLER.instance();
     }
 }

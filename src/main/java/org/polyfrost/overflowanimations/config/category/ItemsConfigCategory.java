@@ -25,8 +25,6 @@
 
 package org.polyfrost.overflowanimations.config.category;
 
-import dev.isxander.yacl3.api.ConfigCategory;
-import net.minecraft.network.chat.Component;
 import org.jspecify.annotations.NonNull;
 import org.polyfrost.overflowanimations.handler.config.bundle.EntryBundle;
 import org.polyfrost.overflowanimations.handler.config.category.Category;
@@ -89,13 +87,6 @@ public final class ItemsConfigCategory extends Category {
     public float itemRotationY = 0.0F;
     public float itemRotationZ = 0.0F;
     public boolean applyCustomizationToBlockItems = true;
-
-    public static ConfigCategory create(final ItemsConfigCategory defaults, final ItemsConfigCategory config) {
-        final ConfigCategory.Builder category = ConfigCategory.createBuilder();
-        category.name(Component.translatable("overflowanimations.category.items"));
-        config.bundle().install(category, defaults, config);
-        return category.build();
-    }
 
     @Override
     public @NonNull EntryBundle bundle() {

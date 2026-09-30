@@ -42,13 +42,13 @@ repositories {
     mavenCentral()
     strictMaven("https://maven.fabricmc.net/", "FabricMC", "net.fabricmc", "net.fabricmc.fabric-api")
     strictMaven("https://maven.terraformersmc.com/", "TerraformersMC", "com.terraformersmc")
-    maven("https://maven.isxander.dev/releases") { // YACL, some releases only on Maven Central
-        name = "isXander"
-        content { includeGroup("dev.isxander") }
-    }
+    google()
+    maven("https://repo.polyfrost.org/releases") { name = "Polyfrost Releases" }
+    maven("https://repo.polyfrost.org/snapshots") { name = "Polyfrost Snapshots" }
+    strictMaven("https://maven.cloverclient.com/releases", "CloverClient", "pl.tomgirl")
+    strictMaven("https://api.modrinth.com/maven", "Modrinth", "maven.modrinth")
     strictMaven("https://maven.bawnorton.com/releases", "Bawnorton", "com.github.bawnorton.mixinsquared")
     strictMaven("https://pkgs.dev.azure.com/djtheredstoner/DevAuth/_packaging/public/maven/v1", "DevAuth", "me.djtheredstoner")
-    maven("https://maven.nucleoid.xyz/") { name = "Nucleoid" } // Placeholder API - required by Mod Menu
 }
 
 dependencies {
@@ -57,8 +57,11 @@ dependencies {
 
     modImplementation("net.fabricmc:fabric-loader:$loaderversion")
     modImplementation("net.fabricmc.fabric-api:fabric-api:${sc.properties.get<String>("deps.fabric_api")}")
-    modImplementation("com.terraformersmc:modmenu:${sc.properties.get<String>("deps.modmenu")}")
-    modImplementation("dev.isxander:yet-another-config-lib:${sc.properties.get<String>("deps.yacl")}")
+    val oneconfig: String = sc.properties["deps.oneconfig"]
+    modImplementation("org.polyfrost.oneconfig:${sc.properties.getOrNull<String>("deps.oneconfig_platform") ?: sc.current.version}-fabric:$oneconfig")
+    for (module in arrayOf("config", "config-impl", "internal", "ui", "utils")) {
+        implementation("org.polyfrost.oneconfig:$module:$oneconfig")
+    }
     include(modImplementation("net.fabricmc:fabric-language-kotlin:${sc.properties.get<String>("deps.fabric_language_kotlin")}")!!)
 
     compileOnly("org.jspecify:jspecify:1.0.0") // Bundled by Minecraft from 1.21.11

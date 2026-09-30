@@ -23,45 +23,45 @@
  * "MINECRAFT" LINKING EXCEPTION TO THE GPL
  */
 
+
 package org.polyfrost.overflowanimations.handler.config.bundle
 
-import dev.isxander.yacl3.api.ConfigCategory
-import dev.isxander.yacl3.api.Option
-import org.polyfrost.overflowanimations.handler.config.bundle.entry.*
-import org.polyfrost.overflowanimations.handler.config.category.Category
-import java.awt.Color
-import java.util.function.BiConsumer
+import org.polyfrost.oneconfig.api.config.v1.Visualizer
+import org.polyfrost.overflowanimations.OverflowAnimationsConstants
+import java.util.function.Consumer
+
+class Entry(
+    val name: String,
+    val visualizer: Class<out Visualizer>,
+    val listener: Consumer<*>? = null,
+    val metadata: Map<String, Any> = emptyMap()
+)
 
 abstract class Bundle {
-    abstract fun install(builder: ConfigCategory.Builder, defaults: Category, config: Category)
+    abstract fun entry(entry: Entry): Bundle
 
-    open fun booleanEntry(name: String, listener: BiConsumer<Option<Boolean>, Boolean>) =
-        this.entry(BooleanEntry(name, listener))
+    @JvmOverloads
+    fun booleanEntry(name: String, listener: Consumer<Boolean>? = null) =
+        this.entry(Entry(name, Visualizer.SwitchVisualizer::class.java, listener))
 
-    fun booleanEntry(name: String) = this.booleanEntry(name) { opt, value -> }
+    @JvmOverloads
+    fun intRange(name: String, min: Int, max: Int, step: Int = 1) =
+        this.floatRange(name, min.toFloat(), max.toFloat(), step.toFloat())
 
-    open fun intRange(name: String, min: Int, max: Int, step: Int) =
-        this.entry(IntRangeEntry(name, null, min, max, step))
+    @JvmOverloads
+    fun floatRange(name: String, min: Float, max: Float, step: Float = 0.1F) =
+        this.entry(Entry(name, Visualizer.SliderVisualizer::class.java, null, mapOf("min" to min, "max" to max, "step" to step)))
 
-    fun intRange(name: String, min: Int, max: Int) = this.intRange(name, min, max, 1)
+    fun floatEntry(name: String) =
+        this.entry(Entry(name, Visualizer.NumberVisualizer::class.java, null, mapOf("min" to -360.0F, "max" to 360.0F)))
 
-    open fun floatRange(name: String, min: Float, max: Float, step: Float) =
-        this.entry(FloatRangeEntry(name, null, min, max, step))
+    @JvmOverloads
+    fun <S : Enum<S>> enumEntry(name: String, enumClazz: Class<S>, listener: Consumer<S>? = null): Bundle {
+        val keys = enumClazz.enumConstants.map { "${OverflowAnimationsConstants.MOD_ID}.enum.${enumClazz.simpleName}.${it.name}" }.toTypedArray()
+        return this.entry(Entry(name, Visualizer.DropdownVisualizer::class.java, listener, mapOf("options" to keys, "optionsKey" to keys)))
+    }
 
-    fun floatRange(name: String, min: Float, max: Float) = this.floatRange(name, min, max, 0.1F)
-
-    open fun floatEntry(name: String) =
-        this.entry(FloatEntry(name, null))
-
-    open fun <S : Enum<S>> enumEntry(name: String, enumClazz: Class<S>, listener: BiConsumer<Option<S>, S>) =
-        this.entry(EnumEntry(name, listener, enumClazz))
-
-    fun <S : Enum<S>> enumEntry(name: String, enumClazz: Class<S>) = this.enumEntry(name, enumClazz) { opt, value -> }
-
-    open fun colorEntry(name: String, listener: BiConsumer<Option<Color>, Color>) =
-        this.entry(ColorEntry(name, listener))
-
-    fun colorEntry(name: String) = this.colorEntry(name) { opt, value -> }
-
-    abstract fun <T> entry(entry: OptionEntrySupplier<T>): Bundle
+    @JvmOverloads
+    fun colorEntry(name: String, listener: Consumer<*>? = null) =
+        this.entry(Entry(name, Visualizer.ColorVisualizer::class.java, listener))
 }

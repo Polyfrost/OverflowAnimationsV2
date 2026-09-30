@@ -88,12 +88,7 @@ class OverflowAnimationsCommand : Command<FabricClientCommandSource> {
         val source = context.getSource()
         source.sendFeedback(Component.literal("Opening config menu...").withColor(Random().nextInt(0xFFFFFF)))
 
-        val minecraft = source.client
-        //? if <26.2 {
-        /*minecraft.schedule({ minecraft.setScreen(OverflowAnimationsConfig.getConfigScreen(minecraft.screen)) })
-        *///?} else {
-        minecraft.schedule({ minecraft.gui.setScreen(OverflowAnimationsConfig.getConfigScreen(minecraft.gui.screen())) })
-        //?}
+        source.client.schedule { OverflowAnimationsConfig.openScreen() }
 
         return Command.SINGLE_SUCCESS
     }
