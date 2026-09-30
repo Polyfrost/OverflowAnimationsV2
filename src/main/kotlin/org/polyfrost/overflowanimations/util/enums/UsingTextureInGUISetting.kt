@@ -25,9 +25,8 @@
 
 package org.polyfrost.overflowanimations.util.enums
 
-enum class ArmorGlintSetting {
+enum class UsingTextureInGUISetting : VersionToggle {
     V1_8,
-    V1_15,
     VANILLA,
-    V1_19_4
+    V1_9
 }

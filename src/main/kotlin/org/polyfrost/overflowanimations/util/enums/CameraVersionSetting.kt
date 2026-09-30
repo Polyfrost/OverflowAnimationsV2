@@ -30,5 +30,5 @@ enum class CameraVersionSetting {
     V1_9_TO_V1_13_2,
     V1_14_TO_V1_14_3,
     VANILLA,
-    MODERN
+    V1_14_4
 }

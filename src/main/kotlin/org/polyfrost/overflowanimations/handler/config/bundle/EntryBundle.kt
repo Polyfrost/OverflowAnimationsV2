@@ -36,39 +36,34 @@ import java.util.function.Predicate
 open class EntryBundle(protected val category: Category, private val name: String) : Bundle() {
     companion object {
         private val LEGACY_ONLY_OPTIONS = listOf(
-            "modernBackwardsWalking", "smoothHeadYaw", "modernViewBobbing", "directionalDamageTilt",
-            "modernSneakEyeHeight", "disableHurtCamera", "itemDrops2DColors", "fireballModel", "itemPickupOffset", "legacyProjectiles",
-            "itemUseAnimationInGUI", "dropItemSwing", "disableDropSwingInContainers", "itemUseCooldownAnimation",
-            "modernBlockBreaking", "resetMiningOnUse", "blockHitWhileMining", "disableAdventureSwing",
+            "disableHurtCamera", "itemDrops2DColors", "fireballModel", "itemPickupOffset", "legacyProjectiles",
+            "disableDropSwingInContainers", "resetMiningOnUse", "blockHitWhileMining", "disableAdventureSwing",
             "disableAdventureUsageSwinging", "disableAdventureUsageParticles", "modernPotionColors",
-            "fishingRodLineFov", "fishingRodLineThickness", "legacyDebugScreen", "hideCrosshairInThirdPerson"
+            "fishingRodLineFov", "fishingRodLineThickness", "legacyDebugScreen"
         )
 
         // Options whose feature does not exist on (or is compiled out of) this Minecraft version
         private val UNSUPPORTED_OPTIONS = buildSet<String> {
             //? if <=1.8.9 {
             /*addAll(listOf(
-                "disableCapeSwingRotation", "capeChestplateTranslation", "fakeOldSneakEyeHeight",
-                "rotateBackwardsWalking", "uncapBlockingHeadRotation", "legacyDamageTilt",
-                "skullPosition", "disableSwingOnUse", "disableSwingOnDrop",
-                "disableSwingOnEntityInteract", "disableItemUsingTextureInGUI", "durabilityBarColors",
+                "disableCapeSwingRotation", "capeChestplateTranslation", "uncapBlockingHeadRotation", "skullPosition",
+                "disableSwingOnUse", "disableSwingOnEntityInteract", "durabilityBarColors",
                 "legacyItemRarities", "heldItemVisibilityInBoat", "offhandUsageSwinging", "legacySwingAnimation",
-                "crosshairInThirdPerson", "listWidgetSelectedBorderColor", "legacyWidgetHoverTextColor",
+                "listWidgetSelectedBorderColor", "legacyWidgetHoverTextColor",
                 "disableCameraTransparentPassthrough", "tooltipStyleRendering", "slotHoverStyleRendering",
                 "listBackgroundGradient", "inventoryEffectsPosition", "fullWidthInventoryEffects", "panoramaRendering",
                 "legacyLoadingScreen", "legacyLoadingScreenProgressBar", "oldChatPosition", "oldCrosshairPosition",
-                "oldCraftingSlotsPosition", "fixSneakingFeetPosition", "fixVerticalBobbingTilt",
-                "oldSkyRenderingCheck", "smoothParticles", "fixMirrorArmSwing", "fixOffHandUsingPose",
+                "oldCraftingSlotsPosition", "fixSneakingFeetPosition", "oldSkyRenderingCheck", "smoothParticles",
+                "fixMirrorArmSwing", "fixOffHandUsingPose",
                 "fixCastLineCheck", "fixCastLineSwing", "fixFireballClientsideVisual", "fixTextStrikethroughStyle",
                 "fixHighAttackSpeedIndicator", "upMinPixelTransparencyLimit", "fixDoubleUsageVisual", "blueVoidSky",
                 "cloudHeight", "playerVoidBox", "oldY0Height", "oldWaterOverlayOpacity", "oldWaterColorFog",
                 "oldWaterColorEffects", "oldCloudRendering", "legacyLightmap", "legacyFogDarkness",
                 "restoreParticleBlending", "disableInventoryEntityScissor",
-                "legacyBlockMiningProgress", "projectileAgeCheck", "blockOutlineRendering",
+                "projectileAgeCheck", "blockOutlineRendering",
                 "disableModelWhilstSleeping", "flameDimensions", "heldItemArmLogic",
                 "legacySplashPosition", "legacyDiffuseLighting",
-                "fixEquipAnimationOnItemUse",
-                "disableCapeLean", "deathLimbs", "bowArmMovement", "lockBlockingArmRotation", "disableHeadRotationInterpolation"
+                "disableCapeLean", "deathLimbs", "bowArmMovement", "lockBlockingArmRotation"
             ))
             *///?} else {
             addAll(LEGACY_ONLY_OPTIONS)

@@ -133,7 +133,7 @@ public abstract class MixinMinecraft_EquipUseLogic {
     //? if <26.3 {
     /*@WrapOperation(method = "handleKeybinds", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/LocalPlayer;swing(Lnet/minecraft/world/InteractionHand;)V"))
     private void overflowanimations$swingOnDrop(final LocalPlayer instance, final InteractionHand hand, final Operation<Void> original) {
-        if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().items.disableSwingOnDrop) {
+        if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().items.dropSwing.isLegacy()) {
             SwingUtilKt.sendSwingPacket(instance, hand);
     *///?} else {
     @WrapOperation(method = "startUseItem", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/LocalPlayer;swing(Lnet/minecraft/world/InteractionHand;Lnet/minecraft/world/item/component/SwingAnimation;Z)Z", ordinal = 0))
@@ -179,7 +179,7 @@ public abstract class MixinMinecraft_EquipUseLogic {
     private boolean overflowanimations$equipAnimationOnItemUse(final LocalPlayer instance, final InteractionHand hand) {
     //?}
         // TODO: This fixes projectile equip, but it isn't going to be 100% accurate in some other areas. This needs to be worked on :)
-        if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().fixes.fixEquipAnimationOnItemUse) {
+        if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().fixes.useEquipAnimation.isLegacy()) {
             // The equip animation plays when right-clicking blocks in creative mode in <1.8.x
             final boolean isAimedAtBlock = this.hitResult != null && this.hitResult.getType() == HitResult.Type.BLOCK;
             // This might need to be revamped a bit. We are already checking for creative mode in the actual method,

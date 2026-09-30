@@ -30,9 +30,9 @@ enum class SneakAnimationSetting {
     V1_8,
     V1_13,
     VANILLA,
-    MODERN;
+    V1_14;
 
     fun isSmooth() = this != V1_8
 
-    fun isInstantResponse() = this != VANILLA && this != MODERN
+    fun isInstantResponse() = this != VANILLA && this != V1_14
 }

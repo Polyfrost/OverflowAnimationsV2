@@ -44,7 +44,7 @@ import org.polyfrost.overflowanimations.util.SwingUtilKt;
 public abstract class MixinMultiPlayerGameMode {
     @WrapOperation(method = "dropItem", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/LocalPlayer;swing(Lnet/minecraft/world/InteractionHand;Lnet/minecraft/world/item/component/SwingAnimation;Z)Z"))
     private boolean overflowanimations$disableSwingOnDrop(final LocalPlayer instance, final InteractionHand hand, final SwingAnimation animation, final boolean sendToSwingingEntity, final Operation<Boolean> original) {
-        if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().items.disableSwingOnDrop) {
+        if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().items.dropSwing.isLegacy()) {
             return SwingUtilKt.sendSwingPacket(instance, hand, animation);
         } else {
             return original.call(instance, hand, animation, sendToSwingingEntity);

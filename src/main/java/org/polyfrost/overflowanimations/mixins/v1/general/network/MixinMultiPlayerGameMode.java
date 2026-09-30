@@ -51,7 +51,7 @@ public abstract class MixinMultiPlayerGameMode {
 
     @Inject(method = "getDestroyStage", at = @At(value = "RETURN"), cancellable = true)
     private void overflowanimations$blockMiningProgress(final CallbackInfoReturnable<Integer> cir) {
-        if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().other.legacyBlockMiningProgress) {
+        if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().other.blockMiningProgress.isLegacy()) {
             cir.setReturnValue(((int) (this.destroyProgress * 10.0F)) - 1);
         }
     }

@@ -25,9 +25,13 @@
 
 package org.polyfrost.overflowanimations.util.enums
 
-enum class ArmorGlintSetting {
-    V1_8,
-    V1_15,
-    VANILLA,
-    V1_19_4
+interface VersionToggle {
+    val isLegacy: Boolean
+        get() {
+            val name = (this as Enum<*>).name
+            //? if <=1.8.9 {
+            /*return name == "V1_8" || name == "VANILLA"
+            *///?} else
+            return name == "V1_8"
+        }
 }

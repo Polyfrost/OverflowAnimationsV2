@@ -33,10 +33,11 @@ import org.polyfrost.overflowanimations.util.UtilsKt;
 import org.polyfrost.overflowanimations.util.enums.TabListSetting;
 import org.polyfrost.overflowanimations.util.enums.DebugCrosshairSetting;
 import org.polyfrost.overflowanimations.util.enums.CameraVersionSetting;
+import org.polyfrost.overflowanimations.util.enums.ThirdPersonCrosshairSetting;
 
 public final class ScreenConfigCategory extends Category {
-    public CameraVersionSetting cameraVersion = CameraVersionSetting.MODERN;
-    public boolean crosshairInThirdPerson = false;
+    public CameraVersionSetting cameraVersion = CameraVersionSetting.V1_14_4;
+    public ThirdPersonCrosshairSetting thirdPersonCrosshair = ThirdPersonCrosshairSetting.V1_9;
     public boolean disableHeartFlash = false;
     public boolean centerScrollableListWidgets = false;
     public boolean listWidgetSelectedBorderColor = false;
@@ -60,14 +61,13 @@ public final class ScreenConfigCategory extends Category {
     public DebugCrosshairSetting debugCrosshairStyle = DebugCrosshairSetting.VANILLA;
     public TabListSetting tabListStyle = TabListSetting.V1_8;
     public boolean legacyDebugScreen = false;
-    public boolean hideCrosshairInThirdPerson = true;
 
     @Override
     public @NonNull EntryBundle bundle() {
         final EntryBundle bundle = new EntryBundle(this, "screen");
 
         bundle.enumEntry("cameraVersion", CameraVersionSetting.class);
-        bundle.booleanEntry("crosshairInThirdPerson");
+        bundle.enumEntry("thirdPersonCrosshair", ThirdPersonCrosshairSetting.class);
         bundle.booleanEntry("disableHeartFlash");
         bundle.booleanEntry("centerScrollableListWidgets");
         bundle.booleanEntry("listWidgetSelectedBorderColor");
@@ -94,8 +94,7 @@ public final class ScreenConfigCategory extends Category {
         bundle.group("legacy_hud")
                 .enumEntry("debugCrosshairStyle", DebugCrosshairSetting.class)
                 .enumEntry("tabListStyle", TabListSetting.class)
-                .booleanEntry("legacyDebugScreen")
-                .booleanEntry("hideCrosshairInThirdPerson");
+                .booleanEntry("legacyDebugScreen");
 
         return bundle;
     }

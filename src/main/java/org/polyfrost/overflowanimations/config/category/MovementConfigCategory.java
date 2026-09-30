@@ -31,33 +31,32 @@ import org.polyfrost.overflowanimations.handler.config.category.Category;
 import org.polyfrost.overflowanimations.util.enums.CapeMovementSetting;
 import org.polyfrost.overflowanimations.util.enums.SneakAnimationSetting;
 import org.polyfrost.overflowanimations.util.enums.SneakBobbingSetting;
+import org.polyfrost.overflowanimations.util.enums.BackwardsWalkingSetting;
+import org.polyfrost.overflowanimations.util.enums.DamageTiltSetting;
+import org.polyfrost.overflowanimations.util.enums.HeadRotationInterpolationSetting;
+import org.polyfrost.overflowanimations.util.enums.SneakEyeHeightSetting;
 
 public final class MovementConfigCategory extends Category {
     // (Movement) Cape
-    public CapeMovementSetting capeMovement = CapeMovementSetting.MODERN;
+    public CapeMovementSetting capeMovement = CapeMovementSetting.V1_13;
     public boolean disableCapeLean = false;
     public boolean disableCapeSwingRotation = false;
     public boolean capeChestplateTranslation = false;
     public boolean capeSneakPosition = false;
     // (Movement) Other
-    public SneakAnimationSetting sneakAnimation = SneakAnimationSetting.MODERN;
+    public SneakAnimationSetting sneakAnimation = SneakAnimationSetting.V1_14;
     public boolean longUnsneak = false;
     public boolean longUnsneakLegacyOnly = true;
-    public boolean fakeOldSneakEyeHeight = false;
-    public boolean rotateBackwardsWalking = false;
+    public SneakEyeHeightSetting sneakEyeHeight = SneakEyeHeightSetting.VANILLA;
+    public BackwardsWalkingSetting backwardsWalking = BackwardsWalkingSetting.V1_12;
     public boolean uncapBlockingHeadRotation = false;
-    public boolean disableHeadRotationInterpolation = false;
+    public HeadRotationInterpolationSetting headRotationInterpolation = HeadRotationInterpolationSetting.V1_13;
     public SneakBobbingSetting sneakBobbing = SneakBobbingSetting.VANILLA;
     public boolean deathLimbs = false;
     public boolean bowArmMovement = false;
-    public boolean legacyDamageTilt = false;
+    public DamageTiltSetting damageTilt = DamageTiltSetting.V1_19_4;
     public boolean offsetHurtTiltTime = false;
 
-    public boolean modernBackwardsWalking = true;
-    public boolean smoothHeadYaw = true;
-    public boolean modernViewBobbing = true;
-    public boolean directionalDamageTilt = true;
-    public boolean modernSneakEyeHeight = false;
     public boolean disableHurtCamera = false;
     public boolean dinnerboneMode = false;
     public boolean dinnerboneModeEntities = false;
@@ -78,22 +77,17 @@ public final class MovementConfigCategory extends Category {
                 .enumEntry("sneakAnimation", SneakAnimationSetting.class)
                 .booleanEntry("longUnsneak")
                 .booleanEntry("longUnsneakLegacyOnly")
-                .booleanEntry("fakeOldSneakEyeHeight")
-                .booleanEntry("rotateBackwardsWalking")
+                .enumEntry("sneakEyeHeight", SneakEyeHeightSetting.class)
+                .enumEntry("backwardsWalking", BackwardsWalkingSetting.class)
                 .booleanEntry("uncapBlockingHeadRotation")
-                .booleanEntry("disableHeadRotationInterpolation")
+                .enumEntry("headRotationInterpolation", HeadRotationInterpolationSetting.class)
                 .enumEntry("sneakBobbing", SneakBobbingSetting.class)
                 .booleanEntry("deathLimbs")
                 .booleanEntry("bowArmMovement")
-                .booleanEntry("legacyDamageTilt")
+                .enumEntry("damageTilt", DamageTiltSetting.class)
                 .booleanEntry("offsetHurtTiltTime");
 
         bundle.group("modern")
-                .booleanEntry("modernBackwardsWalking")
-                .booleanEntry("smoothHeadYaw")
-                .booleanEntry("modernViewBobbing")
-                .booleanEntry("directionalDamageTilt")
-                .booleanEntry("modernSneakEyeHeight")
                 .booleanEntry("disableHurtCamera");
 
         bundle.group("fun")

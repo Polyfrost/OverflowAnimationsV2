@@ -67,7 +67,7 @@ public abstract class MixinHud_CrosshairAndHearts {
     @WrapOperation(method = "extractCrosshair", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/CameraType;isFirstPerson()Z"))
     //?}
     private boolean overflowanimations$crosshairInThirdPerson(final CameraType instance, final Operation<Boolean> original) {
-        if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().screen.crosshairInThirdPerson) {
+        if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().screen.thirdPersonCrosshair.isLegacy()) {
             return true;
         } else {
             return original.call(instance);
