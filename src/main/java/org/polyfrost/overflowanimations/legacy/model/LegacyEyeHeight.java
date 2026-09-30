@@ -72,16 +72,13 @@ public final class LegacyEyeHeight {
         lastSleeping = sleeping;
 
         lastEyeHeight = eyeHeight;
-        switch (config().sneakAnimation) {
-            case V1_7:
-                eyeHeight = target < eyeHeight || !config().longUnsneak ? target : eyeHeight + (target - eyeHeight) * 0.6F;
-                break;
-            case V1_13:
-            case MODERN:
-                eyeHeight += (target - eyeHeight) * 0.5F;
-                break;
-            default:
-                eyeHeight = target;
+        final SneakAnimationSetting sneakAnimation = config().sneakAnimation;
+        if (isSmooth() && config().longUnsneak && target > eyeHeight) {
+            eyeHeight += (target - eyeHeight) * 0.6F;
+        } else if (sneakAnimation == SneakAnimationSetting.V1_13 || sneakAnimation == SneakAnimationSetting.MODERN) {
+            eyeHeight += (target - eyeHeight) * 0.5F;
+        } else {
+            eyeHeight = target;
         }
     }
 
