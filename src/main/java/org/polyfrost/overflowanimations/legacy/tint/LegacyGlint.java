@@ -35,8 +35,10 @@ import net.minecraft.client.render.vertex.BufferBuilder;
 import net.minecraft.client.render.vertex.DefaultVertexFormat;
 import net.minecraft.client.render.vertex.Tesselator;
 import net.minecraft.client.resource.model.ModelTransformations;
+import net.minecraft.resource.Identifier;
 import net.minecraft.util.math.Direction;
 import org.lwjgl.opengl.GL11;
+import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -47,6 +49,8 @@ import java.util.function.Function;
 
 public final class LegacyGlint {
     public static final int ITEM_COLOR = 0xFF61309B;
+    public static final Identifier MODERN_ITEM_TEXTURE = new Identifier("overflowanimations", "textures/misc/enchanted_glint_item.png");
+    public static final Identifier MODERN_ARMOR_TEXTURE = new Identifier("overflowanimations", "textures/misc/enchanted_glint_armor.png");
 
     private static final TextureAtlasSprite ITEM_SPACE = new TextureAtlasSprite("overflowanimations:legacy_glint") {
         @Override
@@ -141,6 +145,21 @@ public final class LegacyGlint {
         GlStateManager.scalef(0.125F, 0.125F, 0.125F);
         GlStateManager.translatef(layer == 0 ? offset : -offset, 0.0F, 0.0F);
         GlStateManager.rotatef(layer == 0 ? -50.0F : 10.0F, 0.0F, 0.0F, 1.0F);
+    }
+
+    public static double modernSpeed() {
+        return OverflowAnimationsConfig.instance().other.maxGlintProperties ? 1.0 : 0.5;
+    }
+
+    public static float modernStrength() {
+        return OverflowAnimationsConfig.instance().other.maxGlintProperties ? 1.0F : 0.75F;
+    }
+
+    public static void setupModernTexturing(final float scale, final double speed) {
+        final long time = (long) (Minecraft.getTime() * speed * 8.0);
+        GlStateManager.translatef(-(time % 110000L) / 110000.0F, (time % 30000L) / 30000.0F, 0.0F);
+        GlStateManager.rotatef(10.0F, 0.0F, 0.0F, 1.0F);
+        GlStateManager.scalef(scale, scale, scale);
     }
 
     public static void renderGuiGlint(final int x, final int y, final float z) {

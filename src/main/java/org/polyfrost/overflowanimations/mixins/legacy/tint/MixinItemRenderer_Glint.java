@@ -40,6 +40,8 @@ import org.lwjgl.opengl.GL11;
 import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig;
 import org.polyfrost.overflowanimations.config.category.ItemsConfigCategory;
 import org.polyfrost.overflowanimations.legacy.tint.LegacyGlint;
+import org.polyfrost.overflowanimations.util.enums.ItemGlintSetting;
+import org.polyfrost.overflowanimations.util.enums.PotionGlintSetting;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -68,35 +70,45 @@ public abstract class MixinItemRenderer_Glint {
     private void overflowanimations$modifyGlint(final ItemRenderer instance, BakedModel model, final Operation<Void> original, @Local(argsOnly = true) final ItemStack item) {
         final ItemsConfigCategory config = OverflowAnimationsConfig.instance().items;
         final boolean potion = item.getItem() instanceof PotionItem;
-        if (potion && config.disablePotionGlint || LegacyGlint.renderingGui && config.legacyGuiGlint && GL11.glIsEnabled(GL11.GL_DEPTH_TEST)) {
+        if (potion && config.potionGlint == PotionGlintSetting.MODERN || LegacyGlint.renderingGui && config.itemGlint == ItemGlintSetting.V1_7 && GL11.glIsEnabled(GL11.GL_DEPTH_TEST)) {
             return;
         }
 
-        if (potion && config.legacyPotionGlint) {
+        if (potion && config.potionGlint == PotionGlintSetting.V1_7) {
             model = LegacyGlint.potionLiquid(model);
         }
 
-        if (config.legacyGlint && !LegacyGlint.renderingGui) {
-            this.overflowanimations$renderLegacyGlint(model);
+        if (config.itemGlint == ItemGlintSetting.MODERN) {
+            this.overflowanimations$renderGlint(model, true);
+        } else if (config.itemGlint == ItemGlintSetting.V1_7 && !LegacyGlint.renderingGui) {
+            this.overflowanimations$renderGlint(model, false);
         } else {
             original.call(instance, model);
         }
     }
 
     @Unique
-    private void overflowanimations$renderLegacyGlint(final BakedModel model) {
-        final BakedModel glint = LegacyGlint.itemSpace(model);
+    private void overflowanimations$renderGlint(final BakedModel model, final boolean modern) {
         GlStateManager.depthMask(false);
         GlStateManager.depthFunc(GL11.GL_EQUAL);
         GlStateManager.disableLighting();
         GlStateManager.blendFunc(GL11.GL_SRC_COLOR, GL11.GL_ONE);
-        this.textureManager.bind(ENCHANTMENT_GLINT_LOCATION);
+        this.textureManager.bind(modern ? LegacyGlint.MODERN_ITEM_TEXTURE : ENCHANTMENT_GLINT_LOCATION);
         GlStateManager.matrixMode(GL11.GL_TEXTURE);
-        for (int layer = 0; layer < 2; layer++) {
+        if (modern) {
+            final int strength = (int) (LegacyGlint.modernStrength() * 255.0F);
             GlStateManager.pushMatrix();
-            LegacyGlint.setupItemTexturing(layer);
-            this.render(glint, LegacyGlint.ITEM_COLOR);
+            LegacyGlint.setupModernTexturing(8.0F, LegacyGlint.modernSpeed());
+            this.render(model, 0xFF000000 | strength << 16 | strength << 8 | strength);
             GlStateManager.popMatrix();
+        } else {
+            final BakedModel glint = LegacyGlint.itemSpace(model);
+            for (int layer = 0; layer < 2; layer++) {
+                GlStateManager.pushMatrix();
+                LegacyGlint.setupItemTexturing(layer);
+                this.render(glint, LegacyGlint.ITEM_COLOR);
+                GlStateManager.popMatrix();
+            }
         }
 
         GlStateManager.matrixMode(GL11.GL_MODELVIEW);
@@ -121,7 +133,7 @@ public abstract class MixinItemRenderer_Glint {
     @Inject(method = "renderGuiItemModel", at = @At("TAIL"))
     private void overflowanimations$renderLegacyGuiGlint(final ItemStack item, final int x, final int y, final CallbackInfo ci) {
         final ItemsConfigCategory config = OverflowAnimationsConfig.instance().items;
-        if (config.legacyGuiGlint && item.hasEnchantmentGlint() && !(config.disablePotionGlint && item.getItem() instanceof PotionItem)) {
+        if (config.itemGlint == ItemGlintSetting.V1_7 && item.hasEnchantmentGlint() && !(config.potionGlint == PotionGlintSetting.MODERN && item.getItem() instanceof PotionItem)) {
             this.textureManager.bind(ENCHANTMENT_GLINT_LOCATION);
             LegacyGlint.renderGuiGlint(x, y, 100.0F + this.zOffset);
             this.textureManager.bind(TextureAtlas.BLOCKS_LOCATION);
