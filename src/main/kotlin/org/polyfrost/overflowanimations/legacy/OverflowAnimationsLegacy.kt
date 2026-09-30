@@ -23,7 +23,6 @@
  * "MINECRAFT" LINKING EXCEPTION TO THE GPL
  */
 
-
 package org.polyfrost.overflowanimations.legacy
 
 import dev.kikugie.fletching_table.annotation.fabric.Entrypoint
