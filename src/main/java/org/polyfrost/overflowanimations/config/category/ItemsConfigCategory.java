@@ -41,8 +41,8 @@ public final class ItemsConfigCategory extends Category {
     public ItemGlintSetting itemGlint = ItemGlintSetting.V1_15;
     public ArmorGlintSetting armorGlint = ArmorGlintSetting.V1_19_4;
     public PotionGlintSetting potionGlint = PotionGlintSetting.V1_19_4;
-    public boolean glintOnItemDrops2D = false;
-    public boolean glintOnItemFramed2D = false;
+    public boolean glintOnItemDrops2D = true;
+    public boolean glintOnItemFramed2D = true;
     // (Items) 2D Drops
     public boolean itemDropsFaceCamera = false;
     public boolean itemDropsFaceCameraRotationFix = false;
@@ -170,15 +170,15 @@ public final class ItemsConfigCategory extends Category {
         bundle.group("glint")
                 .enumEntry("itemGlint", ItemGlintSetting.class)
                 .enumEntry("armorGlint", ArmorGlintSetting.class)
-                .enumEntry("potionGlint", PotionGlintSetting.class)
-                .booleanEntry("glintOnItemDrops2D")
-                .booleanEntry("glintOnItemFramed2D");
+                .enumEntry("potionGlint", PotionGlintSetting.class);
 
         bundle.group("drops2d")
                 .booleanEntry("itemDropsFaceCamera")
                 .booleanEntry("itemDropsFaceCameraRotationFix")
                 .booleanEntry("itemDrops2D")
-                .booleanEntry("itemFramed2D");
+                .booleanEntry("glintOnItemDrops2D")
+                .booleanEntry("itemFramed2D")
+                .booleanEntry("glintOnItemFramed2D");
 
         bundle.group("transformations")
                 .booleanEntry("itemPositions")
