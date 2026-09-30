@@ -404,6 +404,8 @@
 	"overflowanimations.modernBlockBreaking.description": "Shows the block breaking animation as soon as you start mining, like in 1.19+.",
 	"overflowanimations.resetMiningOnUse": "Reset Mining on Item Use",
 	"overflowanimations.resetMiningOnUse.description": "Resets block breaking while using an item or when out of range of the block.",
+	"overflowanimations.blockHitWhileMining": "[1.7] Block-Hit While Mining",
+	"overflowanimations.blockHitWhileMining.description": "Lets you block, eat, drink, draw a bow or place blocks while holding left-click on a block, like 1.7. 1.8 ignores right-click while mining.",
 	"overflowanimations.disableAdventureSwing": "Disable Ground Swinging in Adventure Mode",
 	"overflowanimations.disableAdventureSwing.description": "Stops swinging at blocks in Adventure mode.",
 	"overflowanimations.disableAdventureUsageSwinging": "Disable Usage Swinging in Adventure Mode",

@@ -109,6 +109,7 @@ public final class ItemsConfigCategory extends Category {
     public boolean itemUseCooldownAnimation = false;
     public boolean modernBlockBreaking = false;
     public boolean resetMiningOnUse = false;
+    public boolean blockHitWhileMining = true;
     public boolean disableAdventureSwing = false;
     public boolean disableAdventureUsageSwinging = false;
     public boolean disableAdventureUsageParticles = false;
@@ -255,6 +256,7 @@ public final class ItemsConfigCategory extends Category {
                 .booleanEntry("itemUseCooldownAnimation")
                 .booleanEntry("modernBlockBreaking")
                 .booleanEntry("resetMiningOnUse")
+                .booleanEntry("blockHitWhileMining")
                 .booleanEntry("disableAdventureSwing")
                 .booleanEntry("disableAdventureUsageSwinging")
                 .booleanEntry("disableAdventureUsageParticles")

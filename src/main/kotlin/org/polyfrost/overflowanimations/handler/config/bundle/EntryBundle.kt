@@ -42,7 +42,7 @@ open class EntryBundle(protected val category: Category, private val name: Strin
             "itemDrops2DColors", "legacyProjectiles", "xpOrbPosition", "fireballModel", "disableItemPickupAnimation",
             "itemPickupOffset", "entityItemPositions", "disableHandSway", "reequipSpeed", "smartSwingScaling",
             "itemUseAnimationInGUI", "dropItemSwing", "disableDropSwingInContainers", "itemUseCooldownAnimation",
-            "modernBlockBreaking", "resetMiningOnUse", "disableAdventureSwing", "disableAdventureUsageSwinging",
+            "modernBlockBreaking", "resetMiningOnUse", "blockHitWhileMining", "disableAdventureSwing", "disableAdventureUsageSwinging",
             "disableAdventureUsageParticles", "lunarBlockHitPosition", "lunarItemPositions", "modernPotionColors",
             "coloredPotionBottles", "fishingRodLineFov", "fishingRodLineThickness", "customRodLine",
             "rodLinePositionX", "rodLinePositionY", "rodLinePositionZ", "swingPositionX", "swingPositionY",

@@ -25,6 +25,7 @@
 
 package org.polyfrost.overflowanimations.mixins.legacy.firstperson;
 
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Share;
@@ -37,6 +38,9 @@ import net.minecraft.client.ParticleManager;
 import net.minecraft.client.entity.living.player.LocalClientPlayerEntity;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.world.ClientWorld;
+import net.minecraft.item.BlockItem;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.UseAction;
 import net.minecraft.network.packet.c2s.play.ArmSwingC2SPacket;
 import net.minecraft.world.HitResult;
 import org.polyfrost.overflowanimations.config.category.ItemsConfigCategory;
@@ -119,6 +123,15 @@ public abstract class MixinMinecraft_Swinging {
         } else {
             original.call(instance);
         }
+    }
+
+    @ModifyExpressionValue(method = "doUse", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/ClientPlayerInteractionManager;isMiningBlock()Z"))
+    private boolean overflowanimations$blockHitWhileMining(final boolean original) {
+        if (!original || !LegacyFirstPerson.items().blockHitWhileMining) {
+            return original;
+        }
+        final ItemStack stack = this.player.getItemInHand();
+        return stack == null || (stack.getUseAction() == UseAction.NONE && !(stack.getItem() instanceof BlockItem));
     }
 
     @Inject(method = "doUse", at = @At("HEAD"))
