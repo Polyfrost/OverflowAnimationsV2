@@ -28,11 +28,23 @@ package org.polyfrost.overflowanimations.legacy
 
 import dev.kikugie.fletching_table.annotation.fabric.Entrypoint
 import net.fabricmc.api.ClientModInitializer
+import net.ornithemc.osl.lifecycle.api.client.MinecraftClientEvents
+import org.apache.logging.log4j.LogManager
 import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig
+import org.spongepowered.asm.mixin.MixinEnvironment
 
 @Entrypoint
 class OverflowAnimationsLegacy : ClientModInitializer {
     override fun onInitializeClient() {
         OverflowAnimationsConfig.load()
+
+        val audit = System.getProperty("overflowanimations.audit")
+        if (audit != null) {
+            MinecraftClientEvents.READY.register {
+                MixinEnvironment.getCurrentEnvironment().audit()
+                LogManager.getLogger("OverflowAnimations").info("Mixin audit finished")
+                if (audit == "exit") Runtime.getRuntime().halt(0)
+            }
+        }
     }
 }
