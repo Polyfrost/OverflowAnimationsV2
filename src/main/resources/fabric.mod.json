@@ -21,6 +21,7 @@
 	"icon": "assets/${id}/icon.png",
 	"accessWidener": "overflowanimations.accesswidener",
 	"environment": "client",
+	"provides": ["animatium"],
 	"depends": {
 		"fabricloader": ">=${fabric_loader_version}",
 		"minecraft": "${minecraft_version_range}",
