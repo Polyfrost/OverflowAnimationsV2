@@ -23,21 +23,27 @@
  * "MINECRAFT" LINKING EXCEPTION TO THE GPL
  */
 
-package org.polyfrost.overflowanimations.mixins.legacy.tint;
+package org.polyfrost.overflowanimations.mixins.legacy.compat;
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
-import net.minecraft.client.render.entity.layer.Deadmau5Layer;
-import net.minecraft.client.render.entity.layer.MushroomLayer;
-import net.minecraft.client.render.entity.layer.SnowGolemHeadLayer;
-import net.minecraft.client.render.entity.layer.WornSkullLayer;
-import org.polyfrost.overflowanimations.legacy.tint.LegacyDamageTint;
+import com.llamalad7.mixinextras.sugar.Local;
+import dev.rdh.argentum.impl.render.gui.hud.item.GuiItemIcons;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.PotionItem;
+import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig;
+import org.polyfrost.overflowanimations.config.category.ItemsConfigCategory;
+import org.polyfrost.overflowanimations.util.enums.ItemGlintSetting;
+import org.polyfrost.overflowanimations.util.enums.PotionGlintSetting;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Pseudo;
 import org.spongepowered.asm.mixin.injection.At;
 
-@Mixin({WornSkullLayer.class, SnowGolemHeadLayer.class, MushroomLayer.class, Deadmau5Layer.class})
-public abstract class MixinUntintedLayers_DamageTint {
-    @ModifyReturnValue(method = "colorsWhenDamaged", at = @At("RETURN"))
-    private boolean overflowanimations$skipTint(final boolean original) {
-        return original && !LegacyDamageTint.flatTint();
+@Pseudo
+@Mixin(value = GuiItemIcons.class, remap = false)
+public abstract class MixinGuiItemIcons_Argentum {
+    @ModifyReturnValue(method = "canBake", at = @At("RETURN"))
+    private static boolean overflowanimations$liquidOnlyGlint(final boolean original, @Local(argsOnly = true) final ItemStack item) {
+        final ItemsConfigCategory config = OverflowAnimationsConfig.instance().items;
+        return original && !(config.potionGlint == PotionGlintSetting.V1_7 && config.itemGlint != ItemGlintSetting.V1_7 && item.getItem() instanceof PotionItem && item.hasEnchantmentGlint());
     }
 }

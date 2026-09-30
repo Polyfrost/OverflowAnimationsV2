@@ -1,0 +1,9 @@
+{
+  "schemaVersion": 1,
+  "id": "pylon-alias",
+  "version": "1.0.0",
+  "name": "Pylon alias (dev only)",
+  "description": "AFsagag",
+  "provides": ["pylon"],
+  "depends": { "lenis": "*" }
+}

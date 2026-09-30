@@ -37,7 +37,6 @@ import net.minecraft.client.render.entity.layer.WolfCollarLayer;
 import net.minecraft.client.render.model.Model;
 import net.minecraft.entity.Entity;
 import org.polyfrost.overflowanimations.legacy.tint.LegacyDamageTint;
-import org.polyfrost.overflowanimations.util.enums.DamageTintSetting;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
@@ -45,7 +44,7 @@ import org.spongepowered.asm.mixin.injection.At;
 public abstract class MixinMobLayers_DamageTint {
     @ModifyReturnValue(method = "colorsWhenDamaged", at = @At("RETURN"))
     private boolean overflowanimations$skipCombinerTint(final boolean original) {
-        return original && LegacyDamageTint.config().damageTintStyle != DamageTintSetting.V1_7;
+        return original && !LegacyDamageTint.flatTint();
     }
 
     @WrapOperation(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/model/Model;render(Lnet/minecraft/entity/Entity;FFFFFF)V"))

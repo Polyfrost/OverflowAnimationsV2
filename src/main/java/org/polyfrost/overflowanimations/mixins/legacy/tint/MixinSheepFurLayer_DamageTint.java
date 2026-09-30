@@ -33,7 +33,6 @@ import net.minecraft.client.render.entity.layer.SheepFurLayer;
 import net.minecraft.client.render.model.entity.SheepFurModel;
 import net.minecraft.entity.Entity;
 import org.polyfrost.overflowanimations.legacy.tint.LegacyDamageTint;
-import org.polyfrost.overflowanimations.util.enums.DamageTintSetting;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
@@ -41,7 +40,7 @@ import org.spongepowered.asm.mixin.injection.At;
 public abstract class MixinSheepFurLayer_DamageTint {
     @ModifyReturnValue(method = "colorsWhenDamaged", at = @At("RETURN"))
     private boolean overflowanimations$skipCombinerTint(final boolean original) {
-        return original && LegacyDamageTint.config().damageTintStyle != DamageTintSetting.V1_7;
+        return original && !LegacyDamageTint.flatTint();
     }
 
     @WrapOperation(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/model/entity/SheepFurModel;render(Lnet/minecraft/entity/Entity;FFFFFF)V"))

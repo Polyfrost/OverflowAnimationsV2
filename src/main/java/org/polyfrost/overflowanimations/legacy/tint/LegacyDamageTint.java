@@ -32,6 +32,7 @@ import net.minecraft.entity.living.LivingEntity;
 import org.lwjgl.opengl.GL11;
 import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig;
 import org.polyfrost.overflowanimations.config.category.OtherConfigCategory;
+import org.polyfrost.overflowanimations.legacy.compat.Argentum;
 import org.polyfrost.overflowanimations.util.enums.DamageTintSetting;
 
 import java.nio.FloatBuffer;
@@ -48,8 +49,12 @@ public final class LegacyDamageTint {
         return entity instanceof LivingEntity living && (living.damagedTimer > 0 || living.deathTicks > 0);
     }
 
+    public static boolean flatTint() {
+        return config().damageTintStyle == DamageTintSetting.V1_7 && !Argentum.capturingEntity();
+    }
+
     public static boolean usesFlatPass(final Entity entity) {
-        return config().damageTintStyle == DamageTintSetting.V1_7 && isHurt(entity);
+        return flatTint() && isHurt(entity);
     }
 
     public static void putCombinerTint(final FloatBuffer buffer, final float brightness) {
@@ -58,7 +63,7 @@ public final class LegacyDamageTint {
             return;
         }
 
-        final int color = style.getColor(brightness);
+        final int color = style.getColor(style == DamageTintSetting.V1_7 ? 1.0F : brightness);
         buffer.clear();
         buffer.put((color >> 16 & 0xFF) / 255.0F).put((color >> 8 & 0xFF) / 255.0F).put((color & 0xFF) / 255.0F).put(1.0F - (color >>> 24) / 255.0F);
     }

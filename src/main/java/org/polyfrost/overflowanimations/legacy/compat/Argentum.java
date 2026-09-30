@@ -23,21 +23,23 @@
  * "MINECRAFT" LINKING EXCEPTION TO THE GPL
  */
 
-package org.polyfrost.overflowanimations.mixins.legacy.tint;
+package org.polyfrost.overflowanimations.legacy.compat;
 
-import com.llamalad7.mixinextras.injector.ModifyReturnValue;
-import net.minecraft.client.render.entity.layer.Deadmau5Layer;
-import net.minecraft.client.render.entity.layer.MushroomLayer;
-import net.minecraft.client.render.entity.layer.SnowGolemHeadLayer;
-import net.minecraft.client.render.entity.layer.WornSkullLayer;
-import org.polyfrost.overflowanimations.legacy.tint.LegacyDamageTint;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.At;
+import dev.rdh.argentum.impl.render.entity.instancing.EntityCapture;
+import dev.rdh.argentum.impl.render.gui.hud.item.GuiItemIcons;
+import net.fabricmc.loader.api.FabricLoader;
 
-@Mixin({WornSkullLayer.class, SnowGolemHeadLayer.class, MushroomLayer.class, Deadmau5Layer.class})
-public abstract class MixinUntintedLayers_DamageTint {
-    @ModifyReturnValue(method = "colorsWhenDamaged", at = @At("RETURN"))
-    private boolean overflowanimations$skipTint(final boolean original) {
-        return original && !LegacyDamageTint.flatTint();
+public final class Argentum {
+    private static final boolean LOADED = FabricLoader.getInstance().isModLoaded("argentum");
+
+    private Argentum() {
+    }
+
+    public static boolean capturingEntity() {
+        return LOADED && EntityCapture.current() != null;
+    }
+
+    public static boolean bakingGuiItem() {
+        return LOADED && GuiItemIcons.baking();
     }
 }

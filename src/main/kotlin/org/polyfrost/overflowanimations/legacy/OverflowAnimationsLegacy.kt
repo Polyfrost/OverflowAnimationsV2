@@ -31,10 +31,8 @@ import net.minecraft.client.options.KeyBinding
 import net.ornithemc.osl.keybinds.api.KeybindEvents
 import net.ornithemc.osl.keybinds.api.KeybindRegistry
 import net.ornithemc.osl.lifecycle.api.client.MinecraftClientEvents
-import org.apache.logging.log4j.LogManager
 import org.lwjgl.input.Keyboard
 import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig
-import org.spongepowered.asm.mixin.MixinEnvironment
 
 @Entrypoint
 class OverflowAnimationsLegacy : ClientModInitializer {
@@ -50,15 +48,6 @@ class OverflowAnimationsLegacy : ClientModInitializer {
             var pressed = false
             while (configKey.consumeClick()) pressed = true
             if (pressed && minecraft.screen == null) OverflowAnimationsConfig.openScreen()
-        }
-
-        val audit = System.getProperty("overflowanimations.audit")
-        if (audit != null) {
-            MinecraftClientEvents.READY.register {
-                MixinEnvironment.getCurrentEnvironment().audit()
-                LogManager.getLogger("OverflowAnimations").info("Mixin audit finished")
-                if (audit == "exit") Runtime.getRuntime().halt(0)
-            }
         }
     }
 }

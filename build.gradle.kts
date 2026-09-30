@@ -65,6 +65,7 @@ repositories {
     maven("https://repo.polyfrost.org/releases") { name = "Polyfrost Releases" }
     maven("https://repo.polyfrost.org/snapshots") { name = "Polyfrost Snapshots" }
     strictMaven("https://maven.cloverclient.com/releases", "CloverClient", "pl.tomgirl")
+    strictMaven("https://maven.taumc.org/releases", "TauMC", "dev.rdh", "org.embeddedt.celeritas")
     strictMaven("https://api.modrinth.com/maven", "Modrinth", "maven.modrinth")
     strictMaven("https://maven.bawnorton.com/releases", "Bawnorton", "com.github.bawnorton.mixinsquared")
     strictMaven("https://pkgs.dev.azure.com/djtheredstoner/DevAuth/_packaging/public/maven/v1", "DevAuth", "me.djtheredstoner")
@@ -93,6 +94,14 @@ dependencies {
     modImplementation("net.fabricmc:fabric-language-kotlin:${sc.properties.get<String>("deps.fabric_language_kotlin")}")
 
     compileOnly("org.jspecify:jspecify:1.0.0") // Bundled by Minecraft from 1.21.11
+    if (isOrnithe) {
+        modCompileOnly("dev.rdh:argentum:${sc.properties.get<String>("deps.argentum")}") { isTransitive = false }
+        compileOnly("org.joml:joml:1.10.5")
+        modLocalRuntime("dev.rdh:argentum:${sc.properties.get<String>("deps.argentum")}") { isTransitive = false }
+        localRuntime(files(rootProject.file("dev/pylon-alias")))
+        localRuntime("org.embeddedt.celeritas:celeritas-common:${sc.properties.get<String>("deps.celeritas")}") // jar-in-jar isn't loaded from dev deps
+        localRuntime("org.joml:joml:1.10.5")
+    }
 
     if (!isOrnithe) {
         include(implementation("com.moulberry:mixinconstraints:${sc.properties.get<String>("deps.mixinconstraints")}")!!)

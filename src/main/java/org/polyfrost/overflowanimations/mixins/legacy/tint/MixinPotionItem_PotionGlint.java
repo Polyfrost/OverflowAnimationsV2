@@ -26,18 +26,16 @@
 package org.polyfrost.overflowanimations.mixins.legacy.tint;
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
-import net.minecraft.client.render.entity.layer.Deadmau5Layer;
-import net.minecraft.client.render.entity.layer.MushroomLayer;
-import net.minecraft.client.render.entity.layer.SnowGolemHeadLayer;
-import net.minecraft.client.render.entity.layer.WornSkullLayer;
-import org.polyfrost.overflowanimations.legacy.tint.LegacyDamageTint;
+import net.minecraft.item.PotionItem;
+import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig;
+import org.polyfrost.overflowanimations.util.enums.PotionGlintSetting;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
-@Mixin({WornSkullLayer.class, SnowGolemHeadLayer.class, MushroomLayer.class, Deadmau5Layer.class})
-public abstract class MixinUntintedLayers_DamageTint {
-    @ModifyReturnValue(method = "colorsWhenDamaged", at = @At("RETURN"))
-    private boolean overflowanimations$skipTint(final boolean original) {
-        return original && !LegacyDamageTint.flatTint();
+@Mixin(PotionItem.class)
+public abstract class MixinPotionItem_PotionGlint {
+    @ModifyReturnValue(method = "hasEnchantmentGlint", at = @At("RETURN"))
+    private boolean overflowanimations$modernPotionGlint(final boolean original) {
+        return original && OverflowAnimationsConfig.instance().items.potionGlint != PotionGlintSetting.V1_19_4;
     }
 }

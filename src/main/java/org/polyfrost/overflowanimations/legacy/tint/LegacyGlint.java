@@ -39,6 +39,7 @@ import net.minecraft.resource.Identifier;
 import net.minecraft.util.math.Direction;
 import org.lwjgl.opengl.GL11;
 import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig;
+import org.polyfrost.overflowanimations.util.enums.ArmorGlintSetting;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -80,7 +81,7 @@ public final class LegacyGlint {
         return POTION_LIQUID_MODELS.computeIfAbsent(model, key -> transform(key, quad -> quad.getTintIndex() == 0 ? quad : null));
     }
 
-    private static BakedModel transform(final BakedModel model, final Function<BakedQuad, BakedQuad> mapper) {
+    public static BakedModel transform(final BakedModel model, final Function<BakedQuad, BakedQuad> mapper) {
         final List<BakedQuad> quads = new ArrayList<>();
         for (final Direction direction : Direction.values()) {
             map(model.getQuads(direction), mapper, quads);
@@ -145,6 +146,11 @@ public final class LegacyGlint {
         GlStateManager.scalef(0.125F, 0.125F, 0.125F);
         GlStateManager.translatef(layer == 0 ? offset : -offset, 0.0F, 0.0F);
         GlStateManager.rotatef(layer == 0 ? -50.0F : 10.0F, 0.0F, 0.0F, 1.0F);
+    }
+
+    public static boolean replacesArmorGlint() {
+        final ArmorGlintSetting setting = OverflowAnimationsConfig.instance().items.armorGlint;
+        return setting == ArmorGlintSetting.V1_15 || setting == ArmorGlintSetting.V1_19_4;
     }
 
     public static double modernSpeed() {

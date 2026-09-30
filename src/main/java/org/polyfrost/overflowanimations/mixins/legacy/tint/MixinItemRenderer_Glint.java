@@ -39,6 +39,7 @@ import net.minecraft.resource.Identifier;
 import org.lwjgl.opengl.GL11;
 import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig;
 import org.polyfrost.overflowanimations.config.category.ItemsConfigCategory;
+import org.polyfrost.overflowanimations.legacy.compat.Argentum;
 import org.polyfrost.overflowanimations.legacy.tint.LegacyGlint;
 import org.polyfrost.overflowanimations.util.enums.ItemGlintSetting;
 import org.polyfrost.overflowanimations.util.enums.PotionGlintSetting;
@@ -66,24 +67,34 @@ public abstract class MixinItemRenderer_Glint {
     @Shadow
     protected abstract void render(BakedModel model, int color);
 
+    @Unique
+    private static ItemGlintSetting overflowanimations$style;
+
     @WrapOperation(method = "renderItem", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/entity/ItemRenderer;renderEnchantmentGlint(Lnet/minecraft/client/render/model/block/BakedModel;)V"))
     private void overflowanimations$modifyGlint(final ItemRenderer instance, BakedModel model, final Operation<Void> original, @Local(argsOnly = true) final ItemStack item) {
         final ItemsConfigCategory config = OverflowAnimationsConfig.instance().items;
-        final boolean potion = item.getItem() instanceof PotionItem;
-        if (potion && config.potionGlint == PotionGlintSetting.V1_19_4 || LegacyGlint.renderingGui && config.itemGlint == ItemGlintSetting.V1_7 && GL11.glIsEnabled(GL11.GL_DEPTH_TEST)) {
+        if (LegacyGlint.renderingGui && config.itemGlint == ItemGlintSetting.V1_7 && GL11.glIsEnabled(GL11.GL_DEPTH_TEST)) {
             return;
         }
 
-        if (potion && config.potionGlint == PotionGlintSetting.V1_7) {
+        if (item.getItem() instanceof PotionItem && config.potionGlint == PotionGlintSetting.V1_7) {
             model = LegacyGlint.potionLiquid(model);
         }
 
-        if (config.itemGlint == ItemGlintSetting.V1_15) {
-            this.overflowanimations$renderGlint(model, true);
-        } else if (config.itemGlint == ItemGlintSetting.V1_7 && !LegacyGlint.renderingGui) {
-            this.overflowanimations$renderGlint(model, false);
-        } else {
+        final boolean custom = config.itemGlint == ItemGlintSetting.V1_15 || config.itemGlint == ItemGlintSetting.V1_7 && !LegacyGlint.renderingGui;
+        overflowanimations$style = custom ? config.itemGlint : null;
+        try {
             original.call(instance, model);
+        } finally {
+            overflowanimations$style = null;
+        }
+    }
+
+    @Inject(method = "renderEnchantmentGlint", at = @At("HEAD"), cancellable = true)
+    private void overflowanimations$customGlint(final BakedModel model, final CallbackInfo ci) {
+        if (overflowanimations$style != null) {
+            this.overflowanimations$renderGlint(model, overflowanimations$style == ItemGlintSetting.V1_15);
+            ci.cancel();
         }
     }
 
@@ -133,7 +144,11 @@ public abstract class MixinItemRenderer_Glint {
     @Inject(method = "renderGuiItemModel", at = @At("TAIL"))
     private void overflowanimations$renderLegacyGuiGlint(final ItemStack item, final int x, final int y, final CallbackInfo ci) {
         final ItemsConfigCategory config = OverflowAnimationsConfig.instance().items;
-        if (config.itemGlint == ItemGlintSetting.V1_7 && item.hasEnchantmentGlint() && !(config.potionGlint == PotionGlintSetting.V1_19_4 && item.getItem() instanceof PotionItem)) {
+        if (Argentum.bakingGuiItem()) {
+            return;
+        }
+
+        if (config.itemGlint == ItemGlintSetting.V1_7 && item.hasEnchantmentGlint()) {
             this.textureManager.bind(ENCHANTMENT_GLINT_LOCATION);
             LegacyGlint.renderGuiGlint(x, y, 100.0F + this.zOffset);
             this.textureManager.bind(TextureAtlas.BLOCKS_LOCATION);

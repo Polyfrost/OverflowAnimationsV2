@@ -25,13 +25,29 @@
 
 package org.polyfrost.overflowanimations.legacy.entity;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.living.player.LocalClientPlayerEntity;
 import net.minecraft.client.render.model.block.BakedModel;
+import net.minecraft.client.render.model.block.BakedQuad;
 import net.minecraft.client.render.platform.GlStateManager;
 import net.minecraft.client.resource.model.ModelTransformations;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.util.math.Direction;
 import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig;
 import org.polyfrost.overflowanimations.config.category.ItemsConfigCategory;
+import org.polyfrost.overflowanimations.legacy.tint.LegacyGlint;
+
+import java.util.Collections;
+import java.util.Map;
+import java.util.Set;
+import java.util.WeakHashMap;
 
 public final class LegacyItemRendering {
+    private static final Map<BakedModel, BakedModel> FLAT_MODELS = new WeakHashMap<>();
+    private static final Map<BakedModel, BakedModel> FLAT_LIT_MODELS = new WeakHashMap<>();
+    private static final Set<BakedModel> FLAT = Collections.newSetFromMap(new WeakHashMap<>());
+
     public static ModelTransformations.Type transform;
     public static boolean flat;
 
@@ -47,6 +63,19 @@ public final class LegacyItemRendering {
         return (transform == ModelTransformations.Type.GROUND && items.itemDrops2D) || (transform == ModelTransformations.Type.FIXED && items.itemFramed2D);
     }
 
+    public static BakedModel flatModel(final BakedModel model) {
+        final boolean lit = OverflowAnimationsConfig.instance().items.itemDrops2DColors;
+        return (lit ? FLAT_LIT_MODELS : FLAT_MODELS).computeIfAbsent(model, key -> {
+            final BakedModel flatModel = LegacyGlint.transform(key, quad -> quad.getFace() != Direction.SOUTH ? null : lit ? new BakedQuad(quad.getVertices(), quad.getTintIndex(), Direction.UP) : quad);
+            FLAT.add(flatModel);
+            return flatModel;
+        });
+    }
+
+    public static boolean isFlatModel(final BakedModel model) {
+        return FLAT.contains(model);
+    }
+
     public static boolean hideGlint(final BakedModel model) {
         if (!isFlat(model)) {
             return false;
@@ -54,6 +83,28 @@ public final class LegacyItemRendering {
 
         final ItemsConfigCategory items = OverflowAnimationsConfig.instance().items;
         return transform == ModelTransformations.Type.GROUND ? !items.glintOnItemDrops2D : !items.glintOnItemFramed2D;
+    }
+
+    public static String guiUseModel(final ItemStack item) {
+        final LocalClientPlayerEntity player = Minecraft.getInstance().player;
+        if (OverflowAnimationsConfig.instance().items.usingTextureInGUI.isLegacy() || player == null) {
+            return null;
+        }
+
+        if (item.getItem() == Items.FISHING_ROD && player.fishingBobber != null && item == player.getItemInHand()) {
+            return "fishing_rod_cast";
+        }
+        if (item.getItem() == Items.BOW && item == player.getItemInUse()) {
+            final int useTicks = item.getUseDuration() - player.getItemUseTimer();
+            if (useTicks >= 18) {
+                return "bow_pulling_2";
+            } else if (useTicks > 13) {
+                return "bow_pulling_1";
+            } else if (useTicks > 0) {
+                return "bow_pulling_0";
+            }
+        }
+        return null;
     }
 
     public static void applyTransform(final float x, final float y, final float z, final float rotationX, final float rotationY, final float rotationZ, final float scale) {

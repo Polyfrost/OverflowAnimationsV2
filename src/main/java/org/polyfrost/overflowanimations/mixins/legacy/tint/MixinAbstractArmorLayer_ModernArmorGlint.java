@@ -50,12 +50,11 @@ public abstract class MixinAbstractArmorLayer_ModernArmorGlint {
 
     @Inject(method = "renderEnchantmentGlint", at = @At("HEAD"), cancellable = true)
     private void overflowanimations$renderModernGlint(final LivingEntity entity, final Model model, final float walkAnimationProgress, final float walkAnimationSpeed, final float tickDelta, final float bob, final float yaw, final float pitch, final float scale, final CallbackInfo ci) {
-        final ArmorGlintSetting setting = OverflowAnimationsConfig.instance().items.armorGlint;
-        if (setting != ArmorGlintSetting.V1_15 && setting != ArmorGlintSetting.V1_19_4) {
+        if (!LegacyGlint.replacesArmorGlint()) {
             return;
         }
 
-        final boolean modern = setting == ArmorGlintSetting.V1_19_4;
+        final boolean modern = OverflowAnimationsConfig.instance().items.armorGlint == ArmorGlintSetting.V1_19_4;
         final float strength = modern ? LegacyGlint.modernStrength() : 1.0F;
         ci.cancel();
         this.parent.bindTexture(modern ? LegacyGlint.MODERN_ARMOR_TEXTURE : LegacyGlint.MODERN_ITEM_TEXTURE);
