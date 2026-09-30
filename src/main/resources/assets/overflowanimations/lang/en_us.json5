@@ -99,8 +99,6 @@
 	"overflowanimations.noMoveFishingRodLine.description": "Does not move the fishing rod cast line while sneaking when viewed in the third person mode from <=1.7.x.",
 	"overflowanimations.fishingRodLinePositionThirdPerson": "[1.7] Third-Person Fishing Line Position",
 	"overflowanimations.fishingRodLinePositionThirdPerson.description": "Adjusts the position of the fishing rod cast line horizontally like in <=1.7.x.",
-	"overflowanimations.fishingRodLineThickness": "[1.13] Legacy Fishing Line Thickness",
-	"overflowanimations.fishingRodLineThickness.description": "Restores the old fishing rod line thickness from <1.13?",
 	"overflowanimations.thinFishingRodLineThickness": "[1.14?] Super Thin Fishing Line",
 	"overflowanimations.thinFishingRodLineThickness.description": "Makes the fishing rod line super thin. Overrides the above setting.",
 	"overflowanimations.stickModelWhenCastInThirdperson": "[1.7] Third-Person Stick Fishing Rod",

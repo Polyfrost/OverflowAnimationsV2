@@ -25,7 +25,6 @@
 
 package org.polyfrost.overflowanimations.config.category;
 
-//? if >1.8.9
 import net.minecraft.client.Minecraft;
 import org.jspecify.annotations.NonNull;
 import org.polyfrost.compose.render.PolyColor;
@@ -129,7 +128,7 @@ public final class OtherConfigCategory extends Category {
                 .booleanEntry("flameOffset")
                 .booleanEntry("persistentBlockOutline")
                 //? if <=1.8.9 {
-                /*.booleanEntry("fastGrass")
+                /*.booleanEntry("fastGrass", value -> Minecraft.getInstance().worldRenderer.reload())
                 *///?} elif <26.2 {
                 /*.booleanEntry("fastGrass", value -> Minecraft.getInstance().levelRenderer.allChanged())
                 *///?} else {
@@ -145,6 +144,9 @@ public final class OtherConfigCategory extends Category {
                 *///?} else {
                 .booleanEntry("oldWaterColorEffects", value -> Minecraft.getInstance().levelExtractor.allChanged())
                 //?}
+                //? if <=1.8.9 {
+                /*.booleanEntry("disableRandomBlockRotations", value -> Minecraft.getInstance().worldRenderer.reload())
+                *///?} else
                 .booleanEntry("disableRandomBlockRotations")
                 //? if <1.21.6 {
                 /*.booleanEntry("legacyDiffuseLighting")
