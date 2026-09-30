@@ -77,7 +77,7 @@ public final class OverflowAnimationsConfig extends Config {
     public int configVersion = 0;
 
     private OverflowAnimationsConfig() {
-        super(ID, "OverflowAnimations", Category.VISUALS);
+        super(ID, "/assets/overflowanimations/icon.svg", "OverflowAnimations", Category.VISUALS);
     }
 
     @Override
