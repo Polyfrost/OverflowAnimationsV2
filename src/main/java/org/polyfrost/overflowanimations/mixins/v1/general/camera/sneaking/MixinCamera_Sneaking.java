@@ -79,7 +79,7 @@ public abstract class MixinCamera_Sneaking {
     @WrapOperation(method = "tick", at = @At(value = "FIELD", opcode = Opcodes.PUTFIELD, target = "Lnet/minecraft/client/Camera;eyeHeight:F"))
     private void overflowanimations$oldSneakAnimationInterpolation(final Camera instance, final float value, final Operation<Void> original) {
         final SneakAnimationSetting sneakAnimation = OverflowAnimationsConfig.instance().movement.sneakAnimation;
-        if (OverflowAnimations.isEnabled() && sneakAnimation != SneakAnimationSetting.VANILLA && this.entity.isCrouching()) {
+        if (OverflowAnimations.isEnabled() && sneakAnimation != SneakAnimationSetting.VANILLA && sneakAnimation != SneakAnimationSetting.MODERN && this.entity.isCrouching()) {
             if (sneakAnimation == SneakAnimationSetting.V1_7 && this.entity.getEyeHeight() < this.eyeHeight) {
                 this.eyeHeight = this.overflowanimations$getSneakingEyeHeight();
                 return;

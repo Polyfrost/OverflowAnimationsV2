@@ -60,7 +60,7 @@ public final class ItemsConfigCategory extends Category {
     public boolean durabilityBarColors = false;
     public boolean legacyItemRarities = false;
     public boolean heldItemVisibilityInBoat = false;
-    public boolean itemPickupPosition = true;
+    public boolean itemPickupPosition = false;
     public boolean mobHeadIcons = false;
     public boolean eggSnowballParticles = false;
     // Item Swing
@@ -72,7 +72,7 @@ public final class ItemsConfigCategory extends Category {
     public boolean ignoreMiningFatigueSpeed = false;
     public boolean offhandUsageSwinging = false;
     public boolean alwaysUsageSwing = false;
-    public boolean fakeMissPenaltySwing = false;
+    public boolean fakeMissPenaltySwing = true;
     public boolean disableSwingTranslate = false;
     public boolean disableSwingPivot = false;
     public boolean legacySwingAnimation = false;
@@ -88,11 +88,11 @@ public final class ItemsConfigCategory extends Category {
     public float itemRotationZ = 0.0F;
     public boolean applyCustomizationToBlockItems = true;
 
-    public boolean legacyGlint = false;
+    public boolean legacyGlint = true;
     public boolean legacyGuiGlint = false;
     public boolean legacyPotionGlint = false;
     public boolean disablePotionGlint = false;
-    public boolean modernArmorGlint = false;
+    public boolean modernArmorGlint = true;
     public boolean itemDrops2DColors = false;
     public boolean legacyProjectiles = false;
     public boolean xpOrbPosition = false;
@@ -103,11 +103,11 @@ public final class ItemsConfigCategory extends Category {
     public boolean disableHandSway = false;
     public float reequipSpeed = 0.4F;
     public boolean smartSwingScaling = false;
-    public boolean itemUseAnimationInGUI = false;
-    public boolean dropItemSwing = false;
+    public boolean itemUseAnimationInGUI = true;
+    public boolean dropItemSwing = true;
     public boolean disableDropSwingInContainers = false;
     public boolean itemUseCooldownAnimation = false;
-    public boolean modernBlockBreaking = false;
+    public boolean modernBlockBreaking = true;
     public boolean resetMiningOnUse = false;
     public boolean blockHitWhileMining = true;
     public boolean disableAdventureSwing = false;
@@ -115,14 +115,14 @@ public final class ItemsConfigCategory extends Category {
     public boolean disableAdventureUsageParticles = false;
     public boolean lunarBlockHitPosition = false;
     public boolean lunarItemPositions = false;
-    public boolean modernPotionColors = false;
+    public boolean modernPotionColors = true;
     public boolean coloredPotionBottles = false;
-    public boolean fishingRodLineFov = false;
+    public boolean fishingRodLineFov = true;
     public float fishingRodLineThickness = 0.0F;
     public boolean customRodLine = false;
-    public float rodLinePositionX = -0.36F;
-    public float rodLinePositionY = 0.03F;
-    public float rodLinePositionZ = 0.35F;
+    public float rodLinePositionX = 0.0F;
+    public float rodLinePositionY = 0.0F;
+    public float rodLinePositionZ = 0.0F;
     public float swingPositionX = 0.0F;
     public float swingPositionY = 0.0F;
     public float swingPositionZ = 0.0F;

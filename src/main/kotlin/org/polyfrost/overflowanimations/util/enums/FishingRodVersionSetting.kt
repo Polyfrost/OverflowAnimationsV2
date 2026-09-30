@@ -29,5 +29,6 @@ enum class FishingRodVersionSetting {
     V1_7,
     V1_8,
     V1_13,
-    VANILLA
+    VANILLA,
+    MODERN
 }

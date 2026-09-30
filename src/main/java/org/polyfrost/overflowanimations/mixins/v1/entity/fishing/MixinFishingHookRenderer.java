@@ -121,7 +121,7 @@ public abstract class MixinFishingHookRenderer extends EntityRenderer<FishingHoo
     private Vec3 overflowanimations$customRodLine(final Vec3 original, @Local(argsOnly = true) final Player player, @Local(argsOnly = true, ordinal = 1) final float partialTicks, @Local final int invert) {
         final ItemsConfigCategory items = OverflowAnimationsConfig.instance().items;
         if (OverflowAnimations.isEnabled() && items.customRodLine) {
-            return new Vec3(items.rodLinePositionX * invert, items.rodLinePositionY, items.rodLinePositionZ).xRot(-player.getViewXRot(partialTicks) * Mth.DEG_TO_RAD).yRot(-player.getViewYRot(partialTicks) * Mth.DEG_TO_RAD);
+            return original.add(new Vec3(items.rodLinePositionX * invert, items.rodLinePositionY, items.rodLinePositionZ).xRot(-player.getViewXRot(partialTicks) * Mth.DEG_TO_RAD).yRot(-player.getViewYRot(partialTicks) * Mth.DEG_TO_RAD));
         } else {
             return original;
         }

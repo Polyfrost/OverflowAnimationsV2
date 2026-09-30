@@ -35,11 +35,16 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.polyfrost.compose.render.PolyColor;
 import org.polyfrost.oneconfig.api.config.v1.Config;
+import org.polyfrost.oneconfig.api.config.v1.Properties;
+import org.polyfrost.oneconfig.api.config.v1.Property;
 import org.polyfrost.oneconfig.api.config.v1.Tree;
 import org.polyfrost.oneconfig.api.ui.v1.OneConfigUI;
 import org.polyfrost.oneconfig.internal.ui.navigation.graph.ModConfigRoute;
 import org.polyfrost.overflowanimations.OverflowAnimationsConstants;
 import org.polyfrost.overflowanimations.config.category.*;
+import org.polyfrost.overflowanimations.util.enums.CameraVersionSetting;
+import org.polyfrost.overflowanimations.util.enums.DebugCrosshairSetting;
+import org.polyfrost.overflowanimations.util.enums.SneakAnimationSetting;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -52,6 +57,7 @@ public final class OverflowAnimationsConfig extends Config {
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     private static final String ID = OverflowAnimationsConstants.MOD_ID + ".json";
     private static final Path CONFIG_DIR = FabricLoader.getInstance().getConfigDir();
+    private static final int CONFIG_VERSION = 1;
 
     private static JsonObject legacyConfig = takeLegacyConfig();
     private static final OverflowAnimationsConfig INSTANCE = new OverflowAnimationsConfig();
@@ -61,6 +67,7 @@ public final class OverflowAnimationsConfig extends Config {
     public final ScreenConfigCategory screen = new ScreenConfigCategory();
     public final FixesConfigCategory fixes = new FixesConfigCategory();
     public final OtherConfigCategory other = new OtherConfigCategory();
+    public int configVersion = 0;
 
     private OverflowAnimationsConfig() {
         super(ID, "OverflowAnimations", Category.VISUALS);
@@ -74,6 +81,11 @@ public final class OverflowAnimationsConfig extends Config {
         this.items.bundle().install(tree);
         this.fixes.bundle().install(tree);
         this.other.bundle().install(tree);
+        try {
+            tree.put(Properties.field(null, null, OverflowAnimationsConfig.class.getField("configVersion"), this).addDisplayCondition(() -> Property.Display.HIDDEN));
+        } catch (final NoSuchFieldException exception) {
+            throw new IllegalStateException(exception);
+        }
         return tree;
     }
 
@@ -85,6 +97,48 @@ public final class OverflowAnimationsConfig extends Config {
             legacyConfig = null;
             this.save();
         }
+
+        if (this.configVersion < CONFIG_VERSION) {
+            this.migrateDefaults();
+            this.configVersion = CONFIG_VERSION;
+            this.save();
+        }
+    }
+
+    private void migrateDefaults() {
+        final MovementConfigCategory movement = this.movement;
+        final ItemsConfigCategory items = this.items;
+        final ScreenConfigCategory screen = this.screen;
+        if (items.rodLinePositionX == -0.36F && items.rodLinePositionY == 0.03F && items.rodLinePositionZ == 0.35F) {
+            items.rodLinePositionX = items.rodLinePositionY = items.rodLinePositionZ = 0.0F;
+        }
+
+        if (movement.sneakAnimation == SneakAnimationSetting.VANILLA) {
+            movement.sneakAnimation = SneakAnimationSetting.MODERN;
+        }
+
+        if (screen.cameraVersion == CameraVersionSetting.VANILLA) {
+            screen.cameraVersion = CameraVersionSetting.MODERN;
+        }
+
+        if (screen.debugCrosshairStyle == DebugCrosshairSetting.V1_12 || screen.debugCrosshairStyle == DebugCrosshairSetting.V1_8) {
+            screen.debugCrosshairStyle = DebugCrosshairSetting.VANILLA;
+        }
+
+        movement.modernBackwardsWalking = true;
+        movement.smoothHeadYaw = true;
+        movement.modernViewBobbing = true;
+        movement.directionalDamageTilt = true;
+        items.itemPickupPosition = false;
+        items.fakeMissPenaltySwing = true;
+        items.legacyGlint = true;
+        items.modernArmorGlint = true;
+        items.itemUseAnimationInGUI = true;
+        items.dropItemSwing = true;
+        items.modernBlockBreaking = true;
+        items.modernPotionColors = true;
+        items.fishingRodLineFov = true;
+        screen.hideCrosshairInThirdPerson = true;
     }
 
     public static void load() {
