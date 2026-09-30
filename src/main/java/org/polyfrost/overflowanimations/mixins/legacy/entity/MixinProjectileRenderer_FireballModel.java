@@ -59,7 +59,6 @@ public abstract class MixinProjectileRenderer_FireballModel extends EntityRender
         GlStateManager.rotatef(180.0F - this.dispatcher.cameraYaw, 0.0F, 1.0F, 0.0F);
         GlStateManager.rotatef(-this.dispatcher.cameraPitch, 1.0F, 0.0F, 0.0F);
         GlStateManager.translatef(0.0F, 0.125F, 0.0F);
-        GlStateManager.scalef(0.5F, 0.5F, 0.5F);
         overflowanimations$fireballTransforms();
         Minecraft.getInstance().getItemRenderer().renderItemInHand(new ItemStack(Items.FIRE_CHARGE), ModelTransformations.Type.GROUND);
         GlStateManager.disableRescaleNormal();

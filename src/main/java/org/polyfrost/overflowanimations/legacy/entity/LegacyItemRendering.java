@@ -57,6 +57,10 @@ public final class LegacyItemRendering {
     }
 
     public static void applyTransform(final float x, final float y, final float z, final float rotationX, final float rotationY, final float rotationZ, final float scale) {
+        if (x == 0.0F && y == 0.0F && z == 0.0F && rotationX == 0.0F && rotationY == 0.0F && rotationZ == 0.0F && scale == 0.0F) {
+            return;
+        }
+
         GlStateManager.translatef(x, y, z);
         GlStateManager.rotatef(rotationX, 1.0F, 0.0F, 0.0F);
         GlStateManager.rotatef(rotationY, 0.0F, 1.0F, 0.0F);

@@ -44,7 +44,7 @@ public abstract class MixinItemFrameRenderer_FlatItems {
     @Inject(method = "renderDisplayItem", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/entity/ItemRenderer;renderItemInHand(Lnet/minecraft/item/ItemStack;Lnet/minecraft/client/resource/model/ModelTransformations$Type;)V"))
     private void overflowanimations$itemFramed2DOffset(final ItemFrameEntity itemFrame, final CallbackInfo ci) {
         if (OverflowAnimationsConfig.instance().items.itemFramed2D && !this.itemRenderer.isGui3d(itemFrame.getDisplayItem())) {
-            GlStateManager.translatef(0.0F, 0.0F, -0.03125F);
+            GlStateManager.translatef(0.0F, 0.0F, -0.015625F);
         }
     }
 }

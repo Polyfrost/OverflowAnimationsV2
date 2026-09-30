@@ -33,7 +33,9 @@ import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.living.player.LocalClientPlayerEntity;
 import net.minecraft.client.render.ItemInHandRenderer;
+import net.minecraft.client.render.entity.ItemRenderer;
 import net.minecraft.client.render.platform.GlStateManager;
+import net.minecraft.item.ItemStack;
 import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig;
 import org.polyfrost.overflowanimations.config.category.ItemsConfigCategory;
 import org.polyfrost.overflowanimations.legacy.firstperson.LegacyFirstPerson;
@@ -54,6 +56,19 @@ public abstract class MixinItemInHandRenderer_Swing {
     @Shadow
     @Final
     private Minecraft minecraft;
+
+    @Shadow
+    private ItemStack itemInHand;
+
+    @Shadow
+    @Final
+    private ItemRenderer renderer;
+
+    @Unique
+    private boolean overflowanimations$movesSwingPivot() {
+        final ItemsConfigCategory items = LegacyFirstPerson.items();
+        return items.disableSwingPivot && (items.applyCustomizationToBlockItems || this.itemInHand == null || !LegacyFirstPerson.isBlockLike(this.renderer.getModelShaper().getModel(this.itemInHand)));
+    }
 
     @ModifyArg(method = "renderInFirstPerson", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/ItemInHandRenderer;applyFirstPersonTransform(FF)V"), index = 1)
     private float overflowanimations$itemUsageSwinging(final float swingProgress, @Local(argsOnly = true) final float tickDelta) {
@@ -90,7 +105,7 @@ public abstract class MixinItemInHandRenderer_Swing {
     @Inject(method = "applyFirstPersonTransform", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/platform/GlStateManager;rotatef(FFFF)V", ordinal = 1))
     private void overflowanimations$preSwingPivot(final float equipProgress, final float swingProgress, final CallbackInfo ci) {
         final ItemsConfigCategory items = LegacyFirstPerson.items();
-        if (items.disableSwingPivot) {
+        if (this.overflowanimations$movesSwingPivot()) {
             GlStateManager.translatef(items.itemOffsetX * overflowanimations$PIVOT_MULTIPLIER, items.itemOffsetY * overflowanimations$PIVOT_MULTIPLIER, items.itemOffsetZ * overflowanimations$PIVOT_MULTIPLIER);
         }
     }
@@ -98,7 +113,7 @@ public abstract class MixinItemInHandRenderer_Swing {
     @Inject(method = "applyFirstPersonTransform", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/platform/GlStateManager;rotatef(FFFF)V", ordinal = 3, shift = At.Shift.AFTER))
     private void overflowanimations$postSwingPivot(final float equipProgress, final float swingProgress, final CallbackInfo ci) {
         final ItemsConfigCategory items = LegacyFirstPerson.items();
-        if (items.disableSwingPivot) {
+        if (this.overflowanimations$movesSwingPivot()) {
             GlStateManager.translatef(-items.itemOffsetX * overflowanimations$PIVOT_MULTIPLIER, -items.itemOffsetY * overflowanimations$PIVOT_MULTIPLIER, -items.itemOffsetZ * overflowanimations$PIVOT_MULTIPLIER);
         }
     }

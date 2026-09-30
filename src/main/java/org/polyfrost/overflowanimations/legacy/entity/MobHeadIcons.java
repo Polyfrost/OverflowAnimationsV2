@@ -34,6 +34,7 @@ import net.minecraft.resource.Identifier;
 import org.polyfrost.overflowanimations.OverflowAnimationsConstants;
 
 import javax.imageio.ImageIO;
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
@@ -45,6 +46,7 @@ import java.util.List;
 
 public final class MobHeadIcons {
     private static final String[] TYPES = {"skeleton", "wither", "zombie", "char", "creeper"};
+    private static final int[] SHADOWS = {0xFF1C1C1C, 0xFF060606, 0xFF1C2913, 0xFF2D1C11, 0xFF0C1D0A};
     private static final String[] SKINS = {
             "textures/entity/skeleton/skeleton.png",
             "textures/entity/skeleton/wither_skeleton.png",
@@ -99,13 +101,15 @@ public final class MobHeadIcons {
         }
 
         final int unit = Math.max(1, image.getWidth() / 64);
-        final int size = Math.max(16, 8 * unit);
-        final BufferedImage icon = new BufferedImage(size, size, BufferedImage.TYPE_INT_ARGB);
+        final BufferedImage icon = new BufferedImage(16 * unit, 16 * unit, BufferedImage.TYPE_INT_ARGB);
         final Graphics2D graphics = icon.createGraphics();
-        drawFace(graphics, image, 8 * unit, 8 * unit, size);
-        final String path = texture.getPath();
-        if (path.endsWith("/zombie.png") || path.endsWith("/char.png")) {
-            drawFace(graphics, image, 40 * unit, 8 * unit, size);
+        final int type = indexOf(texture, TEXTURE_PREFIX, ".png");
+        graphics.setColor(new Color(SHADOWS[type], true));
+        graphics.fillRect(12 * unit, 4 * unit, unit, 9 * unit);
+        graphics.fillRect(4 * unit, 12 * unit, 9 * unit, unit);
+        drawFace(graphics, image, 8 * unit, 8 * unit, unit);
+        if (TYPES[type].equals("zombie") || TYPES[type].equals("char")) {
+            drawFace(graphics, image, 40 * unit, 8 * unit, unit);
         }
 
         graphics.dispose();
@@ -114,9 +118,8 @@ public final class MobHeadIcons {
         return new IconResource(texture, bytes.toByteArray());
     }
 
-    private static void drawFace(final Graphics2D graphics, final BufferedImage skin, final int x, final int y, final int size) {
-        final int length = skin.getWidth() / 8;
-        graphics.drawImage(skin, 0, 0, size, size, x, y, x + length, y + length, null);
+    private static void drawFace(final Graphics2D graphics, final BufferedImage skin, final int x, final int y, final int unit) {
+        graphics.drawImage(skin, 4 * unit, 4 * unit, 12 * unit, 12 * unit, x, y, x + 8 * unit, y + 8 * unit, null);
     }
 
     private static int indexOf(final Identifier location, final String prefix, final String suffix) {

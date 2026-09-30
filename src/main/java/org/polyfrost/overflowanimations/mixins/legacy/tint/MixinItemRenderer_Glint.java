@@ -68,7 +68,7 @@ public abstract class MixinItemRenderer_Glint {
     private void overflowanimations$modifyGlint(final ItemRenderer instance, BakedModel model, final Operation<Void> original, @Local(argsOnly = true) final ItemStack item) {
         final ItemsConfigCategory config = OverflowAnimationsConfig.instance().items;
         final boolean potion = item.getItem() instanceof PotionItem;
-        if (potion && config.disablePotionGlint || LegacyGlint.renderingGui && config.legacyGuiGlint) {
+        if (potion && config.disablePotionGlint || LegacyGlint.renderingGui && config.legacyGuiGlint && GL11.glIsEnabled(GL11.GL_DEPTH_TEST)) {
             return;
         }
 

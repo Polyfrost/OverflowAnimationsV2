@@ -27,6 +27,8 @@ package org.polyfrost.overflowanimations.mixins.legacy.firstperson;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import com.llamalad7.mixinextras.sugar.Share;
+import com.llamalad7.mixinextras.sugar.ref.LocalBooleanRef;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.ClientPlayerInteractionManager;
@@ -35,8 +37,6 @@ import net.minecraft.client.ParticleManager;
 import net.minecraft.client.entity.living.player.LocalClientPlayerEntity;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.world.ClientWorld;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.UseAction;
 import net.minecraft.network.packet.c2s.play.ArmSwingC2SPacket;
 import net.minecraft.world.HitResult;
 import org.polyfrost.overflowanimations.config.category.ItemsConfigCategory;
@@ -122,9 +122,13 @@ public abstract class MixinMinecraft_Swinging {
     }
 
     @Inject(method = "doUse", at = @At("HEAD"))
-    private void overflowanimations$itemUseCooldownAnimation(final CallbackInfo ci) {
-        final ItemStack stack = this.player.getItemInHand();
-        if (LegacyFirstPerson.items().itemUseCooldownAnimation && stack != null && stack.getUseAction() != UseAction.NONE) {
+    private void overflowanimations$captureUsing(final CallbackInfo ci, @Share("wasUsing") final LocalBooleanRef wasUsing) {
+        wasUsing.set(this.player.hasItemInUse());
+    }
+
+    @Inject(method = "doUse", at = @At("TAIL"))
+    private void overflowanimations$itemUseCooldownAnimation(final CallbackInfo ci, @Share("wasUsing") final LocalBooleanRef wasUsing) {
+        if (LegacyFirstPerson.items().itemUseCooldownAnimation && !wasUsing.get() && this.player.hasItemInUse()) {
             this.gameRenderer.itemInHandRenderer.onItemUsed();
         }
     }

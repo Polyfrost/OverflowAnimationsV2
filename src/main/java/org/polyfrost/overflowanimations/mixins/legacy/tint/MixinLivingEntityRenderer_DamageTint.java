@@ -49,9 +49,9 @@ public abstract class MixinLivingEntityRenderer_DamageTint {
     protected FloatBuffer tintBuffer;
 
     @Inject(method = "setupOverlayColor(Lnet/minecraft/entity/living/LivingEntity;FZ)Z", at = @At(value = "INVOKE", target = "Ljava/nio/FloatBuffer;flip()Ljava/nio/Buffer;"))
-    private void overflowanimations$applyTintStyle(final LivingEntity entity, final float tickDelta, final boolean alwaysRender, final CallbackInfoReturnable<Boolean> cir, @Local(ordinal = 0) final float brightness) {
+    private void overflowanimations$applyTintStyle(final LivingEntity entity, final float tickDelta, final boolean alwaysRender, final CallbackInfoReturnable<Boolean> cir) {
         if (LegacyDamageTint.isHurt(entity)) {
-            LegacyDamageTint.putCombinerTint(this.tintBuffer, brightness);
+            LegacyDamageTint.putCombinerTint(this.tintBuffer, entity.getBrightness(tickDelta));
         }
     }
 

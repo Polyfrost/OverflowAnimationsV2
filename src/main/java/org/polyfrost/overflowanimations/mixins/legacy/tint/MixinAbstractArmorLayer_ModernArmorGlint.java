@@ -78,7 +78,7 @@ public abstract class MixinAbstractArmorLayer_ModernArmorGlint {
         GlStateManager.matrixMode(GL11.GL_TEXTURE);
         GlStateManager.loadIdentity();
         GlStateManager.matrixMode(GL11.GL_MODELVIEW);
-        final int light = entity.getLightLevel(tickDelta);
+        final int light = entity.isOnFire() ? 15728880 : entity.getLightLevel(tickDelta);
         GLX.multiTexCoord2f(GLX.GL_TEXTURE1, light % 65536, light / 65536);
         GlStateManager.enableLighting();
         GlStateManager.depthMask(true);

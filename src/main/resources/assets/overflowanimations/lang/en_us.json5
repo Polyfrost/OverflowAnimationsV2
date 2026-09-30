@@ -395,7 +395,7 @@
 	"overflowanimations.itemUseAnimationInGUI": "[1.9] Item Use Textures in GUI",
 	"overflowanimations.itemUseAnimationInGUI.description": "Shows the bow pullback and fishing rod cast textures in GUIs, like in 1.9+.",
 	"overflowanimations.dropItemSwing": "[1.15] Drop Item Swing",
-	"overflowanimations.dropItemSwing.description": "Swings the arm when dropping an item, like in 1.15+.",
+	"overflowanimations.dropItemSwing.description": "Swings the arm when dropping an item, like in newer versions (the drop key since 1.15, inventory drops since 1.19).",
 	"overflowanimations.disableDropSwingInContainers": "Disable Drop Item Swing in Containers",
 	"overflowanimations.disableDropSwingInContainers.description": "Stops the drop item swing while a container is open.",
 	"overflowanimations.itemUseCooldownAnimation": "[1.9] Item Use Cooldown Animation",
