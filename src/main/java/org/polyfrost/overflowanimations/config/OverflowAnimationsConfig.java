@@ -44,6 +44,7 @@ import org.polyfrost.overflowanimations.OverflowAnimationsConstants;
 import org.polyfrost.overflowanimations.config.category.*;
 import org.polyfrost.overflowanimations.util.enums.CameraVersionSetting;
 import org.polyfrost.overflowanimations.util.enums.DebugCrosshairSetting;
+import org.polyfrost.overflowanimations.util.enums.FishingRodVersionSetting;
 import org.polyfrost.overflowanimations.util.enums.SneakAnimationSetting;
 
 import java.lang.reflect.Field;
@@ -115,6 +116,10 @@ public final class OverflowAnimationsConfig extends Config {
 
         if (movement.sneakAnimation == SneakAnimationSetting.VANILLA) {
             movement.sneakAnimation = SneakAnimationSetting.MODERN;
+        }
+
+        if (items.fishingRodVersion == FishingRodVersionSetting.VANILLA) {
+            items.fishingRodVersion = FishingRodVersionSetting.MODERN;
         }
 
         if (screen.cameraVersion == CameraVersionSetting.VANILLA) {
