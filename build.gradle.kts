@@ -90,7 +90,7 @@ dependencies {
     for (module in arrayOf("config", "config-impl", "internal", "ui", "utils")) {
         implementation("org.polyfrost.oneconfig:$module:$oneconfig")
     }
-    include(modImplementation("net.fabricmc:fabric-language-kotlin:${sc.properties.get<String>("deps.fabric_language_kotlin")}")!!)
+    modImplementation("net.fabricmc:fabric-language-kotlin:${sc.properties.get<String>("deps.fabric_language_kotlin")}")
 
     compileOnly("org.jspecify:jspecify:1.0.0") // Bundled by Minecraft from 1.21.11
 
