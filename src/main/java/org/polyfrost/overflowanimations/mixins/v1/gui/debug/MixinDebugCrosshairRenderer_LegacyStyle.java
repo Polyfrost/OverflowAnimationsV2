@@ -124,12 +124,13 @@ public abstract class MixinDebugCrosshairRenderer_LegacyStyle {
                 final BufferBuilder builder = new BufferBuilder(bytes, VertexFormat.Mode.LINES, DefaultVertexFormat.POSITION_COLOR_NORMAL);
                 overflowanimations$axes(builder);
             *///?} else {
-            try (ByteBufferBuilder bytes = ByteBufferBuilder.exactlySized(DefaultVertexFormat.POSITION_COLOR_NORMAL_LINE_WIDTH.getVertexSize() * 12)) {
-                //? if <26.2 {
-                /*final BufferBuilder builder = new BufferBuilder(bytes, VertexFormat.Mode.LINES, DefaultVertexFormat.POSITION_COLOR_NORMAL_LINE_WIDTH);
-                *///?} else {
+            //? if <26.2 {
+            /*try (ByteBufferBuilder bytes = ByteBufferBuilder.exactlySized(DefaultVertexFormat.POSITION_COLOR_NORMAL_LINE_WIDTH.getVertexSize() * 12)) {
+                final BufferBuilder builder = new BufferBuilder(bytes, VertexFormat.Mode.LINES, DefaultVertexFormat.POSITION_COLOR_NORMAL_LINE_WIDTH);
+            *///?} else {
+            try (ByteBufferBuilder bytes = ByteBufferBuilder.exactlySized(DefaultVertexFormat.POSITION_COLOR_NORMAL_LINE_WIDTH.getVertexSize() * 12 * 2)) {
                 final BufferBuilder builder = new BufferBuilder(bytes, PrimitiveTopology.LINES, DefaultVertexFormat.POSITION_COLOR_NORMAL_LINE_WIDTH);
-                //?}
+            //?}
                 overflowanimations$axes(builder);
                 overflowanimations$axes(builder);
             //?}
