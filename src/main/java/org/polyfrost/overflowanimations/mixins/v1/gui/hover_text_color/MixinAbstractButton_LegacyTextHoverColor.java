@@ -32,10 +32,8 @@ import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.network.chat.Component;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-//? if <1.21.11 {
-/*import org.spongepowered.asm.mixin.injection.Constant;
-import org.spongepowered.asm.mixin.injection.ModifyConstant;
-*///?}
+//? if <1.21.11
+//import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import org.polyfrost.overflowanimations.OverflowAnimations;
 import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig;
 
@@ -46,7 +44,7 @@ public abstract class MixinAbstractButton_LegacyTextHoverColor extends AbstractW
     }
 
     //? if <1.21.5 {
-    /*@ModifyConstant(method = "renderWidget", constant = @Constant(intValue = 16777215))
+    /*@ModifyExpressionValue(method = "renderWidget", at = @At(value = "CONSTANT", args = "intValue=16777215"))
     private int overflowanimations$renderWidget$old$textColor(final int constant) {
         if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().screen.legacyWidgetHoverTextColor) {
             return this.isHoveredOrFocused() ? 0xFFFFA0 : 0xE0E0E0;
@@ -55,7 +53,7 @@ public abstract class MixinAbstractButton_LegacyTextHoverColor extends AbstractW
         }
     }
     *///?} elif <1.21.11 {
-    /*@ModifyConstant(method = "renderWidget", constant = @Constant(intValue = -1))
+    /*@ModifyExpressionValue(method = "renderWidget", at = @At(value = "CONSTANT", args = "intValue=-1"))
     private int overflowanimations$renderWidget$old$textColor(final int constant) {
         if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().screen.legacyWidgetHoverTextColor) {
             return this.isHoveredOrFocused() ? 0xFFFFFFA0 : 0xFFE0E0E0;
