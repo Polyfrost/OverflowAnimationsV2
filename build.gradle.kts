@@ -306,7 +306,6 @@ publishMods {
             if (!isOrnithe) requires("fabric-api")
             requires("oneconfig")
             requires("fabric-language-kotlin")
-            requires("oneconfig")
             optional("modmenu")
         }
     }
@@ -322,7 +321,6 @@ publishMods {
             if (!isOrnithe) requires("fabric-api")
             requires("oneconfig")
             requires("fabric-language-kotlin")
-            requires("oneconfig")
             optional("modmenu")
         }
     }
