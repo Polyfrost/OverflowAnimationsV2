@@ -51,7 +51,7 @@ public final class MovementConfigCategory extends Category {
     public BackwardsWalkingSetting backwardsWalking = BackwardsWalkingSetting.V1_12;
     public boolean uncapBlockingHeadRotation = false;
     public HeadRotationInterpolationSetting headRotationInterpolation = HeadRotationInterpolationSetting.V1_13;
-    public SneakBobbingSetting sneakBobbing = SneakBobbingSetting.VANILLA;
+    public SneakBobbingSetting sneakBobbing = SneakBobbingSetting.V1_21_2;
     public boolean deathLimbs = false;
     public boolean bowArmMovement = false;
     public DamageTiltSetting damageTilt = DamageTiltSetting.V1_19_4;
