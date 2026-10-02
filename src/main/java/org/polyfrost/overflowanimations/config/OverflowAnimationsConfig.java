@@ -51,6 +51,7 @@ import org.polyfrost.overflowanimations.util.enums.FishingRodVersionSetting;
 import org.polyfrost.overflowanimations.util.enums.ItemGlintSetting;
 import org.polyfrost.overflowanimations.util.enums.PotionGlintSetting;
 import org.polyfrost.overflowanimations.util.enums.SneakAnimationSetting;
+import org.polyfrost.overflowanimations.util.enums.SneakBobbingSetting;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -63,7 +64,7 @@ public final class OverflowAnimationsConfig extends Config {
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     private static final String ID = OverflowAnimationsConstants.MOD_ID + ".json";
     private static final Path CONFIG_DIR = FabricLoader.getInstance().getConfigDir();
-    private static final int CONFIG_VERSION = 2;
+    private static final int CONFIG_VERSION = 3;
 
     private static JsonObject savedConfig = readObject(CONFIG_DIR.resolve(ID));
     private static JsonObject legacyConfig = takeLegacyConfig();
@@ -114,7 +115,13 @@ public final class OverflowAnimationsConfig extends Config {
                 this.migrateDefaults();
             }
 
-            this.movement.longUnsneak = true;
+            if (this.configVersion < 2) {
+                this.movement.longUnsneak = true;
+            }
+
+            if (this.configVersion < 3 && this.movement.sneakBobbing == SneakBobbingSetting.VANILLA) {
+                this.movement.sneakBobbing = SneakBobbingSetting.V1_21_2;
+            }
 
             this.configVersion = CONFIG_VERSION;
             this.save();
