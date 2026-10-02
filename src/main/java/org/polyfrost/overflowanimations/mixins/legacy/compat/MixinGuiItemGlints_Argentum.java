@@ -25,6 +25,7 @@
 
 package org.polyfrost.overflowanimations.mixins.legacy.compat;
 
+import dev.rdh.argentum.impl.render.gui.hud.item.GuiItemAtlas;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.render.platform.GlStateManager;
 import net.minecraft.client.render.vertex.BufferBuilder;
@@ -94,13 +95,13 @@ public abstract class MixinGuiItemGlints_Argentum {
         final float texel = 1.0F / 256.0F;
         this.buffer.begin(GL11.GL_QUADS, FORMAT);
         for (int i = 0; i < this.size; i++) {
-            final int at = i * 10;
+            final int at = i * 9;
             final float x = this.data[at];
             final float y = this.data[at + 1];
             final float z = this.data[at + 2];
             final float u = this.data[at + 3];
             final float v = this.data[at + 4];
-            final float extent = this.data[at + 5];
+            final float extent = GuiItemAtlas.UV_EXTENT;
             // Argentum pads the icon by 4px on each side
             final float x0 = x - 4.0F;
             final float y0 = y - 4.0F;
@@ -111,12 +112,12 @@ public abstract class MixinGuiItemGlints_Argentum {
             final float gu1;
             final float gv1;
             if (modern) {
-                final float padU = (this.data[at + 8] - this.data[at + 6]) * 4.0F / 16.0F;
-                final float padV = (this.data[at + 9] - this.data[at + 7]) * 4.0F / 16.0F;
-                gu0 = this.data[at + 6] - padU;
-                gv0 = this.data[at + 7] - padV;
-                gu1 = this.data[at + 8] + padU;
-                gv1 = this.data[at + 9] + padV;
+                final float padU = (this.data[at + 7] - this.data[at + 5]) * 4.0F / 16.0F;
+                final float padV = (this.data[at + 8] - this.data[at + 6]) * 4.0F / 16.0F;
+                gu0 = this.data[at + 5] - padU;
+                gv0 = this.data[at + 6] - padV;
+                gu1 = this.data[at + 7] + padU;
+                gv1 = this.data[at + 8] + padV;
                 this.vertex(x0, y1, z, u, v, gu0, gv1);
                 this.vertex(x1, y1, z, u + extent, v, gu1, gv1);
                 this.vertex(x1, y0, z, u + extent, v + extent, gu1, gv0);
