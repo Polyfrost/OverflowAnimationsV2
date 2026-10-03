@@ -249,7 +249,12 @@ tasks {
             if (isOrnithe) filter { line -> if ("\"accessWidener\"" in line || "\"fabric-" in line && "kotlin" !in line) "" else line }
         }
 
-        if (isOrnithe) exclude("$modid.accesswidener", "resourcepacks/**", "assets/$modid/shaders/**", "assets/$modid/items/**", "assets/$modid/models/**")
+        if (isOrnithe) {
+            exclude("$modid.accesswidener", "resourcepacks/**", "assets/$modid/shaders/**", "assets/$modid/items/**", "assets/$modid/models/**", "assets/$modid/textures/item/**", "assets/$modid/textures/misc/enchanted_glint_legacy_armor.png*")
+        } else {
+            // Copies of the modern vanilla glint for 1.8.9
+            exclude("assets/$modid/textures/misc/enchanted_glint_item.png*", "assets/$modid/textures/misc/enchanted_glint_armor.png*")
+        }
 
         // The custom renderer is compiled out before 1.21.6, and older shader loaders choke on its includes
         if (sc.current.parsed < "1.21.6" && !isOrnithe) exclude("assets/$modid/shaders/**")
