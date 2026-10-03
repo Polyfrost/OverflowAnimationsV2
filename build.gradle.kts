@@ -99,7 +99,6 @@ dependencies {
         modCompileOnly("dev.rdh:argentum:${sc.properties.get<String>("deps.argentum")}") { isTransitive = false }
         compileOnly("org.joml:joml:1.10.5")
         modLocalRuntime("dev.rdh:argentum:${sc.properties.get<String>("deps.argentum")}") { isTransitive = false }
-        localRuntime(files(rootProject.file("dev/pylon-alias")))
         localRuntime("org.embeddedt.celeritas:celeritas-common:${sc.properties.get<String>("deps.celeritas")}") // jar-in-jar isn't loaded from dev deps
         localRuntime("org.joml:joml:1.10.5")
     }
