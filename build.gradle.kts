@@ -308,10 +308,10 @@ publishMods {
             accessToken = findProperty("modrinth.token").toString()
             minecraftVersions.addAll(releases)
 
-            if (!isOrnithe) requires("fabric-api")
+            requires(if (isOrnithe) "osl" else "fabric-api")
             requires("oneconfig")
             requires("fabric-language-kotlin")
-            optional("modmenu")
+            if (!isOrnithe) optional("modmenu")
         }
     }
 
