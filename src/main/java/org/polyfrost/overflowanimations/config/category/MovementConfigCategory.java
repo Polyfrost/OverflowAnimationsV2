@@ -34,6 +34,7 @@ import org.polyfrost.overflowanimations.util.enums.SneakBobbingSetting;
 import org.polyfrost.overflowanimations.util.enums.BackwardsWalkingSetting;
 import org.polyfrost.overflowanimations.util.enums.DamageTiltSetting;
 import org.polyfrost.overflowanimations.util.enums.HeadRotationInterpolationSetting;
+import org.polyfrost.overflowanimations.util.enums.SlimArmPositionSetting;
 import org.polyfrost.overflowanimations.util.enums.SneakEyeHeightSetting;
 
 public final class MovementConfigCategory extends Category {
@@ -56,6 +57,7 @@ public final class MovementConfigCategory extends Category {
     public boolean bowArmMovement = false;
     public DamageTiltSetting damageTilt = DamageTiltSetting.V1_19_4;
     public boolean offsetHurtTiltTime = false;
+    public SlimArmPositionSetting slimArmPosition = SlimArmPositionSetting.V1_15;
 
     public boolean disableHurtCamera = false;
     public boolean dinnerboneMode = false;
@@ -85,7 +87,8 @@ public final class MovementConfigCategory extends Category {
                 .booleanEntry("deathLimbs")
                 .booleanEntry("bowArmMovement")
                 .enumEntry("damageTilt", DamageTiltSetting.class)
-                .booleanEntry("offsetHurtTiltTime");
+                .booleanEntry("offsetHurtTiltTime")
+                .enumEntry("slimArmPosition", SlimArmPositionSetting.class);
 
         bundle.group("modern")
                 .booleanEntry("disableHurtCamera");

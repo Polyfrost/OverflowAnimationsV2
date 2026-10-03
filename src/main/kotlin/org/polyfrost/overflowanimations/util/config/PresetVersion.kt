@@ -52,6 +52,7 @@ enum class PresetVersion(private val applier: Runnable) {
         movement.sneakBobbing = SneakBobbingSetting.V1_21_1
         movement.deathLimbs = true
         movement.bowArmMovement = true
+        movement.slimArmPosition = SlimArmPositionSetting.V1_8
         movement.damageTilt = DamageTiltSetting.V1_8
         movement.offsetHurtTiltTime = true
 
@@ -157,6 +158,7 @@ enum class PresetVersion(private val applier: Runnable) {
         movement.sneakBobbing = SneakBobbingSetting.V1_21_1
         movement.deathLimbs = true
         movement.bowArmMovement = false
+        movement.slimArmPosition = SlimArmPositionSetting.V1_8
         movement.damageTilt = DamageTiltSetting.V1_8
         movement.offsetHurtTiltTime = false
 
@@ -262,6 +264,7 @@ enum class PresetVersion(private val applier: Runnable) {
         movement.sneakBobbing = SneakBobbingSetting.VANILLA
         movement.deathLimbs = false
         movement.bowArmMovement = false
+        movement.slimArmPosition = SlimArmPositionSetting.VANILLA
         movement.damageTilt = DamageTiltSetting.VANILLA
         movement.offsetHurtTiltTime = false
 
