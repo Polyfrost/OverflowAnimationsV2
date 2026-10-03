@@ -1,2 +1,2 @@
-## 5.0.2
-- Added slim arm position option (1.8 / 1.15+)
+## 5.0.3
+- Fixed log error spam while launching game
