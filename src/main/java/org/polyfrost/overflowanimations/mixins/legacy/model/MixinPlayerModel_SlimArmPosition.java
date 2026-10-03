@@ -23,7 +23,6 @@
  * "MINECRAFT" LINKING EXCEPTION TO THE GPL
  */
 
-
 package org.polyfrost.overflowanimations.mixins.legacy.model;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
