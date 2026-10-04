@@ -29,6 +29,7 @@ import org.polyfrost.oneconfig.api.config.v1.Properties
 import org.polyfrost.oneconfig.api.config.v1.Property
 import org.polyfrost.oneconfig.api.config.v1.Tree
 import org.polyfrost.overflowanimations.OverflowAnimationsConstants
+import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig
 import org.polyfrost.overflowanimations.handler.config.category.Category
 import java.util.function.Consumer
 import java.util.function.Predicate
@@ -107,7 +108,8 @@ open class EntryBundle(protected val category: Category, private val name: Strin
             (entry.listener as Consumer<Any?>?)?.let { listener ->
                 property.addCallback(Predicate { value ->
                     field.set(this.category, value)
-                    listener.accept(value)
+                    // the initial load runs during mod init, before the renderers these listeners touch exist
+                    if (OverflowAnimationsConfig.isLoaded()) listener.accept(value)
                     false
                 })
             }

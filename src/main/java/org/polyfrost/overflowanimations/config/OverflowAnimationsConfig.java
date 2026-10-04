@@ -69,6 +69,7 @@ public final class OverflowAnimationsConfig extends Config {
 
     private static JsonObject savedConfig = readObject(CONFIG_DIR.resolve(ID));
     private static JsonObject legacyConfig = takeLegacyConfig();
+    private static boolean loaded = false;
     private static final OverflowAnimationsConfig INSTANCE = new OverflowAnimationsConfig();
 
     public final MovementConfigCategory movement = new MovementConfigCategory();
@@ -183,6 +184,11 @@ public final class OverflowAnimationsConfig extends Config {
 
     public static void load() {
         INSTANCE.preload();
+        loaded = true;
+    }
+
+    public static boolean isLoaded() {
+        return loaded;
     }
 
     public static void openScreen() {
