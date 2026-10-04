@@ -68,8 +68,7 @@ enum class PresetVersion(private val applier: Runnable) {
         screen.tooltipStyleRendering = true
         screen.slotHoverStyleRendering = true
         screen.listBackgroundGradient = true
-        screen.inventoryEffectsPosition = true
-        screen.fullWidthInventoryEffects = true
+        screen.inventoryEffects = InventoryEffectsSetting.V1_8
         screen.panoramaRendering = true
         screen.legacyLoadingScreen = true
         screen.oldChatPosition = true
@@ -174,8 +173,7 @@ enum class PresetVersion(private val applier: Runnable) {
         screen.tooltipStyleRendering = true
         screen.slotHoverStyleRendering = true
         screen.listBackgroundGradient = true
-        screen.inventoryEffectsPosition = true
-        screen.fullWidthInventoryEffects = true
+        screen.inventoryEffects = InventoryEffectsSetting.V1_8
         screen.panoramaRendering = true
         screen.legacyLoadingScreen = true
         screen.oldChatPosition = true
@@ -280,8 +278,7 @@ enum class PresetVersion(private val applier: Runnable) {
         screen.tooltipStyleRendering = false
         screen.slotHoverStyleRendering = false
         screen.listBackgroundGradient = false
-        screen.inventoryEffectsPosition = false
-        screen.fullWidthInventoryEffects = false
+        screen.inventoryEffects = InventoryEffectsSetting.VANILLA
         screen.panoramaRendering = false
         screen.legacyLoadingScreen = false
         screen.oldChatPosition = false

@@ -51,7 +51,7 @@ open class EntryBundle(protected val category: Category, private val name: Strin
                 "legacyItemRarities", "heldItemVisibilityInBoat", "offhandUsageSwinging", "legacySwingAnimation",
                 "listWidgetSelectedBorderColor", "legacyWidgetHoverTextColor",
                 "disableCameraTransparentPassthrough", "tooltipStyleRendering", "slotHoverStyleRendering",
-                "listBackgroundGradient", "inventoryEffectsPosition", "fullWidthInventoryEffects", "panoramaRendering",
+                "listBackgroundGradient", "panoramaRendering",
                 "legacyLoadingScreen", "legacyLoadingScreenProgressBar", "oldChatPosition", "oldCrosshairPosition",
                 "oldCraftingSlotsPosition", "fixSneakingFeetPosition", "oldSkyRenderingCheck", "smoothParticles",
                 "fixMirrorArmSwing", "fixOffHandUsingPose",
@@ -79,9 +79,6 @@ open class EntryBundle(protected val category: Category, private val name: Strin
             *///?}
             //? if <1.21.9 {
             /*add("fixTextStrikethroughStyle") // Fixes a bug in the 1.21.9 glyph pipeline
-            *///?}
-            //? if <1.21.11 {
-            /*add("fullWidthInventoryEffects") // Effects already use the full width before 1.21.11
             *///?}
         }
     }

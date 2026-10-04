@@ -46,6 +46,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.polyfrost.overflowanimations.OverflowAnimations;
 import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig;
 import org.polyfrost.overflowanimations.mixins.accessor.AbstractRecipeBookScreenAccessor;
+import org.polyfrost.overflowanimations.util.enums.InventoryEffectsSetting;
 
 @Mixin(EffectsInInventory.class)
 public abstract class MixinEffectsInInventory_EffectBackgroundWidthAndPosition {
@@ -64,7 +65,7 @@ public abstract class MixinEffectsInInventory_EffectBackgroundWidthAndPosition {
     @ModifyExpressionValue(method = "extractRenderState", at = @At("MIXINEXTRAS:EXPRESSION"))
     //?}
     private int overflowanimations$fullWidthInventoryEffects(final int original) {
-        if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().screen.fullWidthInventoryEffects && !(this.screen instanceof AbstractRecipeBookScreen<?> recipeBookScreen && ((AbstractRecipeBookScreenAccessor) recipeBookScreen).overflowanimations$getRecipeBookComponent().isVisible())) {
+        if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().screen.inventoryEffects != InventoryEffectsSetting.VANILLA && !(this.screen instanceof AbstractRecipeBookScreen<?> recipeBookScreen && ((AbstractRecipeBookScreenAccessor) recipeBookScreen).overflowanimations$getRecipeBookComponent().isVisible())) {
             return 120;
         } else {
             return original;
@@ -77,7 +78,7 @@ public abstract class MixinEffectsInInventory_EffectBackgroundWidthAndPosition {
     @WrapOperation(method = "extractBackground", at = @At(value = "INVOKE", target = "Ljava/lang/Math;min(II)I"))
     //?}
     private int overflowanimations$fullWidthInventoryEffects$useOldWidth(final int min, final int max, final Operation<Integer> original) {
-        if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().screen.fullWidthInventoryEffects) {
+        if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().screen.inventoryEffects != InventoryEffectsSetting.VANILLA) {
             return min == 120 ? 120 : 32; // Hardcode old width values
         } else {
             return original.call(min, max);
@@ -94,7 +95,7 @@ public abstract class MixinEffectsInInventory_EffectBackgroundWidthAndPosition {
     //?}
     private int overflowanimations$effectsInventoryPosition(final AbstractContainerScreen<?> instance, final Operation<Integer> original) {
         final int imageWidth = original.call(instance);
-        if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().screen.inventoryEffectsPosition && !(this.screen instanceof AbstractRecipeBookScreen<?> recipeBookScreen && ((AbstractRecipeBookScreenAccessor) recipeBookScreen).overflowanimations$getRecipeBookComponent().isVisible())) {
+        if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().screen.inventoryEffects == InventoryEffectsSetting.V1_8 && !(this.screen instanceof AbstractRecipeBookScreen<?> recipeBookScreen && ((AbstractRecipeBookScreenAccessor) recipeBookScreen).overflowanimations$getRecipeBookComponent().isVisible())) {
             return 0;
         } else {
             return imageWidth;
@@ -109,8 +110,8 @@ public abstract class MixinEffectsInInventory_EffectBackgroundWidthAndPosition {
     @ModifyExpressionValue(method = "extractRenderState", at = @At(value = "CONSTANT", args = "intValue=2"))
     //?}
     private int overflowanimations$effectsInventoryPosition(final int original) {
-        if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().screen.inventoryEffectsPosition && !(this.screen instanceof AbstractRecipeBookScreen<?> recipeBookScreen && ((AbstractRecipeBookScreenAccessor) recipeBookScreen).overflowanimations$getRecipeBookComponent().isVisible())) {
-            return OverflowAnimationsConfig.instance().screen.fullWidthInventoryEffects ? -124 : 0; // TODO: Modern
+        if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().screen.inventoryEffects == InventoryEffectsSetting.V1_8 && !(this.screen instanceof AbstractRecipeBookScreen<?> recipeBookScreen && ((AbstractRecipeBookScreenAccessor) recipeBookScreen).overflowanimations$getRecipeBookComponent().isVisible())) {
+            return -124;
         } else {
             return original;
         }

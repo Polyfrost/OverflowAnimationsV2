@@ -30,6 +30,7 @@ import org.polyfrost.overflowanimations.handler.config.bundle.EntryBundle;
 import org.polyfrost.overflowanimations.handler.config.category.Category;
 //? if >1.8.9
 import org.polyfrost.overflowanimations.util.UtilsKt;
+import org.polyfrost.overflowanimations.util.enums.InventoryEffectsSetting;
 import org.polyfrost.overflowanimations.util.enums.TabListSetting;
 import org.polyfrost.overflowanimations.util.enums.DebugCrosshairSetting;
 import org.polyfrost.overflowanimations.util.enums.CameraVersionSetting;
@@ -48,8 +49,7 @@ public final class ScreenConfigCategory extends Category {
     public boolean tooltipStyleRendering = false;
     public boolean slotHoverStyleRendering = false;
     public boolean listBackgroundGradient = false;
-    public boolean inventoryEffectsPosition = false;
-    public boolean fullWidthInventoryEffects = false;
+    public InventoryEffectsSetting inventoryEffects = InventoryEffectsSetting.V1_21_10;
     public boolean panoramaRendering = false;
     public boolean legacyLoadingScreen = false;
     public boolean legacyLoadingScreenProgressBar = false;
@@ -78,8 +78,7 @@ public final class ScreenConfigCategory extends Category {
         bundle.booleanEntry("tooltipStyleRendering");
         bundle.booleanEntry("slotHoverStyleRendering");
         bundle.booleanEntry("listBackgroundGradient");
-        bundle.booleanEntry("inventoryEffectsPosition");
-        bundle.booleanEntry("fullWidthInventoryEffects");
+        bundle.enumEntry("inventoryEffects", InventoryEffectsSetting.class);
         bundle.booleanEntry("panoramaRendering");
         bundle.booleanEntry("legacyLoadingScreen");
         bundle.booleanEntry("legacyLoadingScreenProgressBar");
