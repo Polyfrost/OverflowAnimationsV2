@@ -1,2 +1,2 @@
-## 5.0.3
-- Fixed log error spam while launching game
+## 5.0.4
+- Add inventory potion effects position
