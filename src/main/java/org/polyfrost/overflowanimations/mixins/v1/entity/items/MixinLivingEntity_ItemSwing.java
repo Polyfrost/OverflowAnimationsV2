@@ -29,10 +29,25 @@ import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import net.minecraft.world.entity.LivingEntity;
 //? if >=26.3 {
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.SwingAnimation;
 //?}
 import org.spongepowered.asm.mixin.Mixin;
+//? if >=26.3 {
+import org.spongepowered.asm.mixin.Unique;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.polyfrost.overflowanimations.OverflowAnimations;
+import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig;
+import org.polyfrost.overflowanimations.mixins.accessor.LivingEntityAccessor;
+import org.polyfrost.overflowanimations.mixins.accessor.LivingEntity_SwingStateAccessor;
+import org.polyfrost.overflowanimations.util.enums.SwapSwingAnimationSetting;
+//?}
 import org.polyfrost.overflowanimations.util.SwingUtilKt;
+//? if >=26.3 {
+import java.util.function.Function;
+//?}
 
 // TODO/FIX: Should not affect swing code, only visual, currently matches Legacy Animatium tho
 @Mixin(LivingEntity.class)
@@ -47,4 +62,44 @@ public abstract class MixinLivingEntity_ItemSwing {
         return SwingUtilKt.getItemSwingSpeed((LivingEntity) (Object) this, animation, original.call(animation));
     //?}
     }
+
+    //? if >=26.3 {
+    @Unique
+    private LivingEntity.SwingDescription overflowanimations$trackedSwing;
+
+    @Unique
+    private Function<ItemStack, SwingAnimation> overflowanimations$swingSource;
+
+    @Inject(method = "baseTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity$SwingState;tick()V"))
+    private void overflowanimations$swapSwingAnimation(final CallbackInfo ci) {
+        final LivingEntity self = (LivingEntity) (Object) this;
+        if (!self.level().isClientSide() || !OverflowAnimations.isEnabled() || OverflowAnimationsConfig.instance().items.swapSwingAnimation != SwapSwingAnimationSetting.V26_2) {
+            return;
+        }
+
+        final LivingEntity_SwingStateAccessor swingState = (LivingEntity_SwingStateAccessor) ((LivingEntityAccessor) this).overflowanimations$getSwingState();
+        final LivingEntity.SwingDescription swing = swingState.overflowanimations$getCurrentSwing();
+        if (swing == null) {
+            return;
+        }
+
+        final ItemStack stack = self.getItemInHand(swing.hand());
+        if (swing != this.overflowanimations$trackedSwing) {
+            this.overflowanimations$trackedSwing = swing;
+            this.overflowanimations$swingSource = swing.animation().equals(stack.getAttackAnimation()) ? ItemStack::getAttackAnimation
+                    : swing.animation().equals(stack.getInteractAnimation()) ? ItemStack::getInteractAnimation
+                    : null;
+        }
+
+        if (this.overflowanimations$swingSource == null) {
+            return;
+        }
+
+        final SwingAnimation animation = this.overflowanimations$swingSource.apply(stack);
+        if (!animation.equals(swing.animation())) {
+            this.overflowanimations$trackedSwing = new LivingEntity.SwingDescription(swing.hand(), animation, ((LivingEntityAccessor) this).overflowanimations$getModifiedSwingDuration(animation));
+            swingState.overflowanimations$setCurrentSwing(this.overflowanimations$trackedSwing);
+        }
+    }
+    //?}
 }

@@ -211,6 +211,11 @@
 	"overflowanimations.disableSwingPivot.description": "Removes the pivot when swinging your item.",
 	"overflowanimations.legacySwingAnimation": "Legacy Swing",
 	"overflowanimations.legacySwingAnimation.description": "Removes the 1.9+ cooldown animation when swinging your item, making it look like <=1.8.",
+	"overflowanimations.swapSwingAnimation": "[*] Item Swap Swing Animation",
+	"overflowanimations.swapSwingAnimation.description": "26.2: A swing in progress follows the item you swap to, e.g. a spear stab turns into a sword swing when attribute swapping.\n26.3: A swing keeps the animation of the item it started with.",
+	"overflowanimations.enum.SwapSwingAnimationSetting.V26_2": "26.2",
+	"overflowanimations.enum.SwapSwingAnimationSetting.VANILLA": "Vanilla",
+	"overflowanimations.enum.SwapSwingAnimationSetting.V26_3": "26.3+",
 
 	"overflowanimations.category.items.group.item_modifications": "Item Modifications",
 	"overflowanimations.itemScaleX": "Item Scale X",

@@ -29,11 +29,12 @@ import org.jspecify.annotations.NonNull;
 import org.polyfrost.overflowanimations.handler.config.bundle.EntryBundle;
 import org.polyfrost.overflowanimations.handler.config.category.Category;
 import org.polyfrost.overflowanimations.util.enums.ArmorGlintSetting;
+import org.polyfrost.overflowanimations.util.enums.DropSwingSetting;
 import org.polyfrost.overflowanimations.util.enums.EquipAnimationVersionSetting;
 import org.polyfrost.overflowanimations.util.enums.FishingRodVersionSetting;
 import org.polyfrost.overflowanimations.util.enums.ItemGlintSetting;
 import org.polyfrost.overflowanimations.util.enums.PotionGlintSetting;
-import org.polyfrost.overflowanimations.util.enums.DropSwingSetting;
+import org.polyfrost.overflowanimations.util.enums.SwapSwingAnimationSetting;
 import org.polyfrost.overflowanimations.util.enums.UsingTextureInGUISetting;
 
 public final class ItemsConfigCategory extends Category {
@@ -84,6 +85,7 @@ public final class ItemsConfigCategory extends Category {
     public boolean disableSwingTranslate = false;
     public boolean disableSwingPivot = false;
     public boolean legacySwingAnimation = false;
+    public SwapSwingAnimationSetting swapSwingAnimation = SwapSwingAnimationSetting.V26_2;
     // Item Modifications
     public float itemScaleX = 1.0F;
     public float itemScaleY = 1.0F;
@@ -202,7 +204,8 @@ public final class ItemsConfigCategory extends Category {
                 .booleanEntry("fakeMissPenaltyParticles")
                 .booleanEntry("disableSwingTranslate")
                 .booleanEntry("disableSwingPivot")
-                .booleanEntry("legacySwingAnimation");
+                .booleanEntry("legacySwingAnimation")
+                .enumEntry("swapSwingAnimation", SwapSwingAnimationSetting.class);
 
         bundle.group("item_modifications")
                 .floatRange("itemScaleX", 0.2F, 2.0F, 0.1F)

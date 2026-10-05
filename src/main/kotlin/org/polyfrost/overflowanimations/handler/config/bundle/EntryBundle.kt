@@ -81,6 +81,9 @@ open class EntryBundle(protected val category: Category, private val name: Strin
             //? if <1.21.9 {
             /*add("fixTextStrikethroughStyle") // Fixes a bug in the 1.21.9 glyph pipeline
             *///?}
+            //? if <1.21.11 {
+            /*add("swapSwingAnimation") // Swing animation types arrived with the 1.21.11 spear
+            *///?}
         }
     }
 

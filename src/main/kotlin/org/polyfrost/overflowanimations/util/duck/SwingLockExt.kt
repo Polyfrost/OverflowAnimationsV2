@@ -23,22 +23,16 @@
  * "MINECRAFT" LINKING EXCEPTION TO THE GPL
  */
 
-package org.polyfrost.overflowanimations.mixins.accessor;
 
-//? if >=26.3 {
-import net.minecraft.world.entity.LivingEntity;
-import org.jetbrains.annotations.Nullable;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.gen.Accessor;
-//?}
+package org.polyfrost.overflowanimations.util.duck
 
-//? if >=26.3 {
-@Mixin(LivingEntity.SwingState.class)
-public interface LivingEntity_SwingStateAccessor {
-    @Accessor("currentSwing")
-    @Nullable LivingEntity.SwingDescription overflowanimations$getCurrentSwing();
+//? if >=1.21.11 <26.3 {
+/*import net.minecraft.world.InteractionHand
+import net.minecraft.world.item.component.SwingAnimation
 
-    @Accessor("currentSwing")
-    void overflowanimations$setCurrentSwing(final LivingEntity.SwingDescription currentSwing);
+interface SwingLockExt {
+    fun `overflowanimations$lockSwing`(hand: InteractionHand)
+
+    fun `overflowanimations$swingAnimation`(held: SwingAnimation): SwingAnimation
 }
-//?}
+*///?}

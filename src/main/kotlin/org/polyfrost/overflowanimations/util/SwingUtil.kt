@@ -56,6 +56,9 @@ import org.polyfrost.overflowanimations.mixins.accessor.LivingEntityAccessor
 import org.polyfrost.overflowanimations.mixins.accessor.LivingEntity_SwingStateAccessor
 import org.polyfrost.overflowanimations.util.duck.SwingStateExt
 //?}
+//? if >=1.21.11 <26.3 {
+/*import org.polyfrost.overflowanimations.util.duck.SwingLockExt
+*///?}
 import java.util.*
 import kotlin.math.exp
 import kotlin.math.max
@@ -67,6 +70,9 @@ fun Player.fakeHandSwing(hand: InteractionHand) {
         this.swingTime = -1
         this.swinging = true
         this.swingingArm = hand
+        //? if >=1.21.11 {
+        (this as SwingLockExt).`overflowanimations$lockSwing`(hand)
+        //?}
     }
 }
 
@@ -137,7 +143,7 @@ fun LivingEntity.getItemSwingSpeed(animation: SwingAnimation, fallback: Int): In
         *///?} elif <26.3 {
         /*val swingingHand = if (this.swingingArm != null) this.swingingArm!! else InteractionHand.MAIN_HAND
         val stack = this.getItemInHand(swingingHand)
-        val swingDuration = stack.swingAnimation.duration()
+        val swingDuration = (this as SwingLockExt).`overflowanimations$swingAnimation`(stack.swingAnimation).duration()
         *///?}
 
         //? if >=26.3 {
