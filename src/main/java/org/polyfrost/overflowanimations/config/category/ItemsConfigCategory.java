@@ -80,7 +80,7 @@ public final class ItemsConfigCategory extends Category {
     public boolean offhandUsageSwinging = false;
     public boolean alwaysUsageSwing = false;
     public boolean fakeMissPenaltySwing = true;
-    public boolean fakeMissPenaltyParticles = false;
+    public boolean fakeMissPenaltyParticles = true;
     public boolean disableSwingTranslate = false;
     public boolean disableSwingPivot = false;
     public boolean legacySwingAnimation = false;
