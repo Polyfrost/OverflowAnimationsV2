@@ -1,7 +1,7 @@
 mod.id = "overflowanimations"
 mod.name = "OverflowAnimations"
 mod.group = "org.polyfrost"
-mod.version = "5.0.4"
+mod.version = "5.0.5"
 mod.description = "Visual Tweaks/QOL Settings For Modern Minecraft Versions, Aimed At 1.7/1.8 players."
 mod.source = "https://github.com/Polyfrost/OverflowAnimationsV2"
 mod.issues = "https://github.com/Polyfrost/OverflowAnimationsV2/issues"

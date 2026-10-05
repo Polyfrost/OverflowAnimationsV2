@@ -1,2 +1,2 @@
-## 5.0.4
-- Add inventory potion effects position
+## 5.0.5
+- Add fake miss penalty particles
