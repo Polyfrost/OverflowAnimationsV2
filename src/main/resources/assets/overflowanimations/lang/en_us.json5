@@ -203,6 +203,8 @@
 	"overflowanimations.alwaysUsageSwing.description": "Allows you to swing/use the item in the air/always.",
 	"overflowanimations.fakeMissPenaltySwing": "Swing During Missed Hit",
 	"overflowanimations.fakeMissPenaltySwing.description": "In vanilla Minecraft, if the player has missed their hit, there will be a 10 ms delay on top of the attack cooldown before they can swing again. Enable this feature to play a fake swing animation during that 10 ms delay to match <=1.7.x.",
+	"overflowanimations.fakeMissPenaltyParticles": "Show Particles on Missed Hits",
+	"overflowanimations.fakeMissPenaltyParticles.description": "Shows the critical and sharpness particles a missed hit on an entity would have produced. Also triggers OverflowParticles' Always Show Critical/Sharpness.",
 	"overflowanimations.disableSwingTranslate": "Disable Swing Translate",
 	"overflowanimations.disableSwingTranslate.description": "Removes the translation/offset when swinging your item.",
 	"overflowanimations.disableSwingPivot": "Disable Swing Pivot",

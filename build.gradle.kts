@@ -95,6 +95,7 @@ dependencies {
     modImplementation("net.fabricmc:fabric-language-kotlin:${sc.properties.get<String>("deps.fabric_language_kotlin")}")
 
     compileOnly("org.jspecify:jspecify:1.0.0") // Bundled by Minecraft from 1.21.11
+    modCompileOnly("maven.modrinth:overflowparticles:${sc.properties.get<String>("deps.overflowparticles")}") { isTransitive = false }
     if (isOrnithe) {
         modCompileOnly("dev.rdh:argentum:${sc.properties.get<String>("deps.argentum")}") { isTransitive = false }
         compileOnly("org.joml:joml:1.10.5")
@@ -121,6 +122,7 @@ sourceSets.main {
                 "org/polyfrost/overflowanimations/config/**",
                 "org/polyfrost/overflowanimations/handler/config/**",
                 "org/polyfrost/overflowanimations/handler/compatibility/Mods.kt",
+                "org/polyfrost/overflowanimations/handler/compatibility/OverflowParticlesCompat.kt",
                 "org/polyfrost/overflowanimations/util/enums/**",
                 "org/polyfrost/overflowanimations/OverflowAnimationsConstants.kt",
                 "org/polyfrost/overflowanimations/legacy/**",

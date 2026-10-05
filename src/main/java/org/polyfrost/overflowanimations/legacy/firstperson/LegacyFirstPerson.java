@@ -37,6 +37,9 @@ import net.minecraft.block.SnowLayerBlock;
 import net.minecraft.block.TrapdoorBlock;
 import net.minecraft.client.render.model.block.BakedModel;
 import net.minecraft.client.render.platform.GlStateManager;
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.MobType;
 import net.minecraft.entity.living.LivingEntity;
 import net.minecraft.entity.living.effect.StatusEffect;
 import net.minecraft.entity.living.player.PlayerEntity;
@@ -46,6 +49,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.SwordItem;
 import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig;
 import org.polyfrost.overflowanimations.config.category.ItemsConfigCategory;
+import org.polyfrost.overflowanimations.handler.compatibility.ModsKt;
+import org.polyfrost.overflowanimations.handler.compatibility.OverflowParticlesCompat;
 import org.polyfrost.overflowanimations.mixins.legacy.firstperson.MixinLivingEntity_SwingAccessor;
 import org.polyfrost.overflowanimations.util.enums.FishingRodVersionSetting;
 
@@ -62,6 +67,22 @@ public final class LegacyFirstPerson {
         if (!entity.armSwinging || entity.armSwingingTicks >= duration / 2 || entity.armSwingingTicks < 0) {
             entity.armSwingingTicks = -1;
             entity.armSwinging = true;
+        }
+    }
+
+    public static void fakeAttackParticles(PlayerEntity player, Entity target) {
+        if (player.isSpectator() || !target.canBePunched()) {
+            return;
+        }
+        final boolean living = target instanceof LivingEntity;
+        if (player.fallDistance > 0.0F && !player.onGround && !player.isClimbing() && !player.isInWater() && !player.hasStatusEffect(StatusEffect.BLINDNESS) && player.vehicle == null && living) {
+            player.addCritParticles(target);
+        }
+        if (EnchantmentHelper.modifyDamage(player.getItemInHand(), living ? ((LivingEntity) target).getMobType() : MobType.UNDEFINED) > 0.0F) {
+            player.addEnchantedCritParticles(target);
+        }
+        if (ModsKt.HAS_OVERFLOW_PARTICLES) {
+            OverflowParticlesCompat.postAttack(player, target);
         }
     }
 

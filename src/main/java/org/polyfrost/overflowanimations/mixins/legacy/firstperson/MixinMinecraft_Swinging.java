@@ -107,13 +107,19 @@ public abstract class MixinMinecraft_Swinging {
 
     @Inject(method = "doAttack", at = @At("HEAD"))
     private void overflowanimations$fakeMissPenaltySwing(final CallbackInfo ci) {
-        if (!LegacyFirstPerson.items().fakeMissPenaltySwing || this.attackCooldown <= 0 || this.crosshairTarget == null || !this.interactionManager.hasAttackCooldown()) {
+        final ItemsConfigCategory items = LegacyFirstPerson.items();
+        if (this.attackCooldown <= 0 || this.attackCooldown > 10 || this.crosshairTarget == null || !this.interactionManager.hasAttackCooldown()) {
             return;
         }
         if (this.crosshairTarget.type == HitResult.Type.BLOCK && this.overflowanimations$targetedBlock() == null) {
             return;
         }
-        LegacyFirstPerson.fakeSwing(this.player);
+        if (items.fakeMissPenaltySwing) {
+            LegacyFirstPerson.fakeSwing(this.player);
+        }
+        if (items.fakeMissPenaltyParticles && this.crosshairTarget.type == HitResult.Type.ENTITY) {
+            LegacyFirstPerson.fakeAttackParticles(this.player, this.crosshairTarget.entity);
+        }
     }
 
     @WrapOperation(method = "doAttack", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/entity/living/player/LocalClientPlayerEntity;swingArm()V"))

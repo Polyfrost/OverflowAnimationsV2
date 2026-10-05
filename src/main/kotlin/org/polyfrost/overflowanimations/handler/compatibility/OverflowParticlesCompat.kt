@@ -25,13 +25,23 @@
 
 package org.polyfrost.overflowanimations.handler.compatibility
 
-import net.fabricmc.loader.api.FabricLoader
+//? if <=1.8.9 {
+/*import net.minecraft.entity.Entity
+import net.minecraft.entity.living.player.PlayerEntity as Player
+*///?} else {
+import net.minecraft.world.entity.Entity
+import net.minecraft.world.entity.player.Player
+//?}
+import org.polyfrost.oneconfig.api.event.v1.EventManager
+import org.polyfrost.overflowparticles.client.config.OverflowParticlesConfig
+import org.polyfrost.overflowparticles.client.event.AttackEntityEvent
 
-@JvmField
-val HAS_VFP = FabricLoader.getInstance().isModLoaded("viafabricplus")
-
-@JvmField
-val HAS_LUNAR_CLIENT = FabricLoader.getInstance().isModLoaded("ichor")
-
-@JvmField
-val HAS_OVERFLOW_PARTICLES = FabricLoader.getInstance().isModLoaded("overflowparticles")
+object OverflowParticlesCompat {
+    @JvmStatic
+    fun postAttack(player: Player, target: Entity) {
+        if (OverflowParticlesConfig.checkInvulnerable) {
+            return
+        }
+        EventManager.INSTANCE.post(AttackEntityEvent(player, target))
+    }
+}

@@ -80,6 +80,7 @@ public final class ItemsConfigCategory extends Category {
     public boolean offhandUsageSwinging = false;
     public boolean alwaysUsageSwing = false;
     public boolean fakeMissPenaltySwing = true;
+    public boolean fakeMissPenaltyParticles = false;
     public boolean disableSwingTranslate = false;
     public boolean disableSwingPivot = false;
     public boolean legacySwingAnimation = false;
@@ -198,6 +199,7 @@ public final class ItemsConfigCategory extends Category {
                 .booleanEntry("offhandUsageSwinging")
                 .booleanEntry("alwaysUsageSwing")
                 .booleanEntry("fakeMissPenaltySwing")
+                .booleanEntry("fakeMissPenaltyParticles")
                 .booleanEntry("disableSwingTranslate")
                 .booleanEntry("disableSwingPivot")
                 .booleanEntry("legacySwingAnimation");

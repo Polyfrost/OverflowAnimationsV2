@@ -36,16 +36,21 @@ import net.minecraft.network.protocol.game.ServerboundSwingPacket
 import net.minecraft.network.protocol.game.ClientboundSwingAnimationPacket
 //?}
 import net.minecraft.server.level.ServerLevel
+import net.minecraft.tags.EntityTypeTags
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.effect.MobEffectUtil
 import net.minecraft.world.effect.MobEffects
+import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.player.Player
 //? if >=26.3 {
 import net.minecraft.world.item.component.SwingAnimation
 //?}
+import net.minecraft.world.item.enchantment.Enchantments
 import org.polyfrost.overflowanimations.OverflowAnimations
 import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig
+import org.polyfrost.overflowanimations.handler.compatibility.HAS_OVERFLOW_PARTICLES
+import org.polyfrost.overflowanimations.handler.compatibility.OverflowParticlesCompat
 import org.polyfrost.overflowanimations.mixins.accessor.LivingEntityAccessor
 //? if >=26.3 {
 import org.polyfrost.overflowanimations.mixins.accessor.LivingEntity_SwingStateAccessor
@@ -157,4 +162,26 @@ fun LivingEntity.getItemSwingSpeed(animation: SwingAnimation, fallback: Int): In
     }
 
     return fallback
+}
+
+private val CONDITIONAL_DAMAGE_ENCHANTMENTS = mapOf(
+    Enchantments.SMITE to EntityTypeTags.SENSITIVE_TO_SMITE,
+    Enchantments.BANE_OF_ARTHROPODS to EntityTypeTags.SENSITIVE_TO_BANE_OF_ARTHROPODS,
+    Enchantments.IMPALING to EntityTypeTags.SENSITIVE_TO_IMPALING,
+)
+
+fun LocalPlayer.fakeAttackParticles(target: Entity) {
+    if (this.isSpectator || !target.isAttackable) {
+        return
+    }
+    if (this.fallDistance > 0.0F && !this.onGround() && !this.onClimbable() && !this.isInWater && !this.hasEffect(MobEffects.BLINDNESS) && !this.isPassenger && target is LivingEntity) {
+        this.crit(target)
+    }
+    val type = target.type.builtInRegistryHolder()
+    if (this.mainHandItem.enchantments.keySet().any { enchantment -> enchantment.`is`(Enchantments.SHARPNESS) || CONDITIONAL_DAMAGE_ENCHANTMENTS.any { (key, tag) -> enchantment.`is`(key) && type.`is`(tag) } }) {
+        this.magicCrit(target)
+    }
+    if (HAS_OVERFLOW_PARTICLES) {
+        OverflowParticlesCompat.postAttack(this, target)
+    }
 }

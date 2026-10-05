@@ -30,6 +30,7 @@ import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import org.jetbrains.annotations.Nullable;
 import org.objectweb.asm.Opcodes;
@@ -54,10 +55,19 @@ public abstract class MixinMinecraft_MissPenalty {
     @Nullable
     public LocalPlayer player;
 
+    @Shadow
+    protected int missTime;
+
     @Inject(method = "startAttack", at = @At(value = "RETURN", ordinal = 0))
     private void overflowanimations$fakeMissPenaltySwing(final CallbackInfoReturnable<Boolean> cir) {
-        if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().items.fakeMissPenaltySwing && this.player != null) {
+        if (!OverflowAnimations.isEnabled() || this.player == null || this.missTime > 10) {
+            return;
+        }
+        if (OverflowAnimationsConfig.instance().items.fakeMissPenaltySwing) {
             SwingUtilKt.fakeHandSwing(this.player, InteractionHand.MAIN_HAND);
+        }
+        if (OverflowAnimationsConfig.instance().items.fakeMissPenaltyParticles && this.hitResult instanceof EntityHitResult entityHit) {
+            SwingUtilKt.fakeAttackParticles(this.player, entityHit.getEntity());
         }
     }
 

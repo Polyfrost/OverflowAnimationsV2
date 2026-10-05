@@ -30,30 +30,35 @@ deps.osl = "0.21.0"
 deps.argentum = "1.0.0+b45107a"
 deps.celeritas = "2.5.0-pre.1"
 deps.fabric_language_kotlin = "1.14.1+kotlin.2.4.20"
+deps.overflowparticles = "GPN2xTSL" # Modrinth version id, v1.2.1
 
 ["1.21.4"]
 mod.mc_compat = "1.21.4"
 mod.mc_releases = ["1.21.4"]
 deps.fabric_api = "0.119.4+1.21.4"
 deps.fabric_language_kotlin = "1.13.12+kotlin.2.4.0"
+deps.overflowparticles = "yaucPcIn" # Modrinth version id, v1.2.1
 
 ["1.21.8"]
 mod.mc_compat = ">=1.21.6 <=1.21.8"
 mod.mc_releases = ["1.21.6", "1.21.7", "1.21.8"]
 deps.fabric_api = "0.136.1+1.21.8"
 deps.fabric_language_kotlin = "1.13.12+kotlin.2.4.0"
+deps.overflowparticles = "FFq7i7Bl" # Modrinth version id, v1.2.1
 
 ["1.21.10"]
 mod.mc_compat = ">=1.21.9 <=1.21.10"
 mod.mc_releases = ["1.21.9", "1.21.10"]
 deps.fabric_api = "0.138.4+1.21.10"
 deps.fabric_language_kotlin = "1.13.12+kotlin.2.4.0"
+deps.overflowparticles = "FBNugMRL" # Modrinth version id, v1.2.1
 
 ["1.21.11"]
 mod.mc_compat = "1.21.11"
 mod.mc_releases = ["1.21.11"]
 deps.fabric_api = "0.141.5+1.21.11"
 deps.fabric_language_kotlin = "1.13.12+kotlin.2.4.0"
+deps.overflowparticles = "WXSZXTjq" # Modrinth version id, v1.2.1
 
 ["26.1"]
 mod.mc_compat = ">=26.1 <=26.1.2"
@@ -61,16 +66,19 @@ mod.mc_releases = ["26.1", "26.1.1", "26.1.2"]
 deps.minecraft = "26.1.2"
 deps.fabric_api = "0.155.2+26.1.2"
 deps.fabric_language_kotlin = "1.13.12+kotlin.2.4.0"
+deps.overflowparticles = "Qbu0w67p" # Modrinth version id, v1.2.1
 
 ["26.2"]
 mod.mc_compat = "26.2"
 mod.mc_releases = ["26.2"]
 deps.fabric_api = "0.158.0+26.2"
 deps.fabric_language_kotlin = "1.13.13+kotlin.2.4.10"
+deps.overflowparticles = "iHhwtsNj" # Modrinth version id, v1.2.1
 
 ["26.3"]
 mod.mc_compat = "26.3"
 mod.mc_releases = ["26.3"]
 deps.fabric_api = "0.160.5+26.3"
 deps.fabric_language_kotlin = "1.14.1+kotlin.2.4.20"
+deps.overflowparticles = "vOTB64cU" # Modrinth version id, v1.2.1
 
