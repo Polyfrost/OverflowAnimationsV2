@@ -31,6 +31,9 @@
 		"fabric-language-kotlin": "*",
 		"oneconfigv1": "*"
 	},
+	"breaks": {
+		"animatium": "*"
+	},
 	"custom": {
 		"loom:injected_interfaces": {
 			"net/minecraft/client/renderer/state/CameraRenderState": ["org/polyfrost/overflowanimations/util/states/CameraUtilityRenderState"],
