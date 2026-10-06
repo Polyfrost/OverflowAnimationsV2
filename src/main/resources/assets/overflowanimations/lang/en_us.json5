@@ -41,7 +41,7 @@
 	"overflowanimations.bowArmMovement": "[1.7?] Legacy Third-Person Arm Bow Movement",
 	"overflowanimations.bowArmMovement.description": "Restores old player body movement in third-person when using the bow like in <=1.7?",
 	"overflowanimations.damageTilt": "[*] Damage Tilt",
-	"overflowanimations.damageTilt.description": "1.8: The camera always tilts the same way when you take damage.\n1.19.4: The camera tilts away from where the damage came from.",
+	"overflowanimations.damageTilt.description": "1.8: The camera always tilts the same way when you take damage.\n1.19.4: The camera tilts away from where the damage came from.\nControlled by BetterHurtCam when it is installed.",
 	"overflowanimations.enum.DamageTiltSetting.V1_8": "1.8",
 	"overflowanimations.enum.DamageTiltSetting.VANILLA": "Vanilla",
 	"overflowanimations.enum.DamageTiltSetting.V1_19_4": "1.19.4+",

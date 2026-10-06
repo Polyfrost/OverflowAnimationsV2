@@ -25,25 +25,41 @@
 
 package org.polyfrost.overflowanimations.mixins.v1.entity.items;
 
-import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
-import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.entity.HumanoidMobRenderer;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.polyfrost.overflowanimations.OverflowAnimations;
-import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig;
 
-@Mixin(HumanoidMobRenderer.class)
-public abstract class MixinHumanoidMobRenderer_FixDoubleUsage {
-    @WrapOperation(method = "extractHumanoidRenderState", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;isUsingItem()Z"))
-    private static boolean overflowanimations$fixDoubleBlockingVisual(final LivingEntity instance, final Operation<Boolean> original) {
-        final boolean value = original.call(instance);
-        if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().fixes.fixDoubleUsageVisual && instance == Minecraft.getInstance().player) {
-            return value && Minecraft.getInstance().options.keyUse.isDown();
-        } else {
-            return value;
+@Mixin(LivingEntity.class)
+public abstract class MixinLivingEntity_LateUseSync {
+    @Shadow
+    protected ItemStack useItem;
+
+    @Shadow
+    protected int useItemRemaining;
+
+    @Shadow
+    public abstract boolean isUsingItem();
+
+    @Shadow
+    public abstract InteractionHand getUsedItemHand();
+
+    @Shadow
+    public abstract ItemStack getItemInHand(final InteractionHand hand);
+
+    @Inject(method = "updatingUsingItem", at = @At("HEAD"))
+    private void overflowanimations$lateUseSync(final CallbackInfo ci) {
+        final LivingEntity self = (LivingEntity) (Object) this;
+        if (OverflowAnimations.isEnabled() && self.level().isClientSide() && this.isUsingItem() && this.useItem.isEmpty()) {
+            this.useItem = this.getItemInHand(this.getUsedItemHand());
+            if (!this.useItem.isEmpty()) {
+                this.useItemRemaining = this.useItem.getUseDuration(self);
+            }
         }
     }
 }

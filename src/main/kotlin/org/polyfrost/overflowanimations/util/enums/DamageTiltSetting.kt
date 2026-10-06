@@ -25,8 +25,16 @@
 
 package org.polyfrost.overflowanimations.util.enums
 
+import org.polyfrost.overflowanimations.handler.compatibility.HAS_BETTER_HURT_CAM
+
 enum class DamageTiltSetting : VersionToggle {
     V1_8,
     VANILLA,
-    V1_19_4
+    V1_19_4;
+
+    override val isLegacy: Boolean
+        //? if <=1.8.9 {
+        /*get() = HAS_BETTER_HURT_CAM || super.isLegacy
+        *///?} else
+        get() = !HAS_BETTER_HURT_CAM && super.isLegacy
 }

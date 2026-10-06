@@ -48,6 +48,7 @@ import org.polyfrost.overflowanimations.util.enums.CameraVersionSetting;
 import org.polyfrost.overflowanimations.util.enums.CapeMovementSetting;
 import org.polyfrost.overflowanimations.util.enums.DebugCrosshairSetting;
 import org.polyfrost.overflowanimations.util.enums.FishingRodVersionSetting;
+import org.polyfrost.overflowanimations.util.enums.DamageTiltSetting;
 import org.polyfrost.overflowanimations.util.enums.InventoryEffectsSetting;
 import org.polyfrost.overflowanimations.util.enums.ItemGlintSetting;
 import org.polyfrost.overflowanimations.util.enums.PotionGlintSetting;
@@ -65,7 +66,7 @@ public final class OverflowAnimationsConfig extends Config {
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     private static final String ID = OverflowAnimationsConstants.MOD_ID + ".json";
     private static final Path CONFIG_DIR = FabricLoader.getInstance().getConfigDir();
-    private static final int CONFIG_VERSION = 4;
+    private static final int CONFIG_VERSION = 5;
 
     private static JsonObject savedConfig = readObject(CONFIG_DIR.resolve(ID));
     private static JsonObject legacyConfig = takeLegacyConfig();
@@ -127,6 +128,10 @@ public final class OverflowAnimationsConfig extends Config {
 
             if (this.configVersion < 4) {
                 this.screen.inventoryEffects = InventoryEffectsSetting.V1_21_10;
+            }
+
+            if (this.configVersion < 5 && this.movement.damageTilt == DamageTiltSetting.V1_19_4) {
+                this.movement.damageTilt = DamageTiltSetting.VANILLA;
             }
 
             this.configVersion = CONFIG_VERSION;

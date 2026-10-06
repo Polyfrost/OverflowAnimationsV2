@@ -96,6 +96,9 @@ fun isItemBlacklisted(stack: ItemStack) =
             stack.`is`(ItemTags.SPEARS)
             //?}
 
+fun isItemBlacklistedInThirdPerson(stack: ItemStack) =
+    isItemBlacklisted(stack) || stack.`is`(Items.SPYGLASS)
+
 fun isSwingItemBlacklisted(stack: ItemStack) =
     stack.item is ProjectileItem ||
             stack.item is BucketItem ||

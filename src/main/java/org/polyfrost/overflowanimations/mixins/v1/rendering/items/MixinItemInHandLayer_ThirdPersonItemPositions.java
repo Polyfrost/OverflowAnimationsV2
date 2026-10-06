@@ -79,7 +79,7 @@ public abstract class MixinItemInHandLayer_ThirdPersonItemPositions<S extends Ar
             //?}
     ) {
         final ItemStack stack = state.overflowanimations$getItemHeldByArm(arm);
-        if (OverflowAnimations.isEnabled() && ItemUtilKt.shouldApplyItemPositionsInThirdPerson(state, stack, item.usesBlockLight()) && !ItemUtilKt.isItemBlacklisted(stack)) {
+        if (OverflowAnimations.isEnabled() && ItemUtilKt.shouldApplyItemPositionsInThirdPerson(state, stack, item.usesBlockLight()) && !ItemUtilKt.isItemBlacklistedInThirdPerson(stack)) {
             args.setAll((float) args.get(0) * -1.0F, 0.4375F, (float) args.get(2) / 10 * -1.0F);
         }
     }
@@ -115,7 +115,7 @@ public abstract class MixinItemInHandLayer_ThirdPersonItemPositions<S extends Ar
             //?}
     ) {
         final ItemStack stack = state.overflowanimations$getItemHeldByArm(arm);
-        return !OverflowAnimations.isEnabled() || !ItemUtilKt.shouldApplyItemPositionsInThirdPerson(state, stack, item.usesBlockLight()) || ItemUtilKt.isItemBlacklisted(stack);
+        return !OverflowAnimations.isEnabled() || !ItemUtilKt.shouldApplyItemPositionsInThirdPerson(state, stack, item.usesBlockLight()) || ItemUtilKt.isItemBlacklistedInThirdPerson(stack);
     }
 
     //? if <1.21.9 {
@@ -131,7 +131,7 @@ public abstract class MixinItemInHandLayer_ThirdPersonItemPositions<S extends Ar
         if (OverflowAnimations.isEnabled()) {
             final int direction = EntityUtilKt.getArmMultiplier(arm);
             final ItemStack stack = state.overflowanimations$getItemHeldByArm(arm);
-            if (!stack.isEmpty() && !ItemUtilKt.isItemBlacklisted(stack)) {
+            if (!stack.isEmpty() && !ItemUtilKt.isItemBlacklistedInThirdPerson(stack)) {
                 final boolean isStickRod = OverflowAnimations.isEnabled() &&
                         OverflowAnimationsConfig.instance().items.fishingRodVersion == FishingRodVersionSetting.V1_7 &&
                         stack.is(Items.FISHING_ROD) &&

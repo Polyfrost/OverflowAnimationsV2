@@ -30,9 +30,11 @@ import org.polyfrost.oneconfig.api.config.v1.Property
 import org.polyfrost.oneconfig.api.config.v1.Tree
 import org.polyfrost.overflowanimations.OverflowAnimationsConstants
 import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig
+import org.polyfrost.overflowanimations.handler.compatibility.HAS_BETTER_HURT_CAM
 import org.polyfrost.overflowanimations.handler.config.category.Category
 import java.util.function.Consumer
 import java.util.function.Predicate
+import java.util.function.Supplier
 
 open class EntryBundle(protected val category: Category, private val name: String) : Bundle() {
     companion object {
@@ -42,6 +44,10 @@ open class EntryBundle(protected val category: Category, private val name: Strin
             "disableAdventureUsageSwinging", "disableAdventureUsageParticles", "modernPotionColors",
             "fishingRodLineFov", "fishingRodLineThickness", "legacyDebugScreen"
         )
+
+        private val EXTERNALLY_CONTROLLED_OPTIONS = buildSet {
+            if (HAS_BETTER_HURT_CAM) add("damageTilt")
+        }
 
         // Options whose feature does not exist on (or is compiled out of) this Minecraft version
         private val UNSUPPORTED_OPTIONS = buildSet<String> {
@@ -107,6 +113,9 @@ open class EntryBundle(protected val category: Category, private val name: Strin
             property.addMetadata("category", categoryKey)
             subcategoryKey?.let { property.addMetadata("subcategory", it) }
             property.addMetadata(entry.metadata)
+            if (entry.name in EXTERNALLY_CONTROLLED_OPTIONS) {
+                property.addDisplayCondition(Supplier { Property.Display.DISABLED })
+            }
             @Suppress("UNCHECKED_CAST")
             (entry.listener as Consumer<Any?>?)?.let { listener ->
                 property.addCallback(Predicate { value ->

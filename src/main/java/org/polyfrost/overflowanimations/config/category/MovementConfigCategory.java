@@ -55,7 +55,7 @@ public final class MovementConfigCategory extends Category {
     public SneakBobbingSetting sneakBobbing = SneakBobbingSetting.V1_21_2;
     public boolean deathLimbs = false;
     public boolean bowArmMovement = false;
-    public DamageTiltSetting damageTilt = DamageTiltSetting.V1_19_4;
+    public DamageTiltSetting damageTilt = DamageTiltSetting.VANILLA;
     public boolean offsetHurtTiltTime = false;
     public SlimArmPositionSetting slimArmPosition = SlimArmPositionSetting.V1_15;
 
