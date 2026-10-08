@@ -33,9 +33,6 @@ import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GameGui;
 import net.minecraft.client.render.Window;
-import net.minecraft.entity.living.player.PlayerEntity;
-import net.minecraft.util.math.MathHelper;
-import org.objectweb.asm.Opcodes;
 import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig;
 import org.polyfrost.overflowanimations.legacy.hud.DebugCrosshair;
 import org.polyfrost.overflowanimations.util.enums.DebugCrosshairSetting;
@@ -44,16 +41,12 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
-import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(GameGui.class)
 public abstract class MixinGameGui_CrosshairAndHearts {
     @Shadow
     @Final
     private Minecraft minecraft;
-
-    @Shadow
-    private long lastHealthAnimationTime;
 
     @ModifyVariable(method = "renderStatusBars", at = @At(value = "STORE", ordinal = 0), index = 4)
     private boolean overflowanimations$useOldHealthLogic(boolean value) { // thanks mixces <3
