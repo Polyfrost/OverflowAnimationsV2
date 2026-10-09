@@ -33,7 +33,6 @@ import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GameGui;
 import net.minecraft.client.render.Window;
-import net.minecraft.entity.living.player.PlayerEntity;
 import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig;
 import org.polyfrost.overflowanimations.legacy.hud.DebugCrosshair;
 import org.polyfrost.overflowanimations.util.enums.DebugCrosshairSetting;
@@ -49,13 +48,17 @@ public abstract class MixinGameGui_CrosshairAndHearts {
     @Final
     private Minecraft minecraft;
 
-    @ModifyVariable(method = "renderStatusBars", at = @At("STORE"), ordinal = 0)
-    private boolean overflowanimations$disableHeartFlash(final boolean blinking) {
-        if (!OverflowAnimationsConfig.instance().screen.disableHeartFlash || !(this.minecraft.getCamera() instanceof PlayerEntity)) {
-            return blinking;
-        }
-        final int invulnerableTimer = ((PlayerEntity) this.minecraft.getCamera()).invulnerableTimer;
-        return invulnerableTimer >= 10 && invulnerableTimer / 3 % 2 == 1;
+    @ModifyVariable(method = "renderStatusBars", at = @At(value = "STORE", ordinal = 0), index = 4)
+    private boolean overflowanimations$useOldHealthLogic(boolean value) { // thanks mixces <3
+        /* taken straight from 1.7 */
+        /* MC-2930 aimed to revert this... MC-73438 wants to bring this back.... there is no winning :/ */
+        if (OverflowAnimationsConfig.instance().screen.disableHeartFlash) {
+            boolean i3 = minecraft.player.getMaxHealth() / 3 % 2 == 1;
+            if (minecraft.player.getMaxHealth() < 10) {
+                i3 = false;
+            }
+            return i3;
+        } else return value;
     }
 
     @ModifyExpressionValue(method = "hasCrosshair", at = @At(value = "FIELD", target = "Lnet/minecraft/client/options/GameOptions;debugEnabled:Z"))
