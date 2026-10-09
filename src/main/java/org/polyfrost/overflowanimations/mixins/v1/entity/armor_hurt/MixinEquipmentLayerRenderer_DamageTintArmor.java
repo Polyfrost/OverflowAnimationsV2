@@ -138,6 +138,7 @@ import net.minecraft.client.Minecraft;
 //? if >=26.3 {
 import net.minecraft.client.model.Model;
 import net.minecraft.client.renderer.OrderedSubmitNodeCollector;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 //?}
 import net.minecraft.client.renderer.entity.layers.EquipmentLayerRenderer;
 import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
@@ -147,6 +148,7 @@ import net.minecraft.client.renderer.rendertype.RenderTypes;
 //? if <26.3 {
 /*import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 *///?} else {
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.renderer.texture.UvMapping;
 //?}
 import net.minecraft.resources.Identifier;
@@ -175,6 +177,11 @@ public abstract class MixinEquipmentLayerRenderer_DamageTintArmor {
 
     @Unique
     private static final int overflowanimations$DAMAGE_UV = 196608;
+
+    //? if >=26.3 {
+    @Unique
+    private boolean overflowanimations$glintSwapped;
+    //?}
 
     //? if <1.21.11 {
     /*@WrapOperation(method = RENDER_LAYERS_TARGET, at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/rendertype/RenderType;armorCutoutNoCull(Lnet/minecraft/resources/Identifier;)Lnet/minecraft/client/renderer/rendertype/RenderType;"))
@@ -243,7 +250,8 @@ public abstract class MixinEquipmentLayerRenderer_DamageTintArmor {
     *///?} else {
     @WrapOperation(method = RENDER_LAYERS_TARGET, at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/rendertype/RenderTypes;armorCutoutNoCullGlint(Lnet/minecraft/resources/Identifier;)Lnet/minecraft/client/renderer/rendertype/RenderType;"))
     private <S> RenderType overflowanimations$disableVanillaGlint(final Identifier texture, final Operation<RenderType> original, @Local(argsOnly = true, ordinal = 0) final S state) {
-        if (this.overflowanimations$isArmorHurt(state) && OverflowAnimationsConfig.instance().other.glintAffectsArmorTint && !Minecraft.getInstance().options.improvedTransparency().get()) {
+        if (this.overflowanimations$isArmorHurt(state) && this.overflowanimations$isVanillaProportions(texture)) {
+            this.overflowanimations$glintSwapped = true;
             return RenderTypes.entityCutoutZOffset(texture);
     //?}
         } else {
@@ -257,10 +265,14 @@ public abstract class MixinEquipmentLayerRenderer_DamageTintArmor {
 
     //? if >=26.3 {
     @WrapOperation(method = RENDER_LAYERS_TARGET, at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/OrderedSubmitNodeCollector;submitModel(Lnet/minecraft/client/model/Model;Ljava/lang/Object;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/rendertype/RenderType;IIILnet/minecraft/client/renderer/texture/UvMapping;I)V", ordinal = 0))
-    private <S> void overflowanimations$useOverlayArmorGlint(final OrderedSubmitNodeCollector instance, final Model<? super S> model, final S state, final PoseStack poseStack, final RenderType renderType, final int lightCoords, final int overlayCoords, final int color, final @Nullable UvMapping uvMapping, final int outlineColor, final Operation<Void> original, @Local(argsOnly = true, ordinal = 0) final ItemStack itemStack) {
+    private <S> void overflowanimations$useOverlayArmorGlint(final OrderedSubmitNodeCollector instance, final Model<? super S> model, final S state, final PoseStack poseStack, final RenderType renderType, final int lightCoords, final int overlayCoords, final int color, final @Nullable UvMapping uvMapping, final int outlineColor, final Operation<Void> original, @Local(argsOnly = true, ordinal = 0) final ItemStack itemStack, @Local(argsOnly = true, ordinal = 0) final SubmitNodeCollector submitNodeCollector, @Local(name = "nextOrder") final int nextOrder) {
         original.call(instance, model, state, poseStack, renderType, lightCoords, overlayCoords, color, uvMapping, outlineColor);
+        final boolean glintSwapped = this.overflowanimations$glintSwapped;
+        this.overflowanimations$glintSwapped = false;
         if (this.overflowanimations$isArmorHurt(state) && OverflowAnimationsConfig.instance().other.glintAffectsArmorTint && !Minecraft.getInstance().options.improvedTransparency().get() && itemStack.hasFoil() && ArmorGlint.layers().isEmpty()) {
             original.call(instance, model, state, poseStack, OverflowAnimationsRenderTypes.ARMOR_GLINT, lightCoords, overlayCoords, color, uvMapping, outlineColor);
+        } else if (glintSwapped) {
+            submitNodeCollector.order(nextOrder).submitModel(model, state, poseStack, RenderTypes.trimmedArmorGlint(), lightCoords, OverlayTexture.NO_OVERLAY, -1, null, 0);
     //?}
         }
     }
