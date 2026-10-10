@@ -31,6 +31,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.living.player.PlayerEntity;
+import org.polyfrost.overflowanimations.OverflowAnimations;
 import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig;
 import org.polyfrost.overflowanimations.legacy.hud.VoidFog;
 import org.spongepowered.asm.mixin.Mixin;
@@ -49,7 +50,7 @@ public abstract class MixinGameRenderer_Fog {
 
     @ModifyExpressionValue(method = "setupFog", at = @At(value = "FIELD", target = "Lnet/minecraft/client/render/GameRenderer;renderDistance:F", ordinal = 1))
     private float overflowanimations$voidFog(final float renderDistance, @Local(argsOnly = true) final float tickDelta) {
-        if (!OverflowAnimationsConfig.instance().other.voidFog.hasFog() || !VoidFog.hasVoidFog(this.minecraft.world)) {
+        if (!OverflowAnimations.isEnabled() || !OverflowAnimationsConfig.instance().other.voidFog.hasFog() || !VoidFog.hasVoidFog(this.minecraft.world)) {
             return renderDistance;
         }
         final Entity camera = this.minecraft.getCamera();
@@ -67,6 +68,6 @@ public abstract class MixinGameRenderer_Fog {
 
     @ModifyArg(method = "setupFog", at = @At(value = "INVOKE", target = "Lorg/lwjgl/opengl/GL11;glFogi(II)V", remap = false), index = 1)
     private int overflowanimations$planarSkyFog(final int distanceMode, @Local(argsOnly = true, ordinal = 0) final int mode) {
-        return mode == -1 && OverflowAnimationsConfig.instance().other.planarSkyFog ? GL_EYE_PLANE_ABSOLUTE_NV : distanceMode;
+        return mode == -1 && OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().other.planarSkyFog ? GL_EYE_PLANE_ABSOLUTE_NV : distanceMode;
     }
 }

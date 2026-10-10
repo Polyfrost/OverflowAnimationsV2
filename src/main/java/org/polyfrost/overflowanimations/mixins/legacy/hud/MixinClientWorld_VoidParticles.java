@@ -34,6 +34,7 @@ import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.particle.ParticleType;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import org.polyfrost.overflowanimations.OverflowAnimations;
 import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig;
 import org.polyfrost.overflowanimations.legacy.hud.VoidFog;
 import org.spongepowered.asm.mixin.Mixin;
@@ -45,7 +46,7 @@ import java.util.Random;
 public abstract class MixinClientWorld_VoidParticles {
     @WrapOperation(method = "doRandomDisplayTicks", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/Block;randomDisplayTick(Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/state/BlockState;Ljava/util/Random;)V"))
     private void overflowanimations$voidParticles(final Block instance, final World world, final BlockPos pos, final BlockState state, final Random random, final Operation<Void> original) {
-        if (OverflowAnimationsConfig.instance().other.voidFog.hasParticles() && instance.getMaterial() == Material.AIR) {
+        if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().other.voidFog.hasParticles() && instance.getMaterial() == Material.AIR) {
             if (world.random.nextInt(8) > pos.getY() && VoidFog.hasVoidFog(world)) {
                 world.addParticle(ParticleType.SUSPENDED_DEPTH, pos.getX() + world.random.nextFloat(), pos.getY() + world.random.nextFloat(), pos.getZ() + world.random.nextFloat(), 0.0, 0.0, 0.0);
             }

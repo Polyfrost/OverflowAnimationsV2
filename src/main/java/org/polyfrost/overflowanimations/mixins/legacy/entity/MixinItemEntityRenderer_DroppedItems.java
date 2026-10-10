@@ -37,6 +37,7 @@ import net.minecraft.client.render.platform.GlStateManager;
 import net.minecraft.client.resource.model.ModelTransformations;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.item.ItemStack;
+import org.polyfrost.overflowanimations.OverflowAnimations;
 import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig;
 import org.polyfrost.overflowanimations.config.category.ItemsConfigCategory;
 import org.polyfrost.overflowanimations.legacy.entity.LegacyItemRendering;
@@ -65,19 +66,22 @@ public abstract class MixinItemEntityRenderer_DroppedItems extends EntityRendere
 
     @ModifyArg(method = "applyItemBobbing", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/platform/GlStateManager;rotatef(FFFF)V"), index = 0)
     private float overflowanimations$itemDropsFaceCamera(final float angle, @Local(ordinal = 0) final boolean gui3d) {
-        return !gui3d && OverflowAnimationsConfig.instance().items.itemDropsFaceCamera ? 180.0F - this.dispatcher.cameraYaw : angle;
+        return OverflowAnimations.isEnabled() && !gui3d && OverflowAnimationsConfig.instance().items.itemDropsFaceCamera ? 180.0F - this.dispatcher.cameraYaw : angle;
     }
 
     @Inject(method = "applyItemBobbing", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/platform/GlStateManager;rotatef(FFFF)V", shift = At.Shift.AFTER))
     private void overflowanimations$itemDropsFaceCameraPitch(final ItemEntity entity, final double dx, final double dy, final double dz, final float tickDelta, final BakedModel model, final CallbackInfoReturnable<Integer> cir) {
         final ItemsConfigCategory items = OverflowAnimationsConfig.instance().items;
-        if (!model.isGui3d() && items.itemDropsFaceCamera && items.itemDropsFaceCameraRotationFix) {
+        if (OverflowAnimations.isEnabled() && !model.isGui3d() && items.itemDropsFaceCamera && items.itemDropsFaceCameraRotationFix) {
             GlStateManager.rotatef(-this.dispatcher.cameraPitch, 1.0F, 0.0F, 0.0F);
         }
     }
 
     @Inject(method = "applyItemBobbing", at = @At("TAIL"))
     private void overflowanimations$droppedTransforms(final ItemEntity entity, final double dx, final double dy, final double dz, final float tickDelta, final BakedModel model, final CallbackInfoReturnable<Integer> cir) {
+        if (!OverflowAnimations.isEnabled()) {
+            return;
+        }
         final ItemsConfigCategory items = OverflowAnimationsConfig.instance().items;
         LegacyItemRendering.applyTransform(items.droppedPositionX, items.droppedPositionY, items.droppedPositionZ, items.droppedRotationX, items.droppedRotationY, items.droppedRotationZ, items.droppedScale);
     }

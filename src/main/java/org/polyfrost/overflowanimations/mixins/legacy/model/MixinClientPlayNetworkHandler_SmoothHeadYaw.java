@@ -29,6 +29,7 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.minecraft.client.network.handler.ClientPlayNetworkHandler;
 import net.minecraft.entity.Entity;
+import org.polyfrost.overflowanimations.OverflowAnimations;
 import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig;
 import org.polyfrost.overflowanimations.legacy.model.HeadYawLerp;
 import org.spongepowered.asm.mixin.Mixin;
@@ -38,7 +39,7 @@ import org.spongepowered.asm.mixin.injection.At;
 public abstract class MixinClientPlayNetworkHandler_SmoothHeadYaw {
     @WrapOperation(method = "handleEntityHeadAngles", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;setHeadYaw(F)V"))
     private void overflowanimations$smoothHeadYaw(final Entity entity, final float headYaw, final Operation<Void> original) {
-        if (!OverflowAnimationsConfig.instance().movement.headRotationInterpolation.isLegacy() && entity instanceof HeadYawLerp) {
+        if (OverflowAnimations.isEnabled() && !OverflowAnimationsConfig.instance().movement.headRotationInterpolation.isLegacy() && entity instanceof HeadYawLerp) {
             ((HeadYawLerp) entity).overflowanimations$lerpHeadTo(headYaw, 3);
         } else {
             original.call(entity, headYaw);

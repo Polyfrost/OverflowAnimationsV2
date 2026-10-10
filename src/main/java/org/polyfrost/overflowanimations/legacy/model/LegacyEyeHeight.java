@@ -29,6 +29,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.living.player.PlayerEntity;
 import net.minecraft.util.math.MathHelper;
+import org.polyfrost.overflowanimations.OverflowAnimations;
 import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig;
 import org.polyfrost.overflowanimations.config.category.MovementConfigCategory;
 import org.polyfrost.overflowanimations.util.enums.SneakAnimationSetting;
@@ -51,11 +52,11 @@ public final class LegacyEyeHeight {
 
     private static boolean isSmooth() {
         final SneakAnimationSetting setting = config().sneakAnimation;
-        return setting == SneakAnimationSetting.V1_7 || setting == SneakAnimationSetting.V1_13 || setting == SneakAnimationSetting.V1_14;
+        return OverflowAnimations.isEnabled() && (setting == SneakAnimationSetting.V1_7 || setting == SneakAnimationSetting.V1_13 || setting == SneakAnimationSetting.V1_14);
     }
 
     public static float target(final Entity entity) {
-        if (!config().sneakEyeHeight.isLegacy() && entity instanceof PlayerEntity && entity.isSneaking() && !((PlayerEntity) entity).isSleeping() && !((PlayerEntity) entity).abilities.flying) {
+        if (OverflowAnimations.isEnabled() && !config().sneakEyeHeight.isLegacy() && entity instanceof PlayerEntity && entity.isSneaking() && !((PlayerEntity) entity).isSleeping() && !((PlayerEntity) entity).abilities.flying) {
             return 1.27F;
         }
 
@@ -75,7 +76,7 @@ public final class LegacyEyeHeight {
         final SneakAnimationSetting sneakAnimation = config().sneakAnimation;
         if (isSmooth() && config().longUnsneak && target > eyeHeight) {
             eyeHeight += (target - eyeHeight) * 0.6F;
-        } else if (sneakAnimation == SneakAnimationSetting.V1_13 || sneakAnimation == SneakAnimationSetting.V1_14) {
+        } else if (OverflowAnimations.isEnabled() && (sneakAnimation == SneakAnimationSetting.V1_13 || sneakAnimation == SneakAnimationSetting.V1_14)) {
             eyeHeight += (target - eyeHeight) * 0.5F;
         } else {
             eyeHeight = target;
@@ -87,15 +88,15 @@ public final class LegacyEyeHeight {
             return lastEyeHeight + (eyeHeight - lastEyeHeight) * tickDelta;
         }
 
-        return config().sneakEyeHeight.isLegacy() ? vanillaEyeHeight : target(camera);
+        return !OverflowAnimations.isEnabled() || config().sneakEyeHeight.isLegacy() ? vanillaEyeHeight : target(camera);
     }
 
     public static boolean isOldSneakModel() {
-        return config().sneakAnimation == SneakAnimationSetting.V1_7;
+        return OverflowAnimations.isEnabled() && config().sneakAnimation == SneakAnimationSetting.V1_7;
     }
 
     public static boolean isV1_13LocalSneak(final Entity entity) {
-        return config().sneakAnimation == SneakAnimationSetting.V1_13 && entity == Minecraft.getInstance().player && entity.isSneaking();
+        return OverflowAnimations.isEnabled() && config().sneakAnimation == SneakAnimationSetting.V1_13 && entity == Minecraft.getInstance().player && entity.isSneaking();
     }
 
     public static float modelOffset(final Entity entity, final float tickDelta) {

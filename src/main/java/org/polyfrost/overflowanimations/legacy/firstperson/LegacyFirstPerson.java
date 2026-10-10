@@ -47,6 +47,7 @@ import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.SwordItem;
+import org.polyfrost.overflowanimations.OverflowAnimations;
 import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig;
 import org.polyfrost.overflowanimations.config.category.ItemsConfigCategory;
 import org.polyfrost.overflowanimations.handler.compatibility.ModsKt;
@@ -96,7 +97,7 @@ public final class LegacyFirstPerson {
 
     public static int swingDuration(LivingEntity entity, int original) {
         final ItemsConfigCategory items = items();
-        if (!items.customSwingSpeed) {
+        if (!OverflowAnimations.isEnabled() || !items.customSwingSpeed) {
             return original;
         }
         if (entity.hasStatusEffect(StatusEffect.HASTE) && !items.ignoreHasteSpeed) {
@@ -121,6 +122,9 @@ public final class LegacyFirstPerson {
     }
 
     public static boolean applyFirstPersonTransform(ItemStack stack, BakedModel model) {
+        if (!OverflowAnimations.isEnabled()) {
+            return false;
+        }
         final ItemsConfigCategory items = items();
         final Item item = stack.getItem();
         final Block block = item instanceof BlockItem ? ((BlockItem) item).getBlock() : null;

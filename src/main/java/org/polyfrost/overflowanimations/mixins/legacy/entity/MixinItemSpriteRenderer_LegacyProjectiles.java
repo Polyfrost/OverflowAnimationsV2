@@ -27,6 +27,7 @@ package org.polyfrost.overflowanimations.mixins.legacy.entity;
 
 import net.minecraft.client.render.entity.ItemSpriteRenderer;
 import net.minecraft.client.render.platform.GlStateManager;
+import org.polyfrost.overflowanimations.OverflowAnimations;
 import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig;
 import org.polyfrost.overflowanimations.config.category.ItemsConfigCategory;
 import org.polyfrost.overflowanimations.legacy.entity.LegacyItemRendering;
@@ -51,6 +52,9 @@ public abstract class MixinItemSpriteRenderer_LegacyProjectiles {
 
     @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/entity/ItemRenderer;renderItemInHand(Lnet/minecraft/item/ItemStack;Lnet/minecraft/client/resource/model/ModelTransformations$Type;)V"))
     private void overflowanimations$projectileTransforms(final CallbackInfo ci) {
+        if (!OverflowAnimations.isEnabled()) {
+            return;
+        }
         final ItemsConfigCategory items = OverflowAnimationsConfig.instance().items;
         if (items.legacyProjectiles) {
             GlStateManager.translatef(0.0F, 0.25F, 0.0F);
@@ -62,6 +66,6 @@ public abstract class MixinItemSpriteRenderer_LegacyProjectiles {
     @Unique
     private static boolean overflowanimations$shouldMirror() {
         final ItemsConfigCategory items = OverflowAnimationsConfig.instance().items;
-        return items.legacyProjectiles || items.itemDrops2D;
+        return OverflowAnimations.isEnabled() && (items.legacyProjectiles || items.itemDrops2D);
     }
 }

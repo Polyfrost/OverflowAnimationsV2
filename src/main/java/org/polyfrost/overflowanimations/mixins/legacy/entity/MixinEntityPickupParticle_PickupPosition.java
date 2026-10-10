@@ -30,6 +30,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.particle.EntityPickupParticle;
 import net.minecraft.entity.Entity;
 import org.objectweb.asm.Opcodes;
+import org.polyfrost.overflowanimations.OverflowAnimations;
 import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig;
 import org.polyfrost.overflowanimations.config.category.ItemsConfigCategory;
 import org.spongepowered.asm.mixin.Mixin;
@@ -43,6 +44,9 @@ public abstract class MixinEntityPickupParticle_PickupPosition {
 
     @ModifyExpressionValue(method = "render", at = @At(value = "FIELD", target = "Lnet/minecraft/client/entity/particle/EntityPickupParticle;offsetY:F", opcode = Opcodes.GETFIELD))
     private float overflowanimations$pickupTarget(final float offsetY) {
+        if (!OverflowAnimations.isEnabled()) {
+            return offsetY;
+        }
         final ItemsConfigCategory items = OverflowAnimationsConfig.instance().items;
         final float target = items.itemPickupPosition ? (this.collector == Minecraft.getInstance().player ? 1.12F : -0.5F) : offsetY;
         return target + items.itemPickupOffset;

@@ -32,6 +32,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.overlay.DebugOverlay;
 import net.minecraft.client.render.TextRenderer;
 import net.minecraft.client.render.Window;
+import org.polyfrost.overflowanimations.OverflowAnimations;
 import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig;
 import org.polyfrost.overflowanimations.legacy.hud.LegacyDebugScreen;
 import org.spongepowered.asm.mixin.Final;
@@ -53,7 +54,7 @@ public abstract class MixinDebugOverlay_LegacyScreen {
 
     @Inject(method = "drawGameInfo", at = @At("HEAD"), cancellable = true)
     private void overflowanimations$legacyGameInfo(final CallbackInfo ci) {
-        if (OverflowAnimationsConfig.instance().screen.legacyDebugScreen) {
+        if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().screen.legacyDebugScreen) {
             LegacyDebugScreen.drawGameInfo(this.minecraft, this.textRenderer);
             ci.cancel();
         }
@@ -61,7 +62,7 @@ public abstract class MixinDebugOverlay_LegacyScreen {
 
     @Inject(method = "drawSystemInfo", at = @At("HEAD"), cancellable = true)
     private void overflowanimations$legacySystemInfo(final Window window, final CallbackInfo ci) {
-        if (OverflowAnimationsConfig.instance().screen.legacyDebugScreen) {
+        if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().screen.legacyDebugScreen) {
             LegacyDebugScreen.drawSystemInfo(this.textRenderer, window);
             ci.cancel();
         }
@@ -69,12 +70,12 @@ public abstract class MixinDebugOverlay_LegacyScreen {
 
     @WrapWithCondition(method = {"drawGameInfo", "drawSystemInfo"}, at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/overlay/DebugOverlay;fill(IIIII)V"))
     private boolean overflowanimations$disableDebugHudBackground(final int x1, final int y1, final int x2, final int y2, final int color) {
-        return !OverflowAnimationsConfig.instance().screen.disableDebugHudBackground;
+        return !(OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().screen.disableDebugHudBackground);
     }
 
     @WrapOperation(method = {"drawGameInfo", "drawSystemInfo"}, at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/TextRenderer;draw(Ljava/lang/String;III)I"))
     private int overflowanimations$debugHudTextShadow(final TextRenderer instance, final String text, final int x, final int y, final int color, final Operation<Integer> original) {
-        if (OverflowAnimationsConfig.instance().screen.debugHudTextShadow) {
+        if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().screen.debugHudTextShadow) {
             return instance.draw(text, x, y, color, true);
         } else {
             return original.call(instance, text, x, y, color);

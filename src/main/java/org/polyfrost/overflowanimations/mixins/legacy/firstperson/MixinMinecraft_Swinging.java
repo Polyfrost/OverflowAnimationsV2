@@ -43,6 +43,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.UseAction;
 import net.minecraft.network.packet.c2s.play.ArmSwingC2SPacket;
 import net.minecraft.world.HitResult;
+import org.polyfrost.overflowanimations.OverflowAnimations;
 import org.polyfrost.overflowanimations.config.category.ItemsConfigCategory;
 import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig;
 import org.polyfrost.overflowanimations.legacy.firstperson.LegacyFirstPerson;
@@ -88,7 +89,7 @@ public abstract class MixinMinecraft_Swinging {
     @Inject(method = "handleMouseDown", at = @At("HEAD"))
     private void overflowanimations$usageSwinging(final boolean holdingAttack, final CallbackInfo ci) {
         final ItemsConfigCategory items = LegacyFirstPerson.items();
-        if (!items.itemUsageSwinging || !holdingAttack || this.attackCooldown > 0 || !this.player.hasItemInUse()) {
+        if (!OverflowAnimations.isEnabled() || !items.itemUsageSwinging || !holdingAttack || this.attackCooldown > 0 || !this.player.hasItemInUse()) {
             return;
         }
         final Block block = this.overflowanimations$targetedBlock();
@@ -108,7 +109,7 @@ public abstract class MixinMinecraft_Swinging {
     @Inject(method = "doAttack", at = @At("HEAD"))
     private void overflowanimations$fakeMissPenaltySwing(final CallbackInfo ci) {
         final ItemsConfigCategory items = LegacyFirstPerson.items();
-        if (this.attackCooldown <= 0 || this.attackCooldown > 10 || this.crosshairTarget == null || !this.interactionManager.hasAttackCooldown()) {
+        if (!OverflowAnimations.isEnabled() || this.attackCooldown <= 0 || this.attackCooldown > 10 || this.crosshairTarget == null || !this.interactionManager.hasAttackCooldown()) {
             return;
         }
         if (this.crosshairTarget.type == HitResult.Type.BLOCK && this.overflowanimations$targetedBlock() == null) {
@@ -125,7 +126,7 @@ public abstract class MixinMinecraft_Swinging {
     @WrapOperation(method = "doAttack", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/entity/living/player/LocalClientPlayerEntity;swingArm()V"))
     private void overflowanimations$disableAdventureSwing(final LocalClientPlayerEntity instance, final Operation<Void> original) {
         final Block block = this.overflowanimations$targetedBlock();
-        if (LegacyFirstPerson.items().disableAdventureSwing && block != null && LegacyFirstPerson.cannotMine(instance, block)) {
+        if (OverflowAnimations.isEnabled() && LegacyFirstPerson.items().disableAdventureSwing && block != null && LegacyFirstPerson.cannotMine(instance, block)) {
             instance.networkHandler.sendPacket(new ArmSwingC2SPacket());
         } else {
             original.call(instance);
@@ -134,7 +135,7 @@ public abstract class MixinMinecraft_Swinging {
 
     @ModifyExpressionValue(method = "doUse", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/ClientPlayerInteractionManager;isMiningBlock()Z"))
     private boolean overflowanimations$blockHitWhileMining(final boolean original) {
-        if (!original || !LegacyFirstPerson.items().blockHitWhileMining) {
+        if (!original || !OverflowAnimations.isEnabled() || !LegacyFirstPerson.items().blockHitWhileMining) {
             return original;
         }
         final ItemStack stack = this.player.getItemInHand();
@@ -148,14 +149,14 @@ public abstract class MixinMinecraft_Swinging {
 
     @Inject(method = "doUse", at = @At("TAIL"))
     private void overflowanimations$itemUseCooldownAnimation(final CallbackInfo ci, @Share("wasUsing") final LocalBooleanRef wasUsing) {
-        if (!OverflowAnimationsConfig.instance().fixes.useEquipAnimation.isLegacy() && !wasUsing.get() && this.player.hasItemInUse()) {
+        if (OverflowAnimations.isEnabled() && !OverflowAnimationsConfig.instance().fixes.useEquipAnimation.isLegacy() && !wasUsing.get() && this.player.hasItemInUse()) {
             this.gameRenderer.itemInHandRenderer.onItemUsed();
         }
     }
 
     @Inject(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/entity/living/player/LocalClientPlayerEntity;dropItem(Z)Lnet/minecraft/entity/ItemEntity;"))
     private void overflowanimations$dropItemSwing(final CallbackInfo ci) {
-        if (!LegacyFirstPerson.items().dropSwing.isLegacy() && this.player.getItemInHand() != null) {
+        if (OverflowAnimations.isEnabled() && !LegacyFirstPerson.items().dropSwing.isLegacy() && this.player.getItemInHand() != null) {
             LegacyFirstPerson.fakeSwing(this.player);
         }
     }

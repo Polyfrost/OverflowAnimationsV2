@@ -29,6 +29,7 @@ import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import net.minecraft.client.ClientPlayerInteractionManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.math.BlockPos;
+import org.polyfrost.overflowanimations.OverflowAnimations;
 import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig;
 import org.polyfrost.overflowanimations.legacy.firstperson.LegacyFirstPerson;
 import org.spongepowered.asm.mixin.Final;
@@ -56,7 +57,7 @@ public abstract class MixinClientPlayerInteractionManager_Mining {
 
     @ModifyArg(method = "tickBlockMining", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/world/ClientWorld;updateBlockMiningProgress(ILnet/minecraft/util/math/BlockPos;I)V"), index = 2)
     private int overflowanimations$modernBlockBreaking(final int progress) {
-        if (!OverflowAnimationsConfig.instance().other.blockMiningProgress.isLegacy()) {
+        if (OverflowAnimations.isEnabled() && !OverflowAnimationsConfig.instance().other.blockMiningProgress.isLegacy()) {
             return this.miningProgress > 0.0F ? (int) (this.miningProgress * 10.0F) : -1;
         }
         return progress;
@@ -64,12 +65,12 @@ public abstract class MixinClientPlayerInteractionManager_Mining {
 
     @ModifyExpressionValue(method = "tickBlockMining", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/ClientPlayerInteractionManager;isMiningBlock(Lnet/minecraft/util/math/BlockPos;)Z"))
     private boolean overflowanimations$requireMiningState(final boolean original) {
-        return original && (this.isMiningBlock || !LegacyFirstPerson.items().resetMiningOnUse);
+        return original && (this.isMiningBlock || !(OverflowAnimations.isEnabled() && LegacyFirstPerson.items().resetMiningOnUse));
     }
 
     @Inject(method = "tick", at = @At("HEAD"))
     private void overflowanimations$resetMiningOnUse(final CallbackInfo ci) {
-        if (this.isMiningBlock && LegacyFirstPerson.items().resetMiningOnUse && this.minecraft.player != null && this.minecraft.player.hasItemInUse()) {
+        if (OverflowAnimations.isEnabled() && this.isMiningBlock && LegacyFirstPerson.items().resetMiningOnUse && this.minecraft.player != null && this.minecraft.player.hasItemInUse()) {
             this.isMiningBlock = false;
             this.miningProgress = 0.0F;
             this.minecraft.world.updateBlockMiningProgress(this.minecraft.player.getNetworkId(), this.target, -1);

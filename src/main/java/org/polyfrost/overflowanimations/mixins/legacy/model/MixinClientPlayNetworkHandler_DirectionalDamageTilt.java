@@ -32,6 +32,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.living.LivingEntity;
 import net.minecraft.network.packet.s2c.play.EntityVelocityS2CPacket;
 import net.minecraft.util.math.MathHelper;
+import org.polyfrost.overflowanimations.OverflowAnimations;
 import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -42,7 +43,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class MixinClientPlayNetworkHandler_DirectionalDamageTilt {
     @Inject(method = "handleEntityVelocity", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;lerpVelocity(DDD)V"))
     private void overflowanimations$directionalDamageTilt(final EntityVelocityS2CPacket packet, final CallbackInfo ci, @Local final Entity entity) {
-        if (OverflowAnimationsConfig.instance().movement.damageTilt.isLegacy() || entity != Minecraft.getInstance().player || ((LivingEntity) entity).damagedTimer < 9) {
+        if (!OverflowAnimations.isEnabled() || OverflowAnimationsConfig.instance().movement.damageTilt.isLegacy() || entity != Minecraft.getInstance().player || ((LivingEntity) entity).damagedTimer < 9) {
             return;
         }
 

@@ -28,6 +28,7 @@ package org.polyfrost.overflowanimations.mixins.legacy.model;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import net.minecraft.client.render.GameRenderer;
 import org.objectweb.asm.Opcodes;
+import org.polyfrost.overflowanimations.OverflowAnimations;
 import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig;
 import org.polyfrost.overflowanimations.config.category.MovementConfigCategory;
 import org.spongepowered.asm.mixin.Mixin;
@@ -37,6 +38,9 @@ import org.spongepowered.asm.mixin.injection.At;
 public abstract class MixinGameRenderer_HurtCamera {
     @ModifyExpressionValue(method = "applyHurtCam", at = @At(value = "FIELD", opcode = Opcodes.GETFIELD, target = "Lnet/minecraft/entity/living/LivingEntity;damagedTimer:I"))
     private int overflowanimations$hurtTime(final int original) {
+        if (!OverflowAnimations.isEnabled()) {
+            return original;
+        }
         final MovementConfigCategory config = OverflowAnimationsConfig.instance().movement;
         if (config.disableHurtCamera) {
             return 0;

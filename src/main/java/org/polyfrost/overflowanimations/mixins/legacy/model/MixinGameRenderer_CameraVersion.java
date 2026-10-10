@@ -29,6 +29,7 @@ import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.minecraft.client.render.GameRenderer;
+import org.polyfrost.overflowanimations.OverflowAnimations;
 import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig;
 import org.polyfrost.overflowanimations.util.enums.CameraVersionSetting;
 import org.spongepowered.asm.mixin.Mixin;
@@ -52,7 +53,7 @@ public abstract class MixinGameRenderer_CameraVersion {
 
     @ModifyExpressionValue(method = "transformCamera", at = @At(value = "CONSTANT", args = "floatValue=-0.1F"))
     private float overflowanimations$cameraVersion(final float original) {
-        if (this.overflowanimations$renderingAxisIndicators) {
+        if (!OverflowAnimations.isEnabled() || this.overflowanimations$renderingAxisIndicators) {
             return original;
         }
         final CameraVersionSetting version = OverflowAnimationsConfig.instance().screen.cameraVersion;

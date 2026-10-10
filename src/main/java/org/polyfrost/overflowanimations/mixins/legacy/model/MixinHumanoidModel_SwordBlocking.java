@@ -27,6 +27,7 @@ package org.polyfrost.overflowanimations.mixins.legacy.model;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import net.minecraft.client.render.model.entity.HumanoidModel;
+import org.polyfrost.overflowanimations.OverflowAnimations;
 import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -35,6 +36,6 @@ import org.spongepowered.asm.mixin.injection.At;
 public abstract class MixinHumanoidModel_SwordBlocking {
     @ModifyExpressionValue(method = "setupAnimation", at = @At(value = "CONSTANT", args = "floatValue=-0.5235988F"))
     private float overflowanimations$oldBlockingArm(final float original) {
-        return OverflowAnimationsConfig.instance().other.thirdPersonSwordBlockingPosition ? 0.0F : original;
+        return OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().other.thirdPersonSwordBlockingPosition ? 0.0F : original;
     }
 }

@@ -33,6 +33,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.render.entity.FishingBobberRenderer;
 import net.minecraft.util.math.Vec3d;
 import org.lwjgl.opengl.GL11;
+import org.polyfrost.overflowanimations.OverflowAnimations;
 import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig;
 import org.polyfrost.overflowanimations.config.category.ItemsConfigCategory;
 import org.polyfrost.overflowanimations.util.enums.FishingRodVersionSetting;
@@ -45,6 +46,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class MixinFishingBobberRenderer_FishingLine {
     @WrapOperation(method = "render(Lnet/minecraft/entity/FishingBobberEntity;DDDFF)V", at = @At(value = "NEW", target = "(DDD)Lnet/minecraft/util/math/Vec3d;"))
     private Vec3d overflowanimations$fishingLinePosition(final double x, final double y, final double z, final Operation<Vec3d> original) {
+        if (!OverflowAnimations.isEnabled()) {
+            return original.call(x, y, z);
+        }
         final ItemsConfigCategory items = OverflowAnimationsConfig.instance().items;
         double baseX = x, baseY = y, baseZ = z;
         if (items.fishingRodVersion == FishingRodVersionSetting.V1_13) {
@@ -77,6 +81,9 @@ public abstract class MixinFishingBobberRenderer_FishingLine {
 
     @Inject(method = "render(Lnet/minecraft/entity/FishingBobberEntity;DDDFF)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/vertex/BufferBuilder;begin(ILnet/minecraft/client/render/vertex/VertexFormat;)V", ordinal = 1))
     private void overflowanimations$fishingLineThickness(final CallbackInfo ci, @Share("lineWidth") final LocalFloatRef previousWidth) {
+        if (!OverflowAnimations.isEnabled()) {
+            return;
+        }
         final ItemsConfigCategory items = OverflowAnimationsConfig.instance().items;
         final float width = items.thinFishingRodLineThickness ? 1.0F : items.fishingRodLineThickness;
         if (width > 0.0F) {

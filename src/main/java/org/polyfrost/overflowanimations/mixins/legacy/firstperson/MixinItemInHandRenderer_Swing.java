@@ -36,6 +36,7 @@ import net.minecraft.client.render.ItemInHandRenderer;
 import net.minecraft.client.render.entity.ItemRenderer;
 import net.minecraft.client.render.platform.GlStateManager;
 import net.minecraft.item.ItemStack;
+import org.polyfrost.overflowanimations.OverflowAnimations;
 import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig;
 import org.polyfrost.overflowanimations.config.category.ItemsConfigCategory;
 import org.polyfrost.overflowanimations.legacy.firstperson.LegacyFirstPerson;
@@ -67,26 +68,30 @@ public abstract class MixinItemInHandRenderer_Swing {
     @Unique
     private boolean overflowanimations$movesSwingPivot() {
         final ItemsConfigCategory items = LegacyFirstPerson.items();
-        return items.disableSwingPivot && (items.applyCustomizationToBlockItems || this.itemInHand == null || !LegacyFirstPerson.isBlockLike(this.renderer.getModelShaper().getModel(this.itemInHand)));
+        return OverflowAnimations.isEnabled() && items.disableSwingPivot && (items.applyCustomizationToBlockItems || this.itemInHand == null || !LegacyFirstPerson.isBlockLike(this.renderer.getModelShaper().getModel(this.itemInHand)));
     }
 
     @ModifyArg(method = "renderInFirstPerson", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/ItemInHandRenderer;applyFirstPersonTransform(FF)V"), index = 1)
     private float overflowanimations$itemUsageSwinging(final float swingProgress, @Local(argsOnly = true) final float tickDelta) {
-        return LegacyFirstPerson.items().itemUsageSwinging ? this.minecraft.player.getAttackAnimationProgress(tickDelta) : swingProgress;
+        return OverflowAnimations.isEnabled() && LegacyFirstPerson.items().itemUsageSwinging ? this.minecraft.player.getAttackAnimationProgress(tickDelta) : swingProgress;
     }
 
     @ModifyExpressionValue(method = "renderInFirstPerson", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/entity/living/player/ClientPlayerEntity;getItemUseTimer()I"))
     private int overflowanimations$itemUsageVisualInGUI(final int original) {
-        return OverflowAnimationsConfig.instance().fixes.fixItemUsageVisualInGUI && this.minecraft.screen != null ? 0 : original;
+        return OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().fixes.fixItemUsageVisualInGUI && this.minecraft.screen != null ? 0 : original;
     }
 
     @WrapWithCondition(method = "renderInFirstPerson", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/ItemInHandRenderer;applyHandSway(Lnet/minecraft/client/entity/living/player/LocalClientPlayerEntity;F)V"))
     private boolean overflowanimations$disableHandSway(final ItemInHandRenderer instance, final LocalClientPlayerEntity player, final float tickDelta) {
-        return !LegacyFirstPerson.items().disableHandSway;
+        return !(OverflowAnimations.isEnabled() && LegacyFirstPerson.items().disableHandSway);
     }
 
     @WrapOperation(method = "applyArmSwing", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/platform/GlStateManager;translatef(FFF)V"))
     private void overflowanimations$swingTranslate(final float x, final float y, final float z, final Operation<Void> original) {
+        if (!OverflowAnimations.isEnabled()) {
+            original.call(x, y, z);
+            return;
+        }
         final ItemsConfigCategory items = LegacyFirstPerson.items();
         if (items.disableSwingTranslate) {
             return;

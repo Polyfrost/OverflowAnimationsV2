@@ -29,6 +29,7 @@ import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.render.entity.EntityRenderer;
 import net.minecraft.entity.Entity;
+import org.polyfrost.overflowanimations.OverflowAnimations;
 import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -38,7 +39,7 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 public abstract class MixinEntityRenderer_FlameOffset {
     @ModifyArg(method = "renderOnFire", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/platform/GlStateManager;translatef(FFF)V", ordinal = 1), index = 1)
     private float overflowanimations$flameOffset(final float y, @Local(argsOnly = true) final Entity entity) {
-        if (OverflowAnimationsConfig.instance().other.flameOffset && entity == Minecraft.getInstance().player) {
+        if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().other.flameOffset && entity == Minecraft.getInstance().player) {
             final float scale = entity.width * 1.4F;
             return y + 1.62F * (1.0F - scale) / scale;
         }

@@ -36,6 +36,7 @@ import net.minecraft.client.resource.language.I18n;
 import net.minecraft.entity.living.effect.StatusEffect;
 import net.minecraft.entity.living.effect.StatusEffectInstance;
 import net.minecraft.inventory.menu.InventoryMenu;
+import org.polyfrost.overflowanimations.OverflowAnimations;
 import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig;
 import org.polyfrost.overflowanimations.util.enums.InventoryEffectsSetting;
 import org.spongepowered.asm.mixin.Mixin;
@@ -54,12 +55,12 @@ public abstract class MixinPlayerInventoryScreen_ModernInventoryEffects extends 
 
     @ModifyExpressionValue(method = "checkStatusEffects", at = {@At(value = "CONSTANT", args = "intValue=160"), @At(value = "CONSTANT", args = "intValue=200")})
     private int overflowanimations$keepInventoryCentred(final int original) {
-        return OverflowAnimationsConfig.instance().screen.inventoryEffects == InventoryEffectsSetting.V1_21_10 ? 0 : original;
+        return OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().screen.inventoryEffects == InventoryEffectsSetting.V1_21_10 ? 0 : original;
     }
 
     @WrapOperation(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/game/inventory/PlayerInventoryScreen;drawStatusEffects()V"))
     private void overflowanimations$drawEffectsOnRight(final PlayerInventoryScreen instance, final Operation<Void> original, @Local(argsOnly = true, ordinal = 0) final int mouseX, @Local(argsOnly = true, ordinal = 1) final int mouseY) {
-        if (OverflowAnimationsConfig.instance().screen.inventoryEffects != InventoryEffectsSetting.V1_21_10) {
+        if (!OverflowAnimations.isEnabled() || OverflowAnimationsConfig.instance().screen.inventoryEffects != InventoryEffectsSetting.V1_21_10) {
             original.call(instance);
             return;
         }

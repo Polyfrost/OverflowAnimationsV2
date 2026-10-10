@@ -33,6 +33,7 @@ import net.minecraft.client.render.entity.PlayerRenderer;
 import net.minecraft.client.render.entity.layer.CapeLayer;
 import net.minecraft.client.render.platform.GlStateManager;
 import net.minecraft.util.math.MathHelper;
+import org.polyfrost.overflowanimations.OverflowAnimations;
 import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig;
 import org.polyfrost.overflowanimations.legacy.model.LegacyEyeHeight;
 import org.polyfrost.overflowanimations.util.enums.CapeMovementSetting;
@@ -91,7 +92,7 @@ public abstract class MixinCapeLayer_CapeMovement {
 
     @Unique
     private static boolean overflowanimations$modern() {
-        return OverflowAnimationsConfig.instance().movement.capeMovement == CapeMovementSetting.V1_13;
+        return OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().movement.capeMovement == CapeMovementSetting.V1_13;
     }
 
     @Unique

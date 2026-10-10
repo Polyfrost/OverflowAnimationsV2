@@ -32,6 +32,7 @@ import net.minecraft.client.gui.screen.game.inventory.PlayerInventoryScreen;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.living.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import org.polyfrost.overflowanimations.OverflowAnimations;
 import org.polyfrost.overflowanimations.config.category.ItemsConfigCategory;
 import org.polyfrost.overflowanimations.legacy.firstperson.LegacyFirstPerson;
 import org.spongepowered.asm.mixin.Mixin;
@@ -45,7 +46,7 @@ public abstract class MixinPlayerEntity_DropSwing {
     private void overflowanimations$dropItemSwing(final ItemStack stack, final boolean velocityFromPlayerDirection, final boolean thrownByPlayer, final CallbackInfoReturnable<ItemEntity> cir) {
         final PlayerEntity self = (PlayerEntity) (Object) this;
         final ItemsConfigCategory items = LegacyFirstPerson.items();
-        if (items.dropSwing.isLegacy() || !self.world.isClient || self != Minecraft.getInstance().player) {
+        if (!OverflowAnimations.isEnabled() || items.dropSwing.isLegacy() || !self.world.isClient || self != Minecraft.getInstance().player) {
             return;
         }
         final Screen screen = Minecraft.getInstance().screen;

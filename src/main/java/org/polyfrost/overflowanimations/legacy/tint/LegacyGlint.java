@@ -38,6 +38,7 @@ import net.minecraft.client.resource.model.ModelTransformations;
 import net.minecraft.resource.Identifier;
 import net.minecraft.util.math.Direction;
 import org.lwjgl.opengl.GL11;
+import org.polyfrost.overflowanimations.OverflowAnimations;
 import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig;
 import org.polyfrost.overflowanimations.util.enums.ArmorGlintSetting;
 
@@ -150,7 +151,7 @@ public final class LegacyGlint {
 
     public static boolean replacesArmorGlint() {
         final ArmorGlintSetting setting = OverflowAnimationsConfig.instance().items.armorGlint;
-        return setting == ArmorGlintSetting.V1_15 || setting == ArmorGlintSetting.V1_19_4;
+        return OverflowAnimations.isEnabled() && (setting == ArmorGlintSetting.V1_15 || setting == ArmorGlintSetting.V1_19_4);
     }
 
     public static double modernSpeed() {

@@ -29,6 +29,7 @@ import net.minecraft.client.render.entity.ItemFrameRenderer;
 import net.minecraft.client.render.entity.ItemRenderer;
 import net.minecraft.client.render.platform.GlStateManager;
 import net.minecraft.entity.decoration.ItemFrameEntity;
+import org.polyfrost.overflowanimations.OverflowAnimations;
 import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -43,7 +44,7 @@ public abstract class MixinItemFrameRenderer_FlatItems {
 
     @Inject(method = "renderDisplayItem", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/entity/ItemRenderer;renderItemInHand(Lnet/minecraft/item/ItemStack;Lnet/minecraft/client/resource/model/ModelTransformations$Type;)V"))
     private void overflowanimations$itemFramed2DOffset(final ItemFrameEntity itemFrame, final CallbackInfo ci) {
-        if (OverflowAnimationsConfig.instance().items.itemFramed2D && !this.itemRenderer.isGui3d(itemFrame.getDisplayItem())) {
+        if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().items.itemFramed2D && !this.itemRenderer.isGui3d(itemFrame.getDisplayItem())) {
             GlStateManager.translatef(0.0F, 0.0F, -0.015625F);
         }
     }

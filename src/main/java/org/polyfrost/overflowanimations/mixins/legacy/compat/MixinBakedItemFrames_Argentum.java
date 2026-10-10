@@ -28,6 +28,7 @@ package org.polyfrost.overflowanimations.mixins.legacy.compat;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import dev.rdh.argentum.impl.render.blockentity.BakedItemFrames;
 import net.minecraft.client.render.model.block.BakedModel;
+import org.polyfrost.overflowanimations.OverflowAnimations;
 import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig;
 import org.polyfrost.overflowanimations.legacy.entity.LegacyItemRendering;
 import org.spongepowered.asm.mixin.Mixin;
@@ -39,6 +40,6 @@ import org.spongepowered.asm.mixin.injection.At;
 public abstract class MixinBakedItemFrames_Argentum {
     @ModifyExpressionValue(method = "snapshot", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/item/ItemModelShaper;getModel(Lnet/minecraft/item/ItemStack;)Lnet/minecraft/client/render/model/block/BakedModel;", remap = true))
     private static BakedModel overflowanimations$flatFramedItems(final BakedModel model) {
-        return OverflowAnimationsConfig.instance().items.itemFramed2D && !model.isGui3d() ? LegacyItemRendering.flatModel(model) : model;
+        return OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().items.itemFramed2D && !model.isGui3d() ? LegacyItemRendering.flatModel(model) : model;
     }
 }

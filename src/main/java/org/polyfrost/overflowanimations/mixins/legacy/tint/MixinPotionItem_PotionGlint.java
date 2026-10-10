@@ -27,6 +27,7 @@ package org.polyfrost.overflowanimations.mixins.legacy.tint;
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import net.minecraft.item.PotionItem;
+import org.polyfrost.overflowanimations.OverflowAnimations;
 import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig;
 import org.polyfrost.overflowanimations.util.enums.PotionGlintSetting;
 import org.spongepowered.asm.mixin.Mixin;
@@ -36,6 +37,6 @@ import org.spongepowered.asm.mixin.injection.At;
 public abstract class MixinPotionItem_PotionGlint {
     @ModifyReturnValue(method = "hasEnchantmentGlint", at = @At("RETURN"))
     private boolean overflowanimations$modernPotionGlint(final boolean original) {
-        return original && OverflowAnimationsConfig.instance().items.potionGlint != PotionGlintSetting.V1_19_4;
+        return original && (!OverflowAnimations.isEnabled() || OverflowAnimationsConfig.instance().items.potionGlint != PotionGlintSetting.V1_19_4);
     }
 }

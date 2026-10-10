@@ -27,6 +27,7 @@ package org.polyfrost.overflowanimations.mixins.legacy.model;
 
 import net.minecraft.entity.living.LivingEntity;
 import net.minecraft.util.math.MathHelper;
+import org.polyfrost.overflowanimations.OverflowAnimations;
 import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -43,7 +44,7 @@ public abstract class MixinLivingEntity_BackwardsWalking {
         final LivingEntity self = (LivingEntity) (Object) this;
         final double dx = self.x - self.lastX;
         final double dz = self.z - self.lastZ;
-        if (OverflowAnimationsConfig.instance().movement.backwardsWalking.isLegacy() || (float) (dx * dx + dz * dz) <= 0.0025000002F || this.attackAnimationProgress > 0.0F) {
+        if (!OverflowAnimations.isEnabled() || OverflowAnimationsConfig.instance().movement.backwardsWalking.isLegacy() || (float) (dx * dx + dz * dz) <= 0.0025000002F || this.attackAnimationProgress > 0.0F) {
             return bodyYaw;
         }
 

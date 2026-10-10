@@ -32,6 +32,7 @@ import net.minecraft.block.Blocks;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.client.render.block.BlockRenderDispatcher;
 import net.minecraft.client.render.model.block.BakedModel;
+import org.polyfrost.overflowanimations.OverflowAnimations;
 import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig;
 import org.polyfrost.overflowanimations.legacy.entity.FastGrassModel;
 import org.spongepowered.asm.mixin.Mixin;
@@ -41,11 +42,11 @@ import org.spongepowered.asm.mixin.injection.At;
 public abstract class MixinBlockRenderDispatcher_BlockModels {
     @ModifyExpressionValue(method = "getModel(Lnet/minecraft/block/state/BlockState;Lnet/minecraft/world/WorldView;Lnet/minecraft/util/math/BlockPos;)Lnet/minecraft/client/render/model/block/BakedModel;", at = @At(value = "FIELD", target = "Lnet/minecraft/client/options/GameOptions;allowBlockAlternatives:Z"))
     private boolean overflowanimations$disableRandomBlockRotations(final boolean original) {
-        return original && !OverflowAnimationsConfig.instance().other.disableRandomBlockRotations;
+        return original && !(OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().other.disableRandomBlockRotations);
     }
 
     @ModifyReturnValue(method = "getModel(Lnet/minecraft/block/state/BlockState;Lnet/minecraft/world/WorldView;Lnet/minecraft/util/math/BlockPos;)Lnet/minecraft/client/render/model/block/BakedModel;", at = @At("RETURN"))
     private BakedModel overflowanimations$fastGrass(final BakedModel model, @Local(argsOnly = true) final BlockState state) {
-        return OverflowAnimationsConfig.instance().other.fastGrass && state.getBlock() == Blocks.GRASS ? FastGrassModel.of(model) : model;
+        return OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().other.fastGrass && state.getBlock() == Blocks.GRASS ? FastGrassModel.of(model) : model;
     }
 }

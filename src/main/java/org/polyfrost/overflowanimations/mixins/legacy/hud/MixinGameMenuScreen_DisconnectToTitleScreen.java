@@ -29,6 +29,7 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.menu.GameMenuScreen;
+import org.polyfrost.overflowanimations.OverflowAnimations;
 import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -37,6 +38,6 @@ import org.spongepowered.asm.mixin.injection.At;
 public abstract class MixinGameMenuScreen_DisconnectToTitleScreen {
     @WrapOperation(method = "buttonClicked", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/Minecraft;isIntegratedServerRunning()Z"))
     private boolean overflowanimations$disconnectServerToTitleScreen(final Minecraft instance, final Operation<Boolean> original) {
-        return OverflowAnimationsConfig.instance().screen.disconnectServerToTitleScreen || original.call(instance);
+        return (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().screen.disconnectServerToTitleScreen) || original.call(instance);
     }
 }

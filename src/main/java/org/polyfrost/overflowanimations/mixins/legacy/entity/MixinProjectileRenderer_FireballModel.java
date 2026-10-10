@@ -34,6 +34,7 @@ import net.minecraft.client.resource.model.ModelTransformations;
 import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import org.polyfrost.overflowanimations.OverflowAnimations;
 import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig;
 import org.polyfrost.overflowanimations.config.category.ItemsConfigCategory;
 import org.polyfrost.overflowanimations.legacy.entity.LegacyItemRendering;
@@ -51,7 +52,7 @@ public abstract class MixinProjectileRenderer_FireballModel extends EntityRender
 
     @Inject(method = "render(Lnet/minecraft/entity/projectile/ProjectileEntity;DDDFF)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/platform/GlStateManager;scalef(FFF)V", shift = At.Shift.AFTER), cancellable = true)
     private void overflowanimations$fireballModel(final ProjectileEntity entity, final double dx, final double dy, final double dz, final float yaw, final float tickDelta, final CallbackInfo ci) {
-        if (!OverflowAnimationsConfig.instance().items.fireballModel) {
+        if (!OverflowAnimations.isEnabled() || !OverflowAnimationsConfig.instance().items.fireballModel) {
             return;
         }
 
@@ -69,6 +70,9 @@ public abstract class MixinProjectileRenderer_FireballModel extends EntityRender
 
     @Inject(method = "render(Lnet/minecraft/entity/projectile/ProjectileEntity;DDDFF)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/vertex/BufferBuilder;begin(ILnet/minecraft/client/render/vertex/VertexFormat;)V"))
     private void overflowanimations$fireballSpriteTransforms(final CallbackInfo ci) {
+        if (!OverflowAnimations.isEnabled()) {
+            return;
+        }
         overflowanimations$fireballTransforms();
     }
 

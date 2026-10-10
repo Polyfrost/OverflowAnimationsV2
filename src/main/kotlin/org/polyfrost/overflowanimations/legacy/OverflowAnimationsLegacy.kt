@@ -32,22 +32,61 @@ import net.ornithemc.osl.keybinds.api.KeybindEvents
 import net.ornithemc.osl.keybinds.api.KeybindRegistry
 import net.ornithemc.osl.lifecycle.api.client.MinecraftClientEvents
 import org.lwjgl.input.Keyboard
+import org.polyfrost.oneconfig.api.commands.v1.CommandManager
+import org.polyfrost.oneconfig.api.platform.v1.Platform
+import org.polyfrost.overflowanimations.OverflowAnimations
 import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig
 
 @Entrypoint
 class OverflowAnimationsLegacy : ClientModInitializer {
     private lateinit var configKey: KeyBinding
+    private lateinit var reloadKey: KeyBinding
+    private var openConfig = false
 
     override fun onInitializeClient() {
-        OverflowAnimationsConfig.load()
+        OverflowAnimations.initialize()
 
         KeybindEvents.REGISTER_KEYBINDS.register {
             configKey = KeybindRegistry.register("Open Mod Configuration", Keyboard.KEY_BACKSLASH, "key.category.overflowanimations.common")
+            reloadKey = KeybindRegistry.register("Reload Mod", Keyboard.KEY_END, "key.category.overflowanimations.common")
         }
         MinecraftClientEvents.TICK_END.register { minecraft ->
-            var pressed = false
+            var pressed = openConfig
+            openConfig = false
             while (configKey.consumeClick()) pressed = true
             if (pressed && minecraft.screen == null) OverflowAnimationsConfig.openScreen()
+            var reload = false
+            while (reloadKey.consumeClick()) reload = true
+            if (reload) OverflowAnimations.reload()
         }
+
+        CommandManager.register(
+            CommandManager.literal("overflowanimations")
+                .executes {
+                    // The chat screen closes after the command runs, so the config opens at the end of the tick
+                    openConfig = true
+                    1
+                }
+                .then(CommandManager.literal("on").executes { setEnabled(true) })
+                .then(CommandManager.literal("off").executes { setEnabled(false) })
+                .then(CommandManager.literal("reload").executes {
+                    OverflowAnimations.reload()
+                    message("§aMod reloaded.")
+                })
+        )
+    }
+
+    private fun setEnabled(enabled: Boolean): Int {
+        if (OverflowAnimations.isEnabled() == enabled) {
+            return message("§eMod is already ${if (enabled) "enabled" else "disabled"}!")
+        }
+        OverflowAnimations.enabled = enabled
+        OverflowAnimations.reload()
+        return message(if (enabled) "§aMod enabled." else "§cMod disabled.")
+    }
+
+    private fun message(text: String): Int {
+        Platform.compatibility().displayChatMessage(text)
+        return 1
     }
 }
