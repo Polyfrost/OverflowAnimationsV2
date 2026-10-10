@@ -27,6 +27,7 @@ package org.polyfrost.overflowanimations.util.config
 
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
+//? if >1.8.9
 import com.google.gson.Strictness
 import net.fabricmc.loader.api.FabricLoader
 import org.apache.logging.log4j.LogManager
@@ -36,7 +37,10 @@ import java.nio.file.Files
 object GeneralConfigUtil {
     private val LOGGER = LogManager.getLogger()
 
+    //? if >1.8.9 {
     private val GSON = GsonBuilder().setStrictness(Strictness.LENIENT).create()
+    //?} else
+    //private val GSON = GsonBuilder().create()
     private val CONFIG_FILE = File(FabricLoader.getInstance().gameDir.toFile(), "overflowanimations_utility.json")
     private var data = JsonObject()
 
@@ -46,6 +50,7 @@ object GeneralConfigUtil {
     init {
         // Defaults
         this.data.addProperty(ENABLED_KEY, true)
+        //? if >1.8.9
         this.data.addProperty(PRESET_VERSION_KEY, PresetVersion.VANILLA.name)
     }
 

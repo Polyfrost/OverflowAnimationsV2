@@ -29,6 +29,7 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.minecraft.entity.living.effect.PotionHelper;
 import net.minecraft.entity.living.effect.StatusEffect;
+import org.polyfrost.overflowanimations.OverflowAnimations;
 import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -57,7 +58,7 @@ public abstract class MixinPotionHelper_ModernPotionColors {
 
     @WrapOperation(method = "getColor(Ljava/util/Collection;)I", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/living/effect/StatusEffect;getPotionColor()I"))
     private static int overflowanimations$modernColor(final StatusEffect effect, final Operation<Integer> original) {
-        if (OverflowAnimationsConfig.instance().items.modernPotionColors && effect.id > 0 && effect.id < overflowanimations$MODERN_COLORS.length) {
+        if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().items.modernPotionColors && effect.id > 0 && effect.id < overflowanimations$MODERN_COLORS.length) {
             return overflowanimations$MODERN_COLORS[effect.id];
         }
 
@@ -66,7 +67,7 @@ public abstract class MixinPotionHelper_ModernPotionColors {
 
     @Inject(method = "getColor(IZ)I", at = @At("HEAD"))
     private static void overflowanimations$clearCache(final int metadata, final boolean custom, final CallbackInfoReturnable<Integer> cir) {
-        final boolean modern = OverflowAnimationsConfig.instance().items.modernPotionColors;
+        final boolean modern = OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().items.modernPotionColors;
         if (modern != overflowanimations$cachedModern) {
             overflowanimations$cachedModern = modern;
             COLOR_CACHE.clear();

@@ -30,6 +30,7 @@ import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.client.render.entity.layer.ItemInHandLayer;
 import net.minecraft.entity.living.LivingEntity;
 import net.minecraft.item.ItemStack;
+import org.polyfrost.overflowanimations.OverflowAnimations;
 import org.polyfrost.overflowanimations.legacy.model.LegacyEyeHeight;
 import org.polyfrost.overflowanimations.legacy.model.ThirdPersonItemTransforms;
 import org.spongepowered.asm.mixin.Mixin;
@@ -41,7 +42,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class MixinItemInHandLayer_ThirdPersonPositions {
     @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/ItemInHandRenderer;render(Lnet/minecraft/entity/living/LivingEntity;Lnet/minecraft/item/ItemStack;Lnet/minecraft/client/resource/model/ModelTransformations$Type;)V"))
     private void overflowanimations$thirdPersonPositions(final LivingEntity entity, final float walkAnimationProgress, final float walkAnimationSpeed, final float tickDelta, final float bob, final float yaw, final float pitch, final float scale, final CallbackInfo ci, @Local final ItemStack stack) {
-        ThirdPersonItemTransforms.apply(entity, stack);
+        if (OverflowAnimations.isEnabled()) {
+            ThirdPersonItemTransforms.apply(entity, stack);
+        }
     }
 
     @ModifyExpressionValue(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/living/LivingEntity;isSneaking()Z"))

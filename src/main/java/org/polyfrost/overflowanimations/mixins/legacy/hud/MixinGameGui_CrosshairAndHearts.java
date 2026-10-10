@@ -33,6 +33,7 @@ import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GameGui;
 import net.minecraft.client.render.Window;
+import org.polyfrost.overflowanimations.OverflowAnimations;
 import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig;
 import org.polyfrost.overflowanimations.legacy.hud.DebugCrosshair;
 import org.polyfrost.overflowanimations.util.enums.DebugCrosshairSetting;
@@ -52,7 +53,7 @@ public abstract class MixinGameGui_CrosshairAndHearts {
     private boolean overflowanimations$useOldHealthLogic(boolean value) { // thanks mixces <3
         /* taken straight from 1.7 */
         /* MC-2930 aimed to revert this... MC-73438 wants to bring this back.... there is no winning :/ */
-        if (OverflowAnimationsConfig.instance().screen.disableHeartFlash) {
+        if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().screen.disableHeartFlash) {
             boolean i3 = minecraft.player.getMaxHealth() / 3 % 2 == 1;
             if (minecraft.player.getMaxHealth() < 10) {
                 i3 = false;
@@ -64,18 +65,18 @@ public abstract class MixinGameGui_CrosshairAndHearts {
     @ModifyExpressionValue(method = "hasCrosshair", at = @At(value = "FIELD", target = "Lnet/minecraft/client/options/GameOptions;debugEnabled:Z"))
     private boolean overflowanimations$debugCrosshairStyle(final boolean debugEnabled) {
         final DebugCrosshairSetting style = OverflowAnimationsConfig.instance().screen.debugCrosshairStyle;
-        return debugEnabled && (style == DebugCrosshairSetting.V1_8 || style == DebugCrosshairSetting.VANILLA);
+        return debugEnabled && (!OverflowAnimations.isEnabled() || style == DebugCrosshairSetting.V1_8 || style == DebugCrosshairSetting.VANILLA);
     }
 
     @ModifyReturnValue(method = "hasCrosshair", at = @At("RETURN"))
     private boolean overflowanimations$hideCrosshairInThirdPerson(final boolean original) {
-        return original && (OverflowAnimationsConfig.instance().screen.thirdPersonCrosshair.isLegacy() || this.minecraft.options.perspective == 0);
+        return original && (!OverflowAnimations.isEnabled() || OverflowAnimationsConfig.instance().screen.thirdPersonCrosshair.isLegacy() || this.minecraft.options.perspective == 0);
     }
 
     @WrapOperation(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GameGui;hasCrosshair()Z"))
     private boolean overflowanimations$axisCrosshair(final GameGui instance, final Operation<Boolean> original, final float tickDelta, @Local final Window window) {
         final boolean hasCrosshair = original.call(instance);
-        if (hasCrosshair && OverflowAnimationsConfig.instance().screen.debugCrosshairStyle == DebugCrosshairSetting.V1_12 && DebugCrosshair.isDebugCrosshairVisible(this.minecraft) && this.minecraft.options.perspective == 0) {
+        if (hasCrosshair && OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().screen.debugCrosshairStyle == DebugCrosshairSetting.V1_12 && DebugCrosshair.isDebugCrosshairVisible(this.minecraft) && this.minecraft.options.perspective == 0) {
             DebugCrosshair.render(this.minecraft, window, tickDelta);
             return false;
         }

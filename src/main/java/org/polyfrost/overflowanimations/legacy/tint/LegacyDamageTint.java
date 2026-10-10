@@ -30,6 +30,7 @@ import net.minecraft.client.render.platform.GlStateManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.living.LivingEntity;
 import org.lwjgl.opengl.GL11;
+import org.polyfrost.overflowanimations.OverflowAnimations;
 import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig;
 import org.polyfrost.overflowanimations.config.category.OtherConfigCategory;
 import org.polyfrost.overflowanimations.legacy.compat.Argentum;
@@ -50,7 +51,7 @@ public final class LegacyDamageTint {
     }
 
     public static boolean flatTint() {
-        return config().damageTintStyle == DamageTintSetting.V1_7 && !Argentum.capturingEntity();
+        return OverflowAnimations.isEnabled() && config().damageTintStyle == DamageTintSetting.V1_7 && !Argentum.capturingEntity();
     }
 
     public static boolean usesFlatPass(final Entity entity) {
@@ -59,7 +60,7 @@ public final class LegacyDamageTint {
 
     public static void putCombinerTint(final FloatBuffer buffer, final float brightness) {
         final DamageTintSetting style = config().damageTintStyle;
-        if (style == DamageTintSetting.VANILLA) {
+        if (!OverflowAnimations.isEnabled() || style == DamageTintSetting.VANILLA) {
             return;
         }
 

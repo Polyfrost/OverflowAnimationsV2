@@ -32,6 +32,7 @@ import net.minecraft.client.render.vertex.BufferBuilder;
 import net.minecraft.client.render.vertex.BufferUploader;
 import net.minecraft.client.render.vertex.VertexFormat;
 import org.lwjgl.opengl.GL11;
+import org.polyfrost.overflowanimations.OverflowAnimations;
 import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig;
 import org.polyfrost.overflowanimations.legacy.tint.LegacyGlint;
 import org.polyfrost.overflowanimations.util.enums.ItemGlintSetting;
@@ -70,7 +71,7 @@ public abstract class MixinGuiItemGlints_Argentum {
     @Inject(method = "drawPass", at = @At("HEAD"), cancellable = true)
     private void overflowanimations$glintStyle(final int period, final float direction, final float rotation, final CallbackInfo ci) {
         final ItemGlintSetting style = OverflowAnimationsConfig.instance().items.itemGlint;
-        if (style != ItemGlintSetting.V1_15 && style != ItemGlintSetting.V1_7) {
+        if (!OverflowAnimations.isEnabled() || (style != ItemGlintSetting.V1_15 && style != ItemGlintSetting.V1_7)) {
             return;
         }
 

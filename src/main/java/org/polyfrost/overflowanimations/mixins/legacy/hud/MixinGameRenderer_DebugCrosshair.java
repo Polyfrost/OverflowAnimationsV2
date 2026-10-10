@@ -26,6 +26,7 @@
 package org.polyfrost.overflowanimations.mixins.legacy.hud;
 
 import net.minecraft.client.render.GameRenderer;
+import org.polyfrost.overflowanimations.OverflowAnimations;
 import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig;
 import org.polyfrost.overflowanimations.util.enums.DebugCrosshairSetting;
 import org.spongepowered.asm.mixin.Mixin;
@@ -37,7 +38,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class MixinGameRenderer_DebugCrosshair {
     @Inject(method = "renderAxisIndicators", at = @At("HEAD"), cancellable = true)
     private void overflowanimations$debugCrosshairStyle(final float tickDelta, final CallbackInfo ci) {
-        if (OverflowAnimationsConfig.instance().screen.debugCrosshairStyle != DebugCrosshairSetting.V1_8 && OverflowAnimationsConfig.instance().screen.debugCrosshairStyle != DebugCrosshairSetting.VANILLA) {
+        if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().screen.debugCrosshairStyle != DebugCrosshairSetting.V1_8 && OverflowAnimationsConfig.instance().screen.debugCrosshairStyle != DebugCrosshairSetting.VANILLA) {
             ci.cancel();
         }
     }

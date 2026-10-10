@@ -27,6 +27,7 @@ package org.polyfrost.overflowanimations.mixins.legacy.model;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import net.minecraft.client.render.model.entity.PlayerModel;
+import org.polyfrost.overflowanimations.OverflowAnimations;
 import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig;
 import org.polyfrost.overflowanimations.config.category.MovementConfigCategory;
 import org.polyfrost.overflowanimations.util.enums.CapeMovementSetting;
@@ -38,6 +39,6 @@ public abstract class MixinPlayerModel_CapeSneakPosition {
     @ModifyExpressionValue(method = "setupAnimation", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;isSneaking()Z"))
     private boolean overflowanimations$capeSneakPosition(final boolean original) {
         final MovementConfigCategory movement = OverflowAnimationsConfig.instance().movement;
-        return original && !movement.capeSneakPosition && movement.capeMovement != CapeMovementSetting.V1_13;
+        return original && (!OverflowAnimations.isEnabled() || !movement.capeSneakPosition && movement.capeMovement != CapeMovementSetting.V1_13);
     }
 }

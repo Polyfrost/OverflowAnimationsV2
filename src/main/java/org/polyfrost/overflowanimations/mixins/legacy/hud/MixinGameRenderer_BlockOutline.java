@@ -27,6 +27,7 @@ package org.polyfrost.overflowanimations.mixins.legacy.hud;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import net.minecraft.client.render.GameRenderer;
+import org.polyfrost.overflowanimations.OverflowAnimations;
 import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -35,6 +36,6 @@ import org.spongepowered.asm.mixin.injection.At;
 public abstract class MixinGameRenderer_BlockOutline {
     @ModifyExpressionValue(method = "shouldRenderBlockOutline", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/living/player/PlayerAbilities;canModifyWorld:Z"))
     private boolean overflowanimations$persistentBlockOutline(final boolean canModifyWorld) {
-        return canModifyWorld || OverflowAnimationsConfig.instance().other.persistentBlockOutline;
+        return canModifyWorld || (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().other.persistentBlockOutline);
     }
 }

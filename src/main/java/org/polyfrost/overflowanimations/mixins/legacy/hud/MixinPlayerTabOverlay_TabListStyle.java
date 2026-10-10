@@ -36,6 +36,7 @@ import net.minecraft.client.render.platform.GlStateManager;
 import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.scoreboard.ScoreboardObjective;
 import net.minecraft.text.Formatting;
+import org.polyfrost.overflowanimations.OverflowAnimations;
 import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig;
 import org.polyfrost.overflowanimations.util.enums.TabListSetting;
 import org.spongepowered.asm.mixin.Final;
@@ -66,7 +67,7 @@ public abstract class MixinPlayerTabOverlay_TabListStyle {
 
     @Inject(method = "render", at = @At("HEAD"), cancellable = true)
     private void overflowanimations$legacyTabList(final int width, final Scoreboard scoreboard, final ScoreboardObjective objective, final CallbackInfo ci) {
-        if (OverflowAnimationsConfig.instance().screen.tabListStyle != TabListSetting.V1_7) {
+        if (!OverflowAnimations.isEnabled() || OverflowAnimationsConfig.instance().screen.tabListStyle != TabListSetting.V1_7) {
             return;
         }
         ci.cancel();
@@ -109,6 +110,6 @@ public abstract class MixinPlayerTabOverlay_TabListStyle {
 
     @ModifyVariable(method = "render", at = @At("STORE"), ordinal = 0)
     private boolean overflowanimations$disablePlayerHeads(final boolean showHeads) {
-        return showHeads && OverflowAnimationsConfig.instance().screen.tabListStyle != TabListSetting.NO_HEADS;
+        return showHeads && (!OverflowAnimations.isEnabled() || OverflowAnimationsConfig.instance().screen.tabListStyle != TabListSetting.NO_HEADS);
     }
 }

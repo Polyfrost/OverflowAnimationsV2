@@ -34,6 +34,7 @@ import net.minecraft.client.render.entity.EntityRenderer;
 import net.minecraft.client.resource.model.ModelTransformations;
 import net.minecraft.entity.living.LivingEntity;
 import net.minecraft.item.ItemStack;
+import org.polyfrost.overflowanimations.OverflowAnimations;
 import org.polyfrost.overflowanimations.legacy.tint.LegacyDamageTint;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -43,7 +44,7 @@ public abstract class MixinItemInHandRenderer_DamageTintItems {
     @WrapOperation(method = "renderInFirstPerson", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/ItemInHandRenderer;render(Lnet/minecraft/entity/living/LivingEntity;Lnet/minecraft/item/ItemStack;Lnet/minecraft/client/resource/model/ModelTransformations$Type;)V"))
     private void overflowanimations$tintFirstPersonItem(final ItemInHandRenderer instance, final LivingEntity entity, final ItemStack item, final ModelTransformations.Type transform, final Operation<Void> original, @Local(argsOnly = true) final float tickDelta) {
         MixinLivingEntityRenderer_DamageTintInvoker renderer = null;
-        if (LegacyDamageTint.config().damageTintItems) {
+        if (OverflowAnimations.isEnabled() && LegacyDamageTint.config().damageTintItems) {
             final EntityRenderer<?> entityRenderer = Minecraft.getInstance().getEntityRenderDispatcher().getRenderer(entity);
             if (entityRenderer instanceof MixinLivingEntityRenderer_DamageTintInvoker invoker && invoker.overflowanimations$tint$setupOverlayColor(entity, tickDelta, true)) {
                 renderer = invoker;

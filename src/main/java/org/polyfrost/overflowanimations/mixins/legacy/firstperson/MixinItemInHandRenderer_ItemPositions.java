@@ -42,6 +42,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.PotionItem;
 import net.minecraft.item.SwordItem;
+import org.polyfrost.overflowanimations.OverflowAnimations;
 import org.polyfrost.overflowanimations.config.category.ItemsConfigCategory;
 import org.polyfrost.overflowanimations.legacy.firstperson.LegacyFirstPerson;
 import org.spongepowered.asm.mixin.Final;
@@ -68,6 +69,9 @@ public abstract class MixinItemInHandRenderer_ItemPositions {
 
     @Inject(method = "renderInFirstPerson", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/ItemInHandRenderer;render(Lnet/minecraft/entity/living/LivingEntity;Lnet/minecraft/item/ItemStack;Lnet/minecraft/client/resource/model/ModelTransformations$Type;)V"))
     private void overflowanimations$itemCustomization(final float tickDelta, final CallbackInfo ci) {
+        if (!OverflowAnimations.isEnabled()) {
+            return;
+        }
         final ItemsConfigCategory items = LegacyFirstPerson.items();
         if (!items.applyCustomizationToBlockItems && LegacyFirstPerson.isBlockLike(this.renderer.getModelShaper().getModel(this.itemInHand))) {
             return;
@@ -81,7 +85,7 @@ public abstract class MixinItemInHandRenderer_ItemPositions {
 
     @Inject(method = "applyFirstPersonTransform", at = @At("HEAD"))
     private void overflowanimations$lunarItemPositions(final float equipProgress, final float swingProgress, final CallbackInfo ci) {
-        if (!LegacyFirstPerson.items().lunarItemPositions || this.itemInHand == null) {
+        if (!OverflowAnimations.isEnabled() || !LegacyFirstPerson.items().lunarItemPositions || this.itemInHand == null) {
             return;
         }
         final Item item = this.itemInHand.getItem();
@@ -106,12 +110,19 @@ public abstract class MixinItemInHandRenderer_ItemPositions {
 
     @Inject(method = "applyConsuming", at = @At("HEAD"))
     private void overflowanimations$consumePosition(final CallbackInfo ci) {
+        if (!OverflowAnimations.isEnabled()) {
+            return;
+        }
         final ItemsConfigCategory items = LegacyFirstPerson.items();
         GlStateManager.translatef(items.consumePositionX, items.consumePositionY, items.consumePositionZ);
     }
 
     @WrapOperation(method = "applyConsuming", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/platform/GlStateManager;translatef(FFF)V", ordinal = 0))
     private void overflowanimations$consumeIntensity(final float x, final float y, final float z, final Operation<Void> original) {
+        if (!OverflowAnimations.isEnabled()) {
+            original.call(x, y, z);
+            return;
+        }
         final ItemsConfigCategory items = LegacyFirstPerson.items();
         final float scale = items.scaleConsumeWithItem ? items.itemScaleY : 1.0F;
         original.call(x, y * (1.0F + items.consumeIntensity) * scale, z);
@@ -119,11 +130,15 @@ public abstract class MixinItemInHandRenderer_ItemPositions {
 
     @ModifyArg(method = "applyConsuming", at = @At(value = "INVOKE", target = "Ljava/lang/Math;pow(DD)D"), index = 1)
     private double overflowanimations$consumeSpeed(final double exponent) {
-        return exponent * (1.0F + LegacyFirstPerson.items().consumeSpeed);
+        return OverflowAnimations.isEnabled() ? exponent * (1.0F + LegacyFirstPerson.items().consumeSpeed) : exponent;
     }
 
     @WrapOperation(method = "applyConsuming", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/platform/GlStateManager;translatef(FFF)V", ordinal = 1))
     private void overflowanimations$consumeRotation(final float x, final float y, final float z, final Operation<Void> original) {
+        if (!OverflowAnimations.isEnabled()) {
+            original.call(x, y, z);
+            return;
+        }
         final ItemsConfigCategory items = LegacyFirstPerson.items();
         if (items.scaleConsumeWithItem) {
             original.call(x * items.itemScaleX, y * items.itemScaleY, z * items.itemScaleZ);
@@ -137,17 +152,17 @@ public abstract class MixinItemInHandRenderer_ItemPositions {
 
     @ModifyExpressionValue(method = "applyConsuming", at = @At(value = "CONSTANT", args = "floatValue=0.6F"))
     private float overflowanimations$lunarConsumeX(final float original) {
-        return LegacyFirstPerson.items().lunarItemPositions ? 0.66F : original;
+        return OverflowAnimations.isEnabled() && LegacyFirstPerson.items().lunarItemPositions ? 0.66F : original;
     }
 
     @ModifyExpressionValue(method = "applyConsuming", at = @At(value = "CONSTANT", args = "floatValue=10.0F"))
     private float overflowanimations$lunarConsumePitch(final float original) {
-        return LegacyFirstPerson.items().lunarItemPositions ? 5.0F : original;
+        return OverflowAnimations.isEnabled() && LegacyFirstPerson.items().lunarItemPositions ? 5.0F : original;
     }
 
     @ModifyExpressionValue(method = "applyConsuming", at = @At(value = "CONSTANT", args = "floatValue=30.0F"))
     private float overflowanimations$lunarConsumeRoll(final float original) {
-        return LegacyFirstPerson.items().lunarItemPositions ? 28.0F : original;
+        return OverflowAnimations.isEnabled() && LegacyFirstPerson.items().lunarItemPositions ? 28.0F : original;
     }
 
     @Inject(
@@ -156,6 +171,9 @@ public abstract class MixinItemInHandRenderer_ItemPositions {
             slice = @Slice(from = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/ItemInHandRenderer;applyConsuming(Lnet/minecraft/client/entity/living/player/ClientPlayerEntity;F)V"))
     )
     private void overflowanimations$consumeScale(final float tickDelta, final CallbackInfo ci) {
+        if (!OverflowAnimations.isEnabled()) {
+            return;
+        }
         final float scale = 1.0F + LegacyFirstPerson.items().consumeScale;
         GlStateManager.scalef(scale, scale, scale);
     }
@@ -167,11 +185,15 @@ public abstract class MixinItemInHandRenderer_ItemPositions {
             index = 0
     )
     private float overflowanimations$lunarBlockHitEquip(final float equipProgress) {
-        return LegacyFirstPerson.items().lunarBlockHitPosition ? 0.2F : equipProgress;
+        return OverflowAnimations.isEnabled() && LegacyFirstPerson.items().lunarBlockHitPosition ? 0.2F : equipProgress;
     }
 
     @WrapOperation(method = "applySwordBlocking", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/platform/GlStateManager;translatef(FFF)V"))
     private void overflowanimations$blockingPosition(final float x, final float y, final float z, final Operation<Void> original) {
+        if (!OverflowAnimations.isEnabled()) {
+            original.call(x, y, z);
+            return;
+        }
         final ItemsConfigCategory items = LegacyFirstPerson.items();
         original.call(x + items.blockingPositionX, y + items.blockingPositionY, z + items.blockingPositionZ);
         GlStateManager.rotatef(items.blockingRotationX, 1.0F, 0.0F, 0.0F);
@@ -181,6 +203,9 @@ public abstract class MixinItemInHandRenderer_ItemPositions {
 
     @Inject(method = "applySwordBlocking", at = @At("TAIL"))
     private void overflowanimations$blockingScale(final CallbackInfo ci) {
+        if (!OverflowAnimations.isEnabled()) {
+            return;
+        }
         final ItemsConfigCategory items = LegacyFirstPerson.items();
         if (items.lunarBlockHitPosition) {
             GlStateManager.translatef(-0.55F, 0.2F, 0.1F);
@@ -195,7 +220,7 @@ public abstract class MixinItemInHandRenderer_ItemPositions {
 
     @Inject(method = "applyBowNocking", at = @At("HEAD"))
     private void overflowanimations$lunarBowPosition(final CallbackInfo ci) {
-        if (LegacyFirstPerson.items().lunarItemPositions) {
+        if (OverflowAnimations.isEnabled() && LegacyFirstPerson.items().lunarItemPositions) {
             GlStateManager.translatef(-0.2F, 0.0F, -0.175F);
             GlStateManager.rotatef(1.0F, 0.0F, 0.0F, -1.25F);
         }
@@ -204,7 +229,7 @@ public abstract class MixinItemInHandRenderer_ItemPositions {
     @WrapOperation(method = "applyBowNocking", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/platform/GlStateManager;scalef(FFF)V"))
     private void overflowanimations$legacyBowPull(final float x, final float y, final float z, final Operation<Void> original) {
         final ItemsConfigCategory items = LegacyFirstPerson.items();
-        final boolean legacy = items.itemPositions && !items.lunarItemPositions;
+        final boolean legacy = OverflowAnimations.isEnabled() && items.itemPositions && !items.lunarItemPositions;
         if (legacy) {
             GlStateManager.rotatef(-335.0F, 0.0F, 0.0F, 1.0F);
             GlStateManager.rotatef(-50.0F, 0.0F, 1.0F, 0.0F);

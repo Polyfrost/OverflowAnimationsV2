@@ -31,6 +31,7 @@ import net.minecraft.client.render.platform.GlStateManager;
 import net.minecraft.entity.living.LivingEntity;
 import net.minecraft.entity.living.player.PlayerEntity;
 import net.minecraft.text.Formatting;
+import org.polyfrost.overflowanimations.OverflowAnimations;
 import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig;
 import org.polyfrost.overflowanimations.config.category.MovementConfigCategory;
 import org.spongepowered.asm.mixin.Mixin;
@@ -45,7 +46,7 @@ public abstract class MixinLivingEntityRenderer_Dinnerbone {
     private void overflowanimations$dinnerbone(final LivingEntity entity, final float bob, final float bodyYaw, final float tickDelta, final CallbackInfo ci) {
         final MovementConfigCategory config = OverflowAnimationsConfig.instance().movement;
         final boolean isPlayer = entity instanceof PlayerEntity;
-        if (entity.deathTicks > 0 || !(config.dinnerboneModeEntities || (config.dinnerboneMode && isPlayer)) || overflowanimations$isVanillaDinnerbone(entity, isPlayer)) {
+        if (!OverflowAnimations.isEnabled() || entity.deathTicks > 0 || !(config.dinnerboneModeEntities || (config.dinnerboneMode && isPlayer)) || overflowanimations$isVanillaDinnerbone(entity, isPlayer)) {
             return;
         }
 

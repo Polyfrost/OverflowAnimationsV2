@@ -37,6 +37,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.PotionItem;
 import net.minecraft.resource.Identifier;
 import org.lwjgl.opengl.GL11;
+import org.polyfrost.overflowanimations.OverflowAnimations;
 import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig;
 import org.polyfrost.overflowanimations.config.category.ItemsConfigCategory;
 import org.polyfrost.overflowanimations.legacy.compat.Argentum;
@@ -72,6 +73,10 @@ public abstract class MixinItemRenderer_Glint {
 
     @WrapOperation(method = "renderItem", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/entity/ItemRenderer;renderEnchantmentGlint(Lnet/minecraft/client/render/model/block/BakedModel;)V"))
     private void overflowanimations$modifyGlint(final ItemRenderer instance, BakedModel model, final Operation<Void> original, @Local(argsOnly = true) final ItemStack item) {
+        if (!OverflowAnimations.isEnabled()) {
+            original.call(instance, model);
+            return;
+        }
         final ItemsConfigCategory config = OverflowAnimationsConfig.instance().items;
         if (LegacyGlint.renderingGui && config.itemGlint == ItemGlintSetting.V1_7 && GL11.glIsEnabled(GL11.GL_DEPTH_TEST)) {
             return;
@@ -148,7 +153,7 @@ public abstract class MixinItemRenderer_Glint {
             return;
         }
 
-        if (config.itemGlint == ItemGlintSetting.V1_7 && item.hasEnchantmentGlint()) {
+        if (OverflowAnimations.isEnabled() && config.itemGlint == ItemGlintSetting.V1_7 && item.hasEnchantmentGlint()) {
             this.textureManager.bind(ENCHANTMENT_GLINT_LOCATION);
             LegacyGlint.renderGuiGlint(x, y, 100.0F + this.zOffset);
             this.textureManager.bind(TextureAtlas.BLOCKS_LOCATION);

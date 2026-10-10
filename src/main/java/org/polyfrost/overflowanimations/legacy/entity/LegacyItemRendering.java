@@ -34,6 +34,7 @@ import net.minecraft.client.resource.model.ModelTransformations;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.math.Direction;
+import org.polyfrost.overflowanimations.OverflowAnimations;
 import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig;
 import org.polyfrost.overflowanimations.config.category.ItemsConfigCategory;
 import org.polyfrost.overflowanimations.legacy.tint.LegacyGlint;
@@ -55,7 +56,7 @@ public final class LegacyItemRendering {
     }
 
     public static boolean isFlat(final BakedModel model) {
-        if (model == null || model.isGui3d()) {
+        if (!OverflowAnimations.isEnabled() || model == null || model.isGui3d()) {
             return false;
         }
 
@@ -87,7 +88,7 @@ public final class LegacyItemRendering {
 
     public static String guiUseModel(final ItemStack item) {
         final LocalClientPlayerEntity player = Minecraft.getInstance().player;
-        if (OverflowAnimationsConfig.instance().items.usingTextureInGUI.isLegacy() || player == null) {
+        if (!OverflowAnimations.isEnabled() || OverflowAnimationsConfig.instance().items.usingTextureInGUI.isLegacy() || player == null) {
             return null;
         }
 

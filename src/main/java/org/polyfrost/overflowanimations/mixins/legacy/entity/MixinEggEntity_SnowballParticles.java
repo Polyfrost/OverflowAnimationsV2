@@ -30,6 +30,7 @@ import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.minecraft.entity.particle.ParticleType;
 import net.minecraft.entity.projectile.EggEntity;
 import net.minecraft.world.World;
+import org.polyfrost.overflowanimations.OverflowAnimations;
 import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -38,7 +39,7 @@ import org.spongepowered.asm.mixin.injection.At;
 public abstract class MixinEggEntity_SnowballParticles {
     @WrapOperation(method = "onCollision", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/World;addParticle(Lnet/minecraft/entity/particle/ParticleType;DDDDDD[I)V"))
     private void overflowanimations$eggSnowballParticles(final World instance, final ParticleType type, final double x, final double y, final double z, final double velocityX, final double velocityY, final double velocityZ, final int[] parameters, final Operation<Void> original) {
-        if (OverflowAnimationsConfig.instance().items.eggSnowballParticles) {
+        if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().items.eggSnowballParticles) {
             original.call(instance, ParticleType.SNOWBALL, x, y, z, 0.0, 0.0, 0.0, new int[0]);
         } else {
             original.call(instance, type, x, y, z, velocityX, velocityY, velocityZ, parameters);

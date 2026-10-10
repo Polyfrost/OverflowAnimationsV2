@@ -31,6 +31,7 @@ import net.minecraft.client.render.model.entity.HumanoidModel;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.MathHelper;
 import org.objectweb.asm.Opcodes;
+import org.polyfrost.overflowanimations.OverflowAnimations;
 import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -48,7 +49,7 @@ public abstract class MixinHumanoidModel_WavyArms {
 
     @Inject(method = "setupAnimation", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/math/MathHelper;cos(F)F", ordinal = 2))
     private void overflowanimations$wavyArms(final float walkAnimationProgress, final float walkAnimationSpeed, final float bob, final float yaw, final float pitch, final float scale, final Entity entity, final CallbackInfo ci) {
-        if (OverflowAnimationsConfig.instance().movement.wavyArms) {
+        if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().movement.wavyArms) {
             this.rightArm.rotationX = MathHelper.cos(walkAnimationProgress * 0.6662F + (float) Math.PI) * 2.0F * walkAnimationSpeed;
             this.rightArm.rotationZ = (MathHelper.cos(walkAnimationProgress * 0.2312F) + 1.0F) * walkAnimationSpeed;
             this.leftArm.rotationX = MathHelper.cos(walkAnimationProgress * 0.6662F) * 2.0F * walkAnimationSpeed;
@@ -58,6 +59,6 @@ public abstract class MixinHumanoidModel_WavyArms {
 
     @WrapWithCondition(method = "setupAnimation", at = @At(value = "FIELD", opcode = Opcodes.PUTFIELD, target = "Lnet/minecraft/client/render/model/ModelPart;rotationZ:F", ordinal = 2))
     private boolean overflowanimations$keepWavyArm(final ModelPart part, final float value) {
-        return !OverflowAnimationsConfig.instance().movement.wavyArms;
+        return !(OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().movement.wavyArms);
     }
 }

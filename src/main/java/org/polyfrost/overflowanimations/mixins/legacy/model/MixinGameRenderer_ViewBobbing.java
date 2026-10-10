@@ -27,6 +27,7 @@ package org.polyfrost.overflowanimations.mixins.legacy.model;
 
 import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
 import net.minecraft.client.render.GameRenderer;
+import org.polyfrost.overflowanimations.OverflowAnimations;
 import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -35,6 +36,6 @@ import org.spongepowered.asm.mixin.injection.At;
 public abstract class MixinGameRenderer_ViewBobbing {
     @WrapWithCondition(method = "applyViewBobbing", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/platform/GlStateManager;rotatef(FFFF)V", ordinal = 2))
     private boolean overflowanimations$modernViewBobbing(final float angle, final float x, final float y, final float z) {
-        return OverflowAnimationsConfig.instance().fixes.viewBobbingTilt.isLegacy();
+        return !OverflowAnimations.isEnabled() || OverflowAnimationsConfig.instance().fixes.viewBobbingTilt.isLegacy();
     }
 }

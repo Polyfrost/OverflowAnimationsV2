@@ -32,6 +32,7 @@ import net.minecraft.client.render.model.block.BakedModel;
 import net.minecraft.client.resource.model.ModelManager;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import org.polyfrost.overflowanimations.OverflowAnimations;
 import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig;
 import org.polyfrost.overflowanimations.legacy.entity.MobHeadIcons;
 import org.spongepowered.asm.mixin.Final;
@@ -47,7 +48,7 @@ public abstract class MixinItemModelShaper_MobHeadIcons {
 
     @ModifyReturnValue(method = "getModel(Lnet/minecraft/item/ItemStack;)Lnet/minecraft/client/render/model/block/BakedModel;", at = @At("RETURN"))
     private BakedModel overflowanimations$mobHeadIcons(final BakedModel model, @Local(argsOnly = true) final ItemStack item) {
-        if (OverflowAnimationsConfig.instance().items.mobHeadIcons && item.getItem() == Items.SKULL) {
+        if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().items.mobHeadIcons && item.getItem() == Items.SKULL) {
             return this.modelManager.getModel(MobHeadIcons.getModel(item.getMetadata()));
         }
 

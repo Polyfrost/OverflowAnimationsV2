@@ -30,6 +30,7 @@ import com.llamalad7.mixinextras.sugar.Local;
 import dev.rdh.argentum.impl.render.gui.hud.item.GuiItemIcons;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.PotionItem;
+import org.polyfrost.overflowanimations.OverflowAnimations;
 import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig;
 import org.polyfrost.overflowanimations.config.category.ItemsConfigCategory;
 import org.polyfrost.overflowanimations.util.enums.ItemGlintSetting;
@@ -44,6 +45,6 @@ public abstract class MixinGuiItemIcons_Argentum {
     @ModifyReturnValue(method = "canBake", at = @At("RETURN"))
     private static boolean overflowanimations$liquidOnlyGlint(final boolean original, @Local(argsOnly = true) final ItemStack item) {
         final ItemsConfigCategory config = OverflowAnimationsConfig.instance().items;
-        return original && !(config.potionGlint == PotionGlintSetting.V1_7 && config.itemGlint != ItemGlintSetting.V1_7 && item.getItem() instanceof PotionItem && item.hasEnchantmentGlint());
+        return original && !(OverflowAnimations.isEnabled() && config.potionGlint == PotionGlintSetting.V1_7 && config.itemGlint != ItemGlintSetting.V1_7 && item.getItem() instanceof PotionItem && item.hasEnchantmentGlint());
     }
 }

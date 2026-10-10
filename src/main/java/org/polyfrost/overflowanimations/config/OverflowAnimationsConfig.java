@@ -39,8 +39,10 @@ import org.polyfrost.oneconfig.api.config.v1.Config;
 import org.polyfrost.oneconfig.api.config.v1.Properties;
 import org.polyfrost.oneconfig.api.config.v1.Property;
 import org.polyfrost.oneconfig.api.config.v1.Tree;
+import org.polyfrost.oneconfig.api.config.v1.Visualizer;
 import org.polyfrost.oneconfig.api.ui.v1.OneConfigUI;
 import org.polyfrost.oneconfig.internal.ui.navigation.graph.ModConfigRoute;
+import org.polyfrost.overflowanimations.OverflowAnimations;
 import org.polyfrost.overflowanimations.OverflowAnimationsConstants;
 import org.polyfrost.overflowanimations.config.category.*;
 import org.polyfrost.overflowanimations.util.enums.ArmorGlintSetting;
@@ -87,6 +89,15 @@ public final class OverflowAnimationsConfig extends Config {
     @Override
     protected Tree makeTree() {
         final Tree tree = Tree.tree(ID);
+        final Property<Boolean> toggle = Properties.functional(OverflowAnimations::isEnabled, enabled -> {
+            // the utility config is where this is kept, so the copy saved alongside the options is not read back
+            if (!loaded) return;
+            OverflowAnimations.setEnabled(enabled);
+            OverflowAnimations.reloadIfInWorld();
+        }, "modEnabled", OverflowAnimationsConstants.MOD_ID + ".modEnabled", OverflowAnimationsConstants.MOD_ID + ".modEnabled.description", boolean.class);
+        toggle.addMetadata("visualizer", Visualizer.SwitchVisualizer.class);
+        toggle.addMetadata("category", OverflowAnimationsConstants.MOD_ID + ".category.movement");
+        tree.put(toggle);
         this.movement.bundle().install(tree);
         this.screen.bundle().install(tree);
         this.items.bundle().install(tree);
@@ -97,6 +108,9 @@ public final class OverflowAnimationsConfig extends Config {
         } catch (final NoSuchFieldException exception) {
             throw new IllegalStateException(exception);
         }
+        tree.onAllProps((id, option) -> {
+            if (option != toggle) option.addDisplayCondition(toggle, false);
+        });
         return tree;
     }
 

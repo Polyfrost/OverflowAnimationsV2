@@ -27,6 +27,7 @@ package org.polyfrost.overflowanimations.mixins.legacy.model;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import net.minecraft.client.render.model.entity.PlayerModel;
+import org.polyfrost.overflowanimations.OverflowAnimations;
 import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -35,6 +36,6 @@ import org.spongepowered.asm.mixin.injection.At;
 public abstract class MixinPlayerModel_SlimArmPosition {
     @ModifyExpressionValue(method = "<init>", at = @At(value = "CONSTANT", args = "floatValue=2.5F"))
     private float overflowanimations$modernSlimArmPosition(final float original) {
-        return OverflowAnimationsConfig.instance().movement.slimArmPosition.isLegacy() ? original : 2.0F;
+        return !OverflowAnimations.isEnabled() || OverflowAnimationsConfig.instance().movement.slimArmPosition.isLegacy() ? original : 2.0F;
     }
 }

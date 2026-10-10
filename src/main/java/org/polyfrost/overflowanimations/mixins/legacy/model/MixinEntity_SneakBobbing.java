@@ -29,6 +29,7 @@ import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.client.entity.living.player.LocalClientPlayerEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.MathHelper;
+import org.polyfrost.overflowanimations.OverflowAnimations;
 import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig;
 import org.polyfrost.overflowanimations.util.enums.SneakBobbingSetting;
 import org.spongepowered.asm.mixin.Mixin;
@@ -41,7 +42,7 @@ public abstract class MixinEntity_SneakBobbing {
     @Inject(method = "move", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;makesSteps()Z"))
     private void overflowanimations$modernSneakBobbing(final double dx, final double dy, final double dz, final CallbackInfo ci, @Local(ordinal = 3) final double startX, @Local(ordinal = 5) final double startZ, @Local(ordinal = 0) final boolean sneakingOnGround) {
         final Entity self = (Entity) (Object) this;
-        if (sneakingOnGround && self instanceof LocalClientPlayerEntity && OverflowAnimationsConfig.instance().movement.sneakBobbing == SneakBobbingSetting.V1_21_2) {
+        if (OverflowAnimations.isEnabled() && sneakingOnGround && self instanceof LocalClientPlayerEntity && OverflowAnimationsConfig.instance().movement.sneakBobbing == SneakBobbingSetting.V1_21_2) {
             final double movedX = self.x - startX;
             final double movedZ = self.z - startZ;
             self.walkDistance = (float) (self.walkDistance + MathHelper.sqrt(movedX * movedX + movedZ * movedZ) * 0.6);

@@ -1,5 +1,7 @@
 {
 	"overflowanimations.title": "OverflowAnimations Config",
+	"overflowanimations.modEnabled": "Global Mod Toggle",
+	"overflowanimations.modEnabled.description": "Toggle all mod features on or off.",
 
 	"overflowanimations.category.movement": "Movement",
 	"overflowanimations.category.movement.group.other": "Other",

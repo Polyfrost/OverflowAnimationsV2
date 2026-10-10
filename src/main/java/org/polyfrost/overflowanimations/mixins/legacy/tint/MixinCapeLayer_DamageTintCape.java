@@ -27,6 +27,7 @@ package org.polyfrost.overflowanimations.mixins.legacy.tint;
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import net.minecraft.client.render.entity.layer.CapeLayer;
+import org.polyfrost.overflowanimations.OverflowAnimations;
 import org.polyfrost.overflowanimations.legacy.tint.LegacyDamageTint;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -35,6 +36,6 @@ import org.spongepowered.asm.mixin.injection.At;
 public abstract class MixinCapeLayer_DamageTintCape {
     @ModifyReturnValue(method = "colorsWhenDamaged", at = @At("RETURN"))
     private boolean overflowanimations$tintCape(final boolean original) {
-        return original || LegacyDamageTint.config().damageTintCape;
+        return original || OverflowAnimations.isEnabled() && LegacyDamageTint.config().damageTintCape;
     }
 }

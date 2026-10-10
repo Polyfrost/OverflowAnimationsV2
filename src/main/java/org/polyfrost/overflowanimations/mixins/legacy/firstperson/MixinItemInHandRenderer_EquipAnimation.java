@@ -30,6 +30,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.render.ItemInHandRenderer;
 import net.minecraft.entity.living.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
+import org.polyfrost.overflowanimations.OverflowAnimations;
 import org.polyfrost.overflowanimations.legacy.firstperson.LegacyFirstPerson;
 import org.polyfrost.overflowanimations.util.enums.EquipAnimationVersionSetting;
 import org.spongepowered.asm.mixin.Final;
@@ -54,11 +55,14 @@ public abstract class MixinItemInHandRenderer_EquipAnimation {
 
     @ModifyExpressionValue(method = "tick", at = @At(value = "CONSTANT", args = "floatValue=0.4F"))
     private float overflowanimations$reequipSpeed(final float original) {
-        return LegacyFirstPerson.items().reequipSpeed;
+        return OverflowAnimations.isEnabled() ? LegacyFirstPerson.items().reequipSpeed : original;
     }
 
     @ModifyVariable(method = "tick", at = @At("LOAD"))
     private boolean overflowanimations$equipLogic(final boolean reequip) {
+        if (!OverflowAnimations.isEnabled()) {
+            return reequip;
+        }
         final EquipAnimationVersionSetting setting = LegacyFirstPerson.items().equipAnimationVersion;
         final PlayerInventory inventory = this.minecraft.player.inventory;
         final ItemStack stack = inventory.getSelectedItem();
@@ -83,7 +87,7 @@ public abstract class MixinItemInHandRenderer_EquipAnimation {
 
     @Inject(method = {"onBlockUsed", "onItemUsed"}, at = @At("HEAD"), cancellable = true)
     private void overflowanimations$disableEquipOnUse(final CallbackInfo ci) {
-        if (LegacyFirstPerson.items().equipAnimationVersion == EquipAnimationVersionSetting.DISABLED) {
+        if (OverflowAnimations.isEnabled() && LegacyFirstPerson.items().equipAnimationVersion == EquipAnimationVersionSetting.DISABLED) {
             ci.cancel();
         }
     }
