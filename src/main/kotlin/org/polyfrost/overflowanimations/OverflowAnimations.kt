@@ -80,9 +80,9 @@ object OverflowAnimations {
         OverflowAnimationsConfig.load()
         try {
             GeneralConfigUtil.load()
+            enabled = GeneralConfigUtil.getBoolean(GeneralConfigUtil.ENABLED_KEY)
             LOGGER.info("Successfully loaded the overflowanimations utility config!")
         } catch (_: Exception) {
-            enabled = GeneralConfigUtil.getBoolean(GeneralConfigUtil.ENABLED_KEY)
             LOGGER.error("Failed to load overflowanimations utility config, defaulting...")
         }
 
