@@ -108,15 +108,13 @@ public final class OverflowAnimationsConfig extends Config {
         } catch (final NoSuchFieldException exception) {
             throw new IllegalStateException(exception);
         }
-        tree.onAllProps((id, option) -> {
-            if (option != toggle) option.addDisplayCondition(toggle, false);
-        });
         return tree;
     }
 
     @Override
     protected void initialize(boolean byConfigManager) {
         super.initialize(byConfigManager);
+        if (this.getTree() != null) this.disableAllUnless("modEnabled");
         if (legacyConfig != null && this.getTree() != null) {
             this.importLegacyConfig(legacyConfig);
             legacyConfig = null;
