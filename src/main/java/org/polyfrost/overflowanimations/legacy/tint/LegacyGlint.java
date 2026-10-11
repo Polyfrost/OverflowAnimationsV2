@@ -51,6 +51,7 @@ import java.util.function.Function;
 
 public final class LegacyGlint {
     public static final int ITEM_COLOR = 0xFF61309B;
+    public static final int GUI_ITEM_COLOR = 0xFF8040CC;
     public static final Identifier MODERN_ITEM_TEXTURE = new Identifier("overflowanimations", "textures/misc/enchanted_glint_item.png");
     public static final Identifier MODERN_ARMOR_TEXTURE = new Identifier("overflowanimations", "textures/misc/enchanted_glint_armor.png");
 
@@ -162,6 +163,23 @@ public final class LegacyGlint {
         return OverflowAnimationsConfig.instance().other.maxGlintProperties ? 1.0F : 0.75F;
     }
 
+    public static int itemColor(final int fallback, final int layer) {
+        return fallback;
+    }
+
+    public static int armorColor(final int fallback) {
+        return fallback;
+    }
+
+    public static int gray(final float strength) {
+        final int value = (int) (strength * 255.0F);
+        return 0xFF000000 | value << 16 | value << 8 | value;
+    }
+
+    public static void color(final int argb) {
+        GlStateManager.color4f((argb >> 16 & 255) / 255.0F, (argb >> 8 & 255) / 255.0F, (argb & 255) / 255.0F, 1.0F);
+    }
+
     public static void setupModernTexturing(final float scale, final double speed) {
         final long time = (long) (Minecraft.getTime() * speed * 8.0);
         GlStateManager.translatef(-(time % 110000L) / 110000.0F, (time % 30000L) / 30000.0F, 0.0F);
@@ -179,7 +197,6 @@ public final class LegacyGlint {
         GlStateManager.depthMask(false);
         GlStateManager.enableAlphaTest();
         GlStateManager.enableBlend();
-        GlStateManager.color4f(0.5F, 0.25F, 0.8F, 1.0F);
         final Tesselator tesselator = Tesselator.getInstance();
         final BufferBuilder buffer = tesselator.getBuffer();
         final int left = x - 2;
@@ -187,6 +204,7 @@ public final class LegacyGlint {
         final int size = 20;
         final float texel = 1.0F / 256.0F;
         for (int layer = 0; layer < 2; layer++) {
+            color(itemColor(GUI_ITEM_COLOR, layer));
             GlStateManager.blendFuncSeparate(GL11.GL_DST_ALPHA, GL11.GL_ONE, GL11.GL_ZERO, GL11.GL_ZERO);
             final float period = 3000.0F + layer * 1873;
             final float offset = (Minecraft.getTime() % (long) period) / period * 256.0F;

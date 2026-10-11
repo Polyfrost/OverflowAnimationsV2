@@ -63,7 +63,7 @@ public abstract class MixinAbstractArmorLayer_ModernArmorGlint {
         GlStateManager.depthMask(false);
         GlStateManager.disableLighting();
         GlStateManager.blendFunc(GL11.GL_SRC_COLOR, GL11.GL_ONE);
-        GlStateManager.color4f(strength, strength, strength, 1.0F);
+        LegacyGlint.color(LegacyGlint.armorColor(LegacyGlint.gray(strength)));
         GLX.multiTexCoord2f(GLX.GL_TEXTURE1, 240.0F, 240.0F);
         GlStateManager.matrixMode(GL11.GL_TEXTURE);
         GlStateManager.loadIdentity();

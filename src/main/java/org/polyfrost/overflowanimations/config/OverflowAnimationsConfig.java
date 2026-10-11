@@ -68,7 +68,7 @@ public final class OverflowAnimationsConfig extends Config {
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     private static final String ID = OverflowAnimationsConstants.MOD_ID + ".json";
     private static final Path CONFIG_DIR = FabricLoader.getInstance().getConfigDir();
-    private static final int CONFIG_VERSION = 5;
+    private static final int CONFIG_VERSION = 6;
 
     private static JsonObject savedConfig = readObject(CONFIG_DIR.resolve(ID));
     private static JsonObject legacyConfig = takeLegacyConfig();
@@ -146,6 +146,10 @@ public final class OverflowAnimationsConfig extends Config {
                 this.movement.damageTilt = DamageTiltSetting.VANILLA;
             }
 
+            if (this.configVersion < 6 && this.items.potionGlint == PotionGlintSetting.V1_19_4) {
+                this.items.potionGlint = PotionGlintSetting.VANILLA;
+            }
+
             this.configVersion = CONFIG_VERSION;
             this.save();
         }
@@ -193,9 +197,8 @@ public final class OverflowAnimationsConfig extends Config {
         //? if <=1.8.9 {
         /*items.itemGlint = ItemGlintSetting.V1_15;
         items.armorGlint = ArmorGlintSetting.V1_19_4;
-        items.potionGlint = PotionGlintSetting.V1_19_4;
+        items.potionGlint = PotionGlintSetting.VANILLA;
         *///?}
-        items.modernPotionColors = true;
         items.fishingRodLineFov = true;
     }
 

@@ -84,10 +84,10 @@ public abstract class MixinGuiItemGlints_Argentum {
         GlStateManager.loadIdentity();
         if (modern) {
             Minecraft.getInstance().getTextureManager().bind(LegacyGlint.MODERN_ITEM_TEXTURE);
-            final float strength = LegacyGlint.modernStrength();
-            GlStateManager.color4f(strength, strength, strength, 1.0F);
+            LegacyGlint.color(LegacyGlint.itemColor(LegacyGlint.gray(LegacyGlint.modernStrength()), 0));
             LegacyGlint.setupModernTexturing(8.0F, LegacyGlint.modernSpeed());
         } else {
+            LegacyGlint.color(LegacyGlint.itemColor(LegacyGlint.GUI_ITEM_COLOR, direction > 0.0F ? 0 : 1));
             GlStateManager.blendFuncSeparate(GL11.GL_ONE, GL11.GL_ONE, GL11.GL_SRC_COLOR, GL11.GL_ONE);
             GlStateManager.translatef((float) (Minecraft.getTime() % period) / period, 0.0F, 0.0F);
         }

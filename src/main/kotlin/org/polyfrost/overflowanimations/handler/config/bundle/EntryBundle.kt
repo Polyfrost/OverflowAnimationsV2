@@ -41,7 +41,7 @@ open class EntryBundle(protected val category: Category, private val name: Strin
         private val LEGACY_ONLY_OPTIONS = listOf(
             "disableHurtCamera", "itemDrops2DColors", "fireballModel", "itemPickupOffset", "legacyProjectiles",
             "disableDropSwingInContainers", "resetMiningOnUse", "blockHitWhileMining", "disableAdventureSwing",
-            "disableAdventureUsageSwinging", "disableAdventureUsageParticles", "modernPotionColors",
+            "disableAdventureUsageSwinging", "disableAdventureUsageParticles", "potionColors",
             "fishingRodLineFov", "fishingRodLineThickness", "legacyDebugScreen"
         )
 

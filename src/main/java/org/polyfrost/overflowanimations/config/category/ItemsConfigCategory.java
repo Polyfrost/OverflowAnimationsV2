@@ -33,6 +33,7 @@ import org.polyfrost.overflowanimations.util.enums.DropSwingSetting;
 import org.polyfrost.overflowanimations.util.enums.EquipAnimationVersionSetting;
 import org.polyfrost.overflowanimations.util.enums.FishingRodVersionSetting;
 import org.polyfrost.overflowanimations.util.enums.ItemGlintSetting;
+import org.polyfrost.overflowanimations.util.enums.PotionColorsSetting;
 import org.polyfrost.overflowanimations.util.enums.PotionGlintSetting;
 import org.polyfrost.overflowanimations.util.enums.SwapSwingAnimationSetting;
 import org.polyfrost.overflowanimations.util.enums.UsingTextureInGUISetting;
@@ -41,7 +42,7 @@ public final class ItemsConfigCategory extends Category {
     // (Items) Enchantment Glint
     public ItemGlintSetting itemGlint = ItemGlintSetting.V1_15;
     public ArmorGlintSetting armorGlint = ArmorGlintSetting.V1_19_4;
-    public PotionGlintSetting potionGlint = PotionGlintSetting.V1_19_4;
+    public PotionGlintSetting potionGlint = PotionGlintSetting.VANILLA;
     public boolean glintOnItemDrops2D = true;
     public boolean glintOnItemFramed2D = true;
     // (Items) 2D Drops
@@ -116,7 +117,7 @@ public final class ItemsConfigCategory extends Category {
     public boolean disableAdventureUsageParticles = false;
     public boolean lunarBlockHitPosition = false;
     public boolean lunarItemPositions = false;
-    public boolean modernPotionColors = true;
+    public PotionColorsSetting potionColors = PotionColorsSetting.VANILLA;
     public boolean coloredPotionBottles = false;
     public boolean fishingRodLineFov = true;
     public float fishingRodLineThickness = 0.0F;
@@ -258,7 +259,7 @@ public final class ItemsConfigCategory extends Category {
                 .booleanEntry("lunarItemPositions");
 
         bundle.group("legacy_potions")
-                .booleanEntry("modernPotionColors")
+                .enumEntry("potionColors", PotionColorsSetting.class)
                 .booleanEntry("coloredPotionBottles");
 
         bundle.group("legacy_fishing")

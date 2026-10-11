@@ -112,17 +112,16 @@ public abstract class MixinItemRenderer_Glint {
         this.textureManager.bind(modern ? LegacyGlint.MODERN_ITEM_TEXTURE : ENCHANTMENT_GLINT_LOCATION);
         GlStateManager.matrixMode(GL11.GL_TEXTURE);
         if (modern) {
-            final int strength = (int) (LegacyGlint.modernStrength() * 255.0F);
             GlStateManager.pushMatrix();
             LegacyGlint.setupModernTexturing(8.0F, LegacyGlint.modernSpeed());
-            this.render(model, 0xFF000000 | strength << 16 | strength << 8 | strength);
+            this.render(model, 0xFF000000 | LegacyGlint.itemColor(LegacyGlint.gray(LegacyGlint.modernStrength()), 0));
             GlStateManager.popMatrix();
         } else {
             final BakedModel glint = LegacyGlint.itemSpace(model);
             for (int layer = 0; layer < 2; layer++) {
                 GlStateManager.pushMatrix();
                 LegacyGlint.setupItemTexturing(layer);
-                this.render(glint, LegacyGlint.ITEM_COLOR);
+                this.render(glint, 0xFF000000 | LegacyGlint.itemColor(LegacyGlint.ITEM_COLOR, layer));
                 GlStateManager.popMatrix();
             }
         }
