@@ -1,6 +1,4 @@
-## 5.0.6
-- Add swap swing animation customization
-- Fix vanilla bug where other players holding bows / crossbows / spyglasses before you joining doesn't register
-- Fix spyglass location
-- Make damage tilt VANILLA by default
-- Add global mod toggle on 1.8.9 (`/overflowanimations on|off`)
+## 5.0.7
+- Add mod toggle support
+- 26.3: Fix armor damage tint
+- 1.8: Fix old heart flash not working
