@@ -1,4 +1,3 @@
-## 5.0.7
-- Add mod toggle support
-- 26.3: Fix armor damage tint
-- 1.8: Fix old heart flash not working
+## 5.0.8
+- 1.8: Fix compat with GlintColorizer
+- 1.8: Set potion color default to 1.8
