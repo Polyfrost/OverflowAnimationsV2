@@ -14,7 +14,7 @@ deps.fabric_loader = "0.19.5"
 deps.devauth = "1.2.2"
 deps.mixinconstraints = "1.1.0"
 deps.mixinsquared = "0.2.0"
-deps.oneconfig = "1.2.10"
+deps.oneconfig = "1.4.0"
 deps.junit = "6.1.3"
 
 loomx.loom_version = "1.17-SNAPSHOT"

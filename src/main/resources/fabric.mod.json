@@ -29,7 +29,7 @@
 		"fabric-command-api-v2": "*",
 		"fabric-resource-loader-v0": "*",
 		"fabric-language-kotlin": "*",
-		"oneconfigv1": "*"
+		"oneconfigv1": ">=1.4.0"
 	},
 	"custom": {
 		"loom:injected_interfaces": {
