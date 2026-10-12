@@ -20,7 +20,7 @@ deps.junit = "6.1.3"
 loomx.loom_version = "1.17-SNAPSHOT"
 
 publish.modrinth = "4Hfmgaef"
-publish.curseforge = ""
+publish.curseforge = "1147257"
 
 ["1.8.9"]
 mod.mc_compat = "1.8.9"

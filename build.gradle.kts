@@ -319,15 +319,15 @@ publishMods {
         }
     }
 
-    if (curseforgeId != null) {
+    if (curseforgeId != null && !isOrnithe) {
         curseforge {
             projectId = curseforgeId
-            projectSlug = modid
+            projectSlug = "animations"
             accessToken = findProperty("curseforge.token").toString()
             minecraftVersions.addAll(releases)
             client = true
 
-            if (!isOrnithe) requires("fabric-api")
+            requires("fabric-api")
             requires("oneconfig")
             requires("fabric-language-kotlin")
             optional("modmenu")
