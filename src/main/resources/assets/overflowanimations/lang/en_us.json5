@@ -509,6 +509,8 @@
 	"overflowanimations.swingPositionZ": "Swing Position Z",
 	"overflowanimations.swingPositionZ.description": "Moves the item swing forward or back.",
 	"overflowanimations.category.items.group.swap_position": "Swap Animation",
+	"overflowanimations.instantSwap": "Instant Swap",
+	"overflowanimations.instantSwap.description": "Instantly swaps items in hand with no animation.",
 	"overflowanimations.swapSpeed": "Swap Animation Speed",
 	"overflowanimations.swapSpeed.description": "How fast the item swap animation plays.",
 	"overflowanimations.swapPositionX": "Swap Position X",

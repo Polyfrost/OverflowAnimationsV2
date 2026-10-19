@@ -23,7 +23,7 @@ You can use `/overflowanimations presets` to set everything to a 1.7, 1.8 or mod
 - Old enchantment glint for items, armor and potions
 - 2D dropped items and item frame items, like in 1.7
 - Scale, move and rotate the held item
-- Custom swing and swap animation speed
+- Custom swing and swap animation speed, or instant swap
 - Reposition the eating, drinking, blocking and swap animations, dropped items and projectiles
 - Equip animation and fishing rod position from several versions
 

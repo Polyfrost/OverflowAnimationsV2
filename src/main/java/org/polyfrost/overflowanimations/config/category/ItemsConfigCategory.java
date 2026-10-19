@@ -113,6 +113,7 @@ public final class ItemsConfigCategory extends Category {
     public float itemPickupOffset = 0.0F;
     public boolean entityItemPositions = true;
     public boolean disableHandSway = false;
+    public boolean instantSwap = false;
     public float swapSpeed = 0.4F;
     public float reequipSpeed = 0.4F;
     public boolean smartSwingScaling = false;
@@ -291,6 +292,7 @@ public final class ItemsConfigCategory extends Category {
                 .floatRange("swingPositionZ", -2.0F, 2.0F, 0.01F);
 
         bundle.group("swap_position")
+                .booleanEntry("instantSwap")
                 .floatRange("swapSpeed", 0.1F, 1.0F, 0.05F)
                 .floatRange("swapPositionX", -2.0F, 2.0F, 0.01F)
                 .floatRange("swapPositionY", -2.0F, 2.0F, 0.01F)

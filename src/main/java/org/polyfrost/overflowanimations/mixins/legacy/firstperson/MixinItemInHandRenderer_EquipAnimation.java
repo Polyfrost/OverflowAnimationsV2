@@ -31,6 +31,7 @@ import net.minecraft.client.render.ItemInHandRenderer;
 import net.minecraft.entity.living.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
 import org.polyfrost.overflowanimations.OverflowAnimations;
+import org.polyfrost.overflowanimations.config.category.ItemsConfigCategory;
 import org.polyfrost.overflowanimations.legacy.firstperson.LegacyFirstPerson;
 import org.polyfrost.overflowanimations.util.enums.EquipAnimationVersionSetting;
 import org.spongepowered.asm.mixin.Final;
@@ -53,6 +54,12 @@ public abstract class MixinItemInHandRenderer_EquipAnimation {
     @Shadow
     private int selectedSlot;
 
+    @Shadow
+    private float handHeight;
+
+    @Shadow
+    private float lastHandHeight;
+
     @ModifyExpressionValue(method = "tick", at = @At(value = "CONSTANT", args = "floatValue=0.4F"))
     private float overflowanimations$reequipSpeed(final float original) {
         return OverflowAnimations.isEnabled() ? LegacyFirstPerson.items().swapSpeed : original;
@@ -63,12 +70,15 @@ public abstract class MixinItemInHandRenderer_EquipAnimation {
         if (!OverflowAnimations.isEnabled()) {
             return reequip;
         }
-        final EquipAnimationVersionSetting setting = LegacyFirstPerson.items().equipAnimationVersion;
+        final ItemsConfigCategory items = LegacyFirstPerson.items();
+        final EquipAnimationVersionSetting setting = items.equipAnimationVersion;
         final PlayerInventory inventory = this.minecraft.player.inventory;
         final ItemStack stack = inventory.getSelectedItem();
-        if (setting == EquipAnimationVersionSetting.DISABLED) {
+        if (items.instantSwap || setting == EquipAnimationVersionSetting.DISABLED) {
             this.itemInHand = stack;
             this.selectedSlot = inventory.selectedSlot;
+            this.handHeight = 1.0F;
+            this.lastHandHeight = 1.0F;
             return false;
         } else if (setting == EquipAnimationVersionSetting.V1_7) {
             boolean keep = this.selectedSlot == inventory.selectedSlot && stack == this.itemInHand;
@@ -87,7 +97,7 @@ public abstract class MixinItemInHandRenderer_EquipAnimation {
 
     @Inject(method = {"onBlockUsed", "onItemUsed"}, at = @At("HEAD"), cancellable = true)
     private void overflowanimations$disableEquipOnUse(final CallbackInfo ci) {
-        if (OverflowAnimations.isEnabled() && LegacyFirstPerson.items().equipAnimationVersion == EquipAnimationVersionSetting.DISABLED) {
+        if (OverflowAnimations.isEnabled() && (LegacyFirstPerson.items().instantSwap || LegacyFirstPerson.items().equipAnimationVersion == EquipAnimationVersionSetting.DISABLED)) {
             ci.cancel();
         }
     }

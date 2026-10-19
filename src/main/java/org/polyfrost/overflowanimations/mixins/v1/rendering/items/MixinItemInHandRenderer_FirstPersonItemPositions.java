@@ -89,6 +89,21 @@ public abstract class MixinItemInHandRenderer_FirstPersonItemPositions {
 
     //? if <26.3 {
     /*@Shadow
+    private float oMainHandHeight;
+    *///?}
+
+    //? if <26.3 {
+    /*@Shadow
+    private float offHandHeight;
+    *///?}
+
+    //? if <26.3 {
+    /*@Shadow
+    private float oOffHandHeight;
+    *///?}
+
+    //? if <26.3 {
+    /*@Shadow
     @Final
     private Minecraft minecraft;
     *///?}
@@ -181,11 +196,10 @@ public abstract class MixinItemInHandRenderer_FirstPersonItemPositions {
     //? if <26.3 {
     /*@Inject(method = "applyItemArmTransform", at = @At("TAIL"))
     private void overflowanimations$swapPosition(final PoseStack poseStack, final HumanoidArm arm, final float equipProgress, final CallbackInfo ci) {
-        final float progress = 1.0F - equipProgress;
-        if (progress != 0.0F && OverflowAnimations.isEnabled()) {
+        if (equipProgress != 0.0F && OverflowAnimations.isEnabled()) {
             final ItemsConfigCategory items = OverflowAnimationsConfig.instance().items;
             final int armMultiplier = EntityUtilKt.getArmMultiplier(arm);
-            poseStack.translate(armMultiplier * progress * items.swapPositionX, progress * items.swapPositionY, progress * items.swapPositionZ);
+            poseStack.translate(armMultiplier * equipProgress * items.swapPositionX, equipProgress * items.swapPositionY, equipProgress * items.swapPositionZ);
         }
     }
     *///?}
@@ -646,6 +660,9 @@ public abstract class MixinItemInHandRenderer_FirstPersonItemPositions {
     //? if <26.3 {
     /*@ModifyExpressionValue(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/ItemInHandRenderer;shouldInstantlyReplaceVisibleItem(Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/item/ItemStack;)Z", ordinal = 0))
     private boolean overflowanimations$disableEquipConstraint(final boolean original) {
+        if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().items.instantSwap) {
+            return true;
+        }
         return (!OverflowAnimations.isEnabled() || !OverflowAnimationsConfig.instance().items.equipAnimationVersion.useStackForRendering()) && original;
     }
     *///?}
@@ -653,7 +670,7 @@ public abstract class MixinItemInHandRenderer_FirstPersonItemPositions {
     //? if <26.3 {
     /*@Inject(method = "shouldInstantlyReplaceVisibleItem", at = @At("HEAD"), cancellable = true)
     private void overflowanimations$skipEquipAnimation(final ItemStack currentlyVisibleItem, final ItemStack expectedItem, final CallbackInfoReturnable<Boolean> cir) {
-        if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().items.equipAnimationVersion == EquipAnimationVersionSetting.DISABLED && this.minecraft.player != null) {
+        if (OverflowAnimations.isEnabled() && (OverflowAnimationsConfig.instance().items.instantSwap || OverflowAnimationsConfig.instance().items.equipAnimationVersion == EquipAnimationVersionSetting.DISABLED) && this.minecraft.player != null) {
             cir.setReturnValue(true);
         }
     }
@@ -670,6 +687,13 @@ public abstract class MixinItemInHandRenderer_FirstPersonItemPositions {
     *///?}
         //? if <26.3 {
         /*final LocalPlayer player = this.minecraft.player;
+        if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().items.instantSwap && player != null) {
+            this.overflowanimations$mainHandItem = player.getInventory().getSelectedItem().copy();
+            this.overflowanimations$currentSlot = player.getInventory().getSelectedSlot();
+            this.mainHandHeight = 1.0F;
+            this.oMainHandHeight = 1.0F;
+            return 0.0F;
+        }
         final EquipAnimationVersionSetting setting = OverflowAnimationsConfig.instance().items.equipAnimationVersion;
         if (OverflowAnimations.isEnabled() && setting != EquipAnimationVersionSetting.VANILLA && setting != EquipAnimationVersionSetting.DISABLED && player != null) {
             final float scale = (float) Math.pow(attackAnim, 3);
@@ -710,6 +734,15 @@ public abstract class MixinItemInHandRenderer_FirstPersonItemPositions {
     /*@Inject(method = "tick", at = @At("TAIL"))
     private void overflowanimations$updateFakeItem(final CallbackInfo ci) {
         final LocalPlayer player = this.minecraft.player;
+        if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().items.instantSwap && player != null) {
+            this.mainHandHeight = 1.0F;
+            this.oMainHandHeight = 1.0F;
+            this.offHandHeight = 1.0F;
+            this.oOffHandHeight = 1.0F;
+            this.overflowanimations$mainHandItem = this.mainHandItem.copy();
+            this.overflowanimations$currentSlot = this.minecraft.player.getInventory().getSelectedSlot();
+            return;
+        }
         if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().items.equipAnimationVersion != EquipAnimationVersionSetting.VANILLA && OverflowAnimationsConfig.instance().items.equipAnimationVersion != EquipAnimationVersionSetting.DISABLED && player != null && this.mainHandHeight < 0.1F) {
             this.overflowanimations$mainHandItem = this.mainHandItem.copy();
             this.overflowanimations$currentSlot = this.minecraft.player.getInventory().getSelectedSlot();

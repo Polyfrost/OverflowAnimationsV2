@@ -57,7 +57,27 @@ public abstract class MixinFirstPersonHandsAndItems_EquipAnimationChecks {
 
     //? if >=26.3 {
     @Shadow
+    private float oMainHandHeight;
+    //?}
+
+    //? if >=26.3 {
+    @Shadow
+    private float offHandHeight;
+    //?}
+
+    //? if >=26.3 {
+    @Shadow
+    private float oOffHandHeight;
+    //?}
+
+    //? if >=26.3 {
+    @Shadow
     private ItemStack mainHandItem;
+    //?}
+
+    //? if >=26.3 {
+    @Shadow
+    private ItemStack offHandItem;
     //?}
 
     //? if >=26.3 {
@@ -73,6 +93,9 @@ public abstract class MixinFirstPersonHandsAndItems_EquipAnimationChecks {
     //? if >=26.3 {
     @ModifyExpressionValue(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/FirstPersonHandsAndItems;shouldInstantlyReplaceVisibleItem(Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/client/player/LocalPlayer;)Z", ordinal = 0))
     private boolean overflowanimations$disableEquipConstraint(final boolean original) {
+        if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().items.instantSwap) {
+            return true;
+        }
         return (!OverflowAnimations.isEnabled() || !OverflowAnimationsConfig.instance().items.equipAnimationVersion.useStackForRendering()) && original;
     }
     //?}
@@ -80,7 +103,7 @@ public abstract class MixinFirstPersonHandsAndItems_EquipAnimationChecks {
     //? if >=26.3 {
     @Inject(method = "shouldInstantlyReplaceVisibleItem", at = @At("HEAD"), cancellable = true)
     private void overflowanimations$skipEquipAnimation(final ItemStack currentlyVisibleItem, final ItemStack expectedItem, final LocalPlayer player, final CallbackInfoReturnable<Boolean> cir) {
-        if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().items.equipAnimationVersion == EquipAnimationVersionSetting.DISABLED && player != null) {
+        if (OverflowAnimations.isEnabled() && (OverflowAnimationsConfig.instance().items.instantSwap || OverflowAnimationsConfig.instance().items.equipAnimationVersion == EquipAnimationVersionSetting.DISABLED) && player != null) {
             cir.setReturnValue(true);
         }
     }
@@ -115,6 +138,13 @@ public abstract class MixinFirstPersonHandsAndItems_EquipAnimationChecks {
     // Fixes MC-262560
     @ModifyArg(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/Mth;clamp(FFF)F", ordinal = 2), index = 0)
     private float overflowanimations$handleEquipLogic(final float value, @Local(argsOnly = true, name = "player") final LocalPlayer player, @Local(name = "attackAnim") float attackAnim) {
+        if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().items.instantSwap && player != null) {
+            this.overflowanimations$mainHandItem = player.getInventory().getSelectedItem().copy();
+            this.overflowanimations$currentSlot = player.getInventory().getSelectedSlot();
+            this.mainHandHeight = 1.0F;
+            this.oMainHandHeight = 1.0F;
+            return 0.0F;
+        }
         final EquipAnimationVersionSetting setting = OverflowAnimationsConfig.instance().items.equipAnimationVersion;
         if (OverflowAnimations.isEnabled() && setting != EquipAnimationVersionSetting.VANILLA && setting != EquipAnimationVersionSetting.DISABLED && player != null) {
             final float scale = (float) Math.pow(attackAnim, 3);
@@ -154,6 +184,15 @@ public abstract class MixinFirstPersonHandsAndItems_EquipAnimationChecks {
     //? if >=26.3 {
     @Inject(method = "tick", at = @At("TAIL"))
     private void overflowanimations$updateFakeItem(final LocalPlayer player, final CallbackInfo ci) {
+        if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().items.instantSwap && player != null) {
+            this.mainHandHeight = 1.0F;
+            this.oMainHandHeight = 1.0F;
+            this.offHandHeight = 1.0F;
+            this.oOffHandHeight = 1.0F;
+            this.overflowanimations$mainHandItem = this.mainHandItem.copy();
+            this.overflowanimations$currentSlot = player.getInventory().getSelectedSlot();
+            return;
+        }
         if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().items.equipAnimationVersion != EquipAnimationVersionSetting.VANILLA && OverflowAnimationsConfig.instance().items.equipAnimationVersion != EquipAnimationVersionSetting.DISABLED && player != null && this.mainHandHeight < 0.1F) {
             this.overflowanimations$mainHandItem = this.mainHandItem.copy();
             this.overflowanimations$currentSlot = player.getInventory().getSelectedSlot();
