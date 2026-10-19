@@ -37,6 +37,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.FirstPersonHandsAndItemsRenderer;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.entity.state.AvatarRenderState;
 import net.minecraft.client.renderer.item.ItemStackRenderState;
@@ -102,7 +103,7 @@ public abstract class MixinFirstPersonHandsAndItemsRenderer_FirstPersonItemPosit
             float scaleX = 1.0F + items.swingPositionX;
             float scaleY = 1.0F - items.swingPositionY;
             float scaleZ = 1.0F + items.swingPositionZ;
-            if (items.smartSwingScaling) {
+            if (items.smartSwingScaling && !items.scaleAnimationsWithItem) {
                 scaleX *= items.itemScaleX;
                 scaleY *= items.itemScaleY;
                 scaleZ *= items.itemScaleZ;
@@ -162,7 +163,7 @@ public abstract class MixinFirstPersonHandsAndItemsRenderer_FirstPersonItemPosit
     private void overflowanimations$consumeIntensity(final PoseStack instance, final float x, final float y, final float z, final Operation<Void> original) {
         if (OverflowAnimations.isEnabled()) {
             final ItemsConfigCategory items = OverflowAnimationsConfig.instance().items;
-            final float scale = items.scaleConsumeWithItem ? items.itemScaleY : 1.0F;
+            final float scale = items.scaleConsumeWithItem && !items.scaleAnimationsWithItem ? items.itemScaleY : 1.0F;
             original.call(instance, x, y * (1.0F + items.consumeIntensity) * scale, z);
         } else {
             original.call(instance, x, y, z);
@@ -182,7 +183,7 @@ public abstract class MixinFirstPersonHandsAndItemsRenderer_FirstPersonItemPosit
     private void overflowanimations$consumeRotation(final PoseStack instance, final float x, final float y, final float z, final Operation<Void> original, @Local(argsOnly = true) final HumanoidArm arm) {
         if (OverflowAnimations.isEnabled()) {
             final ItemsConfigCategory items = OverflowAnimationsConfig.instance().items;
-            if (items.scaleConsumeWithItem) {
+            if (items.scaleConsumeWithItem && !items.scaleAnimationsWithItem) {
                 original.call(instance, x * items.itemScaleX, y * items.itemScaleY, z * items.itemScaleZ);
             } else {
                 original.call(instance, x, y, z);
@@ -229,7 +230,7 @@ public abstract class MixinFirstPersonHandsAndItemsRenderer_FirstPersonItemPosit
     @WrapMethod(method = "applyItemArmAttackTransform")
     private void overflowanimations$modifySwingPivot(final PoseStack poseStack, final HumanoidArm arm, final float attackValue, final Operation<Void> original) {
         final ItemsConfigCategory items = OverflowAnimationsConfig.instance().items;
-        final boolean shouldApply = OverflowAnimations.isEnabled() && items.disableSwingPivot;
+        final boolean shouldApply = OverflowAnimations.isEnabled() && items.disableSwingPivot && !items.scaleAnimationsWithItem;
         if (shouldApply) {
             poseStack.translate(items.itemOffsetX * overflowanimations$TRANSLATE_OFFSET_MULTIPLIER, items.itemOffsetY * overflowanimations$TRANSLATE_OFFSET_MULTIPLIER, items.itemOffsetZ * overflowanimations$TRANSLATE_OFFSET_MULTIPLIER);
         }
@@ -315,81 +316,124 @@ public abstract class MixinFirstPersonHandsAndItemsRenderer_FirstPersonItemPosit
     //?}
 
     //? if >=26.3 {
+    // Offsets and scales around the item's resting position before any animation runs, so the swing, block-hit and eating motion shrinks and moves with the item.
+    @Inject(method = "submitArmWithItem", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/PoseStack;pushPose()V", ordinal = 0, shift = At.Shift.AFTER))
+    private void overflowanimations$scaleAnimationsWithItem(final PlayerRenderState playerState, final FirstPersonHandsAndItemsRenderState state, final float tickDelta, final float xRot, final InteractionHand hand, final float attack, final ItemStack itemStack, final float inverseArmHeight, final PoseStack poseStack, final SubmitNodeCollector submitNodeCollector, final int lightCoords, final CallbackInfo ci) {
+        if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().items.scaleAnimationsWithItem && playerState.avatarRenderState != null && !itemStack.isEmpty() && !itemStack.has(DataComponents.MAP_ID)) {
+            final int direction = EntityUtilKt.getHandMultiplier(playerState.avatarRenderState, hand);
+            final ItemStackRenderState itemStackRenderState = hand == InteractionHand.MAIN_HAND ? state.mainHandRenderState : state.offHandRenderState;
+            final PoseStack rest = overflowanimations$restingPose(itemStack, itemStackRenderState, direction, false);
+            final PoseStack customized = overflowanimations$restingPose(itemStack, itemStackRenderState, direction, true);
+            poseStack.mulPose(customized.last().pose().mul(rest.last().pose().invert()));
+        }
+    }
+    //?}
+
+    //? if >=26.3 {
+    @Inject(method = "submitArmWithItem", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/FirstPersonHandsAndItemsRenderer;renderPlayerArm(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;IFFLnet/minecraft/world/entity/HumanoidArm;Lnet/minecraft/client/renderer/state/level/PlayerRenderState;)V"))
+    private void overflowanimations$scaleHand(final PlayerRenderState playerState, final FirstPersonHandsAndItemsRenderState state, final float tickDelta, final float xRot, final InteractionHand hand, final float attack, final ItemStack itemStack, final float inverseArmHeight, final PoseStack poseStack, final SubmitNodeCollector submitNodeCollector, final int lightCoords, final CallbackInfo ci) {
+        final ItemsConfigCategory items = OverflowAnimationsConfig.instance().items;
+        if (OverflowAnimations.isEnabled() && items.scaleHandWithItem && playerState.avatarRenderState != null) {
+            FirstPersonUtilKt.applyHandCustomization(poseStack, EntityUtilKt.getHandMultiplier(playerState.avatarRenderState, hand), items);
+        }
+    }
+    //?}
+
+    //? if >=26.3 {
+    @Unique
+    private static PoseStack overflowanimations$restingPose(final ItemStack itemStack, final ItemStackRenderState itemStackRenderState, final int direction, final boolean offsetAndScale) {
+        final PoseStack poseStack = new PoseStack();
+        if (OverflowAnimationsConfig.instance().items.lunarItemPositions) {
+            FirstPersonUtilKt.applyLunarItemPosition(poseStack, itemStack, direction);
+        }
+        poseStack.translate(direction * 0.56F, -0.52F, -0.72F);
+        overflowanimations$applyItemPositions(poseStack, itemStack, itemStackRenderState, direction, offsetAndScale);
+        return poseStack;
+    }
+    //?}
+
+    //? if >=26.3 {
     @Inject(method = "submitArmWithItem", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/item/ItemStackRenderState;submit(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;III)V"))
     private void overflowanimations$itemPositions(final PlayerRenderState playerState, final FirstPersonHandsAndItemsRenderState state, final float tickDelta, final float xRot, final InteractionHand hand, final float attack, final ItemStack itemStack, final float inverseArmHeight, final PoseStack poseStack, final SubmitNodeCollector submitNodeCollector, final int lightCoords, final CallbackInfo ci) {
         if (OverflowAnimations.isEnabled() && playerState.avatarRenderState != null) {
             final int direction = EntityUtilKt.getHandMultiplier(playerState.avatarRenderState, hand);
-            if (OverflowAnimationsConfig.instance().items.fishingRodVersion == FishingRodVersionSetting.V1_7 && ItemUtilKt.isFishingRodItem(itemStack)) {
-                poseStack.rotate(Axis.YP.rotationDegrees(direction * 180.0F));
-            }
+            final ItemStackRenderState itemStackRenderState = hand == InteractionHand.MAIN_HAND ? state.mainHandRenderState : state.offHandRenderState;
+            overflowanimations$applyItemPositions(poseStack, itemStack, itemStackRenderState, direction, !OverflowAnimationsConfig.instance().items.scaleAnimationsWithItem);
+        }
+    }
     //?}
 
+    //? if >=26.3 {
+    @Unique
+    private static void overflowanimations$applyItemPositions(final PoseStack poseStack, final ItemStack itemStack, final ItemStackRenderState itemStackRenderState, final int direction, final boolean offsetAndScale) {
+        if (OverflowAnimationsConfig.instance().items.fishingRodVersion == FishingRodVersionSetting.V1_7 && ItemUtilKt.isFishingRodItem(itemStack)) {
+            poseStack.rotate(Axis.YP.rotationDegrees(direction * 180.0F));
+        }
+    //?}
+
+        //? if >=26.3 {
+        final boolean isNotBlock3d = !ItemUtilKt.isBlock3d(itemStack, itemStackRenderState.usesBlockLight());
+        if (OverflowAnimationsConfig.instance().items.itemPositions && !OverflowAnimationsConfig.instance().items.lunarItemPositions && !(OverflowAnimationsConfig.instance().items.lunarBlockHitPosition && ItemUtilKt.isSwordItem(itemStack)) && isNotBlock3d && !ItemUtilKt.isItemBlacklisted(itemStack)) {
+            final float radians = 0.4363323129985824F;
+        //?}
+
             //? if >=26.3 {
-            final ItemStackRenderState itemStackRenderState = hand == InteractionHand.MAIN_HAND ? state.mainHandRenderState : state.offHandRenderState;
+            poseStack.scale(0.6F, 0.6F, 0.6F);
+            poseStack.rotate(Axis.YP.rotationDegrees(direction * 275.0F));
+            poseStack.rotate(Axis.ZP.rotationDegrees(direction * 25.0F));
+            poseStack.translate(direction * (-0.2F * Math.sin(radians) + 0.4375F), -0.2F * Math.cos(radians) + 0.4375F, 0.03125F);
+            //?}
+
+        //? if >=26.3 {
+            poseStack.scale(1 / 0.68F, 1 / 0.68F, 1 / 0.68F);
+            poseStack.rotate(Axis.ZP.rotationDegrees(direction * -25.0F));
+            poseStack.rotate(Axis.YP.rotationDegrees(direction * 90.0F));
+            poseStack.translate(direction * -1.13 * 0.0625F, -3.2 * 0.0625F, -1.13 * 0.0625F);
+        }
+        //?}
+
+        //? if >=26.3 {
+        final ItemsConfigCategory items = OverflowAnimationsConfig.instance().items;
+        if (OverflowAnimationsConfig.instance().items.skullPosition && ItemUtilKt.isSkullBlock(itemStack) && !OverflowAnimationsConfig.instance().items.mobHeadIcons) {
+            if (items.applyCustomizationToBlockItems && offsetAndScale) {
+                poseStack.translate(items.itemOffsetX * overflowanimations$TRANSLATE_OFFSET_MULTIPLIER, items.itemOffsetY * overflowanimations$TRANSLATE_OFFSET_MULTIPLIER, items.itemOffsetZ * overflowanimations$TRANSLATE_OFFSET_MULTIPLIER);
+            }
+        //?}
+
+            //? if >=26.3 {
+            poseStack.rotate(Axis.YP.rotationDegrees(45.0F));
+            poseStack.scale(0.4F, 0.4F, 0.4F);
             //?}
 
             //? if >=26.3 {
-            final boolean isNotBlock3d = !ItemUtilKt.isBlock3d(itemStack, itemStackRenderState.usesBlockLight());
-            if (OverflowAnimationsConfig.instance().items.itemPositions && !OverflowAnimationsConfig.instance().items.lunarItemPositions && !(OverflowAnimationsConfig.instance().items.lunarBlockHitPosition && ItemUtilKt.isSwordItem(itemStack)) && isNotBlock3d && !ItemUtilKt.isItemBlacklisted(itemStack)) {
-                final float radians = 0.4363323129985824F;
-            //?}
-
-                //? if >=26.3 {
-                poseStack.scale(0.6F, 0.6F, 0.6F);
-                poseStack.rotate(Axis.YP.rotationDegrees(direction * 275.0F));
-                poseStack.rotate(Axis.ZP.rotationDegrees(direction * 25.0F));
-                poseStack.translate(direction * (-0.2F * Math.sin(radians) + 0.4375F), -0.2F * Math.cos(radians) + 0.4375F, 0.03125F);
-                //?}
-
-            //? if >=26.3 {
-                poseStack.scale(1 / 0.68F, 1 / 0.68F, 1 / 0.68F);
-                poseStack.rotate(Axis.ZP.rotationDegrees(direction * -25.0F));
-                poseStack.rotate(Axis.YP.rotationDegrees(direction * 90.0F));
-                poseStack.translate(direction * -1.13 * 0.0625F, -3.2 * 0.0625F, -1.13 * 0.0625F);
+            // TODO: This is not quite right... (@Mixces)
+            poseStack.rotate(Axis.YP.rotationDegrees(-180.0F));
+            if (!items.applyCustomizationToBlockItems) {
+                poseStack.translate(0.0F, 0.25F, 0.0F);
             }
             //?}
 
-            //? if >=26.3 {
-            final ItemsConfigCategory items = OverflowAnimationsConfig.instance().items;
-            if (OverflowAnimationsConfig.instance().items.skullPosition && ItemUtilKt.isSkullBlock(itemStack) && !OverflowAnimationsConfig.instance().items.mobHeadIcons) {
-                if (items.applyCustomizationToBlockItems) {
-                    poseStack.translate(items.itemOffsetX * overflowanimations$TRANSLATE_OFFSET_MULTIPLIER, items.itemOffsetY * overflowanimations$TRANSLATE_OFFSET_MULTIPLIER, items.itemOffsetZ * overflowanimations$TRANSLATE_OFFSET_MULTIPLIER);
-                }
-            //?}
+        //? if >=26.3 {
+            poseStack.scale(1.125F, 1.125F, 1.125F);
+        }
+        //?}
 
-                //? if >=26.3 {
-                poseStack.rotate(Axis.YP.rotationDegrees(45.0F));
-                poseStack.scale(0.4F, 0.4F, 0.4F);
-                //?}
-
-                //? if >=26.3 {
-                // TODO: This is not quite right... (@Mixces)
-                poseStack.rotate(Axis.YP.rotationDegrees(-180.0F));
-                if (!items.applyCustomizationToBlockItems) {
-                    poseStack.translate(0.0F, 0.25F, 0.0F);
-                }
-                //?}
-
-            //? if >=26.3 {
-                poseStack.scale(1.125F, 1.125F, 1.125F);
-            }
-            //?}
-
-            //? if >=26.3 {
-            if (isNotBlock3d || items.applyCustomizationToBlockItems) {
+        //? if >=26.3 {
+        if (isNotBlock3d || items.applyCustomizationToBlockItems) {
+            if (offsetAndScale) {
                 if (OverflowAnimationsConfig.instance().items.fishingRodVersion == FishingRodVersionSetting.V1_7 && ItemUtilKt.isFishingRodItem(itemStack)) {
                     poseStack.translate(items.itemOffsetX * -overflowanimations$TRANSLATE_OFFSET_MULTIPLIER, items.itemOffsetY * overflowanimations$TRANSLATE_OFFSET_MULTIPLIER, items.itemOffsetZ * overflowanimations$TRANSLATE_OFFSET_MULTIPLIER);
                 } else if (!(OverflowAnimationsConfig.instance().items.skullPosition && ItemUtilKt.isSkullBlock(itemStack) && !OverflowAnimationsConfig.instance().items.mobHeadIcons)) {
                     poseStack.translate(items.itemOffsetX * overflowanimations$TRANSLATE_OFFSET_MULTIPLIER, items.itemOffsetY * overflowanimations$TRANSLATE_OFFSET_MULTIPLIER, items.itemOffsetZ * overflowanimations$TRANSLATE_OFFSET_MULTIPLIER);
                 }
-            //?}
+                poseStack.scale(items.itemScaleX, items.itemScaleY, items.itemScaleZ);
+            }
+        //?}
 
     //? if >=26.3 {
-                poseStack.scale(items.itemScaleX, items.itemScaleY, items.itemScaleZ);
-                poseStack.rotateDegrees(Axis.XP, direction * items.itemRotationX);
-                poseStack.rotateDegrees(Axis.YP, direction * items.itemRotationY);
-                poseStack.rotateDegrees(Axis.ZP, direction * items.itemRotationZ);
-            }
+            poseStack.rotateDegrees(Axis.XP, direction * items.itemRotationX);
+            poseStack.rotateDegrees(Axis.YP, direction * items.itemRotationY);
+            poseStack.rotateDegrees(Axis.ZP, direction * items.itemRotationZ);
         }
     }
     //?}

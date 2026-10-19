@@ -33,6 +33,7 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.PotionItem
 import net.minecraft.world.level.block.CarpetBlock
 import net.minecraft.world.level.block.SnowLayerBlock
+import org.polyfrost.overflowanimations.config.category.ItemsConfigCategory
 
 private fun rotate(poseStack: PoseStack, axis: Axis, degrees: Float) {
     //? if <26.3 {
@@ -46,6 +47,15 @@ fun applyMirroredRotation(poseStack: PoseStack, direction: Int, x: Float, y: Flo
     rotate(poseStack, Axis.XP, x)
     rotate(poseStack, Axis.YP, direction * y)
     rotate(poseStack, Axis.ZP, direction * z)
+}
+
+fun applyHandCustomization(poseStack: PoseStack, direction: Int, items: ItemsConfigCategory) {
+    poseStack.translate(direction * 0.56F, -0.52F, -0.72F)
+    poseStack.translate(items.itemOffsetX * 0.05F, items.itemOffsetY * 0.05F, items.itemOffsetZ * 0.05F)
+    rotate(poseStack, Axis.YP, direction * 45.0F)
+    poseStack.scale(items.itemScaleX, items.itemScaleY, items.itemScaleZ)
+    rotate(poseStack, Axis.YP, direction * -45.0F)
+    poseStack.translate(direction * -0.56F, 0.52F, 0.72F)
 }
 
 fun applyLunarItemPosition(poseStack: PoseStack, stack: ItemStack, direction: Int) {

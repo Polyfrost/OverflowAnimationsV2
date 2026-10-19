@@ -68,7 +68,7 @@ public abstract class MixinItemInHandRenderer_Swing {
     @Unique
     private boolean overflowanimations$movesSwingPivot() {
         final ItemsConfigCategory items = LegacyFirstPerson.items();
-        return OverflowAnimations.isEnabled() && items.disableSwingPivot && (items.applyCustomizationToBlockItems || this.itemInHand == null || !LegacyFirstPerson.isBlockLike(this.renderer.getModelShaper().getModel(this.itemInHand)));
+        return OverflowAnimations.isEnabled() && items.disableSwingPivot && !items.scaleAnimationsWithItem && (items.applyCustomizationToBlockItems || this.itemInHand == null || !LegacyFirstPerson.isBlockLike(this.renderer.getModelShaper().getModel(this.itemInHand)));
     }
 
     @ModifyArg(method = "renderInFirstPerson", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/ItemInHandRenderer;applyFirstPersonTransform(FF)V"), index = 1)
@@ -99,7 +99,7 @@ public abstract class MixinItemInHandRenderer_Swing {
         float scaleX = 1.0F + items.swingPositionX;
         float scaleY = 1.0F - items.swingPositionY;
         float scaleZ = 1.0F + items.swingPositionZ;
-        if (items.smartSwingScaling) {
+        if (items.smartSwingScaling && !items.scaleAnimationsWithItem) {
             scaleX *= items.itemScaleX;
             scaleY *= items.itemScaleY;
             scaleZ *= items.itemScaleZ;

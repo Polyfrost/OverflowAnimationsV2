@@ -240,6 +240,10 @@
 	"overflowanimations.itemRotationZ.description": "",
 	"overflowanimations.applyCustomizationToBlockItems": "Apply to block items and skulls",
 	"overflowanimations.applyCustomizationToBlockItems.description": "",
+	"overflowanimations.scaleAnimationsWithItem": "Scale Animations With Item",
+	"overflowanimations.scaleHandWithItem": "Scale and Move Hand With Item",
+	"overflowanimations.scaleHandWithItem.description": "Applies the item scale and offset sliders to your empty hand too.",
+	"overflowanimations.scaleAnimationsWithItem.description": "Swinging, blocking, eating and equipping follow the custom item scale and offset, so a small, moved item keeps its place on screen. Replaces Smart Item Swing Scaling, Scale Eating/Drinking With Item and Disable Swing Pivot while on.",
 
 	"overflowanimations.category.items.group.other": "Other",
 	"overflowanimations.itemUsageSwinging": "[1.7] Apply the swing offset during item use",

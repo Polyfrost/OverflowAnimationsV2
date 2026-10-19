@@ -98,6 +98,8 @@ public final class ItemsConfigCategory extends Category {
     public float itemRotationY = 0.0F;
     public float itemRotationZ = 0.0F;
     public boolean applyCustomizationToBlockItems = true;
+    public boolean scaleAnimationsWithItem = true;
+    public boolean scaleHandWithItem = false;
 
     public boolean itemDrops2DColors = false;
     public boolean legacyProjectiles = false;
@@ -218,7 +220,9 @@ public final class ItemsConfigCategory extends Category {
                 .floatEntry("itemRotationX")
                 .floatEntry("itemRotationY")
                 .floatEntry("itemRotationZ")
-                .booleanEntry("applyCustomizationToBlockItems");
+                .booleanEntry("applyCustomizationToBlockItems")
+                .booleanEntry("scaleAnimationsWithItem")
+                .booleanEntry("scaleHandWithItem");
 
         bundle.group("other")
                 .booleanEntry("thinFishingRodLineThickness")
