@@ -178,6 +178,18 @@ public abstract class MixinItemInHandRenderer_FirstPersonItemPositions {
     }
     *///?}
 
+    //? if <26.3 {
+    /*@Inject(method = "applyItemArmTransform", at = @At("TAIL"))
+    private void overflowanimations$swapPosition(final PoseStack poseStack, final HumanoidArm arm, final float equipProgress, final CallbackInfo ci) {
+        final float progress = 1.0F - equipProgress;
+        if (progress != 0.0F && OverflowAnimations.isEnabled()) {
+            final ItemsConfigCategory items = OverflowAnimationsConfig.instance().items;
+            final int armMultiplier = EntityUtilKt.getArmMultiplier(arm);
+            poseStack.translate(armMultiplier * progress * items.swapPositionX, progress * items.swapPositionY, progress * items.swapPositionZ);
+        }
+    }
+    *///?}
+
     //? if <26.2 {
     /*@WrapOperation(method = "renderArmWithItem", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/PoseStack;translate(FFF)V", ordinal = 0), slice = @Slice(from = @At(value = "CONSTANT", args = "floatValue=-0.2785682F")))
     *///?} elif 26.2 {
@@ -585,7 +597,7 @@ public abstract class MixinItemInHandRenderer_FirstPersonItemPositions {
     //? if <26.3 {
     /*@ModifyExpressionValue(method = "tick", at = {@At(value = "CONSTANT", args = "floatValue=0.4F"), @At(value = "CONSTANT", args = "floatValue=-0.4F")})
     private float overflowanimations$reequipSpeed(final float original) {
-        return OverflowAnimations.isEnabled() ? Math.copySign(OverflowAnimationsConfig.instance().items.reequipSpeed, original) : original;
+        return OverflowAnimations.isEnabled() ? Math.copySign(OverflowAnimationsConfig.instance().items.swapSpeed, original) : original;
     }
     *///?}
 

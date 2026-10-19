@@ -139,6 +139,18 @@ public abstract class MixinFirstPersonHandsAndItemsRenderer_FirstPersonItemPosit
     //?}
 
     //? if >=26.3 {
+    @Inject(method = "applyItemArmTransform", at = @At("TAIL"))
+    private void overflowanimations$swapPosition(final PoseStack poseStack, final HumanoidArm arm, final float equipProgress, final CallbackInfo ci) {
+        final float progress = 1.0F - equipProgress;
+        if (progress != 0.0F && OverflowAnimations.isEnabled()) {
+            final ItemsConfigCategory items = OverflowAnimationsConfig.instance().items;
+            final int armMultiplier = EntityUtilKt.getArmMultiplier(arm);
+            poseStack.translate(armMultiplier * progress * items.swapPositionX, progress * items.swapPositionY, progress * items.swapPositionZ);
+        }
+    }
+    //?}
+
+    //? if >=26.3 {
     @WrapOperation(method = "submitArmWithItem", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/PoseStack;translate(FFF)V", ordinal = 0), slice = @Slice(from = @At(value = "CONSTANT", args = "floatValue=-0.2785682F")))
     private void overflowanimations$lunarBowPosition(final PoseStack instance, final float x, final float y, final float z, final Operation<Void> original, @Local(ordinal = 0) final HumanoidArm arm) {
         if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().items.lunarItemPositions) {

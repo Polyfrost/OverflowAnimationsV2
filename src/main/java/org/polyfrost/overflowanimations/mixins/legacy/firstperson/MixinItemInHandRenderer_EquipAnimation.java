@@ -55,7 +55,7 @@ public abstract class MixinItemInHandRenderer_EquipAnimation {
 
     @ModifyExpressionValue(method = "tick", at = @At(value = "CONSTANT", args = "floatValue=0.4F"))
     private float overflowanimations$reequipSpeed(final float original) {
-        return OverflowAnimations.isEnabled() ? LegacyFirstPerson.items().reequipSpeed : original;
+        return OverflowAnimations.isEnabled() ? LegacyFirstPerson.items().swapSpeed : original;
     }
 
     @ModifyVariable(method = "tick", at = @At("LOAD"))

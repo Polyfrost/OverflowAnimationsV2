@@ -107,7 +107,7 @@ public abstract class MixinFirstPersonHandsAndItems_EquipAnimationChecks {
     //? if >=26.3 {
     @ModifyExpressionValue(method = "tick", at = {@At(value = "CONSTANT", args = "floatValue=0.4F"), @At(value = "CONSTANT", args = "floatValue=-0.4F")})
     private float overflowanimations$reequipSpeed(final float original) {
-        return OverflowAnimations.isEnabled() ? Math.copySign(OverflowAnimationsConfig.instance().items.reequipSpeed, original) : original;
+        return OverflowAnimations.isEnabled() ? Math.copySign(OverflowAnimationsConfig.instance().items.swapSpeed, original) : original;
     }
     //?}
 
