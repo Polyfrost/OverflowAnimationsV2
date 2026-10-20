@@ -508,7 +508,7 @@ public abstract class MixinItemInHandRenderer_FirstPersonItemPositions {
             poseStack.translate(direction * -1.13 * 0.0625F, -3.2 * 0.0625F, -1.13 * 0.0625F);
         }
 
-        final boolean skull = items.skullPosition && ItemUtilKt.isSkullBlock(itemStack) && !items.mobHeadIcons;
+        final boolean skull = items.skullPosition && ItemUtilKt.isSkullBlock(itemStack);
         if (skull) {
             if (items.applyCustomizationToBlockItems && offsetAndScale) {
                 poseStack.translate(items.itemOffsetX * overflowanimations$TRANSLATE_OFFSET_MULTIPLIER, items.itemOffsetY * overflowanimations$TRANSLATE_OFFSET_MULTIPLIER, items.itemOffsetZ * overflowanimations$TRANSLATE_OFFSET_MULTIPLIER);

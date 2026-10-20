@@ -102,7 +102,6 @@ enum class PresetVersion(private val applier: Runnable) {
         items.legacyItemRarities = true
         items.heldItemVisibilityInBoat = true
         items.itemPickupPosition = true
-        items.mobHeadIcons = true
         items.eggSnowballParticles = true
 
         val other = OverflowAnimationsConfig.instance().other
@@ -207,7 +206,6 @@ enum class PresetVersion(private val applier: Runnable) {
         items.legacyItemRarities = true
         items.heldItemVisibilityInBoat = true
         items.itemPickupPosition = false
-        items.mobHeadIcons = false
         items.eggSnowballParticles = false
 
         val other = OverflowAnimationsConfig.instance().other
@@ -312,7 +310,6 @@ enum class PresetVersion(private val applier: Runnable) {
         items.legacyItemRarities = false
         items.heldItemVisibilityInBoat = false
         items.itemPickupPosition = false
-        items.mobHeadIcons = false
         items.eggSnowballParticles = false
 
         val other = OverflowAnimationsConfig.instance().other

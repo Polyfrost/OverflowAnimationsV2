@@ -218,7 +218,7 @@ public abstract class MixinItemStackRenderLayerState {
                 }
 
                 // TODO/NEED TO FIX
-                if (OverflowAnimationsConfig.instance().items.skullPosition && ItemUtilKt.isSkullBlock(stack) && isGui && !OverflowAnimationsConfig.instance().items.mobHeadIcons) {
+                if (OverflowAnimationsConfig.instance().items.skullPosition && ItemUtilKt.isSkullBlock(stack) && isGui) {
                     localPose.translate(x, y, z);
                     overflowanimations$rotate(localPose, Axis.XP.rotationDegrees(rotation.z()));
                     overflowanimations$rotate(localPose, Axis.YP.rotationDegrees(rotation.y()));

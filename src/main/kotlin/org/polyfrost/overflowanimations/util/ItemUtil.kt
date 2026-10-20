@@ -33,7 +33,6 @@ import net.minecraft.client.renderer.entity.state.ArmedEntityRenderState
 *///?} else {
 import net.minecraft.client.renderer.entity.state.AvatarRenderState
 //?}
-import net.minecraft.resources.Identifier
 import net.minecraft.tags.ItemTags
 import net.minecraft.world.item.*
 import net.minecraft.world.level.block.*
@@ -83,7 +82,7 @@ fun isBlockItemBlacklisted(stack: ItemStack): Boolean {
     return block is BannerBlock ||
             block is RodBlock ||
             block is BedBlock ||
-            (isSkullBlock(stack) && !OverflowAnimationsConfig.instance().items.mobHeadIcons)
+            isSkullBlock(stack)
 }
 
 fun isItemBlacklisted(stack: ItemStack) =
@@ -168,24 +167,6 @@ fun getLegacyItemRarity(stack: ItemStack) =
     } else {
         stack.rarity
     }
-
-fun getMobHeadLocation(item: Item): Identifier? {
-    val block = Block.byItem(item)
-    return if (block == Blocks.AIR || !(block is SkullBlock && block.type is SkullBlock.Types)) {
-        null
-    } else {
-        when (block.type) {
-            SkullBlock.Types.SKELETON -> OverflowAnimations.location("skeleton_skull")
-            SkullBlock.Types.WITHER_SKELETON -> OverflowAnimations.location("wither_skeleton_skull")
-            SkullBlock.Types.PLAYER -> OverflowAnimations.location("player_skull")
-            SkullBlock.Types.ZOMBIE -> OverflowAnimations.location("zombie_skull")
-            SkullBlock.Types.CREEPER -> OverflowAnimations.location("creeper_skull")
-            SkullBlock.Types.PIGLIN -> OverflowAnimations.location("piglin_skull")
-            SkullBlock.Types.DRAGON -> OverflowAnimations.location("dragon_skull")
-            else -> null
-        }
-    }
-}
 
 // TODO/NOTE: Might need rework? as vanilla now has the fix as of 1.21.11+ but doesn't seem fully the same/accurate
 fun shouldInstantlyReplaceVisibleItem1_8(prevStack: ItemStack, currentStack: ItemStack): Boolean {

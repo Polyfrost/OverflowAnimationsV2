@@ -277,8 +277,6 @@
 	"overflowanimations.heldItemVisibilityInBoat.description": "Enable held item visibility while you're in a moving boat like in <=1.8.x.",
 	"overflowanimations.itemPickupPosition": "[1.7] Item Pickup Position",
 	"overflowanimations.itemPickupPosition.description": "Enable/disable the eye-height level item pickup position like in <=1.7.x",
-	"overflowanimations.mobHeadIcons": "[1.7] 2D Mob Head Items",
-	"overflowanimations.mobHeadIcons.description": "Changes the held item model for heads to be 2d icons like in <=1.7.x.",
 	"overflowanimations.eggSnowballParticles": "[1.7] Snowball Particles for Eggs",
 	"overflowanimations.eggSnowballParticles.description": "Changes the egg projectile particle to be the snowball particle like it was in <=1.7.x.",
 

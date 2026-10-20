@@ -70,7 +70,6 @@ public final class ItemsConfigCategory extends Category {
     public boolean legacyItemRarities = LEGACY;
     public boolean heldItemVisibilityInBoat = LEGACY;
     public boolean itemPickupPosition = LEGACY;
-    public boolean mobHeadIcons = LEGACY;
     public boolean eggSnowballParticles = LEGACY;
     // Item Swing
     public boolean customSwingSpeed = false;
@@ -204,7 +203,6 @@ public final class ItemsConfigCategory extends Category {
                 .booleanEntry("lunarItemPositions")
                 .booleanEntry("thinBlockPositions")
                 .booleanEntry("skullPosition")
-                .booleanEntry("mobHeadIcons")
                 .enumEntry("fishingRodVersion", FishingRodVersionSetting.class)
                 .booleanEntry("heldItemVisibilityInBoat");
 
