@@ -23,7 +23,6 @@
  * "MINECRAFT" LINKING EXCEPTION TO THE GPL
  */
 
-
 package org.polyfrost.overflowanimations.mixins.v1.entity.items;
 
 //? if >=1.21.11 <26.3 {

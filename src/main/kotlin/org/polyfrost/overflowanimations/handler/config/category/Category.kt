@@ -29,4 +29,11 @@ import org.polyfrost.overflowanimations.handler.config.bundle.EntryBundle
 
 abstract class Category {
     abstract fun bundle(): EntryBundle
+
+    companion object {
+        //? if <=1.8.9 {
+        /*const val LEGACY = true
+        *///?} else
+        const val LEGACY = false
+    }
 }

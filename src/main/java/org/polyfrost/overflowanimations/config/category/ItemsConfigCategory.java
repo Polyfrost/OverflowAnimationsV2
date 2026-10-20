@@ -40,38 +40,38 @@ import org.polyfrost.overflowanimations.util.enums.UsingTextureInGUISetting;
 
 public final class ItemsConfigCategory extends Category {
     // (Items) Enchantment Glint
-    public ItemGlintSetting itemGlint = ItemGlintSetting.V1_15;
-    public ArmorGlintSetting armorGlint = ArmorGlintSetting.V1_19_4;
-    public PotionGlintSetting potionGlint = PotionGlintSetting.VANILLA;
-    public boolean glintOnItemDrops2D = true;
-    public boolean glintOnItemFramed2D = true;
+    public ItemGlintSetting itemGlint = LEGACY ? ItemGlintSetting.V1_7 : ItemGlintSetting.VANILLA;
+    public ArmorGlintSetting armorGlint = LEGACY ? ArmorGlintSetting.V1_8 : ArmorGlintSetting.VANILLA;
+    public PotionGlintSetting potionGlint = LEGACY ? PotionGlintSetting.V1_7 : PotionGlintSetting.VANILLA;
+    public boolean glintOnItemDrops2D = !LEGACY;
+    public boolean glintOnItemFramed2D = !LEGACY;
     // (Items) 2D Drops
     public boolean itemDropsFaceCamera = false;
     public boolean itemDropsFaceCameraRotationFix = false;
     public boolean itemDrops2D = false;
     public boolean itemFramed2D = false;
     // (Items) Transformations
-    public boolean itemPositions = true;
-    public boolean itemPositionsInThirdPerson = true;
+    public boolean itemPositions = LEGACY;
+    public boolean itemPositionsInThirdPerson = LEGACY;
     public boolean strictItemPositionsInThirdPerson = true;
-    public boolean thinBlockPositions = false;
-    public boolean skullPosition = false;
-    public FishingRodVersionSetting fishingRodVersion = FishingRodVersionSetting.V1_7;
+    public boolean thinBlockPositions = LEGACY;
+    public boolean skullPosition = LEGACY;
+    public FishingRodVersionSetting fishingRodVersion = LEGACY ? FishingRodVersionSetting.V1_7 : FishingRodVersionSetting.VANILLA;
     // (Items) Other
     public boolean thinFishingRodLineThickness = false;
-    public boolean itemUsageSwinging = true;
+    public boolean itemUsageSwinging = LEGACY;
     public boolean usageSwingingParticles = true;
-    public boolean disableSwingOnUse = false;
-    public DropSwingSetting dropSwing = DropSwingSetting.V1_15;
-    public boolean disableSwingOnEntityInteract = false;
-    public UsingTextureInGUISetting usingTextureInGUI = UsingTextureInGUISetting.V1_9;
-    public EquipAnimationVersionSetting equipAnimationVersion = EquipAnimationVersionSetting.VANILLA;
-    public boolean durabilityBarColors = false;
-    public boolean legacyItemRarities = false;
-    public boolean heldItemVisibilityInBoat = false;
-    public boolean itemPickupPosition = false;
-    public boolean mobHeadIcons = false;
-    public boolean eggSnowballParticles = false;
+    public boolean disableSwingOnUse = LEGACY;
+    public DropSwingSetting dropSwing = LEGACY ? DropSwingSetting.V1_8 : DropSwingSetting.VANILLA;
+    public boolean disableSwingOnEntityInteract = LEGACY;
+    public UsingTextureInGUISetting usingTextureInGUI = LEGACY ? UsingTextureInGUISetting.V1_8 : UsingTextureInGUISetting.VANILLA;
+    public EquipAnimationVersionSetting equipAnimationVersion = LEGACY ? EquipAnimationVersionSetting.V1_7 : EquipAnimationVersionSetting.VANILLA;
+    public boolean durabilityBarColors = LEGACY;
+    public boolean legacyItemRarities = LEGACY;
+    public boolean heldItemVisibilityInBoat = LEGACY;
+    public boolean itemPickupPosition = LEGACY;
+    public boolean mobHeadIcons = LEGACY;
+    public boolean eggSnowballParticles = LEGACY;
     // Item Swing
     public boolean customSwingSpeed = false;
     public float itemSwingSpeed = 0.0F;
@@ -173,42 +173,40 @@ public final class ItemsConfigCategory extends Category {
     public @NonNull EntryBundle bundle() {
         final EntryBundle bundle = new EntryBundle(this, "items");
 
-        bundle.group("glint")
-                .enumEntry("itemGlint", ItemGlintSetting.class)
-                .enumEntry("armorGlint", ArmorGlintSetting.class)
-                .enumEntry("potionGlint", PotionGlintSetting.class);
-
-        bundle.group("drops2d")
-                .booleanEntry("itemDropsFaceCamera")
-                .booleanEntry("itemDropsFaceCameraRotationFix")
-                .booleanEntry("itemDrops2D")
-                .booleanEntry("glintOnItemDrops2D")
-                .booleanEntry("itemFramed2D")
-                .booleanEntry("glintOnItemFramed2D");
+        bundle.group("combat")
+                .booleanEntry("itemUsageSwinging")
+                .booleanEntry("usageSwingingParticles")
+                .booleanEntry("blockHitWhileMining")
+                .booleanEntry("lunarBlockHitPosition")
+                .booleanEntry("alwaysUsageSwing")
+                .booleanEntry("offhandUsageSwinging")
+                .booleanEntry("fakeMissPenaltySwing")
+                .booleanEntry("fakeMissPenaltyParticles")
+                .booleanEntry("legacySwingAnimation")
+                .enumEntry("equipAnimationVersion", EquipAnimationVersionSetting.class)
+                .floatRange("reequipSpeed", 0.1F, 1.0F, 0.05F)
+                .booleanEntry("disableSwingOnUse")
+                .booleanEntry("disableSwingOnEntityInteract")
+                .enumEntry("dropSwing", DropSwingSetting.class)
+                .booleanEntry("disableDropSwingInContainers")
+                .enumEntry("swapSwingAnimation", SwapSwingAnimationSetting.class)
+                .booleanEntry("disableHandSway")
+                .booleanEntry("resetMiningOnUse")
+                .booleanEntry("disableAdventureSwing")
+                .booleanEntry("disableAdventureUsageSwinging")
+                .booleanEntry("disableAdventureUsageParticles");
 
         bundle.group("transformations")
                 .booleanEntry("itemPositions")
                 .booleanEntry("itemPositionsInThirdPerson")
                 .booleanEntry("strictItemPositionsInThirdPerson")
+                .booleanEntry("entityItemPositions")
+                .booleanEntry("lunarItemPositions")
                 .booleanEntry("thinBlockPositions")
                 .booleanEntry("skullPosition")
-                .enumEntry("fishingRodVersion", FishingRodVersionSetting.class);
-
-        bundle.group("item_swing")
-                .booleanEntry("customSwingSpeed")
-                .floatRange("itemSwingSpeed", -2.0F, 1.0F, 0.1F)
-                .floatRange("hasteSwingSpeed", -2.0F, 1.0F, 0.1F)
-                .floatRange("miningFatigueSwingSpeed", -2.0F, 1.0F, 0.1F)
-                .booleanEntry("ignoreHasteSpeed")
-                .booleanEntry("ignoreMiningFatigueSpeed")
-                .booleanEntry("offhandUsageSwinging")
-                .booleanEntry("alwaysUsageSwing")
-                .booleanEntry("fakeMissPenaltySwing")
-                .booleanEntry("fakeMissPenaltyParticles")
-                .booleanEntry("disableSwingTranslate")
-                .booleanEntry("disableSwingPivot")
-                .booleanEntry("legacySwingAnimation")
-                .enumEntry("swapSwingAnimation", SwapSwingAnimationSetting.class);
+                .booleanEntry("mobHeadIcons")
+                .enumEntry("fishingRodVersion", FishingRodVersionSetting.class)
+                .booleanEntry("heldItemVisibilityInBoat");
 
         bundle.group("item_modifications")
                 .floatRange("itemScaleX", 0.2F, 2.0F, 0.1F)
@@ -222,51 +220,53 @@ public final class ItemsConfigCategory extends Category {
                 .floatEntry("itemRotationZ")
                 .booleanEntry("applyCustomizationToBlockItems")
                 .booleanEntry("scaleAnimationsWithItem")
-                .booleanEntry("scaleHandWithItem");
+                .booleanEntry("scaleHandWithItem")
+                .booleanEntry("smartSwingScaling");
 
-        bundle.group("other")
-                .booleanEntry("thinFishingRodLineThickness")
-                .booleanEntry("itemUsageSwinging")
-                .booleanEntry("usageSwingingParticles")
-                .booleanEntry("disableSwingOnUse")
-                .enumEntry("dropSwing", DropSwingSetting.class)
-                .booleanEntry("disableSwingOnEntityInteract")
-                .enumEntry("usingTextureInGUI", UsingTextureInGUISetting.class)
-                .enumEntry("equipAnimationVersion", EquipAnimationVersionSetting.class)
-                .booleanEntry("durabilityBarColors")
-                .booleanEntry("legacyItemRarities")
-                .booleanEntry("heldItemVisibilityInBoat")
-                .booleanEntry("itemPickupPosition")
-                .booleanEntry("mobHeadIcons")
-                .booleanEntry("eggSnowballParticles");
+        bundle.group("item_swing")
+                .booleanEntry("customSwingSpeed")
+                .floatRange("itemSwingSpeed", -2.0F, 1.0F, 0.1F)
+                .floatRange("hasteSwingSpeed", -2.0F, 1.0F, 0.1F)
+                .floatRange("miningFatigueSwingSpeed", -2.0F, 1.0F, 0.1F)
+                .booleanEntry("ignoreHasteSpeed")
+                .booleanEntry("ignoreMiningFatigueSpeed")
+                .booleanEntry("disableSwingTranslate")
+                .booleanEntry("disableSwingPivot");
 
-        bundle.group("legacy_drops")
+        bundle.group("glint")
+                .enumEntry("itemGlint", ItemGlintSetting.class)
+                .enumEntry("armorGlint", ArmorGlintSetting.class)
+                .enumEntry("potionGlint", PotionGlintSetting.class);
+
+        bundle.group("drops2d")
+                .booleanEntry("itemDrops2D")
+                .booleanEntry("itemDropsFaceCamera")
+                .booleanEntry("itemDropsFaceCameraRotationFix")
+                .booleanEntry("glintOnItemDrops2D")
                 .booleanEntry("itemDrops2DColors")
-                .booleanEntry("legacyProjectiles")
-                .booleanEntry("xpOrbPosition")
-                .booleanEntry("fireballModel")
+                .booleanEntry("itemFramed2D")
+                .booleanEntry("glintOnItemFramed2D")
+                .booleanEntry("itemPickupPosition")
                 .booleanEntry("disableItemPickupAnimation")
                 .floatRange("itemPickupOffset", -1.0F, 1.0F, 0.05F);
 
-        bundle.group("legacy_usage")
-                .booleanEntry("entityItemPositions")
-                .booleanEntry("disableHandSway")
-                .floatRange("reequipSpeed", 0.1F, 1.0F, 0.05F)
-                .booleanEntry("smartSwingScaling")
-                .booleanEntry("disableDropSwingInContainers")
-                .booleanEntry("resetMiningOnUse")
-                .booleanEntry("blockHitWhileMining")
-                .booleanEntry("disableAdventureSwing")
-                .booleanEntry("disableAdventureUsageSwinging")
-                .booleanEntry("disableAdventureUsageParticles")
-                .booleanEntry("lunarBlockHitPosition")
-                .booleanEntry("lunarItemPositions");
+        bundle.group("legacy_drops")
+                .booleanEntry("legacyProjectiles")
+                .booleanEntry("fireballModel")
+                .booleanEntry("eggSnowballParticles")
+                .booleanEntry("xpOrbPosition");
+
+        bundle.group("other")
+                .enumEntry("usingTextureInGUI", UsingTextureInGUISetting.class)
+                .booleanEntry("durabilityBarColors")
+                .booleanEntry("legacyItemRarities");
 
         bundle.group("legacy_potions")
                 .enumEntry("potionColors", PotionColorsSetting.class)
                 .booleanEntry("coloredPotionBottles");
 
         bundle.group("legacy_fishing")
+                .booleanEntry("thinFishingRodLineThickness")
                 .booleanEntry("fishingRodLineFov")
                 .floatRange("fishingRodLineThickness", 0.0F, 10.0F, 0.5F)
                 .booleanEntry("customRodLine")

@@ -40,7 +40,6 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.polyfrost.overflowanimations.OverflowAnimations;
 import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig;
-import org.polyfrost.overflowanimations.config.category.MovementConfigCategory;
 import org.polyfrost.overflowanimations.mixins.accessor.PlayerAccessor;
 import org.polyfrost.overflowanimations.util.EntityUtilKt;
 import org.polyfrost.overflowanimations.util.enums.SneakAnimationSetting;
@@ -100,8 +99,7 @@ public abstract class MixinCamera_Sneaking {
 
     @Unique
     private boolean overflowanimations$isLongUnsneak() {
-        final MovementConfigCategory movement = OverflowAnimationsConfig.instance().movement;
-        return movement.longUnsneak && !movement.longUnsneakLegacyOnly;
+        return OverflowAnimationsConfig.instance().movement.longUnsneak;
     }
 
     @Unique

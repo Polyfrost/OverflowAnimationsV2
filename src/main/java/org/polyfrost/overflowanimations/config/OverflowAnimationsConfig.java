@@ -66,11 +66,15 @@ import java.nio.file.StandardCopyOption;
 public final class OverflowAnimationsConfig extends Config {
     private static final Logger LOGGER = LogManager.getLogger("OverflowAnimations/Config");
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
-    private static final String ID = OverflowAnimationsConstants.MOD_ID + ".json";
+    private static final String SHARED_ID = OverflowAnimationsConstants.MOD_ID + ".json";
+    //? if <=1.8.9 {
+    /*private static final String ID = OverflowAnimationsConstants.MOD_ID + "-1.8.9.json";
+    *///?} else
+    private static final String ID = SHARED_ID;
     private static final Path CONFIG_DIR = FabricLoader.getInstance().getConfigDir();
-    private static final int CONFIG_VERSION = 6;
+    private static final int CONFIG_VERSION = 7;
 
-    private static JsonObject savedConfig = readObject(CONFIG_DIR.resolve(ID));
+    private static JsonObject savedConfig = readSavedConfig();
     private static JsonObject legacyConfig = takeLegacyConfig();
     private static boolean loaded = false;
     private static final OverflowAnimationsConfig INSTANCE = new OverflowAnimationsConfig();
@@ -96,13 +100,13 @@ public final class OverflowAnimationsConfig extends Config {
             OverflowAnimations.reloadIfInWorld();
         }, "modEnabled", OverflowAnimationsConstants.MOD_ID + ".modEnabled", OverflowAnimationsConstants.MOD_ID + ".modEnabled.description", boolean.class);
         toggle.addMetadata("visualizer", Visualizer.SwitchVisualizer.class);
-        toggle.addMetadata("category", OverflowAnimationsConstants.MOD_ID + ".category.movement");
+        toggle.addMetadata("category", OverflowAnimationsConstants.MOD_ID + ".category.items");
         tree.put(toggle);
+        this.items.bundle().install(tree);
         this.movement.bundle().install(tree);
         this.screen.bundle().install(tree);
-        this.items.bundle().install(tree);
-        this.fixes.bundle().install(tree);
         this.other.bundle().install(tree);
+        this.fixes.bundle().install(tree);
         try {
             tree.put(Properties.field(null, null, OverflowAnimationsConfig.class.getField("configVersion"), this).addDisplayCondition(() -> Property.Display.HIDDEN));
         } catch (final NoSuchFieldException exception) {
@@ -115,6 +119,12 @@ public final class OverflowAnimationsConfig extends Config {
     protected void initialize(boolean byConfigManager) {
         super.initialize(byConfigManager);
         if (this.getTree() != null) this.disableAllUnless("modEnabled");
+        if (savedConfig == null && legacyConfig == null) {
+            this.configVersion = CONFIG_VERSION;
+            this.save();
+            return;
+        }
+
         if (legacyConfig != null && this.getTree() != null) {
             this.importLegacyConfig(legacyConfig);
             legacyConfig = null;
@@ -150,6 +160,12 @@ public final class OverflowAnimationsConfig extends Config {
                 this.items.potionGlint = PotionGlintSetting.VANILLA;
             }
 
+            //? if >1.8.9 {
+            if (this.configVersion < 7 && !isFalse(savedConfig, "longUnsneakLegacyOnly")) {
+                this.movement.longUnsneak = false;
+            }
+            //?}
+
             this.configVersion = CONFIG_VERSION;
             this.save();
         }
@@ -166,6 +182,10 @@ public final class OverflowAnimationsConfig extends Config {
 
     private static boolean isTrue(final JsonObject object, final String key) {
         return object.get(key) instanceof JsonPrimitive value && value.getAsBoolean();
+    }
+
+    private static boolean isFalse(final JsonObject object, final String key) {
+        return object != null && object.get(key) instanceof JsonPrimitive value && !value.getAsBoolean();
     }
 
     private void migrateDefaults() {
@@ -243,6 +263,21 @@ public final class OverflowAnimationsConfig extends Config {
         migrateLegacyGlint(root);
         migrateVersionToggles(root);
         return root;
+    }
+
+    private static JsonObject readSavedConfig() {
+        final Path filePath = CONFIG_DIR.resolve(ID);
+        //? if <=1.8.9 {
+        /*final Path sharedPath = CONFIG_DIR.resolve(SHARED_ID);
+        if (!Files.exists(filePath) && readObject(sharedPath) instanceof JsonObject shared && !(shared.get("movement") instanceof JsonObject)) {
+            try {
+                Files.copy(sharedPath, filePath);
+            } catch (final Exception exception) {
+                LOGGER.error("Failed to copy the shared config file!", exception);
+            }
+        }
+        *///?}
+        return readObject(filePath);
     }
 
     private static JsonObject readObject(final Path path) {

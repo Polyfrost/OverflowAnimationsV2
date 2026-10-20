@@ -45,6 +45,42 @@ open class EntryBundle(protected val category: Category, private val name: Strin
             "fishingRodLineFov", "fishingRodLineThickness", "legacyDebugScreen"
         )
 
+        private val ALIASES = mapOf(
+            "itemUsageSwinging" to listOf("block hit", "blockhit", "block hitting", "1.7 animations", "old animations", "swing while blocking", "swing while eating"),
+            "usageSwingingParticles" to listOf("block hit", "blockhit"),
+            "blockHitWhileMining" to listOf("block hit", "blockhit"),
+            "lunarBlockHitPosition" to listOf("block hit", "blockhit", "lunar", "cheatbreaker"),
+            "alwaysUsageSwing" to listOf("block hit", "blockhit", "air swing"),
+            "offhandUsageSwinging" to listOf("block hit", "blockhit", "offhand"),
+            "thirdPersonSwordBlockingPosition" to listOf("block hit", "blockhit", "sword block", "third person block"),
+            "itemPositions" to listOf("1.7 animations", "old animations", "1.7 sword", "item position", "held item"),
+            "itemPositionsInThirdPerson" to listOf("1.7 animations", "old animations", "third person sword"),
+            "lunarItemPositions" to listOf("lunar", "cheatbreaker"),
+            "fishingRodVersion" to listOf("rod position", "1.7 rod"),
+            "equipAnimationVersion" to listOf("item switch", "swap animation", "re-equip", "reequip"),
+            "legacySwingAnimation" to listOf("attack cooldown", "1.8 swing"),
+            "customSwingSpeed" to listOf("swing speed", "slow swing"),
+            "itemScaleX" to listOf("item size", "small items", "smaller items"),
+            "itemScaleY" to listOf("item size", "small items", "smaller items"),
+            "itemScaleZ" to listOf("item size", "small items", "smaller items"),
+            "itemGlint" to listOf("enchant", "enchantment glint", "shiny"),
+            "armorGlint" to listOf("enchant", "enchantment glint", "shiny armor"),
+            "itemDrops2D" to listOf("2d items", "flat items", "dropped items"),
+            "itemFramed2D" to listOf("2d items", "flat items", "item frame"),
+            "damageTintArmor" to listOf("red armor", "hurt color", "hit color"),
+            "damageTintStyle" to listOf("red armor", "hurt color", "hit color", "red tint"),
+            "sneakAnimation" to listOf("smooth sneak", "crouch"),
+            "longUnsneak" to listOf("smooth sneak", "crouch"),
+            "damageTilt" to listOf("hurt cam", "hurt tilt"),
+            "disableHurtCamera" to listOf("hurt cam", "screen shake"),
+            "cameraVersion" to listOf("eye height", "camera height"),
+            "disableHeartFlash" to listOf("heart flash", "health blink"),
+            "dropSwing" to listOf("drop animation"),
+            "tabListStyle" to listOf("tab list", "player list"),
+            "legacyDebugScreen" to listOf("f3", "debug"),
+            "debugCrosshairStyle" to listOf("f3", "debug crosshair"),
+        )
+
         private val EXTERNALLY_CONTROLLED_OPTIONS = buildSet {
             if (HAS_BETTER_HURT_CAM) add("damageTilt")
         }
@@ -113,6 +149,7 @@ open class EntryBundle(protected val category: Category, private val name: Strin
             property.addMetadata("category", categoryKey)
             subcategoryKey?.let { property.addMetadata("subcategory", it) }
             property.addMetadata(entry.metadata)
+            ALIASES[entry.name]?.let { property.addMetadata("aliases", it) }
             if (entry.name in EXTERNALLY_CONTROLLED_OPTIONS) {
                 property.addDisplayCondition(Supplier { Property.Display.DISABLED })
             }

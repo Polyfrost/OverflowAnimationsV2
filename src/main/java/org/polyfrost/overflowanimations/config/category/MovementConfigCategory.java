@@ -39,25 +39,24 @@ import org.polyfrost.overflowanimations.util.enums.SneakEyeHeightSetting;
 
 public final class MovementConfigCategory extends Category {
     // (Movement) Cape
-    public CapeMovementSetting capeMovement = CapeMovementSetting.V1_13;
+    public CapeMovementSetting capeMovement = LEGACY ? CapeMovementSetting.V1_12 : CapeMovementSetting.V1_13;
     public boolean disableCapeLean = false;
-    public boolean disableCapeSwingRotation = false;
-    public boolean capeChestplateTranslation = false;
-    public boolean capeSneakPosition = false;
+    public boolean disableCapeSwingRotation = LEGACY;
+    public boolean capeChestplateTranslation = LEGACY;
+    public boolean capeSneakPosition = LEGACY;
     // (Movement) Other
-    public SneakAnimationSetting sneakAnimation = SneakAnimationSetting.V1_14;
-    public boolean longUnsneak = true;
-    public boolean longUnsneakLegacyOnly = true;
+    public SneakAnimationSetting sneakAnimation = LEGACY ? SneakAnimationSetting.V1_7 : SneakAnimationSetting.VANILLA;
+    public boolean longUnsneak = LEGACY;
     public SneakEyeHeightSetting sneakEyeHeight = SneakEyeHeightSetting.VANILLA;
-    public BackwardsWalkingSetting backwardsWalking = BackwardsWalkingSetting.V1_12;
-    public boolean uncapBlockingHeadRotation = false;
-    public HeadRotationInterpolationSetting headRotationInterpolation = HeadRotationInterpolationSetting.V1_13;
-    public SneakBobbingSetting sneakBobbing = SneakBobbingSetting.V1_21_2;
-    public boolean deathLimbs = false;
-    public boolean bowArmMovement = false;
-    public DamageTiltSetting damageTilt = DamageTiltSetting.VANILLA;
-    public boolean offsetHurtTiltTime = false;
-    public SlimArmPositionSetting slimArmPosition = SlimArmPositionSetting.V1_15;
+    public BackwardsWalkingSetting backwardsWalking = LEGACY ? BackwardsWalkingSetting.V1_8 : BackwardsWalkingSetting.VANILLA;
+    public boolean uncapBlockingHeadRotation = LEGACY;
+    public HeadRotationInterpolationSetting headRotationInterpolation = LEGACY ? HeadRotationInterpolationSetting.V1_8 : HeadRotationInterpolationSetting.VANILLA;
+    public SneakBobbingSetting sneakBobbing = LEGACY ? SneakBobbingSetting.V1_21_1 : SneakBobbingSetting.VANILLA;
+    public boolean deathLimbs = LEGACY;
+    public boolean bowArmMovement = LEGACY;
+    public DamageTiltSetting damageTilt = LEGACY ? DamageTiltSetting.V1_8 : DamageTiltSetting.VANILLA;
+    public boolean offsetHurtTiltTime = LEGACY;
+    public SlimArmPositionSetting slimArmPosition = LEGACY ? SlimArmPositionSetting.V1_8 : SlimArmPositionSetting.VANILLA;
 
     public boolean disableHurtCamera = false;
     public boolean dinnerboneMode = false;
@@ -68,30 +67,29 @@ public final class MovementConfigCategory extends Category {
     public @NonNull EntryBundle bundle() {
         final EntryBundle bundle = new EntryBundle(this, "movement");
 
+        bundle.group("other")
+                .enumEntry("sneakAnimation", SneakAnimationSetting.class)
+                .booleanEntry("longUnsneak")
+                .enumEntry("sneakEyeHeight", SneakEyeHeightSetting.class)
+                .enumEntry("sneakBobbing", SneakBobbingSetting.class)
+                .enumEntry("backwardsWalking", BackwardsWalkingSetting.class)
+                .enumEntry("headRotationInterpolation", HeadRotationInterpolationSetting.class)
+                .booleanEntry("uncapBlockingHeadRotation")
+                .booleanEntry("bowArmMovement")
+                .enumEntry("slimArmPosition", SlimArmPositionSetting.class)
+                .booleanEntry("deathLimbs");
+
+        bundle.group("modern")
+                .enumEntry("damageTilt", DamageTiltSetting.class)
+                .booleanEntry("offsetHurtTiltTime")
+                .booleanEntry("disableHurtCamera");
+
         bundle.group("cape")
                 .enumEntry("capeMovement", CapeMovementSetting.class)
                 .booleanEntry("disableCapeLean")
                 .booleanEntry("disableCapeSwingRotation")
                 .booleanEntry("capeChestplateTranslation")
                 .booleanEntry("capeSneakPosition");
-
-        bundle.group("other")
-                .enumEntry("sneakAnimation", SneakAnimationSetting.class)
-                .booleanEntry("longUnsneak")
-                .booleanEntry("longUnsneakLegacyOnly")
-                .enumEntry("sneakEyeHeight", SneakEyeHeightSetting.class)
-                .enumEntry("backwardsWalking", BackwardsWalkingSetting.class)
-                .booleanEntry("uncapBlockingHeadRotation")
-                .enumEntry("headRotationInterpolation", HeadRotationInterpolationSetting.class)
-                .enumEntry("sneakBobbing", SneakBobbingSetting.class)
-                .booleanEntry("deathLimbs")
-                .booleanEntry("bowArmMovement")
-                .enumEntry("damageTilt", DamageTiltSetting.class)
-                .booleanEntry("offsetHurtTiltTime")
-                .enumEntry("slimArmPosition", SlimArmPositionSetting.class);
-
-        bundle.group("modern")
-                .booleanEntry("disableHurtCamera");
 
         bundle.group("fun")
                 .booleanEntry("dinnerboneMode")

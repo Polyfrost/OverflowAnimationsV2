@@ -42,54 +42,46 @@ import org.polyfrost.overflowanimations.util.enums.BlockMiningProgressSetting;
 
 public final class OtherConfigCategory extends Category {
     // Sky
-    public boolean blueVoidSky = false;
-    public boolean planarSkyFog = false;
-    public boolean cloudHeight = false;
-    public boolean playerVoidBox = false;
-    public boolean oldCloudRendering = false;
-    public VoidFogSetting voidFog = VoidFogSetting.OFF;
+    public boolean blueVoidSky = LEGACY;
+    public boolean planarSkyFog = LEGACY;
+    public boolean cloudHeight = LEGACY;
+    public boolean playerVoidBox = LEGACY;
+    public boolean oldCloudRendering = LEGACY;
+    public VoidFogSetting voidFog = LEGACY ? VoidFogSetting.PARTICLES : VoidFogSetting.OFF;
     // Damage Tint
-    public boolean damageTintArmor = true;
+    public boolean damageTintArmor = LEGACY;
     public boolean glintAffectsArmorTint = false;
     public boolean damageTintItems = false;
     public boolean damageTintCape = false;
-    public DamageTintSetting damageTintStyle = DamageTintSetting.VANILLA;
+    public DamageTintSetting damageTintStyle = LEGACY ? DamageTintSetting.V1_7 : DamageTintSetting.VANILLA;
     // Other
-    public boolean restoreParticleBlending = false;
-    public boolean lockBlockingArmRotation = false;
-    public BlockMiningProgressSetting blockMiningProgress = BlockMiningProgressSetting.V1_20;
-    public boolean projectileAgeCheck = false;
-    public boolean blockOutlineRendering = false;
-    public boolean disableModelWhilstSleeping = false;
-    public boolean flameDimensions = false;
+    public boolean restoreParticleBlending = LEGACY;
+    public boolean lockBlockingArmRotation = LEGACY;
+    public BlockMiningProgressSetting blockMiningProgress = LEGACY ? BlockMiningProgressSetting.V1_8 : BlockMiningProgressSetting.VANILLA;
+    public boolean projectileAgeCheck = LEGACY;
+    public boolean blockOutlineRendering = LEGACY;
+    public boolean disableModelWhilstSleeping = LEGACY;
+    public boolean flameDimensions = LEGACY;
     public boolean heldItemArmLogic = false;
-    public boolean thirdPersonSwordBlockingPosition = true;
-    public boolean disableInventoryEntityScissor = false;
-    public boolean maxGlintProperties = false;
-    public boolean flameOffset = false;
-    public boolean persistentBlockOutline = false;
+    public boolean thirdPersonSwordBlockingPosition = LEGACY;
+    public boolean disableInventoryEntityScissor = LEGACY;
+    public boolean maxGlintProperties = LEGACY;
+    public boolean flameOffset = LEGACY;
+    public boolean persistentBlockOutline = LEGACY;
     public boolean fastGrass = false;
     public boolean oldY0Height = false;
-    public boolean oldWaterOverlayOpacity = false;
-    public boolean oldWaterColorFog = false;
+    public boolean oldWaterOverlayOpacity = LEGACY;
+    public boolean oldWaterColorFog = LEGACY;
     public boolean oldWaterColorEffects = false;
-    public boolean disableRandomBlockRotations = false;
-    public boolean legacyDiffuseLighting = false;
-    public boolean legacyLightmap = false;
-    public boolean legacyFogDarkness = false;
-    public boolean legacySplashPosition = false;
+    public boolean disableRandomBlockRotations = LEGACY;
+    public boolean legacyDiffuseLighting = LEGACY;
+    public boolean legacyLightmap = LEGACY;
+    public boolean legacyFogDarkness = LEGACY;
+    public boolean legacySplashPosition = LEGACY;
 
     @Override
     public @NonNull EntryBundle bundle() {
         final EntryBundle bundle = new EntryBundle(this, "other");
-
-        bundle.group("sky")
-                .booleanEntry("oldCloudRendering")
-                .booleanEntry("cloudHeight")
-                .booleanEntry("blueVoidSky")
-                .booleanEntry("playerVoidBox")
-                .enumEntry("voidFog", VoidFogSetting.class)
-                .booleanEntry("planarSkyFog");
 
         // Lunar Client handles armor tint itself, but item and cape tint still apply there.
         final GroupBundle damageTint = bundle.group("damage_tint");
@@ -109,19 +101,19 @@ public final class OtherConfigCategory extends Category {
         }
 
         bundle.group("other")
-                .booleanEntry("restoreParticleBlending")
+                .booleanEntry("thirdPersonSwordBlockingPosition")
                 .booleanEntry("lockBlockingArmRotation")
                 .enumEntry("blockMiningProgress", BlockMiningProgressSetting.class)
-                .booleanEntry("projectileAgeCheck")
+                .booleanEntry("persistentBlockOutline")
                 .booleanEntry("blockOutlineRendering")
+                .booleanEntry("restoreParticleBlending")
+                .booleanEntry("projectileAgeCheck")
                 .booleanEntry("disableModelWhilstSleeping")
                 .booleanEntry("flameDimensions")
                 .booleanEntry("heldItemArmLogic")
-                .booleanEntry("thirdPersonSwordBlockingPosition")
                 .booleanEntry("disableInventoryEntityScissor")
                 .booleanEntry("maxGlintProperties")
                 .booleanEntry("flameOffset")
-                .booleanEntry("persistentBlockOutline")
                 //? if <=1.8.9 {
                 /*.booleanEntry("fastGrass", value -> Minecraft.getInstance().worldRenderer.reload())
                 *///?} elif <26.2 {
@@ -151,6 +143,14 @@ public final class OtherConfigCategory extends Category {
                 .booleanEntry("legacyLightmap")
                 .booleanEntry("legacyFogDarkness")
                 .booleanEntry("legacySplashPosition");
+
+        bundle.group("sky")
+                .booleanEntry("oldCloudRendering")
+                .booleanEntry("cloudHeight")
+                .booleanEntry("blueVoidSky")
+                .booleanEntry("playerVoidBox")
+                .enumEntry("voidFog", VoidFogSetting.class)
+                .booleanEntry("planarSkyFog");
 
         return bundle;
     }
