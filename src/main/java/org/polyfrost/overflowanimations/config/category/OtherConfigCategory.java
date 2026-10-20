@@ -35,6 +35,7 @@ import org.polyfrost.overflowanimations.handler.config.category.Category;
 import org.polyfrost.overflowanimations.handler.rendering.RenderUtilsKt;
 //? if >=1.21.6
 import org.polyfrost.overflowanimations.handler.rendering.lighting.LegacyDiffuseLighting;
+import org.polyfrost.overflowanimations.util.enums.DamageTintHeldItemsSetting;
 import org.polyfrost.overflowanimations.util.enums.DamageTintSetting;
 import org.polyfrost.overflowanimations.util.enums.VoidFogSetting;
 import org.polyfrost.overflowanimations.util.enums.BlockMiningProgressSetting;
@@ -51,7 +52,7 @@ public final class OtherConfigCategory extends Category {
     // Damage Tint
     public boolean damageTintArmor = LEGACY;
     public boolean glintAffectsArmorTint = false;
-    public boolean damageTintItems = false;
+    public DamageTintHeldItemsSetting damageTintHeldItems = DamageTintHeldItemsSetting.OFF;
     public boolean damageTintCape = false;
     public DamageTintSetting damageTintStyle = LEGACY ? DamageTintSetting.V1_7 : DamageTintSetting.VANILLA;
     // Other
@@ -90,7 +91,7 @@ public final class OtherConfigCategory extends Category {
                     .booleanEntry("glintAffectsArmorTint");
         }
 
-        damageTint.booleanEntry("damageTintItems")
+        damageTint.enumEntry("damageTintHeldItems", DamageTintHeldItemsSetting.class)
                 .booleanEntry("damageTintCape");
         if (!ModsKt.HAS_LUNAR_CLIENT) {
             //? if >1.8.9 {

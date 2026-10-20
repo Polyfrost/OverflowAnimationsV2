@@ -125,7 +125,7 @@ public abstract class MixinAvatarRenderer_HeldItemArmLogic<AvatarLikeEntity exte
         final var avatarRenderState = overflowanimations$renderState.get();
 
         int overlay = packedOverlay;
-        if (OverflowAnimations.isEnabled() && avatarRenderState != null && OverflowAnimationsConfig.instance().other.damageTintItems) {
+        if (OverflowAnimations.isEnabled() && avatarRenderState != null && OverflowAnimationsConfig.instance().other.damageTintHeldItems.hasFirstPerson()) {
             overlay = LivingEntityRenderer.getOverlayCoords(avatarRenderState, 0.0F);
         }
 

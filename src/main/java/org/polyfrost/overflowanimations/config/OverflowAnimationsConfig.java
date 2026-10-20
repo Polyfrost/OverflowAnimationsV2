@@ -51,6 +51,7 @@ import org.polyfrost.overflowanimations.util.enums.CapeMovementSetting;
 import org.polyfrost.overflowanimations.util.enums.DebugCrosshairSetting;
 import org.polyfrost.overflowanimations.util.enums.FishingRodVersionSetting;
 import org.polyfrost.overflowanimations.util.enums.DamageTiltSetting;
+import org.polyfrost.overflowanimations.util.enums.DamageTintHeldItemsSetting;
 import org.polyfrost.overflowanimations.util.enums.InventoryEffectsSetting;
 import org.polyfrost.overflowanimations.util.enums.ItemGlintSetting;
 import org.polyfrost.overflowanimations.util.enums.PotionGlintSetting;
@@ -72,7 +73,7 @@ public final class OverflowAnimationsConfig extends Config {
     *///?} else
     private static final String ID = SHARED_ID;
     private static final Path CONFIG_DIR = FabricLoader.getInstance().getConfigDir();
-    private static final int CONFIG_VERSION = 7;
+    private static final int CONFIG_VERSION = 8;
 
     private static JsonObject savedConfig = readSavedConfig();
     private static JsonObject legacyConfig = takeLegacyConfig();
@@ -165,6 +166,10 @@ public final class OverflowAnimationsConfig extends Config {
                 this.movement.longUnsneak = false;
             }
             //?}
+
+            if (this.configVersion < 8 && savedConfig != null && isTrue(savedConfig, "damageTintItems")) {
+                this.other.damageTintHeldItems = DamageTintHeldItemsSetting.BOTH;
+            }
 
             this.configVersion = CONFIG_VERSION;
             this.save();
@@ -262,6 +267,7 @@ public final class OverflowAnimationsConfig extends Config {
         migrateCapeMovement(root);
         migrateLegacyGlint(root);
         migrateVersionToggles(root);
+        migrateDamageTintItems(root);
         return root;
     }
 
@@ -353,6 +359,12 @@ public final class OverflowAnimationsConfig extends Config {
             if (root.get(toggle[0]) instanceof JsonObject category && category.remove(toggle[1]) instanceof JsonElement value && value.getAsBoolean()) {
                 category.addProperty(toggle[2], "V1_8");
             }
+        }
+    }
+
+    private static void migrateDamageTintItems(final JsonObject root) {
+        if (root.get("other") instanceof JsonObject other && other.remove("damage_tint_items") instanceof JsonElement value) {
+            other.addProperty("damage_tint_held_items", value.getAsBoolean() ? "BOTH" : "OFF");
         }
     }
 

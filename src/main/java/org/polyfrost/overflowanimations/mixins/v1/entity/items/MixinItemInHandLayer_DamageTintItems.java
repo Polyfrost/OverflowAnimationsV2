@@ -47,7 +47,7 @@ public abstract class MixinItemInHandLayer_DamageTintItems<S extends ArmedEntity
     @ModifyExpressionValue(method = "submitArmWithItem", at = @At(value = "FIELD", target = "Lnet/minecraft/client/renderer/texture/OverlayTexture;NO_OVERLAY:I", opcode = Opcodes.GETSTATIC))
 //?}
     private int overflowanimations$damageTintItems(final int original, @Local(argsOnly = true, ordinal = 0) final S state) {
-        if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().other.damageTintItems) {
+        if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().other.damageTintHeldItems.hasThirdPerson()) {
             return LivingEntityRenderer.getOverlayCoords(state, 0.0F);
         } else {
             return original;

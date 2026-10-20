@@ -44,7 +44,7 @@ public abstract class MixinItemInHandRenderer_DamageTintItems {
     @WrapOperation(method = "renderInFirstPerson", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/ItemInHandRenderer;render(Lnet/minecraft/entity/living/LivingEntity;Lnet/minecraft/item/ItemStack;Lnet/minecraft/client/resource/model/ModelTransformations$Type;)V"))
     private void overflowanimations$tintFirstPersonItem(final ItemInHandRenderer instance, final LivingEntity entity, final ItemStack item, final ModelTransformations.Type transform, final Operation<Void> original, @Local(argsOnly = true) final float tickDelta) {
         MixinLivingEntityRenderer_DamageTintInvoker renderer = null;
-        if (OverflowAnimations.isEnabled() && LegacyDamageTint.config().damageTintItems) {
+        if (OverflowAnimations.isEnabled() && LegacyDamageTint.config().damageTintHeldItems.hasFirstPerson()) {
             final EntityRenderer<?> entityRenderer = Minecraft.getInstance().getEntityRenderDispatcher().getRenderer(entity);
             if (entityRenderer instanceof MixinLivingEntityRenderer_DamageTintInvoker invoker && invoker.overflowanimations$tint$setupOverlayColor(entity, tickDelta, true)) {
                 renderer = invoker;

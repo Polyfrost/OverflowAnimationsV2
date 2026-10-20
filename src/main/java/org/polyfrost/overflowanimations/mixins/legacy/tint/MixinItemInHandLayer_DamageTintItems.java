@@ -36,6 +36,6 @@ import org.spongepowered.asm.mixin.injection.At;
 public abstract class MixinItemInHandLayer_DamageTintItems {
     @ModifyReturnValue(method = "colorsWhenDamaged", at = @At("RETURN"))
     private boolean overflowanimations$tintItems(final boolean original) {
-        return original || OverflowAnimations.isEnabled() && LegacyDamageTint.config().damageTintItems;
+        return original || OverflowAnimations.isEnabled() && LegacyDamageTint.config().damageTintHeldItems.hasThirdPerson();
     }
 }
