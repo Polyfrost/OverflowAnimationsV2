@@ -41,7 +41,7 @@ import org.polyfrost.oneconfig.api.config.v1.Property;
 import org.polyfrost.oneconfig.api.config.v1.Tree;
 import org.polyfrost.oneconfig.api.config.v1.Visualizer;
 import org.polyfrost.oneconfig.api.ui.v1.OneConfigUI;
-import org.polyfrost.oneconfig.internal.ui.navigation.graph.ModConfigRoute;
+import org.polyfrost.oneconfig.api.ui.v1.page.OneConfigPages;
 import org.polyfrost.overflowanimations.OverflowAnimations;
 import org.polyfrost.overflowanimations.OverflowAnimationsConstants;
 import org.polyfrost.overflowanimations.config.category.*;
@@ -280,7 +280,7 @@ public final class OverflowAnimationsConfig extends Config {
     }
 
     public static void openScreen() {
-        OneConfigUI.open(new ModConfigRoute(ID, null));
+        OneConfigUI.open(OneConfigPages.modConfig(ID));
     }
 
     public static OverflowAnimationsConfig instance() {
