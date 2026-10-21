@@ -84,7 +84,7 @@ public final class OverflowAnimationsConfig extends Config {
     *///?} else
     private static final String ID = SHARED_ID;
     private static final Path CONFIG_DIR = FabricLoader.getInstance().getConfigDir();
-    private static final int CONFIG_VERSION = 9;
+    private static final int CONFIG_VERSION = 10;
 
     private static JsonObject savedConfig = readSavedConfig();
     private static JsonObject legacyConfig = takeLegacyConfig();
@@ -186,6 +186,12 @@ public final class OverflowAnimationsConfig extends Config {
 
             if (this.configVersion < 8 && savedConfig != null && isTrue(savedConfig, "damageTintItems")) {
                 this.other.damageTintHeldItems = DamageTintHeldItemsSetting.BOTH;
+            }
+
+            if (this.configVersion < 10 && savedConfig != null && savedConfig.has("reequipSpeed")) {
+                try {
+                    this.items.swapSpeed = savedConfig.get("reequipSpeed").getAsFloat();
+                } catch (final Exception ignored) {}
             }
 
             this.configVersion = CONFIG_VERSION;

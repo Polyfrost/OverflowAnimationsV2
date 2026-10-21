@@ -113,6 +113,8 @@ public final class ItemsConfigCategory extends Category {
     public float itemPickupOffset = 0.0F;
     public boolean entityItemPositions = true;
     public boolean disableHandSway = false;
+    public boolean instantSwap = false;
+    public float swapSpeed = 0.4F;
     public float reequipSpeed = 0.4F;
     public boolean smartSwingScaling = false;
     public boolean disableDropSwingInContainers = false;
@@ -134,6 +136,9 @@ public final class ItemsConfigCategory extends Category {
     public float swingPositionX = 0.0F;
     public float swingPositionY = 0.0F;
     public float swingPositionZ = 0.0F;
+    public float swapPositionX = 0.0F;
+    public float swapPositionY = 0.0F;
+    public float swapPositionZ = 0.0F;
     public float consumePositionX = 0.0F;
     public float consumePositionY = 0.0F;
     public float consumePositionZ = 0.0F;
@@ -203,7 +208,6 @@ public final class ItemsConfigCategory extends Category {
                 .booleanEntry("fakeMissPenaltySwing")
                 .booleanEntry("fakeMissPenaltyParticles")
                 .booleanEntry("legacySwingAnimation")
-                .floatRange("reequipSpeed", 0.1F, 1.0F, 0.05F)
                 .booleanEntry("disableSwingOnUse")
                 .booleanEntry("disableSwingOnEntityInteract")
                 .enumEntry("dropSwing", DropSwingSetting.class)
@@ -286,6 +290,13 @@ public final class ItemsConfigCategory extends Category {
                 .floatRange("swingPositionX", -2.0F, 2.0F, 0.01F)
                 .floatRange("swingPositionY", -2.0F, 2.0F, 0.01F)
                 .floatRange("swingPositionZ", -2.0F, 2.0F, 0.01F);
+
+        bundle.group("swap_position")
+                .booleanEntry("instantSwap")
+                .floatRange("swapSpeed", 0.1F, 1.0F, 0.05F)
+                .floatRange("swapPositionX", -2.0F, 2.0F, 0.01F)
+                .floatRange("swapPositionY", -2.0F, 2.0F, 0.01F)
+                .floatRange("swapPositionZ", -2.0F, 2.0F, 0.01F);
 
         bundle.group("consume_position")
                 .floatRange("consumePositionX", -2.0F, 2.0F, 0.01F)
