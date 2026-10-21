@@ -5,7 +5,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     id("dev.kikugie.loom-back-compat")
-    id("org.jetbrains.kotlin.jvm") version "2.4.10"
+    id("org.jetbrains.kotlin.jvm") version "2.4.20"
     id("com.google.devtools.ksp") version "2.3.6"
     id("dev.kikugie.fletching-table.fabric") version "0.1.0-alpha.22"
     id("dev.deftu.gradle.bloom") version "0.2.0"
@@ -59,6 +59,7 @@ repositories {
         filter { groups.forEach(::includeGroup) }
     }
 
+    mavenLocal()
     mavenCentral()
     strictMaven("https://maven.fabricmc.net/", "FabricMC", "net.fabricmc", "net.fabricmc.fabric-api")
     strictMaven("https://maven.terraformersmc.com/", "TerraformersMC", "com.terraformersmc")
