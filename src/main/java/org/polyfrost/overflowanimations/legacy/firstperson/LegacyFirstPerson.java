@@ -129,7 +129,7 @@ public final class LegacyFirstPerson {
         final Item item = stack.getItem();
         final Block block = item instanceof BlockItem ? ((BlockItem) item).getBlock() : null;
         if (model.isCustomRenderer()) {
-            if (items.itemPositions && !items.lunarItemPositions && (block instanceof ChestBlock || block instanceof EnderChestBlock)) {
+            if (items.firstPersonItemPositions.isOld() && !items.lunarItemPositions && (block instanceof ChestBlock || block instanceof EnderChestBlock)) {
                 GlStateManager.rotatef(-90.0F, 0.0F, 1.0F, 0.0F);
             }
             return false;
@@ -139,7 +139,7 @@ public final class LegacyFirstPerson {
             if (block == null || items.lunarItemPositions) {
                 return false;
             }
-            if (items.itemPositions) {
+            if (items.firstPersonItemPositions.isOld()) {
                 final boolean frontOnSouth = block instanceof FurnaceBlock || block instanceof DispenserBlock || block instanceof PumpkinBlock;
                 GlStateManager.rotatef(frontOnSouth ? 270.0F : 90.0F, 0.0F, 1.0F, 0.0F);
             }
@@ -160,7 +160,7 @@ public final class LegacyFirstPerson {
                 return false;
             }
             GlStateManager.rotatef(180.0F, 0.0F, 1.0F, 0.0F);
-        } else if (!items.itemPositions || (items.lunarBlockHitPosition && item instanceof SwordItem)) {
+        } else if (!items.firstPersonItemPositions.isOld() || (items.lunarBlockHitPosition && item instanceof SwordItem)) {
             return false;
         }
         applyLegacyItemTransform();

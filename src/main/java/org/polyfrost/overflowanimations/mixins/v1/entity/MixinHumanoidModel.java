@@ -185,7 +185,7 @@ public abstract class MixinHumanoidModel<T extends HumanoidRenderState> extends 
     @WrapOperation(method = {"poseLeftArm", "poseRightArm"}, at = @At(value = "INVOKE", target = "Lnet/minecraft/client/model/HumanoidModel;poseBlockingArm(Lnet/minecraft/client/model/geom/ModelPart;Z)V"))
     private void overflowanimations$oldSwordBlockArm(final HumanoidModel<?> instance, final ModelPart arm, final boolean right, final Operation<Void> original, @Local(argsOnly = true, ordinal = 0) final T state) {
         original.call(instance, arm, right);
-        if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().other.thirdPersonSwordBlockingPosition) {
+        if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().other.thirdPersonBlockAnimation.isOld()) {
             final ItemStack stack = state.overflowanimations$getItemHeldByArm(right ? HumanoidArm.RIGHT : HumanoidArm.LEFT);
             if (!(stack.getItem() instanceof ShieldItem)) {
                 arm.xRot = arm.xRot * 0.5F - ((float) Math.PI / 10.0F) * 2.0F;

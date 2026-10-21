@@ -56,7 +56,7 @@ public abstract class MixinAbstractArmorLayer_DamageTint {
     @ModifyReturnValue(method = "colorsWhenDamaged", at = @At("RETURN"))
     private boolean overflowanimations$tintArmor(final boolean original) {
         final OtherConfigCategory config = LegacyDamageTint.config();
-        return original || OverflowAnimations.isEnabled() && config.damageTintArmor && !LegacyDamageTint.flatTint();
+        return original || OverflowAnimations.isEnabled() && config.hitColorArmor.isOld() && !LegacyDamageTint.flatTint();
     }
 
     @WrapOperation(method = "renderArmor", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/model/Model;render(Lnet/minecraft/entity/Entity;FFFFFF)V", ordinal = 1))
@@ -64,7 +64,7 @@ public abstract class MixinAbstractArmorLayer_DamageTint {
         original.call(model, entity, walkAnimationProgress, walkAnimationSpeed, bob, yaw, pitch, scale);
         final OtherConfigCategory config = LegacyDamageTint.config();
         final boolean tintAfterGlint = config.glintAffectsArmorTint && !this.hasColor && stack.hasEnchantments();
-        if (config.damageTintArmor && !tintAfterGlint && LegacyDamageTint.beginFlatPass(entity, tickDelta)) {
+        if (config.hitColorArmor.isOld() && !tintAfterGlint && LegacyDamageTint.beginFlatPass(entity, tickDelta)) {
             original.call(model, entity, walkAnimationProgress, walkAnimationSpeed, bob, yaw, pitch, scale);
             LegacyDamageTint.endFlatPass();
         }
@@ -73,7 +73,7 @@ public abstract class MixinAbstractArmorLayer_DamageTint {
     @WrapOperation(method = "renderArmor", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/entity/layer/AbstractArmorLayer;renderEnchantmentGlint(Lnet/minecraft/entity/living/LivingEntity;Lnet/minecraft/client/render/model/Model;FFFFFFF)V"))
     private void overflowanimations$glintTint(final AbstractArmorLayer<?> instance, final LivingEntity entity, final Model model, final float walkAnimationProgress, final float walkAnimationSpeed, final float tickDelta, final float bob, final float yaw, final float pitch, final float scale, final Operation<Void> original) {
         final OtherConfigCategory config = LegacyDamageTint.config();
-        final boolean suspendCombiners = OverflowAnimations.isEnabled() && config.damageTintArmor && !config.glintAffectsArmorTint && !LegacyDamageTint.flatTint() && LegacyDamageTint.isHurt(entity);
+        final boolean suspendCombiners = OverflowAnimations.isEnabled() && config.hitColorArmor.isOld() && !config.glintAffectsArmorTint && !LegacyDamageTint.flatTint() && LegacyDamageTint.isHurt(entity);
         if (suspendCombiners) {
             this.overflowanimations$parent().overflowanimations$tint$tearDownOverlayColor();
         }
@@ -83,7 +83,7 @@ public abstract class MixinAbstractArmorLayer_DamageTint {
             this.overflowanimations$parent().overflowanimations$tint$setupOverlayColor(entity, tickDelta, true);
         }
 
-        if (config.damageTintArmor && config.glintAffectsArmorTint && LegacyDamageTint.beginFlatPass(entity, tickDelta)) {
+        if (config.hitColorArmor.isOld() && config.glintAffectsArmorTint && LegacyDamageTint.beginFlatPass(entity, tickDelta)) {
             model.render(entity, walkAnimationProgress, walkAnimationSpeed, bob, yaw, pitch, scale);
             LegacyDamageTint.endFlatPass();
         }

@@ -123,7 +123,7 @@ fun applyLegacyFirstPersonTransforms(poseStack: PoseStack, direction: Int, runna
 }
 
 fun shouldApplyItemPositionsInThirdPerson(armedEntityRenderState: ArmedEntityRenderState, stack: ItemStack, useBlockLight: Boolean) =
-    if (OverflowAnimationsConfig.instance().items.itemPositionsInThirdPerson &&
+    if (OverflowAnimationsConfig.instance().items.thirdPersonItemPositions.isOld &&
         //? if <1.21.9 {
         /*(OverflowAnimationsConfig.instance().items.entityItemPositions || armedEntityRenderState is PlayerRenderState)
         *///?} else {
@@ -134,7 +134,7 @@ fun shouldApplyItemPositionsInThirdPerson(armedEntityRenderState: ArmedEntityRen
     } else if (OverflowAnimationsConfig.instance().items.fishingRodVersion == FishingRodVersionSetting.V1_7) {
         isFishingRodItem(armedEntityRenderState.`overflowanimations$getItemHeldByArm`(armedEntityRenderState.mainArm))
     } else {
-        OverflowAnimationsConfig.instance().other.thirdPersonSwordBlockingPosition && isBlockingArm(
+        OverflowAnimationsConfig.instance().other.thirdPersonBlockAnimation.isOld && isBlockingArm(
             armedEntityRenderState.mainArm,
             armedEntityRenderState
         )

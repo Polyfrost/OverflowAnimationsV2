@@ -40,7 +40,7 @@ enum class PresetVersion(private val applier: Runnable) {
         // Values
         val movement = OverflowAnimationsConfig.instance().movement
         movement.sneakAnimation = SneakAnimationSetting.V1_7
-        movement.longUnsneak = true
+        movement.longerUnsneak = UnsneakSetting.LONG
         movement.capeMovement = CapeMovementSetting.V1_12
         movement.disableCapeLean = false
         movement.disableCapeSwingRotation = true
@@ -58,7 +58,7 @@ enum class PresetVersion(private val applier: Runnable) {
 
         val screen = OverflowAnimationsConfig.instance().screen
         screen.thirdPersonCrosshair = ThirdPersonCrosshairSetting.V1_8
-        screen.disableHeartFlash = true
+        screen.healthBarFlashing = HeartFlashingSetting.V1_7
         screen.centerScrollableListWidgets = true
         screen.listWidgetSelectedBorderColor = true
         screen.legacyWidgetHoverTextColor = true
@@ -85,14 +85,14 @@ enum class PresetVersion(private val applier: Runnable) {
         items.glintOnItemFramed2D = false
         items.itemDropsFaceCamera = true
         items.itemDropsFaceCameraRotationFix = false
-        items.itemDrops2D = true
+        items.droppedItems2D = DroppedItemsSetting.FLAT
         items.itemFramed2D = true
-        items.itemPositions = true
-        items.itemPositionsInThirdPerson = true
+        items.firstPersonItemPositions = FirstPersonItemPositionsSetting.V1_7
+        items.thirdPersonItemPositions = ThirdPersonItemPositionsSetting.V1_7
         items.thinBlockPositions = true
         items.skullPosition = true
         items.fishingRodVersion = FishingRodVersionSetting.V1_7
-        items.itemUsageSwinging = true
+        items.punchingDuringUsage = BlockHittingSetting.V1_7
         items.equipAnimationVersion = EquipAnimationVersionSetting.V1_7
         items.disableSwingOnUse = true
         items.dropSwing = DropSwingSetting.V1_8
@@ -109,14 +109,14 @@ enum class PresetVersion(private val applier: Runnable) {
         other.planarSkyFog = true
         other.cloudHeight = true
         other.playerVoidBox = true
-        other.thirdPersonSwordBlockingPosition = true
+        other.thirdPersonBlockAnimation = ThirdPersonBlockAnimationSetting.V1_7
         other.lockBlockingArmRotation = true
         other.projectileAgeCheck = true
         other.blockMiningProgress = BlockMiningProgressSetting.V1_8
         other.disableInventoryEntityScissor = true
         other.blockOutlineRendering = true
         other.disableModelWhilstSleeping = true
-        other.damageTintArmor = true
+        other.hitColorArmor = HitColorArmorSetting.RED
         other.glintAffectsArmorTint = false
         other.damageTintStyle = DamageTintSetting.V1_7
         other.maxGlintProperties = true
@@ -144,7 +144,7 @@ enum class PresetVersion(private val applier: Runnable) {
         // Values
         val movement = OverflowAnimationsConfig.instance().movement
         movement.sneakAnimation = SneakAnimationSetting.V1_8
-        movement.longUnsneak = false
+        movement.longerUnsneak = UnsneakSetting.MATCH_SNEAK_ANIMATION
         movement.capeMovement = CapeMovementSetting.V1_12
         movement.disableCapeLean = false
         movement.disableCapeSwingRotation = true
@@ -162,7 +162,7 @@ enum class PresetVersion(private val applier: Runnable) {
 
         val screen = OverflowAnimationsConfig.instance().screen
         screen.thirdPersonCrosshair = ThirdPersonCrosshairSetting.V1_8
-        screen.disableHeartFlash = false
+        screen.healthBarFlashing = HeartFlashingSetting.V1_8
         screen.centerScrollableListWidgets = false
         screen.listWidgetSelectedBorderColor = true
         screen.legacyWidgetHoverTextColor = true
@@ -189,14 +189,14 @@ enum class PresetVersion(private val applier: Runnable) {
         items.glintOnItemFramed2D = true
         items.itemDropsFaceCamera = false
         items.itemDropsFaceCameraRotationFix = false
-        items.itemDrops2D = false
+        items.droppedItems2D = DroppedItemsSetting.MODEL
         items.itemFramed2D = false
-        items.itemPositions = false
-        items.itemPositionsInThirdPerson = false
+        items.firstPersonItemPositions = FirstPersonItemPositionsSetting.V1_8
+        items.thirdPersonItemPositions = ThirdPersonItemPositionsSetting.V1_8
         items.thinBlockPositions = false
         items.skullPosition = true
         items.fishingRodVersion = FishingRodVersionSetting.V1_8
-        items.itemUsageSwinging = false
+        items.punchingDuringUsage = BlockHittingSetting.V1_8
         items.equipAnimationVersion = EquipAnimationVersionSetting.V1_8
         items.disableSwingOnUse = true
         items.dropSwing = DropSwingSetting.V1_8
@@ -213,14 +213,14 @@ enum class PresetVersion(private val applier: Runnable) {
         other.planarSkyFog = true
         other.cloudHeight = true
         other.playerVoidBox = true
-        other.thirdPersonSwordBlockingPosition = false
+        other.thirdPersonBlockAnimation = ThirdPersonBlockAnimationSetting.V1_8
         other.lockBlockingArmRotation = true
         other.projectileAgeCheck = true
         other.blockMiningProgress = BlockMiningProgressSetting.V1_8
         other.disableInventoryEntityScissor = true
         other.blockOutlineRendering = true
         other.disableModelWhilstSleeping = true
-        other.damageTintArmor = false
+        other.hitColorArmor = HitColorArmorSetting.UNCHANGED
         other.glintAffectsArmorTint = true
         other.damageTintStyle = DamageTintSetting.VANILLA
         other.maxGlintProperties = true
@@ -244,7 +244,7 @@ enum class PresetVersion(private val applier: Runnable) {
         // Values
         val movement = OverflowAnimationsConfig.instance().movement
         movement.sneakAnimation = SneakAnimationSetting.VANILLA
-        movement.longUnsneak = false
+        movement.longerUnsneak = UnsneakSetting.MATCH_SNEAK_ANIMATION
         //? if <=1.8.9 {
         /*movement.capeMovement = CapeMovementSetting.V1_12
         *///?} else {
@@ -266,7 +266,7 @@ enum class PresetVersion(private val applier: Runnable) {
 
         val screen = OverflowAnimationsConfig.instance().screen
         screen.thirdPersonCrosshair = ThirdPersonCrosshairSetting.VANILLA
-        screen.disableHeartFlash = false
+        screen.healthBarFlashing = HeartFlashingSetting.V1_8
         screen.centerScrollableListWidgets = false
         screen.listWidgetSelectedBorderColor = false
         screen.legacyWidgetHoverTextColor = false
@@ -293,14 +293,14 @@ enum class PresetVersion(private val applier: Runnable) {
         items.glintOnItemFramed2D = true
         items.itemDropsFaceCamera = false
         items.itemDropsFaceCameraRotationFix = false
-        items.itemDrops2D = false
+        items.droppedItems2D = DroppedItemsSetting.MODEL
         items.itemFramed2D = false
-        items.itemPositions = false
-        items.itemPositionsInThirdPerson = false
+        items.firstPersonItemPositions = FirstPersonItemPositionsSetting.V1_8
+        items.thirdPersonItemPositions = ThirdPersonItemPositionsSetting.V1_8
         items.thinBlockPositions = false
         items.skullPosition = false
         items.fishingRodVersion = FishingRodVersionSetting.VANILLA
-        items.itemUsageSwinging = false
+        items.punchingDuringUsage = BlockHittingSetting.V1_8
         items.equipAnimationVersion = EquipAnimationVersionSetting.VANILLA
         items.disableSwingOnUse = false
         items.dropSwing = DropSwingSetting.VANILLA
@@ -317,14 +317,14 @@ enum class PresetVersion(private val applier: Runnable) {
         other.planarSkyFog = false
         other.cloudHeight = false
         other.playerVoidBox = false
-        other.thirdPersonSwordBlockingPosition = false
+        other.thirdPersonBlockAnimation = ThirdPersonBlockAnimationSetting.V1_8
         other.lockBlockingArmRotation = false
         other.projectileAgeCheck = false
         other.blockMiningProgress = BlockMiningProgressSetting.VANILLA
         other.disableInventoryEntityScissor = false
         other.blockOutlineRendering = false
         other.disableModelWhilstSleeping = false
-        other.damageTintArmor = false
+        other.hitColorArmor = HitColorArmorSetting.UNCHANGED
         other.glintAffectsArmorTint = false
         other.damageTintStyle = DamageTintSetting.VANILLA
         other.maxGlintProperties = false

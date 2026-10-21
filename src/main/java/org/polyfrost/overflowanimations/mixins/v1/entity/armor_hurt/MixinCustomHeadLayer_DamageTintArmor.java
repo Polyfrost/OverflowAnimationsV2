@@ -66,7 +66,7 @@ public abstract class MixinCustomHeadLayer_DamageTintArmor<S extends LivingEntit
     @WrapOperation(method = "submit(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;ILnet/minecraft/client/renderer/entity/state/LivingEntityRenderState;FF)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/blockentity/SkullBlockRenderer;submitSkull(FLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;ILnet/minecraft/client/model/object/skull/SkullModelBase;Lnet/minecraft/client/renderer/rendertype/RenderType;ILnet/minecraft/client/renderer/feature/ModelFeatureRenderer$CrumblingOverlay;)V"))
     private void overflowanimations$damageTintArmor$skullOverride(final float animationValue, final PoseStack poseStack, final SubmitNodeCollector submitNodeCollector, final int lightCoords, final SkullModelBase model, final RenderType renderType, final int outlineColor, final ModelFeatureRenderer.CrumblingOverlay breakProgress, final Operation<Void> original, @Local(argsOnly = true, name = "state") final S state) {
     //?}
-        if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().other.damageTintArmor) {
+        if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().other.hitColorArmor.isOld()) {
             //? if <26.1 {
             /*poseStack.pushPose();
             if (direction == null) {
@@ -114,7 +114,7 @@ public abstract class MixinCustomHeadLayer_DamageTintArmor<S extends LivingEntit
     @ModifyExpressionValue(method = "submit(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;ILnet/minecraft/client/renderer/entity/state/LivingEntityRenderState;FF)V", at = @At(value = "FIELD", target = "Lnet/minecraft/client/renderer/texture/OverlayTexture;NO_OVERLAY:I", opcode = Opcodes.GETSTATIC))
     //?}
     private int overflowanimations$damageTintArmor(final int original, @Local(argsOnly = true, ordinal = 0) final S state) {
-        if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().other.damageTintArmor) {
+        if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().other.hitColorArmor.isOld()) {
             return LivingEntityRenderer.getOverlayCoords(state, 0.0F);
         } else {
             return original;

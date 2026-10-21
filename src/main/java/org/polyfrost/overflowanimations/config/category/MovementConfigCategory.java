@@ -34,6 +34,7 @@ import org.polyfrost.overflowanimations.util.enums.SneakBobbingSetting;
 import org.polyfrost.overflowanimations.util.enums.BackwardsWalkingSetting;
 import org.polyfrost.overflowanimations.util.enums.DamageTiltSetting;
 import org.polyfrost.overflowanimations.util.enums.HeadRotationInterpolationSetting;
+import org.polyfrost.overflowanimations.util.enums.UnsneakSetting;
 import org.polyfrost.overflowanimations.util.enums.SlimArmPositionSetting;
 import org.polyfrost.overflowanimations.util.enums.SneakEyeHeightSetting;
 
@@ -46,7 +47,7 @@ public final class MovementConfigCategory extends Category {
     public boolean capeSneakPosition = LEGACY;
     // (Movement) Other
     public SneakAnimationSetting sneakAnimation = LEGACY ? SneakAnimationSetting.V1_7 : SneakAnimationSetting.VANILLA;
-    public boolean longUnsneak = LEGACY;
+    public UnsneakSetting longerUnsneak = LEGACY ? UnsneakSetting.LONG : UnsneakSetting.MATCH_SNEAK_ANIMATION;
     public SneakEyeHeightSetting sneakEyeHeight = SneakEyeHeightSetting.VANILLA;
     public BackwardsWalkingSetting backwardsWalking = LEGACY ? BackwardsWalkingSetting.V1_8 : BackwardsWalkingSetting.VANILLA;
     public boolean uncapBlockingHeadRotation = LEGACY;
@@ -67,9 +68,12 @@ public final class MovementConfigCategory extends Category {
     public @NonNull EntryBundle bundle() {
         final EntryBundle bundle = new EntryBundle(this, "movement");
 
-        bundle.group("other")
+        bundle.tab("interaction")
                 .enumEntry("sneakAnimation", SneakAnimationSetting.class)
-                .booleanEntry("longUnsneak")
+                .enumEntry("longerUnsneak", UnsneakSetting.class)
+                .enumEntry("damageTilt", DamageTiltSetting.class);
+
+        bundle.group("other")
                 .enumEntry("sneakEyeHeight", SneakEyeHeightSetting.class)
                 .enumEntry("sneakBobbing", SneakBobbingSetting.class)
                 .enumEntry("backwardsWalking", BackwardsWalkingSetting.class)
@@ -80,7 +84,6 @@ public final class MovementConfigCategory extends Category {
                 .booleanEntry("deathLimbs");
 
         bundle.group("modern")
-                .enumEntry("damageTilt", DamageTiltSetting.class)
                 .booleanEntry("offsetHurtTiltTime")
                 .booleanEntry("disableHurtCamera");
 

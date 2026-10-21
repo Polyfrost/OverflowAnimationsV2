@@ -73,7 +73,7 @@ public abstract class MixinItemInHandRenderer_Swing {
 
     @ModifyArg(method = "renderInFirstPerson", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/ItemInHandRenderer;applyFirstPersonTransform(FF)V"), index = 1)
     private float overflowanimations$itemUsageSwinging(final float swingProgress, @Local(argsOnly = true) final float tickDelta) {
-        return OverflowAnimations.isEnabled() && LegacyFirstPerson.items().itemUsageSwinging ? this.minecraft.player.getAttackAnimationProgress(tickDelta) : swingProgress;
+        return OverflowAnimations.isEnabled() && LegacyFirstPerson.items().punchingDuringUsage.isOld() ? this.minecraft.player.getAttackAnimationProgress(tickDelta) : swingProgress;
     }
 
     @ModifyExpressionValue(method = "renderInFirstPerson", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/entity/living/player/ClientPlayerEntity;getItemUseTimer()I"))

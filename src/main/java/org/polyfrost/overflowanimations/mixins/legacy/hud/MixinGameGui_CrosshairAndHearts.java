@@ -53,7 +53,7 @@ public abstract class MixinGameGui_CrosshairAndHearts {
     private boolean overflowanimations$useOldHealthLogic(boolean value) { // thanks mixces <3
         /* taken straight from 1.7 */
         /* MC-2930 aimed to revert this... MC-73438 wants to bring this back.... there is no winning :/ */
-        if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().screen.disableHeartFlash) {
+        if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().screen.healthBarFlashing.isOld()) {
             boolean i3 = minecraft.player.getMaxHealth() / 3 % 2 == 1;
             if (minecraft.player.getMaxHealth() < 10) {
                 i3 = false;

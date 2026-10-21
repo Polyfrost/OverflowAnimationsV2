@@ -36,6 +36,6 @@ import org.spongepowered.asm.mixin.injection.At;
 public abstract class MixinHumanoidModel_SwordBlocking {
     @ModifyExpressionValue(method = "setupAnimation", at = @At(value = "CONSTANT", args = "floatValue=-0.5235988F"))
     private float overflowanimations$oldBlockingArm(final float original) {
-        return OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().other.thirdPersonSwordBlockingPosition ? 0.0F : original;
+        return OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().other.thirdPersonBlockAnimation.isOld() ? 0.0F : original;
     }
 }

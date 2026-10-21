@@ -89,13 +89,13 @@ public abstract class MixinMinecraft_Swinging {
     @Inject(method = "handleMouseDown", at = @At("HEAD"))
     private void overflowanimations$usageSwinging(final boolean holdingAttack, final CallbackInfo ci) {
         final ItemsConfigCategory items = LegacyFirstPerson.items();
-        if (!OverflowAnimations.isEnabled() || !items.itemUsageSwinging || !holdingAttack || this.attackCooldown > 0 || !this.player.hasItemInUse()) {
+        if (!OverflowAnimations.isEnabled() || !items.punchingDuringUsage.isOld() || !holdingAttack || this.attackCooldown > 0 || !this.player.hasItemInUse()) {
             return;
         }
         final Block block = this.overflowanimations$targetedBlock();
         final boolean adventure = LegacyFirstPerson.cannotMine(this.player, block);
         if (block != null) {
-            if (items.usageSwingingParticles && !(adventure && items.disableAdventureUsageParticles)) {
+            if (items.punchingDuringUsageParticles.isOld() && !(adventure && items.disableAdventureUsageParticles)) {
                 this.particleManager.addBlockMiningParticles(this.crosshairTarget.getPos(), this.crosshairTarget.face);
             }
         } else if (!items.alwaysUsageSwing) {

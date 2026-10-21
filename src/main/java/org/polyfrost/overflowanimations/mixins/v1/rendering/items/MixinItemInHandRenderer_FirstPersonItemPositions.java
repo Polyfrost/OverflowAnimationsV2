@@ -241,8 +241,13 @@ public abstract class MixinItemInHandRenderer_FirstPersonItemPositions {
 
     //? if <26.3 {
     /*@ModifyExpressionValue(method = "applyEatTransform", at = @At(value = "CONSTANT", args = "floatValue=0.6F"))
-    private float overflowanimations$lunarConsumeX(final float original) {
-        return OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().items.lunarItemPositions ? 0.66F : original;
+    private float overflowanimations$consumeCenteringX(final float original) {
+        if (!OverflowAnimations.isEnabled()) {
+            return original;
+        }
+        final ItemsConfigCategory items = OverflowAnimationsConfig.instance().items;
+        final float centering = items.lunarItemPositions ? 0.66F : original;
+        return items.disableConsumeCentering ? centering + 0.68F : centering;
     }
     *///?}
 
@@ -333,7 +338,7 @@ public abstract class MixinItemInHandRenderer_FirstPersonItemPositions {
     *///?}
         //? if <26.3 {
         /*final int direction = EntityUtilKt.getHandMultiplier(player, hand);
-        final boolean legacy = OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().items.itemPositions && !OverflowAnimationsConfig.instance().items.lunarItemPositions;
+        final boolean legacy = OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().items.firstPersonItemPositions.isOld() && !OverflowAnimationsConfig.instance().items.lunarItemPositions;
         if (legacy) {
             instance.mulPose(Axis.ZP.rotationDegrees(direction * -335));
             instance.mulPose(Axis.YP.rotationDegrees(direction * -50.0F));
@@ -368,7 +373,7 @@ public abstract class MixinItemInHandRenderer_FirstPersonItemPositions {
     *///?}
     //? if <26.3 {
         /*final ItemsConfigCategory items = OverflowAnimationsConfig.instance().items;
-        if (OverflowAnimations.isEnabled() && (items.itemPositions || items.lunarBlockHitPosition) && !(itemStack.getItem() instanceof ShieldItem)) {
+        if (OverflowAnimations.isEnabled() && (items.firstPersonItemPositions.isOld() || items.lunarBlockHitPosition) && !(itemStack.getItem() instanceof ShieldItem)) {
             final int direction = EntityUtilKt.getHandMultiplier(player, hand);
             if (items.lunarBlockHitPosition) {
                 poseStack.translate(0.0F, (0.2F - inverseArmHeight) * -0.6F, 0.0F);
@@ -496,7 +501,7 @@ public abstract class MixinItemInHandRenderer_FirstPersonItemPositions {
         }
 
         final boolean isNotBlock3d = !ItemUtilKt.isBlock3d(itemStack, itemStackRenderState.usesBlockLight());
-        if (items.itemPositions && !items.lunarItemPositions && !(items.lunarBlockHitPosition && ItemUtilKt.isSwordItem(itemStack)) && isNotBlock3d && !ItemUtilKt.isItemBlacklisted(itemStack)) {
+        if (items.firstPersonItemPositions.isOld() && !items.lunarItemPositions && !(items.lunarBlockHitPosition && ItemUtilKt.isSwordItem(itemStack)) && isNotBlock3d && !ItemUtilKt.isItemBlacklisted(itemStack)) {
             final float radians = 0.4363323129985824F;
             poseStack.scale(0.6F, 0.6F, 0.6F);
             poseStack.mulPose(Axis.YP.rotationDegrees(direction * 275.0F));
@@ -564,7 +569,7 @@ public abstract class MixinItemInHandRenderer_FirstPersonItemPositions {
     /*private void overflowanimations$itemUsageSwinging(final AbstractClientPlayer player, final float tickDelta, final float pitch, final InteractionHand hand, final float swingProgress, final ItemStack itemStack, final float equippedProgress, final PoseStack poseStack, final SubmitNodeCollector submitNodeCollector, final int lightCoords, final CallbackInfo ci, @Local(name = "arm") final HumanoidArm arm) {
     *///?}
     //? if <26.3 {
-        /*if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().items.itemUsageSwinging) {
+        /*if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().items.punchingDuringUsage.isOld()) {
             this.applyItemArmAttackTransform(poseStack, arm, swingProgress);
         }
     }

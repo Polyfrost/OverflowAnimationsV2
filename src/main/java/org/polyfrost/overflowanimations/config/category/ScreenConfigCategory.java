@@ -35,11 +35,12 @@ import org.polyfrost.overflowanimations.util.enums.TabListSetting;
 import org.polyfrost.overflowanimations.util.enums.DebugCrosshairSetting;
 import org.polyfrost.overflowanimations.util.enums.CameraVersionSetting;
 import org.polyfrost.overflowanimations.util.enums.ThirdPersonCrosshairSetting;
+import org.polyfrost.overflowanimations.util.enums.HeartFlashingSetting;
 
 public final class ScreenConfigCategory extends Category {
     public CameraVersionSetting cameraVersion = LEGACY ? CameraVersionSetting.V1_8 : CameraVersionSetting.VANILLA;
     public ThirdPersonCrosshairSetting thirdPersonCrosshair = LEGACY ? ThirdPersonCrosshairSetting.V1_8 : ThirdPersonCrosshairSetting.VANILLA;
-    public boolean disableHeartFlash = LEGACY;
+    public HeartFlashingSetting healthBarFlashing = LEGACY ? HeartFlashingSetting.V1_7 : HeartFlashingSetting.V1_8;
     public boolean centerScrollableListWidgets = LEGACY;
     public boolean listWidgetSelectedBorderColor = LEGACY;
     public boolean legacyWidgetHoverTextColor = LEGACY;
@@ -66,9 +67,16 @@ public final class ScreenConfigCategory extends Category {
     public @NonNull EntryBundle bundle() {
         final EntryBundle bundle = new EntryBundle(this, "screen");
 
-        bundle.enumEntry("cameraVersion", CameraVersionSetting.class);
-        bundle.enumEntry("thirdPersonCrosshair", ThirdPersonCrosshairSetting.class);
-        bundle.booleanEntry("disableHeartFlash");
+        bundle.tab("interaction")
+                .enumEntry("cameraVersion", CameraVersionSetting.class);
+
+        bundle.tab("hud")
+                .enumEntry("healthBarFlashing", HeartFlashingSetting.class)
+                .enumEntry("thirdPersonCrosshair", ThirdPersonCrosshairSetting.class)
+                .enumEntry("inventoryEffects", InventoryEffectsSetting.class)
+                .enumEntry("tabListStyle", TabListSetting.class)
+                .enumEntry("debugCrosshairStyle", DebugCrosshairSetting.class);
+
         bundle.booleanEntry("centerScrollableListWidgets");
         bundle.booleanEntry("listWidgetSelectedBorderColor");
         bundle.booleanEntry("legacyWidgetHoverTextColor");
@@ -78,7 +86,6 @@ public final class ScreenConfigCategory extends Category {
         bundle.booleanEntry("tooltipStyleRendering");
         bundle.booleanEntry("slotHoverStyleRendering");
         bundle.booleanEntry("listBackgroundGradient");
-        bundle.enumEntry("inventoryEffects", InventoryEffectsSetting.class);
         bundle.booleanEntry("panoramaRendering");
         bundle.booleanEntry("legacyLoadingScreen");
         bundle.booleanEntry("legacyLoadingScreenProgressBar");
@@ -91,8 +98,6 @@ public final class ScreenConfigCategory extends Category {
         //bundle.booleanEntry("oldCraftingSlotsPosition");
 
         bundle.group("legacy_hud")
-                .enumEntry("debugCrosshairStyle", DebugCrosshairSetting.class)
-                .enumEntry("tabListStyle", TabListSetting.class)
                 .booleanEntry("legacyDebugScreen");
 
         return bundle;

@@ -38,6 +38,8 @@ import org.polyfrost.overflowanimations.handler.rendering.lighting.LegacyDiffuse
 import org.polyfrost.overflowanimations.util.enums.DamageTintHeldItemsSetting;
 import org.polyfrost.overflowanimations.util.enums.DamageTintSetting;
 import org.polyfrost.overflowanimations.util.enums.VoidFogSetting;
+import org.polyfrost.overflowanimations.util.enums.HitColorArmorSetting;
+import org.polyfrost.overflowanimations.util.enums.ThirdPersonBlockAnimationSetting;
 import org.polyfrost.overflowanimations.util.enums.BlockMiningProgressSetting;
 
 
@@ -50,7 +52,7 @@ public final class OtherConfigCategory extends Category {
     public boolean oldCloudRendering = LEGACY;
     public VoidFogSetting voidFog = LEGACY ? VoidFogSetting.PARTICLES : VoidFogSetting.OFF;
     // Damage Tint
-    public boolean damageTintArmor = LEGACY;
+    public HitColorArmorSetting hitColorArmor = LEGACY ? HitColorArmorSetting.RED : HitColorArmorSetting.UNCHANGED;
     public boolean glintAffectsArmorTint = false;
     public DamageTintHeldItemsSetting damageTintHeldItems = DamageTintHeldItemsSetting.OFF;
     public boolean damageTintCape = false;
@@ -64,7 +66,7 @@ public final class OtherConfigCategory extends Category {
     public boolean disableModelWhilstSleeping = LEGACY;
     public boolean flameDimensions = LEGACY;
     public boolean heldItemArmLogic = false;
-    public boolean thirdPersonSwordBlockingPosition = LEGACY;
+    public ThirdPersonBlockAnimationSetting thirdPersonBlockAnimation = LEGACY ? ThirdPersonBlockAnimationSetting.V1_7 : ThirdPersonBlockAnimationSetting.V1_8;
     public boolean disableInventoryEntityScissor = LEGACY;
     public boolean maxGlintProperties = LEGACY;
     public boolean flameOffset = LEGACY;
@@ -84,25 +86,26 @@ public final class OtherConfigCategory extends Category {
     public @NonNull EntryBundle bundle() {
         final EntryBundle bundle = new EntryBundle(this, "other");
 
+        bundle.tab("position")
+                .enumEntry("thirdPersonBlockAnimation", ThirdPersonBlockAnimationSetting.class);
+
         // Lunar Client handles armor tint itself, but item and cape tint still apply there.
         final GroupBundle damageTint = bundle.group("damage_tint");
         if (!ModsKt.HAS_LUNAR_CLIENT) {
-            damageTint.booleanEntry("damageTintArmor")
-                    .booleanEntry("glintAffectsArmorTint");
+            final GroupBundle interaction = bundle.tab("interaction");
+            //? if >1.8.9 {
+            interaction.enumEntry("damageTintStyle", DamageTintSetting.class, value -> RenderUtilsKt.updateOverlayTint(value));
+            //?} else {
+            /*interaction.enumEntry("damageTintStyle", DamageTintSetting.class);
+            *///?}
+            interaction.enumEntry("hitColorArmor", HitColorArmorSetting.class);
+            damageTint.booleanEntry("glintAffectsArmorTint");
         }
 
         damageTint.enumEntry("damageTintHeldItems", DamageTintHeldItemsSetting.class)
                 .booleanEntry("damageTintCape");
-        if (!ModsKt.HAS_LUNAR_CLIENT) {
-            //? if >1.8.9 {
-            damageTint.enumEntry("damageTintStyle", DamageTintSetting.class, value -> RenderUtilsKt.updateOverlayTint(value));
-            //?} else {
-            /*damageTint.enumEntry("damageTintStyle", DamageTintSetting.class);
-            *///?}
-        }
 
         bundle.group("other")
-                .booleanEntry("thirdPersonSwordBlockingPosition")
                 .booleanEntry("lockBlockingArmRotation")
                 .enumEntry("blockMiningProgress", BlockMiningProgressSetting.class)
                 .booleanEntry("persistentBlockOutline")

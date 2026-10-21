@@ -29,4 +29,6 @@ import org.polyfrost.overflowanimations.handler.config.category.Category
 
 class GroupBundle(category: Category, name: String) : EntryBundle(category, name) {
     override fun group(name: String) = throw UnsupportedOperationException("You cannot create child groups!")
+
+    override fun tab(name: String) = throw UnsupportedOperationException("You cannot create tabs inside a group!")
 }

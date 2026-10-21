@@ -64,10 +64,10 @@ public final class ThirdPersonItemTransforms {
         final ItemsConfigCategory items = OverflowAnimationsConfig.instance().items;
         final Item item = stack.getItem();
         final boolean isBlock = model.isGui3d() && item instanceof BlockItem;
-        final boolean swordBlocking = OverflowAnimationsConfig.instance().other.thirdPersonSwordBlockingPosition &&
+        final boolean swordBlocking = OverflowAnimationsConfig.instance().other.thirdPersonBlockAnimation.isOld() &&
                 entity instanceof PlayerEntity && ((PlayerEntity) entity).getItemUseTimer() > 0 && stack.getUseAction() == UseAction.BLOCK;
         final ModelTransformation transformation = model.getTransformations().get(ModelTransformations.Type.THIRD_PERSON);
-        final boolean legacy = items.itemPositionsInThirdPerson && (entity instanceof PlayerEntity || items.entityItemPositions) &&
+        final boolean legacy = items.thirdPersonItemPositions.isOld() && (entity instanceof PlayerEntity || items.entityItemPositions) &&
                 (!items.strictItemPositionsInThirdPerson || isBlock || item == Items.BOW || isHandheld(item)) &&
                 transformation.scale.x != 0.0F && transformation.scale.y != 0.0F && transformation.scale.z != 0.0F;
 

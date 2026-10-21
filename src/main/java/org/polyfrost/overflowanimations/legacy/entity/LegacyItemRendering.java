@@ -61,7 +61,7 @@ public final class LegacyItemRendering {
         }
 
         final ItemsConfigCategory items = OverflowAnimationsConfig.instance().items;
-        return (transform == ModelTransformations.Type.GROUND && items.itemDrops2D) || (transform == ModelTransformations.Type.FIXED && items.itemFramed2D);
+        return (transform == ModelTransformations.Type.GROUND && items.droppedItems2D.isOld()) || (transform == ModelTransformations.Type.FIXED && items.itemFramed2D);
     }
 
     public static BakedModel flatModel(final BakedModel model) {

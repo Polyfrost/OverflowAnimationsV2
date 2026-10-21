@@ -46,15 +46,15 @@ open class EntryBundle(protected val category: Category, private val name: Strin
         )
 
         private val ALIASES = mapOf(
-            "itemUsageSwinging" to listOf("block hit", "blockhit", "block hitting", "1.7 animations", "old animations", "swing while blocking", "swing while eating"),
-            "usageSwingingParticles" to listOf("block hit", "blockhit"),
+            "punchingDuringUsage" to listOf("block hit", "blockhit", "block hitting", "1.7 animations", "old animations", "swing while blocking", "swing while eating"),
+            "punchingDuringUsageParticles" to listOf("block hit", "blockhit"),
             "blockHitWhileMining" to listOf("block hit", "blockhit"),
             "lunarBlockHitPosition" to listOf("block hit", "blockhit", "lunar", "cheatbreaker"),
             "alwaysUsageSwing" to listOf("block hit", "blockhit", "air swing"),
             "offhandUsageSwinging" to listOf("block hit", "blockhit", "offhand"),
-            "thirdPersonSwordBlockingPosition" to listOf("block hit", "blockhit", "sword block", "third person block"),
-            "itemPositions" to listOf("1.7 animations", "old animations", "1.7 sword", "item position", "held item"),
-            "itemPositionsInThirdPerson" to listOf("1.7 animations", "old animations", "third person sword"),
+            "thirdPersonBlockAnimation" to listOf("block hit", "blockhit", "sword block", "third person block"),
+            "firstPersonItemPositions" to listOf("1.7 animations", "old animations", "1.7 sword", "item position", "held item"),
+            "thirdPersonItemPositions" to listOf("1.7 animations", "old animations", "third person sword"),
             "lunarItemPositions" to listOf("lunar", "cheatbreaker"),
             "fishingRodVersion" to listOf("rod position", "1.7 rod"),
             "equipAnimationVersion" to listOf("item switch", "swap animation", "re-equip", "reequip"),
@@ -65,16 +65,16 @@ open class EntryBundle(protected val category: Category, private val name: Strin
             "itemScaleZ" to listOf("item size", "small items", "smaller items"),
             "itemGlint" to listOf("enchant", "enchantment glint", "shiny"),
             "armorGlint" to listOf("enchant", "enchantment glint", "shiny armor"),
-            "itemDrops2D" to listOf("2d items", "flat items", "dropped items"),
+            "droppedItems2D" to listOf("2d items", "flat items", "dropped items"),
             "itemFramed2D" to listOf("2d items", "flat items", "item frame"),
-            "damageTintArmor" to listOf("red armor", "hurt color", "hit color"),
+            "hitColorArmor" to listOf("red armor", "hurt color", "hit color"),
             "damageTintStyle" to listOf("red armor", "hurt color", "hit color", "red tint"),
             "sneakAnimation" to listOf("smooth sneak", "crouch"),
-            "longUnsneak" to listOf("smooth sneak", "crouch"),
+            "longerUnsneak" to listOf("smooth sneak", "crouch"),
             "damageTilt" to listOf("hurt cam", "hurt tilt"),
             "disableHurtCamera" to listOf("hurt cam", "screen shake"),
             "cameraVersion" to listOf("eye height", "camera height"),
-            "disableHeartFlash" to listOf("heart flash", "health blink"),
+            "healthBarFlashing" to listOf("heart flash", "health blink"),
             "dropSwing" to listOf("drop animation"),
             "tabListStyle" to listOf("tab list", "player list"),
             "legacyDebugScreen" to listOf("f3", "debug"),
@@ -131,13 +131,21 @@ open class EntryBundle(protected val category: Category, private val name: Strin
 
     protected val entries = ArrayList<Entry>()
     private val groups = ArrayList<GroupBundle>()
+    private val tabs = LinkedHashMap<String, GroupBundle>()
 
-    fun install(tree: Tree) {
+    fun installTabs(tree: Tree) {
+        for ((name, tab) in this.tabs) {
+            tab.installEntries(tree, "${OverflowAnimationsConstants.MOD_ID}.category.$name", null)
+        }
+    }
+
+    fun installAdvanced(tree: Tree) {
+        val advancedKey = "${OverflowAnimationsConstants.MOD_ID}.category.advanced"
         val categoryKey = "${OverflowAnimationsConstants.MOD_ID}.category.${this.name}"
         for (group in this.groups) {
-            group.installEntries(tree, categoryKey, "$categoryKey.group.${group.name()}")
+            group.installEntries(tree, advancedKey, "$categoryKey.group.${group.name()}")
         }
-        this.installEntries(tree, categoryKey, null)
+        this.installEntries(tree, advancedKey, categoryKey)
     }
 
     internal fun installEntries(tree: Tree, categoryKey: String, subcategoryKey: String?) {
@@ -170,6 +178,8 @@ open class EntryBundle(protected val category: Category, private val name: Strin
         if (entry.name !in UNSUPPORTED_OPTIONS) this.entries.add(entry)
         return this
     }
+
+    open fun tab(name: String): GroupBundle = this.tabs.getOrPut(name) { GroupBundle(this.category, name) }
 
     open fun group(name: String): GroupBundle {
         val group = GroupBundle(this.category, name)

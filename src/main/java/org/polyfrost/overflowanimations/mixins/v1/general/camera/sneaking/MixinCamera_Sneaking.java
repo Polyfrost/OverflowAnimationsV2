@@ -99,7 +99,7 @@ public abstract class MixinCamera_Sneaking {
 
     @Unique
     private boolean overflowanimations$isLongUnsneak() {
-        return OverflowAnimationsConfig.instance().movement.longUnsneak;
+        return OverflowAnimationsConfig.instance().movement.longerUnsneak.isOld();
     }
 
     @Unique

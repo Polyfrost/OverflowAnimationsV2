@@ -83,7 +83,7 @@ fun applySwingWhilstMining(level: ClientLevel?, player: Player, hitResult: HitRe
     if (activeHand == hand) {
         if (hitResult != null && hitResult.type == HitResult.Type.BLOCK) {
             val blockHitResult = hitResult as BlockHitResult
-            if (OverflowAnimationsConfig.instance().items.usageSwingingParticles && level != null && !level.getBlockState(blockHitResult.blockPos).isAir && !ServerFeatureManager.isPresent(ServerFeatures.MINING_ITEM_USAGE)) {
+            if (OverflowAnimationsConfig.instance().items.punchingDuringUsageParticles.isOld && level != null && !level.getBlockState(blockHitResult.blockPos).isAir && !ServerFeatureManager.isPresent(ServerFeatures.MINING_ITEM_USAGE)) {
                 //? if <1.21.9 {
                 /*Minecraft.getInstance().particleEngine.crack(blockHitResult.blockPos, blockHitResult.direction)
                 *///?} elif <26.3 {

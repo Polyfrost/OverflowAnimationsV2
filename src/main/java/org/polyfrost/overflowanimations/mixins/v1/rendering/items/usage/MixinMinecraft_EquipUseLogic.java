@@ -164,7 +164,7 @@ public abstract class MixinMinecraft_EquipUseLogic {
     @Inject(method = "tick", at = @At("TAIL"))
     private void overflowanimations$applySwingWhilstMining(final CallbackInfo ci) {
         if (OverflowAnimations.isEnabled()
-                && OverflowAnimationsConfig.instance().items.itemUsageSwinging
+                && OverflowAnimationsConfig.instance().items.punchingDuringUsage.isOld()
                 && this.player != null
                 && !(this.player.getItemInHand(this.player.getUsedItemHand()).isEmpty() || !this.player.isUsingItem() || !this.options.keyAttack.isDown())) {
             EntityUtilKt.applySwingWhilstMining(this.level, this.player, this.hitResult);

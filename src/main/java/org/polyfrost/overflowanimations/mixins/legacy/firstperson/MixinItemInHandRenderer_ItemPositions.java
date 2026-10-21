@@ -221,8 +221,13 @@ public abstract class MixinItemInHandRenderer_ItemPositions {
     }
 
     @ModifyExpressionValue(method = "applyConsuming", at = @At(value = "CONSTANT", args = "floatValue=0.6F"))
-    private float overflowanimations$lunarConsumeX(final float original) {
-        return OverflowAnimations.isEnabled() && LegacyFirstPerson.items().lunarItemPositions ? 0.66F : original;
+    private float overflowanimations$consumeCenteringX(final float original) {
+        if (!OverflowAnimations.isEnabled()) {
+            return original;
+        }
+        final ItemsConfigCategory items = LegacyFirstPerson.items();
+        final float centering = items.lunarItemPositions ? 0.66F : original;
+        return items.disableConsumeCentering ? centering + 0.68F : centering;
     }
 
     @ModifyExpressionValue(method = "applyConsuming", at = @At(value = "CONSTANT", args = "floatValue=10.0F"))
@@ -299,7 +304,7 @@ public abstract class MixinItemInHandRenderer_ItemPositions {
     @WrapOperation(method = "applyBowNocking", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/platform/GlStateManager;scalef(FFF)V"))
     private void overflowanimations$legacyBowPull(final float x, final float y, final float z, final Operation<Void> original) {
         final ItemsConfigCategory items = LegacyFirstPerson.items();
-        final boolean legacy = OverflowAnimations.isEnabled() && items.itemPositions && !items.lunarItemPositions;
+        final boolean legacy = OverflowAnimations.isEnabled() && items.firstPersonItemPositions.isOld() && !items.lunarItemPositions;
         if (legacy) {
             GlStateManager.rotatef(-335.0F, 0.0F, 0.0F, 1.0F);
             GlStateManager.rotatef(-50.0F, 0.0F, 1.0F, 0.0F);

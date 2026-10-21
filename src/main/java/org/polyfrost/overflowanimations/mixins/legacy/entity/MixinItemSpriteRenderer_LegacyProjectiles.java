@@ -66,6 +66,6 @@ public abstract class MixinItemSpriteRenderer_LegacyProjectiles {
     @Unique
     private static boolean overflowanimations$shouldMirror() {
         final ItemsConfigCategory items = OverflowAnimationsConfig.instance().items;
-        return OverflowAnimations.isEnabled() && (items.legacyProjectiles || items.itemDrops2D);
+        return OverflowAnimations.isEnabled() && (items.legacyProjectiles || items.droppedItems2D.isOld());
     }
 }

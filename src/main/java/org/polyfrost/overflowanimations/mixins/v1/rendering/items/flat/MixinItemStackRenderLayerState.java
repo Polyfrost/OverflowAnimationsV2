@@ -257,7 +257,7 @@ public abstract class MixinItemStackRenderLayerState {
 
     @Unique
     private boolean overflowanimations$isTransformationModeValid() {
-        final boolean itemDrops2D = OverflowAnimationsConfig.instance().items.itemDrops2D;
+        final boolean itemDrops2D = OverflowAnimationsConfig.instance().items.droppedItems2D.isOld();
         final boolean itemFramed2D = OverflowAnimationsConfig.instance().items.itemFramed2D;
         return (itemDrops2D && this.itemStackRenderState.displayContext == ItemDisplayContext.GROUND) || (itemFramed2D && this.itemStackRenderState.displayContext == ItemDisplayContext.FIXED);
     }

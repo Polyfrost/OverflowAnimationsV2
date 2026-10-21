@@ -33,6 +33,11 @@ import org.polyfrost.overflowanimations.util.enums.DropSwingSetting;
 import org.polyfrost.overflowanimations.util.enums.EquipAnimationVersionSetting;
 import org.polyfrost.overflowanimations.util.enums.FishingRodVersionSetting;
 import org.polyfrost.overflowanimations.util.enums.ItemGlintSetting;
+import org.polyfrost.overflowanimations.util.enums.BlockHittingParticlesSetting;
+import org.polyfrost.overflowanimations.util.enums.BlockHittingSetting;
+import org.polyfrost.overflowanimations.util.enums.DroppedItemsSetting;
+import org.polyfrost.overflowanimations.util.enums.FirstPersonItemPositionsSetting;
+import org.polyfrost.overflowanimations.util.enums.ThirdPersonItemPositionsSetting;
 import org.polyfrost.overflowanimations.util.enums.PotionColorsSetting;
 import org.polyfrost.overflowanimations.util.enums.PotionGlintSetting;
 import org.polyfrost.overflowanimations.util.enums.SwapSwingAnimationSetting;
@@ -48,19 +53,19 @@ public final class ItemsConfigCategory extends Category {
     // (Items) 2D Drops
     public boolean itemDropsFaceCamera = false;
     public boolean itemDropsFaceCameraRotationFix = false;
-    public boolean itemDrops2D = false;
+    public DroppedItemsSetting droppedItems2D = DroppedItemsSetting.MODEL;
     public boolean itemFramed2D = false;
     // (Items) Transformations
-    public boolean itemPositions = LEGACY;
-    public boolean itemPositionsInThirdPerson = LEGACY;
+    public FirstPersonItemPositionsSetting firstPersonItemPositions = LEGACY ? FirstPersonItemPositionsSetting.V1_7 : FirstPersonItemPositionsSetting.V1_8;
+    public ThirdPersonItemPositionsSetting thirdPersonItemPositions = LEGACY ? ThirdPersonItemPositionsSetting.V1_7 : ThirdPersonItemPositionsSetting.V1_8;
     public boolean strictItemPositionsInThirdPerson = true;
     public boolean thinBlockPositions = LEGACY;
     public boolean skullPosition = LEGACY;
     public FishingRodVersionSetting fishingRodVersion = LEGACY ? FishingRodVersionSetting.V1_7 : FishingRodVersionSetting.VANILLA;
     // (Items) Other
     public boolean thinFishingRodLineThickness = false;
-    public boolean itemUsageSwinging = LEGACY;
-    public boolean usageSwingingParticles = true;
+    public BlockHittingSetting punchingDuringUsage = LEGACY ? BlockHittingSetting.V1_7 : BlockHittingSetting.V1_8;
+    public BlockHittingParticlesSetting punchingDuringUsageParticles = BlockHittingParticlesSetting.SHOWN;
     public boolean disableSwingOnUse = LEGACY;
     public DropSwingSetting dropSwing = LEGACY ? DropSwingSetting.V1_8 : DropSwingSetting.VANILLA;
     public boolean disableSwingOnEntityInteract = LEGACY;
@@ -139,6 +144,7 @@ public final class ItemsConfigCategory extends Category {
     public float consumeIntensity = 0.0F;
     public float consumeSpeed = 0.0F;
     public boolean scaleConsumeWithItem = false;
+    public boolean disableConsumeCentering = false;
     public float blockingPositionX = 0.0F;
     public float blockingPositionY = 0.0F;
     public float blockingPositionZ = 0.0F;
@@ -172,9 +178,24 @@ public final class ItemsConfigCategory extends Category {
     public @NonNull EntryBundle bundle() {
         final EntryBundle bundle = new EntryBundle(this, "items");
 
+        bundle.tab("position")
+                .enumEntry("firstPersonItemPositions", FirstPersonItemPositionsSetting.class)
+                .enumEntry("thirdPersonItemPositions", ThirdPersonItemPositionsSetting.class)
+                .enumEntry("fishingRodVersion", FishingRodVersionSetting.class);
+
+        bundle.tab("interaction")
+                .enumEntry("punchingDuringUsage", BlockHittingSetting.class)
+                .enumEntry("punchingDuringUsageParticles", BlockHittingParticlesSetting.class)
+                .enumEntry("equipAnimationVersion", EquipAnimationVersionSetting.class);
+
+        bundle.tab("item_visual")
+                .enumEntry("itemGlint", ItemGlintSetting.class)
+                .enumEntry("armorGlint", ArmorGlintSetting.class)
+                .enumEntry("potionGlint", PotionGlintSetting.class)
+                .enumEntry("droppedItems2D", DroppedItemsSetting.class)
+                .enumEntry("usingTextureInGUI", UsingTextureInGUISetting.class);
+
         bundle.group("combat")
-                .booleanEntry("itemUsageSwinging")
-                .booleanEntry("usageSwingingParticles")
                 .booleanEntry("blockHitWhileMining")
                 .booleanEntry("lunarBlockHitPosition")
                 .booleanEntry("alwaysUsageSwing")
@@ -182,7 +203,6 @@ public final class ItemsConfigCategory extends Category {
                 .booleanEntry("fakeMissPenaltySwing")
                 .booleanEntry("fakeMissPenaltyParticles")
                 .booleanEntry("legacySwingAnimation")
-                .enumEntry("equipAnimationVersion", EquipAnimationVersionSetting.class)
                 .floatRange("reequipSpeed", 0.1F, 1.0F, 0.05F)
                 .booleanEntry("disableSwingOnUse")
                 .booleanEntry("disableSwingOnEntityInteract")
@@ -196,14 +216,11 @@ public final class ItemsConfigCategory extends Category {
                 .booleanEntry("disableAdventureUsageParticles");
 
         bundle.group("transformations")
-                .booleanEntry("itemPositions")
-                .booleanEntry("itemPositionsInThirdPerson")
                 .booleanEntry("strictItemPositionsInThirdPerson")
                 .booleanEntry("entityItemPositions")
                 .booleanEntry("lunarItemPositions")
                 .booleanEntry("thinBlockPositions")
                 .booleanEntry("skullPosition")
-                .enumEntry("fishingRodVersion", FishingRodVersionSetting.class)
                 .booleanEntry("heldItemVisibilityInBoat");
 
         bundle.group("item_modifications")
@@ -231,13 +248,7 @@ public final class ItemsConfigCategory extends Category {
                 .booleanEntry("disableSwingTranslate")
                 .booleanEntry("disableSwingPivot");
 
-        bundle.group("glint")
-                .enumEntry("itemGlint", ItemGlintSetting.class)
-                .enumEntry("armorGlint", ArmorGlintSetting.class)
-                .enumEntry("potionGlint", PotionGlintSetting.class);
-
         bundle.group("drops2d")
-                .booleanEntry("itemDrops2D")
                 .booleanEntry("itemDropsFaceCamera")
                 .booleanEntry("itemDropsFaceCameraRotationFix")
                 .booleanEntry("glintOnItemDrops2D")
@@ -255,7 +266,6 @@ public final class ItemsConfigCategory extends Category {
                 .booleanEntry("xpOrbPosition");
 
         bundle.group("other")
-                .enumEntry("usingTextureInGUI", UsingTextureInGUISetting.class)
                 .booleanEntry("durabilityBarColors")
                 .booleanEntry("legacyItemRarities");
 
@@ -287,7 +297,8 @@ public final class ItemsConfigCategory extends Category {
                 .floatRange("consumeScale", -1.0F, 1.0F, 0.01F)
                 .floatRange("consumeIntensity", -1.0F, 1.0F, 0.05F)
                 .floatRange("consumeSpeed", -1.0F, 1.0F, 0.05F)
-                .booleanEntry("scaleConsumeWithItem");
+                .booleanEntry("scaleConsumeWithItem")
+                .booleanEntry("disableConsumeCentering");
 
         bundle.group("blocking_position")
                 .floatRange("blockingPositionX", -2.0F, 2.0F, 0.01F)

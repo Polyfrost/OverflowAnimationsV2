@@ -112,7 +112,7 @@ public abstract class MixinEquipmentLayerRenderer_DamageTintArmor {
     private static boolean overflowanimations$isArmorHurt() {
         final LivingEntityRenderState state = RenderUtilsKt.currentArmorRenderState;
         return OverflowAnimations.isEnabled() &&
-                OverflowAnimationsConfig.instance().other.damageTintArmor &&
+                OverflowAnimationsConfig.instance().other.hitColorArmor.isOld() &&
                 state != null &&
                 state.hasRedOverlay;
     }
@@ -285,7 +285,7 @@ public abstract class MixinEquipmentLayerRenderer_DamageTintArmor {
     @Unique
     private <S> boolean overflowanimations$isArmorHurt(final S state) {
         return OverflowAnimations.isEnabled() &&
-                OverflowAnimationsConfig.instance().other.damageTintArmor &&
+                OverflowAnimationsConfig.instance().other.hitColorArmor.isOld() &&
                 state instanceof LivingEntityRenderState livingEntityRenderState &&
                 livingEntityRenderState.hasRedOverlay;
     }

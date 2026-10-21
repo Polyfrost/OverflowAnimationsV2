@@ -45,6 +45,7 @@ import org.polyfrost.oneconfig.internal.ui.navigation.graph.ModConfigRoute;
 import org.polyfrost.overflowanimations.OverflowAnimations;
 import org.polyfrost.overflowanimations.OverflowAnimationsConstants;
 import org.polyfrost.overflowanimations.config.category.*;
+import org.polyfrost.overflowanimations.handler.config.bundle.EntryBundle;
 import org.polyfrost.overflowanimations.util.enums.ArmorGlintSetting;
 import org.polyfrost.overflowanimations.util.enums.CameraVersionSetting;
 import org.polyfrost.overflowanimations.util.enums.CapeMovementSetting;
@@ -54,6 +55,16 @@ import org.polyfrost.overflowanimations.util.enums.DamageTiltSetting;
 import org.polyfrost.overflowanimations.util.enums.DamageTintHeldItemsSetting;
 import org.polyfrost.overflowanimations.util.enums.InventoryEffectsSetting;
 import org.polyfrost.overflowanimations.util.enums.ItemGlintSetting;
+import org.polyfrost.overflowanimations.util.enums.BlockHittingParticlesSetting;
+import org.polyfrost.overflowanimations.util.enums.BlockHittingSetting;
+import org.polyfrost.overflowanimations.util.enums.DroppedItemsSetting;
+import org.polyfrost.overflowanimations.util.enums.FirstPersonItemPositionsSetting;
+import org.polyfrost.overflowanimations.util.enums.HeartFlashingSetting;
+import org.polyfrost.overflowanimations.util.enums.HitColorArmorSetting;
+import org.polyfrost.overflowanimations.util.enums.LegacyToggle;
+import org.polyfrost.overflowanimations.util.enums.ThirdPersonBlockAnimationSetting;
+import org.polyfrost.overflowanimations.util.enums.ThirdPersonItemPositionsSetting;
+import org.polyfrost.overflowanimations.util.enums.UnsneakSetting;
 import org.polyfrost.overflowanimations.util.enums.PotionGlintSetting;
 import org.polyfrost.overflowanimations.util.enums.SneakAnimationSetting;
 import org.polyfrost.overflowanimations.util.enums.SneakBobbingSetting;
@@ -73,7 +84,7 @@ public final class OverflowAnimationsConfig extends Config {
     *///?} else
     private static final String ID = SHARED_ID;
     private static final Path CONFIG_DIR = FabricLoader.getInstance().getConfigDir();
-    private static final int CONFIG_VERSION = 8;
+    private static final int CONFIG_VERSION = 9;
 
     private static JsonObject savedConfig = readSavedConfig();
     private static JsonObject legacyConfig = takeLegacyConfig();
@@ -101,13 +112,15 @@ public final class OverflowAnimationsConfig extends Config {
             OverflowAnimations.reloadIfInWorld();
         }, "modEnabled", OverflowAnimationsConstants.MOD_ID + ".modEnabled", OverflowAnimationsConstants.MOD_ID + ".modEnabled.description", boolean.class);
         toggle.addMetadata("visualizer", Visualizer.SwitchVisualizer.class);
-        toggle.addMetadata("category", OverflowAnimationsConstants.MOD_ID + ".category.items");
+        toggle.addMetadata("category", OverflowAnimationsConstants.MOD_ID + ".category.position");
         tree.put(toggle);
-        this.items.bundle().install(tree);
-        this.movement.bundle().install(tree);
-        this.screen.bundle().install(tree);
-        this.other.bundle().install(tree);
-        this.fixes.bundle().install(tree);
+        final EntryBundle[] bundles = {this.items.bundle(), this.movement.bundle(), this.screen.bundle(), this.other.bundle(), this.fixes.bundle()};
+        for (final EntryBundle bundle : bundles) {
+            bundle.installTabs(tree);
+        }
+        for (final EntryBundle bundle : bundles) {
+            bundle.installAdvanced(tree);
+        }
         try {
             tree.put(Properties.field(null, null, OverflowAnimationsConfig.class.getField("configVersion"), this).addDisplayCondition(() -> Property.Display.HIDDEN));
         } catch (final NoSuchFieldException exception) {
@@ -133,6 +146,10 @@ public final class OverflowAnimationsConfig extends Config {
         }
 
         if (this.configVersion < CONFIG_VERSION) {
+            if (this.configVersion < 9) {
+                this.migrateLegacyToggles(savedConfig);
+            }
+
             if (this.configVersion < 1) {
                 this.migrateGlint(savedConfig);
                 if (savedConfig != null && savedConfig.has("oldCapeMovement")) {
@@ -142,7 +159,7 @@ public final class OverflowAnimationsConfig extends Config {
             }
 
             if (this.configVersion < 2) {
-                this.movement.longUnsneak = true;
+                this.movement.longerUnsneak = UnsneakSetting.LONG;
             }
 
             if (this.configVersion < 3 && this.movement.sneakBobbing == SneakBobbingSetting.VANILLA) {
@@ -163,7 +180,7 @@ public final class OverflowAnimationsConfig extends Config {
 
             //? if >1.8.9 {
             if (this.configVersion < 7 && !isFalse(savedConfig, "longUnsneakLegacyOnly")) {
-                this.movement.longUnsneak = false;
+                this.movement.longerUnsneak = UnsneakSetting.MATCH_SNEAK_ANIMATION;
             }
             //?}
 
@@ -176,6 +193,32 @@ public final class OverflowAnimationsConfig extends Config {
         }
 
         savedConfig = null;
+    }
+
+    private void migrateLegacyToggles(final JsonObject saved) {
+        if (saved == null) {
+            return;
+        }
+
+        if (saved.has("itemPositions")) this.items.firstPersonItemPositions = legacyToggle(saved, "itemPositions", FirstPersonItemPositionsSetting.class);
+        if (saved.has("itemPositionsInThirdPerson")) this.items.thirdPersonItemPositions = legacyToggle(saved, "itemPositionsInThirdPerson", ThirdPersonItemPositionsSetting.class);
+        if (saved.has("itemUsageSwinging")) this.items.punchingDuringUsage = legacyToggle(saved, "itemUsageSwinging", BlockHittingSetting.class);
+        if (saved.has("usageSwingingParticles")) this.items.punchingDuringUsageParticles = legacyToggle(saved, "usageSwingingParticles", BlockHittingParticlesSetting.class);
+        if (saved.has("itemDrops2D")) this.items.droppedItems2D = legacyToggle(saved, "itemDrops2D", DroppedItemsSetting.class);
+        if (saved.has("longUnsneak")) this.movement.longerUnsneak = legacyToggle(saved, "longUnsneak", UnsneakSetting.class);
+        if (saved.has("disableHeartFlash")) this.screen.healthBarFlashing = legacyToggle(saved, "disableHeartFlash", HeartFlashingSetting.class);
+        if (saved.has("damageTintArmor")) this.other.hitColorArmor = legacyToggle(saved, "damageTintArmor", HitColorArmorSetting.class);
+        if (saved.has("thirdPersonSwordBlockingPosition")) this.other.thirdPersonBlockAnimation = legacyToggle(saved, "thirdPersonSwordBlockingPosition", ThirdPersonBlockAnimationSetting.class);
+    }
+
+    private static <E extends Enum<E> & LegacyToggle> E legacyToggle(final JsonObject object, final String key, final Class<E> type) {
+        final boolean old = isTrue(object, key);
+        for (final E value : type.getEnumConstants()) {
+            if (value.isOld() == old) {
+                return value;
+            }
+        }
+        throw new IllegalArgumentException(type.getName());
     }
 
     private void migrateGlint(final JsonObject saved) {
@@ -268,6 +311,7 @@ public final class OverflowAnimationsConfig extends Config {
         migrateLegacyGlint(root);
         migrateVersionToggles(root);
         migrateDamageTintItems(root);
+        migrateRenamedLegacyToggles(root);
         return root;
     }
 
@@ -358,6 +402,25 @@ public final class OverflowAnimationsConfig extends Config {
         for (final String[] toggle : toggles) {
             if (root.get(toggle[0]) instanceof JsonObject category && category.remove(toggle[1]) instanceof JsonElement value && value.getAsBoolean()) {
                 category.addProperty(toggle[2], "V1_8");
+            }
+        }
+    }
+
+    private static void migrateRenamedLegacyToggles(final JsonObject root) {
+        final String[][] toggles = {
+                {"items", "item_positions", "first_person_item_positions", "V1_7", "V1_8"},
+                {"items", "item_positions_in_third_person", "third_person_item_positions", "V1_7", "V1_8"},
+                {"items", "item_usage_swinging", "punching_during_usage", "V1_7", "V1_8"},
+                {"items", "usage_swinging_particles", "punching_during_usage_particles", "SHOWN", "HIDDEN"},
+                {"items", "item_drops2_d", "dropped_items2_d", "FLAT", "MODEL"},
+                {"movement", "long_unsneak", "longer_unsneak", "LONG", "MATCH_SNEAK_ANIMATION"},
+                {"screen", "disable_heart_flash", "health_bar_flashing", "V1_7", "V1_8"},
+                {"other", "damage_tint_armor", "hit_color_armor", "RED", "UNCHANGED"},
+                {"other", "third_person_sword_blocking_position", "third_person_block_animation", "V1_7", "V1_8"}
+        };
+        for (final String[] toggle : toggles) {
+            if (root.get(toggle[0]) instanceof JsonObject category && category.remove(toggle[1]) instanceof JsonElement value) {
+                category.addProperty(toggle[2], value.getAsBoolean() ? toggle[3] : toggle[4]);
             }
         }
     }

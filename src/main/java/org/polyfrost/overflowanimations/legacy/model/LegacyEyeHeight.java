@@ -74,7 +74,7 @@ public final class LegacyEyeHeight {
 
         lastEyeHeight = eyeHeight;
         final SneakAnimationSetting sneakAnimation = config().sneakAnimation;
-        if (isSmooth() && config().longUnsneak && target > eyeHeight) {
+        if (isSmooth() && config().longerUnsneak.isOld() && target > eyeHeight) {
             eyeHeight += (target - eyeHeight) * 0.6F;
         } else if (OverflowAnimations.isEnabled() && (sneakAnimation == SneakAnimationSetting.V1_13 || sneakAnimation == SneakAnimationSetting.V1_14)) {
             eyeHeight += (target - eyeHeight) * 0.5F;

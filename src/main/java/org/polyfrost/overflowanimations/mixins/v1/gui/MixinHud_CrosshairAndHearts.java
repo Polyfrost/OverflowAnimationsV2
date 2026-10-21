@@ -98,15 +98,15 @@ public abstract class MixinHud_CrosshairAndHearts {
     //? if <26.1 {
     /*@WrapWithCondition(method = "renderHearts", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/Gui;renderHeart(Lnet/minecraft/client/gui/GuiGraphics;Lnet/minecraft/client/gui/Gui$HeartType;IIZZZ)V"))
     private boolean overflowanimations$heartFlash(final Gui instance, final GuiGraphics graphics, final Gui.HeartType type, final int xo, final int yo, final boolean isHardcore, final boolean blinks, final boolean half) {
-        return !OverflowAnimations.isEnabled() || !OverflowAnimationsConfig.instance().screen.disableHeartFlash || !blinks || type == Gui.HeartType.CONTAINER;
+        return !OverflowAnimations.isEnabled() || !OverflowAnimationsConfig.instance().screen.healthBarFlashing.isOld() || !blinks || type == Gui.HeartType.CONTAINER;
     *///?} elif 26.1 {
     /*@WrapWithCondition(method = "extractHearts", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/Gui;extractHeart(Lnet/minecraft/client/gui/GuiGraphicsExtractor;Lnet/minecraft/client/gui/Gui$HeartType;IIZZZ)V"))
     private boolean overflowanimations$heartFlash(final Gui instance, final GuiGraphicsExtractor graphics, final Gui.HeartType type, final int xo, final int yo, final boolean isHardcore, final boolean blinks, final boolean half) {
-        return !OverflowAnimations.isEnabled() || !OverflowAnimationsConfig.instance().screen.disableHeartFlash || !blinks || type == Gui.HeartType.CONTAINER;
+        return !OverflowAnimations.isEnabled() || !OverflowAnimationsConfig.instance().screen.healthBarFlashing.isOld() || !blinks || type == Gui.HeartType.CONTAINER;
     *///?} else {
     @WrapWithCondition(method = "extractHearts", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/Hud;extractHeart(Lnet/minecraft/client/gui/GuiGraphicsExtractor;Lnet/minecraft/client/gui/Hud$HeartType;IIZZZ)V"))
     private boolean overflowanimations$heartFlash(final Hud instance, final GuiGraphicsExtractor graphics, final Hud.HeartType type, final int xo, final int yo, final boolean isHardcore, final boolean blinks, final boolean half) {
-        return !OverflowAnimations.isEnabled() || !OverflowAnimationsConfig.instance().screen.disableHeartFlash || !blinks || type == Hud.HeartType.CONTAINER;
+        return !OverflowAnimations.isEnabled() || !OverflowAnimationsConfig.instance().screen.healthBarFlashing.isOld() || !blinks || type == Hud.HeartType.CONTAINER;
     //?}
     }
 }
