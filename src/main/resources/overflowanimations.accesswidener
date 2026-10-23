@@ -85,3 +85,9 @@ accessible method net/minecraft/client/renderer/CloudRenderer isWestEmpty (J)Z
 accessible method net/minecraft/client/renderer/CloudRenderer isEastEmpty (J)Z
 
 accessible method net/minecraft/client/multiplayer/ClientLevel getSkyFlashTime ()I
+#? if >=1.21.9
+accessible field net/minecraft/client/entity/ClientAvatarState xCloak D
+#? if >=1.21.9
+accessible field net/minecraft/client/entity/ClientAvatarState yCloak D
+#? if >=1.21.9
+accessible field net/minecraft/client/entity/ClientAvatarState zCloak D
