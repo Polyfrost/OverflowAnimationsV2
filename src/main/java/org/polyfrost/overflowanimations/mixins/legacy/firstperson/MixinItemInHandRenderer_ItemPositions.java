@@ -178,6 +178,14 @@ public abstract class MixinItemInHandRenderer_ItemPositions {
         }
     }
 
+    @Inject(method = "applyFirstPersonTransform", at = @At("TAIL"))
+    private void overflowanimations$swapPosition(final float equipProgress, final float swingProgress, final CallbackInfo ci) {
+        if (equipProgress != 0.0F && OverflowAnimations.isEnabled()) {
+            final ItemsConfigCategory items = LegacyFirstPerson.items();
+            GlStateManager.translatef(equipProgress * items.swapPositionX, equipProgress * items.swapPositionY, equipProgress * items.swapPositionZ);
+        }
+    }
+
     @Inject(method = "applyConsuming", at = @At("HEAD"))
     private void overflowanimations$consumePosition(final CallbackInfo ci) {
         if (!OverflowAnimations.isEnabled()) {

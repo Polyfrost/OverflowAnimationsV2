@@ -45,7 +45,6 @@ import net.minecraft.client.renderer.texture.OverlayTexture
 import net.minecraft.resources.Identifier
 *///?}
 import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig
-import org.polyfrost.overflowanimations.mixins.accessor.GameRendererAccessor
 import org.polyfrost.overflowanimations.mixins.accessor.OverlayTextureAccessor
 import org.polyfrost.overflowanimations.util.enums.DamageTintSetting
 import org.joml.Matrix3x2f
@@ -154,9 +153,36 @@ fun GuiGraphicsExtractor.drawScaledText(font: Font, text: String, x: Int, y: Int
  * Please mojang, just make `overlay texture -> overlay color` and be a part of EntityRenderState :pray: :pray: :pray:
  */
 fun resetOverlayTexture() {
-    val gameRenderer = Minecraft.getInstance().gameRenderer
-    gameRenderer.overlayTexture().close()
-    (gameRenderer as GameRendererAccessor).`overflowanimations$setOverlayTexture`(OverlayTexture())
+    val overlayTexture = Minecraft.getInstance().gameRenderer.overlayTexture()
+    val dynamicTexture = (overlayTexture as OverlayTextureAccessor).`overflowanimations$getDynamicTexture`()
+    val pixels = dynamicTexture.pixels
+    //? if <26.1 {
+    /*if (pixels != null) {
+        for (y in 0..<16) {
+            for (x in 0..<16) {
+                if (y < 8) {
+                    pixels.setPixel(x, y, -1291911168)
+                } else {
+                    val k = ((1.0f - x.toFloat() / 15.0f * 0.75f) * 255.0f).toInt()
+                    pixels.setPixel(x, y, (k shl 24) or 0x00FFFFFF)
+                }
+            }
+        }
+        dynamicTexture.upload()
+    }
+    *///?} else {
+    for (y in 0..<16) {
+        for (x in 0..<16) {
+            if (y < 8) {
+                pixels.setPixel(x, y, -1291911168)
+            } else {
+                val k = ((1.0f - x.toFloat() / 15.0f * 0.75f) * 255.0f).toInt()
+                pixels.setPixel(x, y, (k shl 24) or 0x00FFFFFF)
+            }
+        }
+    }
+    dynamicTexture.upload()
+    //?}
 }
 
 fun setOverlayColor(color: Int) {
