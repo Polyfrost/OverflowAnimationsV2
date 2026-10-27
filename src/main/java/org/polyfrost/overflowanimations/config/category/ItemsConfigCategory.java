@@ -45,8 +45,8 @@ import org.polyfrost.overflowanimations.util.enums.UsingTextureInGUISetting;
 
 public final class ItemsConfigCategory extends Category {
     // (Items) Enchantment Glint
-    public ItemGlintSetting itemGlint = LEGACY ? ItemGlintSetting.V1_7 : ItemGlintSetting.VANILLA;
-    public ArmorGlintSetting armorGlint = LEGACY ? ArmorGlintSetting.V1_8 : ArmorGlintSetting.VANILLA;
+    public ItemGlintSetting itemGlint = LEGACY ? ItemGlintSetting.V1_7 : ItemGlintSetting.V1_15;
+    public ArmorGlintSetting armorGlint = LEGACY ? ArmorGlintSetting.V1_8 : ArmorGlintSetting.V1_19_4;
     public PotionGlintSetting potionGlint = LEGACY ? PotionGlintSetting.V1_7 : PotionGlintSetting.VANILLA;
     public boolean glintOnItemDrops2D = !LEGACY;
     public boolean glintOnItemFramed2D = !LEGACY;
@@ -56,20 +56,20 @@ public final class ItemsConfigCategory extends Category {
     public DroppedItemsSetting droppedItems2D = DroppedItemsSetting.MODEL;
     public boolean itemFramed2D = false;
     // (Items) Transformations
-    public FirstPersonItemPositionsSetting firstPersonItemPositions = LEGACY ? FirstPersonItemPositionsSetting.V1_7 : FirstPersonItemPositionsSetting.V1_8;
-    public ThirdPersonItemPositionsSetting thirdPersonItemPositions = LEGACY ? ThirdPersonItemPositionsSetting.V1_7 : ThirdPersonItemPositionsSetting.V1_8;
+    public FirstPersonItemPositionsSetting firstPersonItemPositions = FirstPersonItemPositionsSetting.V1_7;
+    public ThirdPersonItemPositionsSetting thirdPersonItemPositions = ThirdPersonItemPositionsSetting.V1_7;
     public boolean strictItemPositionsInThirdPerson = true;
     public boolean thinBlockPositions = LEGACY;
     public boolean skullPosition = LEGACY;
-    public FishingRodVersionSetting fishingRodVersion = LEGACY ? FishingRodVersionSetting.V1_7 : FishingRodVersionSetting.VANILLA;
+    public FishingRodVersionSetting fishingRodVersion = FishingRodVersionSetting.V1_7;
     // (Items) Other
     public boolean thinFishingRodLineThickness = false;
-    public BlockHittingSetting punchingDuringUsage = LEGACY ? BlockHittingSetting.V1_7 : BlockHittingSetting.V1_8;
+    public BlockHittingSetting punchingDuringUsage = BlockHittingSetting.V1_7;
     public BlockHittingParticlesSetting punchingDuringUsageParticles = BlockHittingParticlesSetting.SHOWN;
     public boolean disableSwingOnUse = LEGACY;
-    public DropSwingSetting dropSwing = LEGACY ? DropSwingSetting.V1_8 : DropSwingSetting.VANILLA;
+    public DropSwingSetting dropSwing = LEGACY ? DropSwingSetting.V1_8 : DropSwingSetting.V1_15;
     public boolean disableSwingOnEntityInteract = LEGACY;
-    public UsingTextureInGUISetting usingTextureInGUI = LEGACY ? UsingTextureInGUISetting.V1_8 : UsingTextureInGUISetting.VANILLA;
+    public UsingTextureInGUISetting usingTextureInGUI = LEGACY ? UsingTextureInGUISetting.V1_8 : UsingTextureInGUISetting.V1_9;
     public EquipAnimationVersionSetting equipAnimationVersion = LEGACY ? EquipAnimationVersionSetting.V1_7 : EquipAnimationVersionSetting.VANILLA;
     public boolean durabilityBarColors = LEGACY;
     public boolean legacyItemRarities = LEGACY;

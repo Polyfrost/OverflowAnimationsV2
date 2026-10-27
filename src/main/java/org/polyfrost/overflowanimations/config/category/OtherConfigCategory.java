@@ -52,7 +52,7 @@ public final class OtherConfigCategory extends Category {
     public boolean oldCloudRendering = LEGACY;
     public VoidFogSetting voidFog = LEGACY ? VoidFogSetting.PARTICLES : VoidFogSetting.OFF;
     // Damage Tint
-    public HitColorArmorSetting hitColorArmor = LEGACY ? HitColorArmorSetting.RED : HitColorArmorSetting.UNCHANGED;
+    public HitColorArmorSetting hitColorArmor = HitColorArmorSetting.RED;
     public boolean glintAffectsArmorTint = false;
     public DamageTintHeldItemsSetting damageTintHeldItems = DamageTintHeldItemsSetting.OFF;
     public boolean damageTintCape = false;
@@ -60,13 +60,13 @@ public final class OtherConfigCategory extends Category {
     // Other
     public boolean restoreParticleBlending = LEGACY;
     public boolean lockBlockingArmRotation = LEGACY;
-    public BlockMiningProgressSetting blockMiningProgress = LEGACY ? BlockMiningProgressSetting.V1_8 : BlockMiningProgressSetting.VANILLA;
+    public BlockMiningProgressSetting blockMiningProgress = LEGACY ? BlockMiningProgressSetting.V1_8 : BlockMiningProgressSetting.V1_20;
     public boolean projectileAgeCheck = LEGACY;
     public boolean blockOutlineRendering = LEGACY;
     public boolean disableModelWhilstSleeping = LEGACY;
     public boolean flameDimensions = LEGACY;
     public boolean heldItemArmLogic = false;
-    public ThirdPersonBlockAnimationSetting thirdPersonBlockAnimation = LEGACY ? ThirdPersonBlockAnimationSetting.V1_7 : ThirdPersonBlockAnimationSetting.V1_8;
+    public ThirdPersonBlockAnimationSetting thirdPersonBlockAnimation = ThirdPersonBlockAnimationSetting.V1_7;
     public boolean disableInventoryEntityScissor = LEGACY;
     public boolean maxGlintProperties = LEGACY;
     public boolean flameOffset = LEGACY;

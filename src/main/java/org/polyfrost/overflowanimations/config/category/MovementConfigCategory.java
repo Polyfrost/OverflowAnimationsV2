@@ -46,18 +46,18 @@ public final class MovementConfigCategory extends Category {
     public boolean capeChestplateTranslation = LEGACY;
     public boolean capeSneakPosition = LEGACY;
     // (Movement) Other
-    public SneakAnimationSetting sneakAnimation = LEGACY ? SneakAnimationSetting.V1_7 : SneakAnimationSetting.VANILLA;
+    public SneakAnimationSetting sneakAnimation = LEGACY ? SneakAnimationSetting.V1_7 : SneakAnimationSetting.V1_14;
     public UnsneakSetting longerUnsneak = LEGACY ? UnsneakSetting.LONG : UnsneakSetting.MATCH_SNEAK_ANIMATION;
     public SneakEyeHeightSetting sneakEyeHeight = SneakEyeHeightSetting.VANILLA;
-    public BackwardsWalkingSetting backwardsWalking = LEGACY ? BackwardsWalkingSetting.V1_8 : BackwardsWalkingSetting.VANILLA;
+    public BackwardsWalkingSetting backwardsWalking = LEGACY ? BackwardsWalkingSetting.V1_8 : BackwardsWalkingSetting.V1_12;
     public boolean uncapBlockingHeadRotation = LEGACY;
-    public HeadRotationInterpolationSetting headRotationInterpolation = LEGACY ? HeadRotationInterpolationSetting.V1_8 : HeadRotationInterpolationSetting.VANILLA;
-    public SneakBobbingSetting sneakBobbing = LEGACY ? SneakBobbingSetting.V1_21_1 : SneakBobbingSetting.VANILLA;
+    public HeadRotationInterpolationSetting headRotationInterpolation = LEGACY ? HeadRotationInterpolationSetting.V1_8 : HeadRotationInterpolationSetting.V1_13;
+    public SneakBobbingSetting sneakBobbing = LEGACY ? SneakBobbingSetting.V1_21_1 : SneakBobbingSetting.V1_21_2;
     public boolean deathLimbs = LEGACY;
     public boolean bowArmMovement = LEGACY;
     public DamageTiltSetting damageTilt = LEGACY ? DamageTiltSetting.V1_8 : DamageTiltSetting.VANILLA;
     public boolean offsetHurtTiltTime = LEGACY;
-    public SlimArmPositionSetting slimArmPosition = LEGACY ? SlimArmPositionSetting.V1_8 : SlimArmPositionSetting.VANILLA;
+    public SlimArmPositionSetting slimArmPosition = LEGACY ? SlimArmPositionSetting.V1_8 : SlimArmPositionSetting.V1_15;
 
     public boolean disableHurtCamera = false;
     public boolean dinnerboneMode = false;

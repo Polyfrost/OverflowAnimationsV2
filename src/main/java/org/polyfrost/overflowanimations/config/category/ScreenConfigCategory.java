@@ -38,8 +38,8 @@ import org.polyfrost.overflowanimations.util.enums.ThirdPersonCrosshairSetting;
 import org.polyfrost.overflowanimations.util.enums.HeartFlashingSetting;
 
 public final class ScreenConfigCategory extends Category {
-    public CameraVersionSetting cameraVersion = LEGACY ? CameraVersionSetting.V1_8 : CameraVersionSetting.VANILLA;
-    public ThirdPersonCrosshairSetting thirdPersonCrosshair = LEGACY ? ThirdPersonCrosshairSetting.V1_8 : ThirdPersonCrosshairSetting.VANILLA;
+    public CameraVersionSetting cameraVersion = LEGACY ? CameraVersionSetting.V1_8 : CameraVersionSetting.V1_14_4;
+    public ThirdPersonCrosshairSetting thirdPersonCrosshair = LEGACY ? ThirdPersonCrosshairSetting.V1_8 : ThirdPersonCrosshairSetting.V1_9;
     public HeartFlashingSetting healthBarFlashing = LEGACY ? HeartFlashingSetting.V1_7 : HeartFlashingSetting.V1_8;
     public boolean centerScrollableListWidgets = LEGACY;
     public boolean listWidgetSelectedBorderColor = LEGACY;
@@ -50,7 +50,7 @@ public final class ScreenConfigCategory extends Category {
     public boolean tooltipStyleRendering = LEGACY;
     public boolean slotHoverStyleRendering = LEGACY;
     public boolean listBackgroundGradient = LEGACY;
-    public InventoryEffectsSetting inventoryEffects = LEGACY ? InventoryEffectsSetting.V1_8 : InventoryEffectsSetting.VANILLA;
+    public InventoryEffectsSetting inventoryEffects = LEGACY ? InventoryEffectsSetting.V1_8 : InventoryEffectsSetting.V1_21_10;
     public boolean panoramaRendering = LEGACY;
     public boolean legacyLoadingScreen = LEGACY;
     public boolean legacyLoadingScreenProgressBar = false;
