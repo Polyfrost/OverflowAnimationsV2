@@ -1,3 +1,5 @@
+import dev.detekt.gradle.Detekt
+import net.ltgt.gradle.errorprone.errorprone
 import net.ornithemc.ploceus.api.PloceusGradleExtensionApi
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
@@ -12,6 +14,8 @@ plugins {
     id("me.modmuss50.mod-publish-plugin") version "2.2.0"
     id("net.fabricmc.fabric-loom-remap") version "1.17-SNAPSHOT" apply false
     id("ploceus") version "1.17.4" apply false
+    id("dev.detekt") version "2.0.0-alpha.6"
+    id("net.ltgt.errorprone") version "5.1.1"
 }
 
 val isOrnithe = sc.current.version == "1.8.9"
@@ -115,6 +119,21 @@ dependencies {
         testImplementation("org.junit.jupiter:junit-jupiter:${sc.properties.get<String>("deps.junit")}")
         testImplementation("net.fabricmc:fabric-loader-junit:$loaderversion")
     }
+
+    errorprone("com.google.errorprone:error_prone_core:${sc.properties.get<String>("deps.errorprone")}")
+}
+
+tasks.withType<JavaCompile>().configureEach {
+    options.errorprone {
+        disableAllChecks = true
+        error("UnnecessarilyFullyQualified")
+    }
+}
+
+// the enabled Detekt rules need type resolution, which only the per-compilation tasks have
+tasks.named<Detekt>("detekt") {
+    enabled = false
+    dependsOn(tasks.withType<Detekt>().matching { it.name != "detekt" && !it.name.endsWith("SourceSet") })
 }
 
 sourceSets.main {
