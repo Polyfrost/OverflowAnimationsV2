@@ -49,7 +49,7 @@ public final class MovementConfigCategory extends Category {
     public SneakAnimationSetting sneakAnimation = LEGACY ? SneakAnimationSetting.V1_7 : SneakAnimationSetting.VANILLA;
     public UnsneakSetting longerUnsneak = LEGACY ? UnsneakSetting.LONG : UnsneakSetting.MATCH_SNEAK_ANIMATION;
     public SneakEyeHeightSetting sneakEyeHeight = SneakEyeHeightSetting.VANILLA;
-    public BackwardsWalkingSetting backwardsWalking = LEGACY ? BackwardsWalkingSetting.V1_12 : BackwardsWalkingSetting.VANILLA;
+    public BackwardsWalkingSetting backwardsWalking = BackwardsWalkingSetting.VANILLA;
     public boolean uncapBlockingHeadRotation = LEGACY;
     public HeadRotationInterpolationSetting headRotationInterpolation = LEGACY ? HeadRotationInterpolationSetting.V1_13 : HeadRotationInterpolationSetting.VANILLA;
     public SneakBobbingSetting sneakBobbing = LEGACY ? SneakBobbingSetting.V1_21_2 : SneakBobbingSetting.VANILLA;

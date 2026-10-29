@@ -92,7 +92,7 @@ public final class OverflowAnimationsConfig extends Config {
     *///?} else
     private static final String ID = SHARED_ID;
     private static final Path CONFIG_DIR = FabricLoader.getInstance().getConfigDir();
-    private static final int CONFIG_VERSION = 10;
+    private static final int CONFIG_VERSION = 11;
 
     private static JsonObject savedConfig = readSavedConfig();
     private static JsonObject legacyConfig = takeLegacyConfig();
@@ -206,6 +206,9 @@ public final class OverflowAnimationsConfig extends Config {
             //?} else {
             /*if (this.configVersion >= 7 && this.configVersion < 10) {
                 this.migrateLegacySplitDefaults();
+            }
+            if (this.configVersion < 11 && this.movement.backwardsWalking == BackwardsWalkingSetting.V1_12) {
+                this.movement.backwardsWalking = BackwardsWalkingSetting.VANILLA;
             }
             *///?}
 
