@@ -41,7 +41,7 @@ public final class FixesConfigCategory extends Category {
     public boolean fixFireballClientsideVisual = true;
     public boolean fixTextStrikethroughStyle = true;
     public boolean fixHighAttackSpeedIndicator = true;
-    public ViewBobbingTiltSetting viewBobbingTilt = ViewBobbingTiltSetting.V1_14;
+    public ViewBobbingTiltSetting viewBobbingTilt = LEGACY ? ViewBobbingTiltSetting.V1_14 : ViewBobbingTiltSetting.VANILLA;
     public boolean upMinPixelTransparencyLimit = true;
     public UseEquipAnimationSetting useEquipAnimation = UseEquipAnimationSetting.V1_8;
     public boolean fixItemUsageVisualInGUI = true;

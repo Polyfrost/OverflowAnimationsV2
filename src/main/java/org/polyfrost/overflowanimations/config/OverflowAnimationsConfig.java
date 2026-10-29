@@ -47,7 +47,16 @@ import org.polyfrost.overflowanimations.OverflowAnimationsConstants;
 import org.polyfrost.overflowanimations.config.category.*;
 import org.polyfrost.overflowanimations.handler.config.bundle.EntryBundle;
 import org.polyfrost.overflowanimations.util.enums.ArmorGlintSetting;
+import org.polyfrost.overflowanimations.util.enums.BackwardsWalkingSetting;
+import org.polyfrost.overflowanimations.util.enums.BlockMiningProgressSetting;
 import org.polyfrost.overflowanimations.util.enums.CameraVersionSetting;
+import org.polyfrost.overflowanimations.util.enums.DropSwingSetting;
+import org.polyfrost.overflowanimations.util.enums.HeadRotationInterpolationSetting;
+import org.polyfrost.overflowanimations.util.enums.SlimArmPositionSetting;
+import org.polyfrost.overflowanimations.util.enums.SneakAnimationSetting;
+import org.polyfrost.overflowanimations.util.enums.ThirdPersonCrosshairSetting;
+import org.polyfrost.overflowanimations.util.enums.UsingTextureInGUISetting;
+import org.polyfrost.overflowanimations.util.enums.ViewBobbingTiltSetting;
 import org.polyfrost.overflowanimations.util.enums.CapeMovementSetting;
 import org.polyfrost.overflowanimations.util.enums.DebugCrosshairSetting;
 import org.polyfrost.overflowanimations.util.enums.FishingRodVersionSetting;
@@ -66,7 +75,6 @@ import org.polyfrost.overflowanimations.util.enums.ThirdPersonBlockAnimationSett
 import org.polyfrost.overflowanimations.util.enums.ThirdPersonItemPositionsSetting;
 import org.polyfrost.overflowanimations.util.enums.UnsneakSetting;
 import org.polyfrost.overflowanimations.util.enums.PotionGlintSetting;
-import org.polyfrost.overflowanimations.util.enums.SneakAnimationSetting;
 import org.polyfrost.overflowanimations.util.enums.SneakBobbingSetting;
 
 import java.lang.reflect.Field;
@@ -84,7 +92,7 @@ public final class OverflowAnimationsConfig extends Config {
     *///?} else
     private static final String ID = SHARED_ID;
     private static final Path CONFIG_DIR = FabricLoader.getInstance().getConfigDir();
-    private static final int CONFIG_VERSION = 9;
+    private static final int CONFIG_VERSION = 10;
 
     private static JsonObject savedConfig = readSavedConfig();
     private static JsonObject legacyConfig = takeLegacyConfig();
@@ -188,6 +196,19 @@ public final class OverflowAnimationsConfig extends Config {
                 this.other.damageTintHeldItems = DamageTintHeldItemsSetting.BOTH;
             }
 
+            //? if >1.8.9 {
+            if (this.configVersion < 10) {
+                if (this.configVersion >= 7) {
+                    this.migrateSplitDefaults();
+                }
+                this.migrateVanillaDefaults();
+            }
+            //?} else {
+            /*if (this.configVersion >= 7 && this.configVersion < 10) {
+                this.migrateLegacySplitDefaults();
+            }
+            *///?}
+
             this.configVersion = CONFIG_VERSION;
             this.save();
         }
@@ -237,23 +258,14 @@ public final class OverflowAnimationsConfig extends Config {
     }
 
     private void migrateDefaults() {
-        final MovementConfigCategory movement = this.movement;
         final ItemsConfigCategory items = this.items;
         final ScreenConfigCategory screen = this.screen;
         if (items.rodLinePositionX == -0.36F && items.rodLinePositionY == 0.03F && items.rodLinePositionZ == 0.35F) {
             items.rodLinePositionX = items.rodLinePositionY = items.rodLinePositionZ = 0.0F;
         }
 
-        if (movement.sneakAnimation == SneakAnimationSetting.VANILLA) {
-            movement.sneakAnimation = SneakAnimationSetting.V1_14;
-        }
-
         if (items.fishingRodVersion == FishingRodVersionSetting.VANILLA) {
             items.fishingRodVersion = FishingRodVersionSetting.V1_17;
-        }
-
-        if (screen.cameraVersion == CameraVersionSetting.VANILLA) {
-            screen.cameraVersion = CameraVersionSetting.V1_14_4;
         }
 
         if (screen.debugCrosshairStyle == DebugCrosshairSetting.V1_12 || screen.debugCrosshairStyle == DebugCrosshairSetting.V1_8) {
@@ -268,6 +280,65 @@ public final class OverflowAnimationsConfig extends Config {
         items.potionGlint = PotionGlintSetting.VANILLA;
         *///?}
         items.fishingRodLineFov = true;
+    }
+
+    private void migrateSplitDefaults() {
+        final ItemsConfigCategory items = this.items;
+        final OtherConfigCategory other = this.other;
+        if (items.firstPersonItemPositions == FirstPersonItemPositionsSetting.V1_8) items.firstPersonItemPositions = FirstPersonItemPositionsSetting.V1_7;
+        if (items.thirdPersonItemPositions == ThirdPersonItemPositionsSetting.V1_8) items.thirdPersonItemPositions = ThirdPersonItemPositionsSetting.V1_7;
+        if (items.fishingRodVersion == FishingRodVersionSetting.VANILLA) items.fishingRodVersion = FishingRodVersionSetting.V1_7;
+        if (items.punchingDuringUsage == BlockHittingSetting.V1_8) items.punchingDuringUsage = BlockHittingSetting.V1_7;
+        if (other.hitColorArmor == HitColorArmorSetting.UNCHANGED) other.hitColorArmor = HitColorArmorSetting.RED;
+        if (other.thirdPersonBlockAnimation == ThirdPersonBlockAnimationSetting.V1_8) other.thirdPersonBlockAnimation = ThirdPersonBlockAnimationSetting.V1_7;
+    }
+
+    private void migrateVanillaDefaults() {
+        final ItemsConfigCategory items = this.items;
+        final MovementConfigCategory movement = this.movement;
+        final ScreenConfigCategory screen = this.screen;
+        final FixesConfigCategory fixes = this.fixes;
+        final OtherConfigCategory other = this.other;
+        if (items.itemGlint == ItemGlintSetting.V1_15) items.itemGlint = ItemGlintSetting.VANILLA;
+        if (items.armorGlint == ArmorGlintSetting.V1_19_4) items.armorGlint = ArmorGlintSetting.VANILLA;
+        if (items.dropSwing == DropSwingSetting.V1_15) items.dropSwing = DropSwingSetting.VANILLA;
+        if (items.usingTextureInGUI == UsingTextureInGUISetting.V1_9) items.usingTextureInGUI = UsingTextureInGUISetting.VANILLA;
+        if (movement.sneakAnimation == SneakAnimationSetting.V1_14) movement.sneakAnimation = SneakAnimationSetting.VANILLA;
+        if (movement.backwardsWalking == BackwardsWalkingSetting.V1_12) movement.backwardsWalking = BackwardsWalkingSetting.VANILLA;
+        if (movement.headRotationInterpolation == HeadRotationInterpolationSetting.V1_13) movement.headRotationInterpolation = HeadRotationInterpolationSetting.VANILLA;
+        if (movement.slimArmPosition == SlimArmPositionSetting.V1_15) movement.slimArmPosition = SlimArmPositionSetting.VANILLA;
+        if (movement.sneakBobbing == SneakBobbingSetting.V1_21_2) movement.sneakBobbing = SneakBobbingSetting.VANILLA;
+        if (screen.inventoryEffects == InventoryEffectsSetting.V1_21_10) screen.inventoryEffects = InventoryEffectsSetting.VANILLA;
+        if (screen.cameraVersion == CameraVersionSetting.V1_14_4) screen.cameraVersion = CameraVersionSetting.VANILLA;
+        if (screen.thirdPersonCrosshair == ThirdPersonCrosshairSetting.V1_9) screen.thirdPersonCrosshair = ThirdPersonCrosshairSetting.VANILLA;
+        if (fixes.viewBobbingTilt == ViewBobbingTiltSetting.V1_14) fixes.viewBobbingTilt = ViewBobbingTiltSetting.VANILLA;
+        if (other.blockMiningProgress == BlockMiningProgressSetting.V1_20) other.blockMiningProgress = BlockMiningProgressSetting.VANILLA;
+    }
+
+    private void migrateLegacySplitDefaults() {
+        final ItemsConfigCategory items = this.items;
+        final MovementConfigCategory movement = this.movement;
+        final ScreenConfigCategory screen = this.screen;
+        final OtherConfigCategory other = this.other;
+        if (items.itemGlint == ItemGlintSetting.V1_7) items.itemGlint = ItemGlintSetting.V1_15;
+        if (items.dropSwing == DropSwingSetting.V1_8) items.dropSwing = DropSwingSetting.V1_15;
+        if (items.usingTextureInGUI == UsingTextureInGUISetting.V1_8) items.usingTextureInGUI = UsingTextureInGUISetting.V1_9;
+        items.thinBlockPositions = false;
+        if (movement.backwardsWalking == BackwardsWalkingSetting.V1_8) movement.backwardsWalking = BackwardsWalkingSetting.V1_12;
+        if (movement.headRotationInterpolation == HeadRotationInterpolationSetting.V1_8) movement.headRotationInterpolation = HeadRotationInterpolationSetting.V1_13;
+        if (movement.sneakBobbing == SneakBobbingSetting.V1_21_1) movement.sneakBobbing = SneakBobbingSetting.V1_21_2;
+        if (movement.slimArmPosition == SlimArmPositionSetting.V1_8) movement.slimArmPosition = SlimArmPositionSetting.V1_15;
+        movement.capeSneakPosition = false;
+        if (screen.thirdPersonCrosshair == ThirdPersonCrosshairSetting.V1_8) screen.thirdPersonCrosshair = ThirdPersonCrosshairSetting.V1_9;
+        screen.centerScrollableListWidgets = false;
+        screen.disableDebugHudBackground = false;
+        screen.debugHudTextShadow = false;
+        screen.disconnectServerToTitleScreen = false;
+        if (other.blockMiningProgress == BlockMiningProgressSetting.V1_8) other.blockMiningProgress = BlockMiningProgressSetting.V1_20;
+        other.persistentBlockOutline = false;
+        other.maxGlintProperties = false;
+        other.disableRandomBlockRotations = false;
+        other.planarSkyFog = false;
     }
 
     public static void load() {

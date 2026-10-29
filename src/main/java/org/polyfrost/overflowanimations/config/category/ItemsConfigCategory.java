@@ -45,8 +45,8 @@ import org.polyfrost.overflowanimations.util.enums.UsingTextureInGUISetting;
 
 public final class ItemsConfigCategory extends Category {
     // (Items) Enchantment Glint
-    public ItemGlintSetting itemGlint = LEGACY ? ItemGlintSetting.V1_7 : ItemGlintSetting.V1_15;
-    public ArmorGlintSetting armorGlint = LEGACY ? ArmorGlintSetting.V1_8 : ArmorGlintSetting.V1_19_4;
+    public ItemGlintSetting itemGlint = LEGACY ? ItemGlintSetting.V1_15 : ItemGlintSetting.VANILLA;
+    public ArmorGlintSetting armorGlint = LEGACY ? ArmorGlintSetting.V1_8 : ArmorGlintSetting.VANILLA;
     public PotionGlintSetting potionGlint = LEGACY ? PotionGlintSetting.V1_7 : PotionGlintSetting.VANILLA;
     public boolean glintOnItemDrops2D = !LEGACY;
     public boolean glintOnItemFramed2D = !LEGACY;
@@ -59,7 +59,7 @@ public final class ItemsConfigCategory extends Category {
     public FirstPersonItemPositionsSetting firstPersonItemPositions = FirstPersonItemPositionsSetting.V1_7;
     public ThirdPersonItemPositionsSetting thirdPersonItemPositions = ThirdPersonItemPositionsSetting.V1_7;
     public boolean strictItemPositionsInThirdPerson = true;
-    public boolean thinBlockPositions = LEGACY;
+    public boolean thinBlockPositions = false;
     public boolean skullPosition = LEGACY;
     public FishingRodVersionSetting fishingRodVersion = FishingRodVersionSetting.V1_7;
     // (Items) Other
@@ -67,9 +67,9 @@ public final class ItemsConfigCategory extends Category {
     public BlockHittingSetting punchingDuringUsage = BlockHittingSetting.V1_7;
     public BlockHittingParticlesSetting punchingDuringUsageParticles = BlockHittingParticlesSetting.SHOWN;
     public boolean disableSwingOnUse = LEGACY;
-    public DropSwingSetting dropSwing = LEGACY ? DropSwingSetting.V1_8 : DropSwingSetting.V1_15;
+    public DropSwingSetting dropSwing = LEGACY ? DropSwingSetting.V1_15 : DropSwingSetting.VANILLA;
     public boolean disableSwingOnEntityInteract = LEGACY;
-    public UsingTextureInGUISetting usingTextureInGUI = LEGACY ? UsingTextureInGUISetting.V1_8 : UsingTextureInGUISetting.V1_9;
+    public UsingTextureInGUISetting usingTextureInGUI = LEGACY ? UsingTextureInGUISetting.V1_9 : UsingTextureInGUISetting.VANILLA;
     public EquipAnimationVersionSetting equipAnimationVersion = LEGACY ? EquipAnimationVersionSetting.V1_7 : EquipAnimationVersionSetting.VANILLA;
     public boolean durabilityBarColors = LEGACY;
     public boolean legacyItemRarities = LEGACY;

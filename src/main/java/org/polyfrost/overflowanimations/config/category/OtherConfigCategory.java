@@ -46,7 +46,7 @@ import org.polyfrost.overflowanimations.util.enums.BlockMiningProgressSetting;
 public final class OtherConfigCategory extends Category {
     // Sky
     public boolean blueVoidSky = LEGACY;
-    public boolean planarSkyFog = LEGACY;
+    public boolean planarSkyFog = false;
     public boolean cloudHeight = LEGACY;
     public boolean playerVoidBox = LEGACY;
     public boolean oldCloudRendering = LEGACY;
@@ -60,7 +60,7 @@ public final class OtherConfigCategory extends Category {
     // Other
     public boolean restoreParticleBlending = LEGACY;
     public boolean lockBlockingArmRotation = LEGACY;
-    public BlockMiningProgressSetting blockMiningProgress = LEGACY ? BlockMiningProgressSetting.V1_8 : BlockMiningProgressSetting.V1_20;
+    public BlockMiningProgressSetting blockMiningProgress = LEGACY ? BlockMiningProgressSetting.V1_20 : BlockMiningProgressSetting.VANILLA;
     public boolean projectileAgeCheck = LEGACY;
     public boolean blockOutlineRendering = LEGACY;
     public boolean disableModelWhilstSleeping = LEGACY;
@@ -68,15 +68,15 @@ public final class OtherConfigCategory extends Category {
     public boolean heldItemArmLogic = false;
     public ThirdPersonBlockAnimationSetting thirdPersonBlockAnimation = ThirdPersonBlockAnimationSetting.V1_7;
     public boolean disableInventoryEntityScissor = LEGACY;
-    public boolean maxGlintProperties = LEGACY;
+    public boolean maxGlintProperties = false;
     public boolean flameOffset = LEGACY;
-    public boolean persistentBlockOutline = LEGACY;
+    public boolean persistentBlockOutline = false;
     public boolean fastGrass = false;
     public boolean oldY0Height = false;
     public boolean oldWaterOverlayOpacity = LEGACY;
     public boolean oldWaterColorFog = LEGACY;
     public boolean oldWaterColorEffects = false;
-    public boolean disableRandomBlockRotations = LEGACY;
+    public boolean disableRandomBlockRotations = false;
     public boolean legacyDiffuseLighting = LEGACY;
     public boolean legacyLightmap = LEGACY;
     public boolean legacyFogDarkness = LEGACY;
