@@ -1,2 +1,2 @@
-## 5.1.2
-- Fix up defaults
+## 5.1.3
+- Turn on 1.12+ backwards walking on 1.8 by default
