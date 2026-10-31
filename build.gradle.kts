@@ -222,8 +222,10 @@ tasks.withType<JavaCompile>().configureEach {
 
 tasks.withType<KotlinCompile>().configureEach {
     compilerOptions.jvmTarget = JvmTarget.fromTarget(requiredJava.majorVersion)
-    finalizedBy("detekt", ":spotlessKotlinCheck")
+    finalizedBy(":spotlessKotlinCheck")
 }
+tasks.named("compileKotlin") { finalizedBy("detektMain") }
+tasks.named("compileTestKotlin") { finalizedBy("detektTest") }
 
 val currentCommitHash: String by lazy {
     providers.exec {
