@@ -7,7 +7,7 @@ OverflowAnimations brings back animations and visuals from older versions of Min
 
 You can use `/overflowanimations presets` to set everything to a 1.7, 1.8 or modern look at once (Fabric versions).
 
-### What comes turned on
+### Defaults
 
 - 1.7 held item and fishing rod positions
 - Swing your arm while using an item and while mining
