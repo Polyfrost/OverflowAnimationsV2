@@ -1,2 +1,2 @@
-## 5.1.3
-- Turn on 1.12+ backwards walking on 1.8 by default
+## 5.1.4
+- Turn fake particles off by default
