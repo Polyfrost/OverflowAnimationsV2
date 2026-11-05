@@ -28,48 +28,72 @@ package org.polyfrost.overflowanimations.handler.networking
 import com.google.gson.JsonElement
 import com.google.gson.JsonParser
 import com.google.gson.JsonPrimitive
+//? if >1.8.9 {
 import com.mojang.logging.LogUtils
 import net.minecraft.network.FriendlyByteBuf
 import net.minecraft.resources.Identifier
 import org.polyfrost.overflowanimations.handler.server_features.ServerFeature
 import org.polyfrost.overflowanimations.handler.server_features.ServerFeatures
+//?} else {
+/*import org.apache.logging.log4j.LogManager
+*///?}
 import java.nio.ByteBuffer
+//? if >1.8.9
 import java.util.concurrent.Executor
 
 // Combat module id and option keys are based on Apollo's CombatModule, licensed under the MIT License, Copyright (c) 2026 Moonsworth:
 // https://github.com/LunarClient/Apollo/blob/63fda2ae735c6ca4c29e52cb5583ae9f89ac1cc3/api/src/main/java/com/lunarclient/apollo/module/combat/CombatModule.java
 object ApolloCombat {
     // Bukkit drops plugin messages on channels the client hasn't registered, and Apollo's JSON servers send from their lunar:apollo registration handler, so apollo:json must be announced first.
+    //? if >1.8.9 {
     val CHANNELS: Map<Identifier, (ByteArray) -> Unit> = mapOf(
         Identifier.fromNamespaceAndPath("apollo", "json") to ::handleJson,
         Identifier.fromNamespaceAndPath("lunar", "apollo") to ::handle
     )
 
     private val LOGGER = LogUtils.getLogger()
+    //?} else {
+    /*val CHANNELS: Map<String, (ByteArray) -> Unit> = mapOf(
+        "apollo:json" to ::handleJson,
+        "lunar:apollo" to ::handle
+    )
+
+    private val LOGGER = LogManager.getLogger()
+    *///?}
     private const val OVERRIDE_MESSAGE = "/lunarclient.apollo.configurable.v1.OverrideConfigurableSettingsMessage"
     private const val SETTINGS_MESSAGE = "/lunarclient.apollo.configurable.v1.ConfigurableSettings"
+    const val MISS_PENALTY = "disable-miss-penalty"
+    const val BLOCK_MISS_PENALTY = "disable-block-miss-penalty"
+    const val DIG_AND_USE = "allow-dig-and-use"
+    //? if >1.8.9 {
     private val OPTIONS = mapOf(
-        ServerFeatures.MISS_PENALTY to "disable-miss-penalty",
-        ServerFeatures.BLOCK_MISS_PENALTY to "disable-block-miss-penalty",
-        ServerFeatures.MINING_ITEM_USAGE to "allow-dig-and-use"
+        ServerFeatures.MISS_PENALTY to MISS_PENALTY,
+        ServerFeatures.BLOCK_MISS_PENALTY to BLOCK_MISS_PENALTY,
+        ServerFeatures.MINING_ITEM_USAGE to DIG_AND_USE
     )
+    //?}
 
     private var enabled = false
     private val options = hashSetOf<String>()
 
-    fun isPresent(feature: ServerFeature) = enabled && OPTIONS[feature] in options
+    fun isPresent(option: String?) = enabled && option in options
+
+    //? if >1.8.9
+    fun isPresent(feature: ServerFeature) = isPresent(OPTIONS[feature])
 
     fun reset() {
         enabled = false
         options.clear()
     }
 
+    //? if >1.8.9 {
     fun tap(buf: FriendlyByteBuf, executor: Executor) {
         val packet = FriendlyByteBuf(buf.duplicate())
         val handler = CHANNELS[packet.readIdentifier()] ?: return
         val data = ByteArray(packet.readableBytes()).also { packet.readBytes(it) }
         executor.execute { handler(data) }
     }
+    //?}
 
     fun handle(data: ByteArray) {
         try {
@@ -94,7 +118,11 @@ object ApolloCombat {
 
     private fun handleJson(data: ByteArray) {
         try {
+            //? if >1.8.9 {
             val packet = JsonParser.parseString(String(data, Charsets.UTF_8)).asJsonObject
+            //?} else {
+            /*val packet = JsonParser().parse(String(data, Charsets.UTF_8)).asJsonObject
+            *///?}
             val type = packet.get("@type")?.asString ?: return
             val modules = when {
                 type.endsWith(OVERRIDE_MESSAGE) -> packet.getAsJsonArray("configurable_settings")?.map { it.asJsonObject }.orEmpty()
