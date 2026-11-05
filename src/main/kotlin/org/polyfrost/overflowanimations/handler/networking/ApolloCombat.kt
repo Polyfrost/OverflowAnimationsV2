@@ -25,16 +25,29 @@
 
 package org.polyfrost.overflowanimations.handler.networking
 
+import com.google.gson.JsonElement
+import com.google.gson.JsonParser
+import com.google.gson.JsonPrimitive
 import com.mojang.logging.LogUtils
+import net.minecraft.network.FriendlyByteBuf
+import net.minecraft.resources.Identifier
 import org.polyfrost.overflowanimations.handler.server_features.ServerFeature
 import org.polyfrost.overflowanimations.handler.server_features.ServerFeatures
 import java.nio.ByteBuffer
+import java.util.concurrent.Executor
 
 // Combat module id and option keys are based on Apollo's CombatModule, licensed under the MIT License, Copyright (c) 2026 Moonsworth:
 // https://github.com/LunarClient/Apollo/blob/63fda2ae735c6ca4c29e52cb5583ae9f89ac1cc3/api/src/main/java/com/lunarclient/apollo/module/combat/CombatModule.java
 object ApolloCombat {
+    // Bukkit drops plugin messages on channels the client hasn't registered, and Apollo's JSON servers send from their lunar:apollo registration handler, so apollo:json must be announced first.
+    val CHANNELS: Map<Identifier, (ByteArray) -> Unit> = mapOf(
+        Identifier.fromNamespaceAndPath("apollo", "json") to ::handleJson,
+        Identifier.fromNamespaceAndPath("lunar", "apollo") to ::handle
+    )
+
     private val LOGGER = LogUtils.getLogger()
-    private const val SETTINGS_MESSAGE = "/lunarclient.apollo.configurable.v1.OverrideConfigurableSettingsMessage"
+    private const val OVERRIDE_MESSAGE = "/lunarclient.apollo.configurable.v1.OverrideConfigurableSettingsMessage"
+    private const val SETTINGS_MESSAGE = "/lunarclient.apollo.configurable.v1.ConfigurableSettings"
     private val OPTIONS = mapOf(
         ServerFeatures.MISS_PENALTY to "disable-miss-penalty",
         ServerFeatures.BLOCK_MISS_PENALTY to "disable-block-miss-penalty",
@@ -51,20 +64,61 @@ object ApolloCombat {
         options.clear()
     }
 
+    fun tap(buf: FriendlyByteBuf, executor: Executor) {
+        val packet = FriendlyByteBuf(buf.duplicate())
+        val handler = CHANNELS[packet.readIdentifier()] ?: return
+        val data = ByteArray(packet.readableBytes()).also { packet.readBytes(it) }
+        executor.execute { handler(data) }
+    }
+
     fun handle(data: ByteArray) {
         try {
             val packet = ByteBuffer.wrap(data).fields()
-            if (packet.string(1)?.endsWith(SETTINGS_MESSAGE) != true) return
-            for (settings in packet.messages(2).flatMap { it.messages(1) }) {
+            val type = packet.string(1) ?: return
+            val modules = when {
+                type.endsWith(OVERRIDE_MESSAGE) -> packet.messages(2).flatMap { it.messages(1) }
+                type.endsWith(SETTINGS_MESSAGE) -> packet.messages(2)
+                else -> return
+            }
+            for (settings in modules) {
                 if (settings.string(2) != "combat") continue
-                enabled = settings.bool(3)
-                for (property in settings.messages(4)) {
-                    val key = property.string(1) ?: continue
-                    if (property.messages(2).any { it.bool(4) }) options.add(key) else options.remove(key)
+                val properties = settings.messages(4).mapNotNull { property ->
+                    property.string(1)?.let { key -> key to property.messages(2).any { it.bool(4) } }
                 }
+                applyCombat(settings.bool(3), properties.toMap())
             }
         } catch (e: RuntimeException) {
             LOGGER.warn("Failed to read Apollo settings", e)
+        }
+    }
+
+    private fun handleJson(data: ByteArray) {
+        try {
+            val packet = JsonParser.parseString(String(data, Charsets.UTF_8)).asJsonObject
+            val type = packet.get("@type")?.asString ?: return
+            val modules = when {
+                type.endsWith(OVERRIDE_MESSAGE) -> packet.getAsJsonArray("configurable_settings")?.map { it.asJsonObject }.orEmpty()
+                type.endsWith(SETTINGS_MESSAGE) -> listOf(packet)
+                else -> return
+            }
+            for (settings in modules) {
+                if (settings.get("apollo_module")?.asString != "combat") continue
+                val properties = settings.getAsJsonObject("properties")?.entrySet().orEmpty().mapNotNull { (key, value) ->
+                    value.bool()?.let { key to it }
+                }
+                applyCombat(settings.get("enable").bool() == true, properties.toMap())
+            }
+        } catch (e: RuntimeException) {
+            LOGGER.warn("Failed to read Apollo settings", e)
+        }
+    }
+
+    private fun JsonElement?.bool() = (this as? JsonPrimitive)?.takeIf { it.isBoolean }?.asBoolean
+
+    private fun applyCombat(enable: Boolean, properties: Map<String, Boolean>) {
+        enabled = enable
+        for ((key, value) in properties) {
+            if (value) options.add(key) else options.remove(key)
         }
     }
 

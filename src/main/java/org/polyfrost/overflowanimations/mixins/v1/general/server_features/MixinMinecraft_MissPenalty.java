@@ -79,4 +79,14 @@ public abstract class MixinMinecraft_MissPenalty {
             return original;
         }
     }
+
+    @ModifyExpressionValue(method = "continueAttack", at = @At(value = "FIELD", target = "Lnet/minecraft/client/Minecraft;missTime:I", ordinal = 0, opcode = Opcodes.GETFIELD))
+    private int overflowanimations$disableBlockMissPenalty(final int original) {
+        if (original <= 10 && this.hitResult != null && this.hitResult.getType() == HitResult.Type.BLOCK && ServerFeatureManager.isPresent(ServerFeatures.BLOCK_MISS_PENALTY)) {
+            this.missTime = 0;
+            return 0;
+        } else {
+            return original;
+        }
+    }
 }
