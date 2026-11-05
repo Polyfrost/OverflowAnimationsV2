@@ -30,6 +30,8 @@ import org.polyfrost.overflowanimations.handler.server_features.ServerFeature
 import org.polyfrost.overflowanimations.handler.server_features.ServerFeatures
 import java.nio.ByteBuffer
 
+// Combat module id and option keys are based on Apollo's CombatModule, licensed under the MIT License, Copyright (c) 2026 Moonsworth:
+// https://github.com/LunarClient/Apollo/blob/63fda2ae735c6ca4c29e52cb5583ae9f89ac1cc3/api/src/main/java/com/lunarclient/apollo/module/combat/CombatModule.java
 object ApolloCombat {
     private val LOGGER = LogUtils.getLogger()
     private const val SETTINGS_MESSAGE = "/lunarclient.apollo.configurable.v1.OverrideConfigurableSettingsMessage"
