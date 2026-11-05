@@ -329,16 +329,16 @@ public abstract class MixinItemInHandRenderer_FirstPersonItemPositions {
     /*@WrapOperation(method = "renderArmWithItem", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/PoseStack;scale(FFF)V", ordinal = 1))
     *///?}
     //? if <26.1 {
-    /*private void overflowanimations$postBowTransform(final PoseStack instance, final float xScale, final float yScale, final float zScale, final Operation<Void> original, @Local(argsOnly = true, ordinal = 0) final AbstractClientPlayer player, @Local(argsOnly = true, ordinal = 0) final InteractionHand hand) {
+    /*private void overflowanimations$postBowTransform(final PoseStack instance, final float xScale, final float yScale, final float zScale, final Operation<Void> original, @Local(argsOnly = true, ordinal = 0) final AbstractClientPlayer player, @Local(argsOnly = true, ordinal = 0) final InteractionHand hand, @Local(argsOnly = true, ordinal = 0) final ItemStack itemStack) {
     *///?} elif 26.2 {
     /*@WrapOperation(method = "submitArmWithItem", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/PoseStack;scale(FFF)V", ordinal = 1))
     *///?}
     //? if >=26.1 <26.3 {
-    /*private void overflowanimations$postBowTransform(final PoseStack instance, final float xScale, final float yScale, final float zScale, final Operation<Void> original, @Local(argsOnly = true, name = "player") final AbstractClientPlayer player, @Local(argsOnly = true, name = "hand") final InteractionHand hand) {
+    /*private void overflowanimations$postBowTransform(final PoseStack instance, final float xScale, final float yScale, final float zScale, final Operation<Void> original, @Local(argsOnly = true, name = "player") final AbstractClientPlayer player, @Local(argsOnly = true, name = "hand") final InteractionHand hand, @Local(argsOnly = true, name = "itemStack") final ItemStack itemStack) {
     *///?}
         //? if <26.3 {
         /*final int direction = EntityUtilKt.getHandMultiplier(player, hand);
-        final boolean legacy = OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().items.firstPersonItemPositions.isOld() && !OverflowAnimationsConfig.instance().items.lunarItemPositions;
+        final boolean legacy = OverflowAnimations.isEnabled() && ItemUtilKt.usesLegacyFirstPersonPositions(itemStack) && !OverflowAnimationsConfig.instance().items.lunarItemPositions;
         if (legacy) {
             instance.mulPose(Axis.ZP.rotationDegrees(direction * -335));
             instance.mulPose(Axis.YP.rotationDegrees(direction * -50.0F));
@@ -373,7 +373,7 @@ public abstract class MixinItemInHandRenderer_FirstPersonItemPositions {
     *///?}
     //? if <26.3 {
         /*final ItemsConfigCategory items = OverflowAnimationsConfig.instance().items;
-        if (OverflowAnimations.isEnabled() && (items.firstPersonItemPositions.isOld() || items.lunarBlockHitPosition) && !(itemStack.getItem() instanceof ShieldItem)) {
+        if (OverflowAnimations.isEnabled() && (ItemUtilKt.usesLegacyFirstPersonPositions(itemStack) || items.lunarBlockHitPosition) && !(itemStack.getItem() instanceof ShieldItem)) {
             final int direction = EntityUtilKt.getHandMultiplier(player, hand);
             if (items.lunarBlockHitPosition) {
                 poseStack.translate(0.0F, (0.2F - inverseArmHeight) * -0.6F, 0.0F);
@@ -501,7 +501,7 @@ public abstract class MixinItemInHandRenderer_FirstPersonItemPositions {
         }
 
         final boolean isNotBlock3d = !ItemUtilKt.isBlock3d(itemStack, itemStackRenderState.usesBlockLight());
-        if (items.firstPersonItemPositions.isOld() && !items.lunarItemPositions && !(items.lunarBlockHitPosition && ItemUtilKt.isSwordItem(itemStack)) && isNotBlock3d && !ItemUtilKt.isItemBlacklisted(itemStack)) {
+        if (ItemUtilKt.usesLegacyFirstPersonPositions(itemStack) && !items.lunarItemPositions && !(items.lunarBlockHitPosition && ItemUtilKt.isSwordItem(itemStack)) && isNotBlock3d && !ItemUtilKt.isItemBlacklisted(itemStack)) {
             final float radians = 0.4363323129985824F;
             poseStack.scale(0.6F, 0.6F, 0.6F);
             poseStack.mulPose(Axis.YP.rotationDegrees(direction * 275.0F));

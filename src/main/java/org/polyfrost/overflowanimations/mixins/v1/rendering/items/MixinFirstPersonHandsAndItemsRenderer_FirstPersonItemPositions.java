@@ -269,9 +269,9 @@ public abstract class MixinFirstPersonHandsAndItemsRenderer_FirstPersonItemPosit
 
     //? if >=26.3 {
     @WrapOperation(method = "submitArmWithItem", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/PoseStack;scale(FFF)V", ordinal = 1))
-    private void overflowanimations$postBowTransform(final PoseStack instance, final float xScale, final float yScale, final float zScale, final Operation<Void> original, @Local(argsOnly = true, name = "playerState") final PlayerRenderState playerState, @Local(argsOnly = true, name = "hand") final InteractionHand hand) {
+    private void overflowanimations$postBowTransform(final PoseStack instance, final float xScale, final float yScale, final float zScale, final Operation<Void> original, @Local(argsOnly = true, name = "playerState") final PlayerRenderState playerState, @Local(argsOnly = true, name = "hand") final InteractionHand hand, @Local(argsOnly = true, name = "itemStack") final ItemStack itemStack) {
         final int direction = playerState.avatarRenderState != null ? EntityUtilKt.getHandMultiplier(playerState.avatarRenderState, hand) : 1;
-        final boolean legacy = OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().items.firstPersonItemPositions.isOld() && !OverflowAnimationsConfig.instance().items.lunarItemPositions;
+        final boolean legacy = OverflowAnimations.isEnabled() && ItemUtilKt.usesLegacyFirstPersonPositions(itemStack) && !OverflowAnimationsConfig.instance().items.lunarItemPositions;
         if (legacy) {
             instance.rotate(Axis.ZP.rotationDegrees(direction * -335));
             instance.rotate(Axis.YP.rotationDegrees(direction * -50.0F));
@@ -295,7 +295,7 @@ public abstract class MixinFirstPersonHandsAndItemsRenderer_FirstPersonItemPosit
     @ModifyExpressionValue(method = "submitArmWithItem", at = @At("MIXINEXTRAS:EXPRESSION"))
     private boolean overflowanimations$oldFirstPersonSwordBlock(final boolean original, @Local(argsOnly = true, name = "playerState") final PlayerRenderState playerState, @Local(argsOnly = true, name = "hand") final InteractionHand hand, @Local(argsOnly = true, name = "itemStack") final ItemStack itemStack, @Local(argsOnly = true, name = "poseStack") final PoseStack poseStack, @Local(argsOnly = true, name = "inverseArmHeight") final float inverseArmHeight) {
         final ItemsConfigCategory items = OverflowAnimationsConfig.instance().items;
-        if (OverflowAnimations.isEnabled() && (items.firstPersonItemPositions.isOld() || items.lunarBlockHitPosition) && !(itemStack.getItem() instanceof ShieldItem) && playerState.avatarRenderState != null) {
+        if (OverflowAnimations.isEnabled() && (ItemUtilKt.usesLegacyFirstPersonPositions(itemStack) || items.lunarBlockHitPosition) && !(itemStack.getItem() instanceof ShieldItem) && playerState.avatarRenderState != null) {
             final int direction = EntityUtilKt.getHandMultiplier(playerState.avatarRenderState, hand);
             if (items.lunarBlockHitPosition) {
                 poseStack.translate(0.0F, (0.2F - inverseArmHeight) * -0.6F, 0.0F);
@@ -378,7 +378,7 @@ public abstract class MixinFirstPersonHandsAndItemsRenderer_FirstPersonItemPosit
 
         //? if >=26.3 {
         final boolean isNotBlock3d = !ItemUtilKt.isBlock3d(itemStack, itemStackRenderState.usesBlockLight());
-        if (OverflowAnimationsConfig.instance().items.firstPersonItemPositions.isOld() && !OverflowAnimationsConfig.instance().items.lunarItemPositions && !(OverflowAnimationsConfig.instance().items.lunarBlockHitPosition && ItemUtilKt.isSwordItem(itemStack)) && isNotBlock3d && !ItemUtilKt.isItemBlacklisted(itemStack)) {
+        if (ItemUtilKt.usesLegacyFirstPersonPositions(itemStack) && !OverflowAnimationsConfig.instance().items.lunarItemPositions && !(OverflowAnimationsConfig.instance().items.lunarBlockHitPosition && ItemUtilKt.isSwordItem(itemStack)) && isNotBlock3d && !ItemUtilKt.isItemBlacklisted(itemStack)) {
             final float radians = 0.4363323129985824F;
         //?}
 

@@ -38,7 +38,9 @@ import net.minecraft.world.item.*
 import net.minecraft.world.level.block.*
 import org.polyfrost.overflowanimations.OverflowAnimations
 import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig
+import org.polyfrost.overflowanimations.util.enums.FirstPersonItemPositionsSetting
 import org.polyfrost.overflowanimations.util.enums.FishingRodVersionSetting
+import org.polyfrost.overflowanimations.util.enums.ThirdPersonItemPositionsSetting
 import java.lang.Double.isNaN
 import kotlin.math.roundToInt
 
@@ -122,8 +124,18 @@ fun applyLegacyFirstPersonTransforms(poseStack: PoseStack, direction: Int, runna
     //?}
 }
 
+fun usesLegacyFirstPersonPositions(stack: ItemStack): Boolean {
+    val setting = OverflowAnimationsConfig.instance().items.firstPersonItemPositions
+    return setting.isOld && !(setting == FirstPersonItemPositionsSetting.AUTO && ItemTransformOverrides.isOverridden(stack, "firstperson"))
+}
+
+fun usesLegacyThirdPersonPositions(stack: ItemStack): Boolean {
+    val setting = OverflowAnimationsConfig.instance().items.thirdPersonItemPositions
+    return setting.isOld && !(setting == ThirdPersonItemPositionsSetting.AUTO && ItemTransformOverrides.isOverridden(stack, "thirdperson"))
+}
+
 fun shouldApplyItemPositionsInThirdPerson(armedEntityRenderState: ArmedEntityRenderState, stack: ItemStack, useBlockLight: Boolean) =
-    if (OverflowAnimationsConfig.instance().items.thirdPersonItemPositions.isOld &&
+    if (usesLegacyThirdPersonPositions(stack) &&
         //? if <1.21.9 {
         /*(OverflowAnimationsConfig.instance().items.entityItemPositions || armedEntityRenderState is PlayerRenderState)
         *///?} else {

@@ -27,5 +27,6 @@ package org.polyfrost.overflowanimations.util.enums
 
 enum class FirstPersonItemPositionsSetting(override val isOld: Boolean) : LegacyToggle {
     V1_7(true),
-    V1_8(false)
+    V1_8(false),
+    AUTO(true)
 }

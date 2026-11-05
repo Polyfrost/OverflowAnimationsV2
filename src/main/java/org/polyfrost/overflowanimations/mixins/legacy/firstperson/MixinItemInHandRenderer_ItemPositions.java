@@ -46,6 +46,7 @@ import net.minecraft.item.SwordItem;
 import org.polyfrost.overflowanimations.OverflowAnimations;
 import org.polyfrost.overflowanimations.config.category.ItemsConfigCategory;
 import org.polyfrost.overflowanimations.legacy.firstperson.LegacyFirstPerson;
+import org.polyfrost.overflowanimations.legacy.model.ItemTransformOverrides;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -304,7 +305,7 @@ public abstract class MixinItemInHandRenderer_ItemPositions {
     @WrapOperation(method = "applyBowNocking", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/platform/GlStateManager;scalef(FFF)V"))
     private void overflowanimations$legacyBowPull(final float x, final float y, final float z, final Operation<Void> original) {
         final ItemsConfigCategory items = LegacyFirstPerson.items();
-        final boolean legacy = OverflowAnimations.isEnabled() && items.firstPersonItemPositions.isOld() && !items.lunarItemPositions;
+        final boolean legacy = OverflowAnimations.isEnabled() && ItemTransformOverrides.usesLegacyFirstPerson(this.renderer.getModelShaper().getModel(this.itemInHand)) && !items.lunarItemPositions;
         if (legacy) {
             GlStateManager.rotatef(-335.0F, 0.0F, 0.0F, 1.0F);
             GlStateManager.rotatef(-50.0F, 0.0F, 1.0F, 0.0F);
