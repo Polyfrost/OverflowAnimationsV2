@@ -25,6 +25,7 @@
 
 package org.polyfrost.overflowanimations.handler.server_features
 
+import org.polyfrost.overflowanimations.handler.networking.ApolloCombat
 import org.polyfrost.overflowanimations.util.isSingleplayer
 
 object ServerFeatureManager {
@@ -33,6 +34,6 @@ object ServerFeatureManager {
 
     @JvmStatic
     fun isPresent(feature: ServerFeature): Boolean {
-        return !isSingleplayer() && ENABLED_SERVER_FEATURES.contains(feature)
+        return !isSingleplayer() && (ENABLED_SERVER_FEATURES.contains(feature) || ApolloCombat.isPresent(feature))
     }
 }

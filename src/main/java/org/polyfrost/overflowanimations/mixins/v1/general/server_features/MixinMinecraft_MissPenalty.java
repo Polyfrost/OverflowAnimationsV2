@@ -25,8 +25,7 @@
 
 package org.polyfrost.overflowanimations.mixins.v1.general.server_features;
 
-import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
-import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.InteractionHand;
@@ -71,12 +70,13 @@ public abstract class MixinMinecraft_MissPenalty {
         }
     }
 
-    @WrapOperation(method = "startAttack", at = @At(value = "FIELD", target = "Lnet/minecraft/client/Minecraft;missTime:I", ordinal = 0, opcode = Opcodes.GETFIELD))
-    private int overflowanimations$disableSwingMissPenalty(final Minecraft instance, final Operation<Integer> original) {
-        if (ServerFeatureManager.isPresent(ServerFeatures.MISS_PENALTY) && (this.hitResult != null && this.hitResult.getType() != HitResult.Type.BLOCK)) {
+    @ModifyExpressionValue(method = "startAttack", at = @At(value = "FIELD", target = "Lnet/minecraft/client/Minecraft;missTime:I", ordinal = 0, opcode = Opcodes.GETFIELD))
+    private int overflowanimations$disableSwingMissPenalty(final int original) {
+        if (this.hitResult != null && ServerFeatureManager.isPresent(this.hitResult.getType() == HitResult.Type.BLOCK ? ServerFeatures.BLOCK_MISS_PENALTY : ServerFeatures.MISS_PENALTY)) {
+            this.missTime = 0;
             return 0;
         } else {
-            return original.call(instance);
+            return original;
         }
     }
 }

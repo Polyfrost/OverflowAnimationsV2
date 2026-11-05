@@ -39,6 +39,9 @@ object ServerFeatures {
     val MISS_PENALTY = register(location("miss_penalty"))
 
     @JvmField
+    val BLOCK_MISS_PENALTY = ServerFeature(location("block_miss_penalty"), -1)
+
+    @JvmField
     val LEFT_CLICK_ITEM_USAGE = register(location("left_click_item_usage"))
 
     @JvmField
