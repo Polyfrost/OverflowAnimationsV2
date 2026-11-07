@@ -43,9 +43,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.UseAction;
 import net.minecraft.network.packet.c2s.play.ArmSwingC2SPacket;
 import net.minecraft.world.HitResult;
+import org.objectweb.asm.Opcodes;
 import org.polyfrost.overflowanimations.OverflowAnimations;
 import org.polyfrost.overflowanimations.config.category.ItemsConfigCategory;
 import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig;
+import org.polyfrost.overflowanimations.handler.networking.ApolloCombat;
 import org.polyfrost.overflowanimations.legacy.firstperson.LegacyFirstPerson;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -95,7 +97,7 @@ public abstract class MixinMinecraft_Swinging {
         final Block block = this.overflowanimations$targetedBlock();
         final boolean adventure = LegacyFirstPerson.cannotMine(this.player, block);
         if (block != null) {
-            if (items.punchingDuringUsageParticles.isOld() && !(adventure && items.disableAdventureUsageParticles)) {
+            if (items.punchingDuringUsageParticles.isOld() && !(adventure && items.disableAdventureUsageParticles) && !ApolloCombat.INSTANCE.isPresent(ApolloCombat.DIG_AND_USE)) {
                 this.particleManager.addBlockMiningParticles(this.crosshairTarget.getPos(), this.crosshairTarget.face);
             }
         } else if (!items.alwaysUsageSwing) {
@@ -106,10 +108,30 @@ public abstract class MixinMinecraft_Swinging {
         }
     }
 
-    @Inject(method = "doAttack", at = @At("HEAD"))
+    @ModifyExpressionValue(method = "doAttack", at = @At(value = "FIELD", target = "Lnet/minecraft/client/Minecraft;attackCooldown:I", ordinal = 0, opcode = Opcodes.GETFIELD))
+    private int overflowanimations$disableSwingMissPenalty(final int original) {
+        if (original <= 10 && this.crosshairTarget != null && ApolloCombat.INSTANCE.isPresent(this.crosshairTarget.type == HitResult.Type.BLOCK ? ApolloCombat.BLOCK_MISS_PENALTY : ApolloCombat.MISS_PENALTY)) {
+            this.attackCooldown = 0;
+            return 0;
+        } else {
+            return original;
+        }
+    }
+
+    @ModifyExpressionValue(method = "handleMouseDown", at = @At(value = "FIELD", target = "Lnet/minecraft/client/Minecraft;attackCooldown:I", ordinal = 0, opcode = Opcodes.GETFIELD))
+    private int overflowanimations$disableBlockMissPenalty(final int original) {
+        if (original <= 10 && this.crosshairTarget != null && this.crosshairTarget.type == HitResult.Type.BLOCK && ApolloCombat.INSTANCE.isPresent(ApolloCombat.BLOCK_MISS_PENALTY)) {
+            this.attackCooldown = 0;
+            return 0;
+        } else {
+            return original;
+        }
+    }
+
+    @Inject(method = "doAttack", at = @At(value = "RETURN", ordinal = 0))
     private void overflowanimations$fakeMissPenaltySwing(final CallbackInfo ci) {
         final ItemsConfigCategory items = LegacyFirstPerson.items();
-        if (!OverflowAnimations.isEnabled() || this.attackCooldown <= 0 || this.attackCooldown > 10 || this.crosshairTarget == null || !this.interactionManager.hasAttackCooldown()) {
+        if (!OverflowAnimations.isEnabled() || this.attackCooldown > 10 || this.crosshairTarget == null || !this.interactionManager.hasAttackCooldown()) {
             return;
         }
         if (this.crosshairTarget.type == HitResult.Type.BLOCK && this.overflowanimations$targetedBlock() == null) {
@@ -133,10 +155,18 @@ public abstract class MixinMinecraft_Swinging {
         }
     }
 
+    @ModifyExpressionValue(method = "handleMouseDown", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/entity/living/player/LocalClientPlayerEntity;hasItemInUse()Z"))
+    private boolean overflowanimations$miningItemUsage(final boolean original) {
+        return original && !ApolloCombat.INSTANCE.isPresent(ApolloCombat.DIG_AND_USE);
+    }
+
     @ModifyExpressionValue(method = "doUse", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/ClientPlayerInteractionManager;isMiningBlock()Z"))
     private boolean overflowanimations$blockHitWhileMining(final boolean original) {
-        if (!original || !OverflowAnimations.isEnabled() || !LegacyFirstPerson.items().blockHitWhileMining) {
-            return original;
+        if (!original || ApolloCombat.INSTANCE.isPresent(ApolloCombat.DIG_AND_USE)) {
+            return false;
+        }
+        if (!OverflowAnimations.isEnabled() || !LegacyFirstPerson.items().blockHitWhileMining) {
+            return true;
         }
         final ItemStack stack = this.player.getItemInHand();
         return stack == null || (stack.getUseAction() == UseAction.NONE && !(stack.getItem() instanceof BlockItem));

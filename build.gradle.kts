@@ -144,6 +144,7 @@ sourceSets.main {
                 "org/polyfrost/overflowanimations/handler/config/**",
                 "org/polyfrost/overflowanimations/handler/compatibility/Mods.kt",
                 "org/polyfrost/overflowanimations/handler/compatibility/OverflowParticlesCompat.kt",
+                "org/polyfrost/overflowanimations/handler/networking/ApolloCombat.kt",
                 "org/polyfrost/overflowanimations/util/enums/**",
                 "org/polyfrost/overflowanimations/util/config/GeneralConfigUtil.kt",
                 "org/polyfrost/overflowanimations/OverflowAnimations.kt",

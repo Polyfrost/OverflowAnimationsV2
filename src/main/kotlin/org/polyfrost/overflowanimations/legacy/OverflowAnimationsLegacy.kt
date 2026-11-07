@@ -26,16 +26,21 @@
 package org.polyfrost.overflowanimations.legacy
 
 import dev.kikugie.fletching_table.annotation.fabric.Entrypoint
+import io.netty.buffer.Unpooled
 import net.fabricmc.api.ClientModInitializer
 import net.minecraft.client.options.KeyBinding
+import net.minecraft.network.PacketByteBuf
+import net.minecraft.network.packet.c2s.play.CustomPayloadC2SPacket
 import net.ornithemc.osl.keybinds.api.KeybindEvents
 import net.ornithemc.osl.keybinds.api.KeybindRegistry
 import net.ornithemc.osl.lifecycle.api.client.MinecraftClientEvents
+import net.ornithemc.osl.networking.api.client.ClientConnectionEvents
 import org.lwjgl.input.Keyboard
 import org.polyfrost.oneconfig.api.commands.v1.CommandManager
 import org.polyfrost.oneconfig.api.platform.v1.Platform
 import org.polyfrost.overflowanimations.OverflowAnimations
 import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig
+import org.polyfrost.overflowanimations.handler.networking.ApolloCombat
 
 @Entrypoint
 class OverflowAnimationsLegacy : ClientModInitializer {
@@ -59,6 +64,12 @@ class OverflowAnimationsLegacy : ClientModInitializer {
             while (reloadKey.consumeClick()) reload = true
             if (reload) OverflowAnimations.reload()
         }
+
+        ClientConnectionEvents.LOGIN.register { context ->
+            val channels = ApolloCombat.CHANNELS.keys.joinToString("\u0000").toByteArray()
+            context.minecraft().networkHandler.sendPacket(CustomPayloadC2SPacket("REGISTER", PacketByteBuf(Unpooled.wrappedBuffer(channels))))
+        }
+        ClientConnectionEvents.DISCONNECT.register { ApolloCombat.reset() }
 
         CommandManager.register(
             CommandManager.literal("overflowanimations")

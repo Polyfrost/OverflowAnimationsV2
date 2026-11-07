@@ -28,16 +28,25 @@ package org.polyfrost.overflowanimations.handler.networking
 import net.fabricmc.fabric.api.client.networking.v1.*
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking
+import net.fabricmc.fabric.impl.networking.RegistrationPayload
+import net.minecraft.client.Minecraft
 import org.polyfrost.overflowanimations.OverflowAnimationsConstants
+import org.polyfrost.overflowanimations.handler.compatibility.HAS_LUNAR_CLIENT
 import org.polyfrost.overflowanimations.handler.networking.payloads.InfoPayload
 import org.polyfrost.overflowanimations.handler.networking.payloads.SetServerFeaturesPayload
 import org.polyfrost.overflowanimations.handler.server_features.ServerFeatureManager
 
 object OverflowAnimationsNetworking {
+    private fun reset(client: Minecraft) = client.schedule {
+        ServerFeatureManager.ENABLED_SERVER_FEATURES.clear()
+        ApolloCombat.reset()
+    }
+
     fun bootstrap() {
-        ClientLoginConnectionEvents.DISCONNECT.register { _, _ -> ServerFeatureManager.ENABLED_SERVER_FEATURES.clear() }
-        ClientConfigurationConnectionEvents.DISCONNECT.register { _, _ -> ServerFeatureManager.ENABLED_SERVER_FEATURES.clear() }
-        ClientPlayConnectionEvents.DISCONNECT.register { _, _ -> ServerFeatureManager.ENABLED_SERVER_FEATURES.clear() }
+        ClientLoginConnectionEvents.DISCONNECT.register { _, client -> reset(client) }
+        ClientConfigurationConnectionEvents.DISCONNECT.register { _, client -> reset(client) }
+        ClientPlayConnectionEvents.DISCONNECT.register { _, client -> reset(client) }
+        ClientConfigurationConnectionEvents.INIT.register { _, client -> reset(client) }
 
         for (type in InfoPayload.TYPES) {
             //? if <26.1 {
@@ -51,6 +60,12 @@ object OverflowAnimationsNetworking {
         ClientPlayConnectionEvents.JOIN.register { _, sender, _ ->
             InfoPayload.TYPES.firstOrNull(ClientPlayNetworking::canSend)?.let { type ->
                 sender.sendPacket(OverflowAnimationsConstants.INFO_PAYLOAD.copy(payloadType = type))
+            }
+        }
+
+        if (!HAS_LUNAR_CLIENT) {
+            ClientPlayConnectionEvents.JOIN.register { _, sender, _ ->
+                sender.sendPacket(RegistrationPayload(RegistrationPayload.REGISTER, ApolloCombat.CHANNELS.keys.toList()))
             }
         }
 
