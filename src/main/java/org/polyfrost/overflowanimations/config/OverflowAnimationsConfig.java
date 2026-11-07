@@ -62,6 +62,7 @@ import org.polyfrost.overflowanimations.util.enums.DebugCrosshairSetting;
 import org.polyfrost.overflowanimations.util.enums.FishingRodVersionSetting;
 import org.polyfrost.overflowanimations.util.enums.DamageTiltSetting;
 import org.polyfrost.overflowanimations.util.enums.DamageTintHeldItemsSetting;
+import org.polyfrost.overflowanimations.util.enums.DamageTintSetting;
 import org.polyfrost.overflowanimations.util.enums.InventoryEffectsSetting;
 import org.polyfrost.overflowanimations.util.enums.ItemGlintSetting;
 import org.polyfrost.overflowanimations.util.enums.BlockHittingParticlesSetting;
@@ -92,7 +93,7 @@ public final class OverflowAnimationsConfig extends Config {
     *///?} else
     private static final String ID = SHARED_ID;
     private static final Path CONFIG_DIR = FabricLoader.getInstance().getConfigDir();
-    private static final int CONFIG_VERSION = 12;
+    private static final int CONFIG_VERSION = 13;
 
     private static JsonObject savedConfig = readSavedConfig();
     private static JsonObject legacyConfig = takeLegacyConfig();
@@ -214,6 +215,10 @@ public final class OverflowAnimationsConfig extends Config {
 
             if (this.configVersion < 12) {
                 this.items.fakeMissPenaltyParticles = false;
+            }
+
+            if (this.configVersion < 13) {
+                this.other.damageTintStyle = DamageTintSetting.VANILLA;
             }
 
             this.configVersion = CONFIG_VERSION;

@@ -56,7 +56,7 @@ public final class OtherConfigCategory extends Category {
     public boolean glintAffectsArmorTint = false;
     public DamageTintHeldItemsSetting damageTintHeldItems = DamageTintHeldItemsSetting.OFF;
     public boolean damageTintCape = false;
-    public DamageTintSetting damageTintStyle = LEGACY ? DamageTintSetting.V1_7 : DamageTintSetting.VANILLA;
+    public DamageTintSetting damageTintStyle = DamageTintSetting.VANILLA;
     // Other
     public boolean restoreParticleBlending = LEGACY;
     public boolean lockBlockingArmRotation = LEGACY;
