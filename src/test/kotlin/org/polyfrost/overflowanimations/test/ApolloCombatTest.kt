@@ -25,6 +25,7 @@
 
 package org.polyfrost.overflowanimations.test
 
+//? if > 1.8.9 {
 import io.netty.buffer.Unpooled
 import net.minecraft.network.FriendlyByteBuf
 import net.minecraft.resources.Identifier
@@ -200,3 +201,4 @@ class ApolloCombatTest {
         assertFeatures(miss = false, block = false, digAndUse = false)
     }
 }
+//?}

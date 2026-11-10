@@ -113,13 +113,16 @@ dependencies {
     if (!isOrnithe) {
         include(implementation("com.moulberry:mixinconstraints:${sc.properties.get<String>("deps.mixinconstraints")}")!!)
         include(implementation(annotationProcessor("com.github.bawnorton.mixinsquared:mixinsquared-fabric:${sc.properties.get<String>("deps.mixinsquared")}")!!)!!)
-
-        testImplementation("org.junit.jupiter:junit-jupiter:${sc.properties.get<String>("deps.junit")}")
-        testImplementation("net.fabricmc:fabric-loader-junit:$loaderversion")
     }
+
+    testImplementation("org.junit.jupiter:junit-jupiter:${sc.properties.get<String>("deps.junit")}")
+    testImplementation("net.fabricmc:fabric-loader-junit:$loaderversion")
 
     errorprone("com.google.errorprone:error_prone_core:${sc.properties.get<String>("deps.errorprone")}")
 }
+
+// Loom only feeds localRuntime to the main runtime, but tests load the same modLocalRuntime mods
+configurations.testRuntimeClasspath { extendsFrom(configurations["localRuntime"]) }
 
 tasks.withType<JavaCompile>().configureEach {
     options.errorprone {
@@ -155,9 +158,6 @@ sourceSets.main {
         }
     }
 }
-
-// MixinTest bootstraps modern Minecraft
-if (isOrnithe) tasks.matching { it.name in setOf("compileTestJava", "compileTestKotlin", "test") }.configureEach { enabled = false }
 
 loom {
     fabricModJsonPath = rootProject.file("src/main/resources/fabric.mod.json")
@@ -247,8 +247,12 @@ tasks {
         }
     }
 
-    // A second copy of the mod metadata lands here, and the loader then picks either copy at random
-    processTestResources { exclude("fabric.mod.json") }
+    processTestResources {
+        // A second copy of the mod metadata lands here, and the loader then picks either copy at random
+        exclude("fabric.mod.json")
+        // Fabric Loader's JUnit launcher can't locate the 1.8.9 game without this stub; elsewhere it'd just mute test logs
+        if (!isOrnithe) exclude("log4j2.xml")
+    }
 
     processResources {
         val props = mapOf(

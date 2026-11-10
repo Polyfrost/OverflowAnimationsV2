@@ -25,6 +25,7 @@
 
 package org.polyfrost.overflowanimations.test
 
+//? if > 1.8.9 {
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import net.minecraft.resources.Identifier
@@ -74,3 +75,4 @@ class ItemTransformOverridesTest {
         assertFalse(overridden(mapOf("models/item/handheld.json" to """{"parent":"minecraft:item/sword"}"""), "other"))
     }
 }
+//?}
