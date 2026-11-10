@@ -41,6 +41,7 @@ val development: Boolean = sc.properties["mod.development"]
 val mcversion: String = sc.properties.getOrNull<String>("deps.minecraft") ?: sc.current.version
 val versionrange: String = sc.properties["mod.mc_compat"]
 val loaderversion: String = sc.properties["deps.fabric_loader"]
+val oneconfigversion: String = sc.properties["deps.oneconfig"]
 
 version = "$modversion+$mcversion-fabric" + (if (development) "_development" else "")
 group = sc.properties.get<String>("mod.group")
@@ -266,7 +267,8 @@ tasks {
             "modrinth" to sc.properties.get<String>("mod.modrinth"),
             "discord" to sc.properties.get<String>("mod.discord"),
             "fabric_loader_version" to loaderversion,
-            "minecraft_version_range" to versionrange
+            "minecraft_version_range" to versionrange,
+            "oneconfig_version" to oneconfigversion,
         )
 
         inputs.properties(props)
