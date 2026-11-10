@@ -75,7 +75,6 @@ repositories {
     strictMaven("https://maven.taumc.org/releases", "TauMC", "dev.rdh", "org.embeddedt.celeritas")
     strictMaven("https://api.modrinth.com/maven", "Modrinth", "maven.modrinth")
     strictMaven("https://maven.bawnorton.com/releases", "Bawnorton", "com.github.bawnorton.mixinsquared")
-    strictMaven("https://pkgs.dev.azure.com/djtheredstoner/DevAuth/_packaging/public/maven/v1", "DevAuth", "me.djtheredstoner")
     strictMaven("https://maven.pkg.jetbrains.space/public/p/compose/dev", "JetBrains Compose Dev", "org.jetbrains.skiko")
 }
 
@@ -114,8 +113,6 @@ dependencies {
     if (!isOrnithe) {
         include(implementation("com.moulberry:mixinconstraints:${sc.properties.get<String>("deps.mixinconstraints")}")!!)
         include(implementation(annotationProcessor("com.github.bawnorton.mixinsquared:mixinsquared-fabric:${sc.properties.get<String>("deps.mixinsquared")}")!!)!!)
-
-        modRuntimeOnly("me.djtheredstoner:DevAuth-fabric:${sc.properties.get<String>("deps.devauth")}")
 
         testImplementation("org.junit.jupiter:junit-jupiter:${sc.properties.get<String>("deps.junit")}")
         testImplementation("net.fabricmc:fabric-loader-junit:$loaderversion")
@@ -172,8 +169,6 @@ loom {
         runDirectory = rootProject.file("run")
         jvmArguments.add("-Dmixin.debug.export=true")
         jvmArguments.add("-Dmixin.hotSwap=true")
-        jvmArguments.add("-Ddevauth.enabled=true")
-        jvmArguments.add("-Ddevauth.account=main")
         if (isOrnithe && System.getProperty("os.name").startsWith("Mac")) jvmArguments.add("-XstartOnFirstThread")
     }
 
