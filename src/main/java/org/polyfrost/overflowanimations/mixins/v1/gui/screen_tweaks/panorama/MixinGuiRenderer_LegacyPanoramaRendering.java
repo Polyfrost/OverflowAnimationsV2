@@ -32,8 +32,6 @@ import net.minecraft.client.gui.render.GuiRenderer;
 import net.minecraft.client.renderer.CubeMap;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.polyfrost.overflowanimations.OverflowAnimations;
 import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig;
 import org.polyfrost.overflowanimations.handler.rendering.panorama.LegacyPanoramaRenderer;
@@ -49,13 +47,6 @@ public abstract class MixinGuiRenderer_LegacyPanoramaRendering {
         } else {
             original.call(instance, rotXInDegrees, rotYInDegrees);
         }
-    }
-//?}
-
-//? if >=26.1 {
-    @Inject(method = "close", at = @At("TAIL"))
-    private void overflowanimations$closePanorama(final CallbackInfo ci) {
-        LegacyPanoramaRenderer.INSTANCE.close();
     }
 }
 //?}

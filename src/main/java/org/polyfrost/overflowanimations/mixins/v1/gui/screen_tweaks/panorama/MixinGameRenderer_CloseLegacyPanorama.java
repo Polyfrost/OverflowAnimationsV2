@@ -25,24 +25,20 @@
 
 package org.polyfrost.overflowanimations.mixins.v1.gui.screen_tweaks.panorama;
 
-// Needs the 1.21.5 GPU API / 1.21.6 rendering changes; compiled out on older versions
 //? if >=1.21.6 {
-//? if <26.1 {
-/*import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.renderer.GameRenderer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.polyfrost.overflowanimations.handler.rendering.panorama.LegacyPanoramaRenderer;
-*///?}
 
-//? if <26.1 {
-/*@Mixin(GameRenderer.class)
+// not hooked into GuiRenderer#close, since other mods (e.g. OneConfig) create and close their own GuiRenderers
+@Mixin(GameRenderer.class)
 public abstract class MixinGameRenderer_CloseLegacyPanorama {
-    @Inject(method = "close", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/CubeMap;close()V", shift = At.Shift.AFTER))
+    @Inject(method = "close", at = @At("TAIL"))
     private void overflowanimations$closePanorama(final CallbackInfo ci) {
         LegacyPanoramaRenderer.INSTANCE.close();
     }
 }
-*///?}
 //?}
