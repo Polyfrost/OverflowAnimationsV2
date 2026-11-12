@@ -120,17 +120,16 @@ public abstract class MixinDebugCrosshairRenderer_LegacyStyle {
     private static GpuBuffer overflowanimations$legacyBuffer() {
         if (overflowanimations$legacyBuffer == null) {
             //? if <1.21.11 {
-            /*try (ByteBufferBuilder bytes = ByteBufferBuilder.exactlySized(DefaultVertexFormat.POSITION_COLOR_NORMAL.getVertexSize() * 6)) {
+            /*try (ByteBufferBuilder bytes = ByteBufferBuilder.exactlySized(DefaultVertexFormat.POSITION_COLOR_NORMAL.getVertexSize() * 6 * 2)) {
                 final BufferBuilder builder = new BufferBuilder(bytes, VertexFormat.Mode.LINES, DefaultVertexFormat.POSITION_COLOR_NORMAL);
                 overflowanimations$axes(builder);
             *///?} else {
-            //? if <26.2 {
-            /*try (ByteBufferBuilder bytes = ByteBufferBuilder.exactlySized(DefaultVertexFormat.POSITION_COLOR_NORMAL_LINE_WIDTH.getVertexSize() * 12)) {
-                final BufferBuilder builder = new BufferBuilder(bytes, VertexFormat.Mode.LINES, DefaultVertexFormat.POSITION_COLOR_NORMAL_LINE_WIDTH);
-            *///?} else {
             try (ByteBufferBuilder bytes = ByteBufferBuilder.exactlySized(DefaultVertexFormat.POSITION_COLOR_NORMAL_LINE_WIDTH.getVertexSize() * 12 * 2)) {
+                //? if <26.2 {
+                /*final BufferBuilder builder = new BufferBuilder(bytes, VertexFormat.Mode.LINES, DefaultVertexFormat.POSITION_COLOR_NORMAL_LINE_WIDTH);
+                *///?} else {
                 final BufferBuilder builder = new BufferBuilder(bytes, PrimitiveTopology.LINES, DefaultVertexFormat.POSITION_COLOR_NORMAL_LINE_WIDTH);
-            //?}
+                //?}
                 overflowanimations$axes(builder);
                 overflowanimations$axes(builder);
             //?}
