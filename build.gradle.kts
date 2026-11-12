@@ -12,7 +12,7 @@ plugins {
     id("dev.kikugie.fletching-table.fabric") version "0.1.0-alpha.22"
     id("dev.deftu.gradle.bloom") version "0.2.0"
     id("me.modmuss50.mod-publish-plugin") version "2.2.0"
-    id("net.fabricmc.fabric-loom-remap") version "1.17-SNAPSHOT" apply false
+    id("net.fabricmc.fabric-loom-remap") version "1.19-SNAPSHOT" apply false
     id("ploceus") version "1.17.4" apply false
     id("dev.detekt") version "2.0.0-alpha.6"
     id("net.ltgt.errorprone") version "5.1.1"
