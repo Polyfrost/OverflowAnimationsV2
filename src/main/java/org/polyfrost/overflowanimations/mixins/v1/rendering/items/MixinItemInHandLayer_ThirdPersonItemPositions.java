@@ -56,6 +56,7 @@ import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 import org.polyfrost.overflowanimations.OverflowAnimations;
 import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig;
 import org.polyfrost.overflowanimations.util.EntityUtilKt;
+import org.polyfrost.overflowanimations.util.ItemTransformOverrides;
 import org.polyfrost.overflowanimations.util.ItemUtilKt;
 import org.polyfrost.overflowanimations.util.enums.FishingRodVersionSetting;
 
@@ -142,6 +143,9 @@ public abstract class MixinItemInHandLayer_ThirdPersonItemPositions<S extends Ar
                         //?}
                 final boolean usesBlockLight = item.usesBlockLight();
                 if (ItemUtilKt.shouldApplyItemPositionsInThirdPerson(state, stack, usesBlockLight)) {
+                    if (ItemStack.isSameItemSameComponents(item.overflowanimations$getItemStack(), stack)) {
+                        ItemTransformOverrides.legacyThirdPerson = item;
+                    }
                     if (ItemUtilKt.isBlock3d(stack, usesBlockLight)) {
                         final float scale = 0.375F;
                         poseStack.translate(0.0F, 0.1875F, -0.3125F);
@@ -295,5 +299,14 @@ public abstract class MixinItemInHandLayer_ThirdPersonItemPositions<S extends Ar
                 }
             }
         }
+    }
+
+    //? if <1.21.9 {
+    /*@Inject(method = "renderArmWithItem", at = {@At("HEAD"), @At("RETURN")})
+    *///?} else {
+    @Inject(method = "submitArmWithItem", at = {@At("HEAD"), @At("RETURN")})
+    //?}
+    private void overflowanimations$resetLegacyThirdPerson(final CallbackInfo ci) {
+        ItemTransformOverrides.legacyThirdPerson = null;
     }
 }

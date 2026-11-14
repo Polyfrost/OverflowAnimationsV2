@@ -25,11 +25,14 @@
 
 package org.polyfrost.overflowanimations.mixins.v1.rendering.items.flat;
 
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 //? if <1.21.5 {
 /*import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.block.model.ItemTransform;
+import net.minecraft.client.resources.model.BakedModel;
 *///?} elif <1.21.9 {
 /*import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.block.model.BakedQuad;
@@ -48,6 +51,7 @@ import net.minecraft.client.resources.model.geometry.BakedQuad;
 import net.minecraft.client.resources.model.geometry.ItemQuads;
 //?}
 import net.minecraft.core.Direction;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Final;
@@ -60,8 +64,11 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.polyfrost.overflowanimations.OverflowAnimations;
 import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig;
+import org.polyfrost.overflowanimations.util.ItemTransformOverrides;
 import org.polyfrost.overflowanimations.util.ItemUtilKt;
 import org.polyfrost.overflowanimations.util.enums.FishingRodVersionSetting;
+//? if >=1.21.5
+import org.polyfrost.overflowanimations.util.states.ModelIdHolder;
 import org.joml.Quaternionf;
 import org.joml.Vector3fc;
 
@@ -71,7 +78,11 @@ import java.util.stream.Collectors;
 //?}
 
 @Mixin(ItemStackRenderState.LayerRenderState.class)
-public abstract class MixinItemStackRenderLayerState {
+//? if <1.21.5 {
+/*public abstract class MixinItemStackRenderLayerState {
+*///?} else {
+public abstract class MixinItemStackRenderLayerState implements ModelIdHolder {
+//?}
     //? if <1.21.5 {
     /*@Shadow
     abstract ItemTransform transform();
@@ -153,6 +164,58 @@ public abstract class MixinItemStackRenderLayerState {
             return foilType;
         }
     }
+
+    //? if <1.21.5 {
+    /*@WrapOperation(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/block/model/ItemTransform;apply(ZLcom/mojang/blaze3d/vertex/PoseStack;)V"))
+    private void overflowanimations$vanillaThirdPersonTransform(final ItemTransform transform, final boolean leftHand, final PoseStack pose, final Operation<Void> original) {
+    *///?} else {
+    //? if <1.21.9 {
+    /*@WrapOperation(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/block/model/ItemTransform;apply(ZLcom/mojang/blaze3d/vertex/PoseStack$Pose;)V"))
+    *///?} elif <26.1 {
+    /*@WrapOperation(method = "submit", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/block/model/ItemTransform;apply(ZLcom/mojang/blaze3d/vertex/PoseStack$Pose;)V"))
+    *///?} else {
+    @WrapOperation(method = "applyTransform", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/resources/model/cuboid/ItemTransform;apply(ZLcom/mojang/blaze3d/vertex/PoseStack$Pose;)V"))
+    //?}
+    private void overflowanimations$vanillaThirdPersonTransform(final ItemTransform transform, final boolean leftHand, final PoseStack.Pose pose, final Operation<Void> original) {
+    //?}
+        ItemTransform applied = transform;
+        if (ItemTransformOverrides.legacyThirdPerson == this.itemStackRenderState) {
+            final ItemTransform vanilla = ItemTransformOverrides.vanillaThirdPersonTransform(this.itemStackRenderState.overflowanimations$getItemStack(), this.overflowanimations$getModelId(), this.itemStackRenderState.displayContext);
+            if (vanilla != null) {
+                applied = vanilla;
+            }
+        }
+
+        original.call(applied, leftHand, pose);
+    }
+
+    //? if <1.21.5 {
+    /*@Shadow
+    BakedModel model;
+
+    @Unique
+    private Identifier overflowanimations$getModelId() {
+        return this.model == null ? null : ItemTransformOverrides.bakedModelIds.get(this.model);
+    }
+    *///?} else {
+    @Unique
+    private Identifier overflowanimations$modelId;
+
+    @Unique
+    private Identifier overflowanimations$getModelId() {
+        return this.overflowanimations$modelId;
+    }
+
+    @Override
+    public void overflowanimations$setModelId(final Identifier id) {
+        this.overflowanimations$modelId = id;
+    }
+
+    @Inject(method = "clear", at = @At("HEAD"))
+    private void overflowanimations$clearModelId(final CallbackInfo ci) {
+        this.overflowanimations$modelId = null;
+    }
+    //?}
 
     // TODO/MOVE
     //? if <1.21.5 {
