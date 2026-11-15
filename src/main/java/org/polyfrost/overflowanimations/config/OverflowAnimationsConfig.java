@@ -93,7 +93,7 @@ public final class OverflowAnimationsConfig extends Config {
     *///?} else
     private static final String ID = SHARED_ID;
     private static final Path CONFIG_DIR = FabricLoader.getInstance().getConfigDir();
-    private static final int CONFIG_VERSION = 13;
+    private static final int CONFIG_VERSION = 14;
 
     private static JsonObject savedConfig = readSavedConfig();
     private static JsonObject legacyConfig = takeLegacyConfig();
@@ -219,6 +219,11 @@ public final class OverflowAnimationsConfig extends Config {
 
             if (this.configVersion < 13) {
                 this.other.damageTintStyle = DamageTintSetting.VANILLA;
+            }
+
+            if (this.configVersion < 14) {
+                if (this.items.firstPersonItemPositions == FirstPersonItemPositionsSetting.V1_7) this.items.firstPersonItemPositions = FirstPersonItemPositionsSetting.AUTO;
+                if (this.items.thirdPersonItemPositions == ThirdPersonItemPositionsSetting.V1_7) this.items.thirdPersonItemPositions = ThirdPersonItemPositionsSetting.AUTO;
             }
 
             this.configVersion = CONFIG_VERSION;

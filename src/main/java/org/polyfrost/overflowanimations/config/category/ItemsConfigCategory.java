@@ -56,8 +56,8 @@ public final class ItemsConfigCategory extends Category {
     public DroppedItemsSetting droppedItems2D = DroppedItemsSetting.MODEL;
     public boolean itemFramed2D = false;
     // (Items) Transformations
-    public FirstPersonItemPositionsSetting firstPersonItemPositions = FirstPersonItemPositionsSetting.V1_7;
-    public ThirdPersonItemPositionsSetting thirdPersonItemPositions = ThirdPersonItemPositionsSetting.V1_7;
+    public FirstPersonItemPositionsSetting firstPersonItemPositions = FirstPersonItemPositionsSetting.AUTO;
+    public ThirdPersonItemPositionsSetting thirdPersonItemPositions = ThirdPersonItemPositionsSetting.AUTO;
     public boolean strictItemPositionsInThirdPerson = true;
     public boolean thinBlockPositions = false;
     public boolean skullPosition = LEGACY;
