@@ -1,2 +1,2 @@
-## 5.1.7
-- Fix legacy crosshair crash on 1.21.8+
+## 5.1.8
+- migrate everyone to AUTO instead of 1.7 item pos
