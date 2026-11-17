@@ -676,6 +676,7 @@ public abstract class MixinItemInHandRenderer_FirstPersonItemPositions {
                     stackCopy != this.overflowanimations$mainHandItem && stackCopy.getItem() == this.overflowanimations$mainHandItem.getItem() &&
                     stackCopy.getDamageValue() == this.overflowanimations$mainHandItem.getDamageValue()) {
                 this.overflowanimations$mainHandItem = stackCopy;
+                this.mainHandItem = player.getInventory().getSelectedItem();
                 mainHandTargetHeight = scale;
             }
             *///?}

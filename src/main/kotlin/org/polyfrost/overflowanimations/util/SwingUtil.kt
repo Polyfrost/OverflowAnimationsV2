@@ -95,7 +95,7 @@ fun LocalPlayer.sendSwingPacket(hand: InteractionHand) {
     this.connection.send(ServerboundSwingPacket(hand))
 }
 *///?} else {
-fun attackArm(state: HumanoidRenderState) = state.useItemHand.asArm(state.mainArm)
+fun attackArm(state: HumanoidRenderState) = state.currentSwing?.hand()?.asArm(state.mainArm) ?: state.mainArm
 
 fun swingState(livingEntity: LivingEntity) = (livingEntity as LivingEntityAccessor).`overflowanimations$getSwingState`()
 

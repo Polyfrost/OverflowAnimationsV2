@@ -104,7 +104,7 @@ public abstract class MixinAvatarRenderer_HeldItemArmLogic<AvatarLikeEntity exte
         if (OverflowAnimations.isEnabled() && OverflowAnimationsConfig.instance().other.heldItemArmLogic) {
             final HumanoidArm humanoidArm = arm == model.rightArm ? HumanoidArm.RIGHT : HumanoidArm.LEFT;
             final var avatarRenderState = overflowanimations$renderState.get();
-            if (avatarRenderState != null && (avatarRenderState.mainArm == humanoidArm ? avatarRenderState.rightArmPose : avatarRenderState.leftArmPose) == HumanoidModel.ArmPose.ITEM) {
+            if (avatarRenderState != null && (humanoidArm == HumanoidArm.RIGHT ? avatarRenderState.rightArmPose : avatarRenderState.leftArmPose) == HumanoidModel.ArmPose.ITEM) {
                 // Adapted from the ITEM arm pose rotations in HumanoidModel#poseRightArm/poseLeftArm
                 arm.xRot = arm.xRot * 0.5F - (float) (Math.PI / 10);
                 arm.yRot = 0.0F;
