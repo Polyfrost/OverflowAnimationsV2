@@ -1,2 +1,2 @@
-## 5.1.10
-- Fix compat with DamageTint on 1.7 damage tint
+## 5.1.11
+- Turn off fast grass by default even on 1.7 preset
