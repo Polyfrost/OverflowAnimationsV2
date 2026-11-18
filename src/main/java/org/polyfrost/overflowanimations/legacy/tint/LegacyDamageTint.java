@@ -34,6 +34,7 @@ import org.polyfrost.overflowanimations.OverflowAnimations;
 import org.polyfrost.overflowanimations.config.OverflowAnimationsConfig;
 import org.polyfrost.overflowanimations.config.category.OtherConfigCategory;
 import org.polyfrost.overflowanimations.legacy.compat.Argentum;
+import org.polyfrost.overflowanimations.legacy.compat.DamageTint;
 import org.polyfrost.overflowanimations.util.enums.DamageTintSetting;
 
 import java.nio.FloatBuffer;
@@ -74,7 +75,8 @@ public final class LegacyDamageTint {
             return false;
         }
 
-        final int color = DamageTintSetting.V1_7.getColor(entity.getBrightness(tickDelta));
+        final float brightness = entity.getBrightness(tickDelta);
+        final int color = DamageTint.active() && entity instanceof LivingEntity living ? damageTintColor(living, brightness) : DamageTintSetting.V1_7.getColor(brightness);
         Minecraft.getInstance().gameRenderer.disableLightMap();
         GlStateManager.disableTexture();
         GlStateManager.disableAlphaTest();
@@ -83,6 +85,14 @@ public final class LegacyDamageTint {
         GlStateManager.depthFunc(GL11.GL_EQUAL);
         GlStateManager.color4f((color >> 16 & 0xFF) / 255.0F, (color >> 8 & 0xFF) / 255.0F, (color & 0xFF) / 255.0F, 1.0F - (color >>> 24) / 255.0F);
         return true;
+    }
+
+    private static int damageTintColor(final LivingEntity entity, final float brightness) {
+        final int argb = DamageTint.argb(entity);
+        final int r = (int) ((argb >> 16 & 0xFF) * brightness);
+        final int g = (int) ((argb >> 8 & 0xFF) * brightness);
+        final int b = (int) ((argb & 0xFF) * brightness);
+        return 255 - (argb >>> 24) << 24 | r << 16 | g << 8 | b;
     }
 
     public static void endFlatPass() {

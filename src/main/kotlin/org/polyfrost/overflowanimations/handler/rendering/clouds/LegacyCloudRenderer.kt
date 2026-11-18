@@ -115,6 +115,7 @@ class LegacyCloudRenderer : SimplePreparableReloadListener<Optional<TextureData>
                 if (meshData != null) {
                     if (this.vertexBuffer != null && this.vertexBuffer!!.size() >= meshData.vertexBuffer().remaining()) {
                         RenderSystem.getDevice().createCommandEncoder().writeToBuffer(this.vertexBuffer!!.slice(), meshData.vertexBuffer())
+                        this.geometry = this.geometry?.copy(indexCount = indexCount)
                     } else {
                         if (this.geometry != null) {
                             this.geometry?.close()
