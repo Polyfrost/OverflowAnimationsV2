@@ -46,6 +46,10 @@ import org.polyfrost.overflowanimations.OverflowAnimations;
 import org.polyfrost.overflowanimations.OverflowAnimationsConstants;
 import org.polyfrost.overflowanimations.config.category.*;
 import org.polyfrost.overflowanimations.handler.config.bundle.EntryBundle;
+//? if >1.8.9 {
+import org.polyfrost.overflowanimations.util.config.GeneralConfigUtil;
+import org.polyfrost.overflowanimations.util.config.PresetVersion;
+//?}
 import org.polyfrost.overflowanimations.util.enums.ArmorGlintSetting;
 import org.polyfrost.overflowanimations.util.enums.BackwardsWalkingSetting;
 import org.polyfrost.overflowanimations.util.enums.BlockMiningProgressSetting;
@@ -93,7 +97,7 @@ public final class OverflowAnimationsConfig extends Config {
     *///?} else
     private static final String ID = SHARED_ID;
     private static final Path CONFIG_DIR = FabricLoader.getInstance().getConfigDir();
-    private static final int CONFIG_VERSION = 14;
+    private static final int CONFIG_VERSION = 15;
 
     private static JsonObject savedConfig = readSavedConfig();
     private static JsonObject legacyConfig = takeLegacyConfig();
@@ -225,6 +229,12 @@ public final class OverflowAnimationsConfig extends Config {
                 if (this.items.firstPersonItemPositions == FirstPersonItemPositionsSetting.V1_7) this.items.firstPersonItemPositions = FirstPersonItemPositionsSetting.AUTO;
                 if (this.items.thirdPersonItemPositions == ThirdPersonItemPositionsSetting.V1_7) this.items.thirdPersonItemPositions = ThirdPersonItemPositionsSetting.AUTO;
             }
+
+            //? if >1.8.9 {
+            if (this.configVersion < 15 && GeneralConfigUtil.getEnum(GeneralConfigUtil.PRESET_VERSION_KEY, PresetVersion.VANILLA) == PresetVersion.V1_7) {
+                this.other.fastGrass = false;
+            }
+            //?}
 
             this.configVersion = CONFIG_VERSION;
             this.save();

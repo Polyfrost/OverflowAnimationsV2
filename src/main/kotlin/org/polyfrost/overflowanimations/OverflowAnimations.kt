@@ -95,7 +95,6 @@ object OverflowAnimations {
             SharedConstants.IS_RUNNING_IN_IDE = true
         }
 
-        OverflowAnimationsConfig.load()
         try {
             GeneralConfigUtil.load()
             enabled = GeneralConfigUtil.getBoolean(GeneralConfigUtil.ENABLED_KEY)
@@ -103,6 +102,7 @@ object OverflowAnimations {
         } catch (_: Exception) {
             LOGGER.error("Failed to load overflowanimations utility config, defaulting...")
         }
+        OverflowAnimationsConfig.load()
 
         //? if >=1.21.9
         DebugScreenEntries.register(OverflowAnimationsDebugEntry.GROUP, OverflowAnimationsDebugEntry())
