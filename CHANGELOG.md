@@ -1,2 +1,2 @@
-## 5.1.11
-- Turn off fast grass by default even on 1.7 preset
+## 5.1.12
+- block-hit while mining now works with any held item
