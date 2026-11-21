@@ -38,7 +38,6 @@ import net.minecraft.client.ParticleManager;
 import net.minecraft.client.entity.living.player.LocalClientPlayerEntity;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.world.ClientWorld;
-import net.minecraft.item.ItemStack;
 import net.minecraft.network.packet.c2s.play.ArmSwingC2SPacket;
 import net.minecraft.world.HitResult;
 import org.objectweb.asm.Opcodes;
@@ -163,11 +162,7 @@ public abstract class MixinMinecraft_Swinging {
         if (!original || ApolloCombat.INSTANCE.isPresent(ApolloCombat.DIG_AND_USE)) {
             return false;
         }
-        if (!OverflowAnimations.isEnabled() || !LegacyFirstPerson.items().blockHitWhileMining) {
-            return true;
-        }
-        final ItemStack stack = this.player.getItemInHand();
-        return stack == null;
+        return !OverflowAnimations.isEnabled() || !LegacyFirstPerson.items().blockHitWhileMining;
     }
 
     @Inject(method = "doUse", at = @At("HEAD"))
