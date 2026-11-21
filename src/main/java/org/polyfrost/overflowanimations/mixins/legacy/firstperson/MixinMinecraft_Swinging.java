@@ -38,9 +38,7 @@ import net.minecraft.client.ParticleManager;
 import net.minecraft.client.entity.living.player.LocalClientPlayerEntity;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.world.ClientWorld;
-import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.UseAction;
 import net.minecraft.network.packet.c2s.play.ArmSwingC2SPacket;
 import net.minecraft.world.HitResult;
 import org.objectweb.asm.Opcodes;
@@ -169,7 +167,7 @@ public abstract class MixinMinecraft_Swinging {
             return true;
         }
         final ItemStack stack = this.player.getItemInHand();
-        return stack == null || (stack.getUseAction() == UseAction.NONE && !(stack.getItem() instanceof BlockItem));
+        return stack == null;
     }
 
     @Inject(method = "doUse", at = @At("HEAD"))
