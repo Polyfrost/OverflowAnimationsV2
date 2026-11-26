@@ -114,7 +114,7 @@ public abstract class MixinItemStackRenderLayerState {
     //?}
         if (OverflowAnimations.isEnabled() && overflowanimations$isTransformationModeValid() && !this.usesBlockLight) {
             //? if <26.3 {
-            /*return quads.stream().filter(baked -> baked.direction() == Direction.SOUTH).collect(Collectors.toList());
+            /*return quads.stream().filter(baked -> baked.direction().getAxis() == Direction.Axis.Z).collect(Collectors.toList());
             *///?} else {
             return new ItemQuads(overflowanimations$flatten(quads.all()), overflowanimations$flatten(quads.solid()), overflowanimations$flatten(quads.translucent()));
             //?}
@@ -135,7 +135,7 @@ public abstract class MixinItemStackRenderLayerState {
     *///?} else {
     @Unique
     private static List<BakedQuad> overflowanimations$flatten(final List<BakedQuad> quads) {
-        return quads.stream().filter(baked -> baked.direction() == Direction.SOUTH).collect(Collectors.toList());
+        return quads.stream().filter(baked -> baked.direction().getAxis() == Direction.Axis.Z).collect(Collectors.toList());
     }
     //?}
 

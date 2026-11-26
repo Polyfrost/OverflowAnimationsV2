@@ -80,7 +80,7 @@ public abstract class MixinItemRenderer_FlatItems {
 
         final List<BakedQuad> front = new ArrayList<>(quads.size());
         for (final BakedQuad quad : quads) {
-            if (quad.getFace() == Direction.SOUTH) {
+            if (quad.getFace().getAxis() == Direction.Axis.Z) {
                 front.add(quad);
             }
         }
@@ -91,7 +91,7 @@ public abstract class MixinItemRenderer_FlatItems {
     @WrapOperation(method = "applyNormal", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/vertex/BufferBuilder;postNormal(FFF)V"))
     private void overflowanimations$legacySpriteNormal(final BufferBuilder instance, final float x, final float y, final float z, final Operation<Void> original) {
         if (LegacyItemRendering.flat && OverflowAnimationsConfig.instance().items.itemDrops2DColors) {
-            original.call(instance, x, z, y);
+            original.call(instance, x, Math.abs(z), y);
         } else {
             original.call(instance, x, y, z);
         }
