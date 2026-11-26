@@ -67,7 +67,7 @@ public final class LegacyItemRendering {
     public static BakedModel flatModel(final BakedModel model) {
         final boolean lit = OverflowAnimationsConfig.instance().items.itemDrops2DColors;
         return (lit ? FLAT_LIT_MODELS : FLAT_MODELS).computeIfAbsent(model, key -> {
-            final BakedModel flatModel = LegacyGlint.transform(key, quad -> quad.getFace() != Direction.SOUTH ? null : lit ? new BakedQuad(quad.getVertices(), quad.getTintIndex(), Direction.UP) : quad);
+            final BakedModel flatModel = LegacyGlint.transform(key, quad -> quad.getFace().getAxis() != Direction.Axis.Z ? null : lit ? new BakedQuad(quad.getVertices(), quad.getTintIndex(), Direction.UP) : quad);
             FLAT.add(flatModel);
             return flatModel;
         });

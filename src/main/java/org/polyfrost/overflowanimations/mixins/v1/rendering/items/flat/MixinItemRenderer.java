@@ -60,7 +60,7 @@ public abstract class MixinItemRenderer {
     private static List<BakedQuad> overflowanimations$itemDrops2D(final BakedModel model, final BlockState state, final Direction direction, final RandomSource random, final Operation<List<BakedQuad>> original) {
         final List<BakedQuad> quads = original.call(model, state, direction, random);
         if (OverflowAnimations.isEnabled() && overflowanimations$isTransformationModeValid() && !model.usesBlockLight()) {
-            return quads.stream().filter(baked -> baked.getDirection() == Direction.SOUTH).toList();
+            return quads.stream().filter(baked -> baked.getDirection().getAxis() == Direction.Axis.Z).toList();
         } else {
             return quads;
         }
