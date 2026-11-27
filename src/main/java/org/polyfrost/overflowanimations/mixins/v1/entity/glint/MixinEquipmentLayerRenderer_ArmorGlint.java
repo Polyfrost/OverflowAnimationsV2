@@ -73,9 +73,16 @@ public abstract class MixinEquipmentLayerRenderer_ArmorGlint {
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+//? if >=26.3 {
+import com.llamalad7.mixinextras.sugar.Local;
+import com.llamalad7.mixinextras.sugar.ref.LocalIntRef;
+//?}
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.model.Model;
 import net.minecraft.client.renderer.OrderedSubmitNodeCollector;
+//? if >=26.3 {
+import net.minecraft.client.renderer.SubmitNodeCollector;
+//?}
 import net.minecraft.client.renderer.entity.layers.EquipmentLayerRenderer;
 //? if <26.3 {
 /*import net.minecraft.client.renderer.feature.ModelFeatureRenderer;
@@ -125,11 +132,16 @@ public abstract class MixinEquipmentLayerRenderer_ArmorGlint {
     }
     *///?} else {
     @WrapOperation(method = RENDER_LAYERS_TARGET, at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/OrderedSubmitNodeCollector;submitModel(Lnet/minecraft/client/model/Model;Ljava/lang/Object;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/rendertype/RenderType;IIILnet/minecraft/client/renderer/texture/UvMapping;I)V", ordinal = 0))
-    private <S> void overflowanimations$submitGlint(final OrderedSubmitNodeCollector instance, final Model<? super S> model, final S state, final PoseStack poseStack, final RenderType renderType, final int lightCoords, final int overlayCoords, final int color, final UvMapping uvMapping, final int outlineColor, final Operation<Void> original) {
+    private <S> void overflowanimations$submitGlint(final OrderedSubmitNodeCollector instance, final Model<? super S> model, final S state, final PoseStack poseStack, final RenderType renderType, final int lightCoords, final int overlayCoords, final int color, final UvMapping uvMapping, final int outlineColor, final Operation<Void> original, @Local(argsOnly = true) final SubmitNodeCollector submitNodeCollector, @Local(name = "nextOrder") final LocalIntRef nextOrder) {
         original.call(instance, model, state, poseStack, renderType, lightCoords, overlayCoords, color, uvMapping, outlineColor);
-        final int glintOverlay = ArmorGlint.tintsWithArmor() ? overlayCoords : OverlayTexture.NO_OVERLAY;
-        for (final RenderType glint : this.overflowanimations$glint) {
-            original.call(instance, model, state, poseStack, glint, lightCoords, glintOverlay, color, null, 0);
+        if (!this.overflowanimations$glint.isEmpty()) {
+            final int glintOrder = nextOrder.get();
+            nextOrder.set(glintOrder + 1);
+            final OrderedSubmitNodeCollector glintCollector = submitNodeCollector.order(glintOrder);
+            final int glintOverlay = ArmorGlint.tintsWithArmor() ? overlayCoords : OverlayTexture.NO_OVERLAY;
+            for (final RenderType glint : this.overflowanimations$glint) {
+                original.call(glintCollector, model, state, poseStack, glint, lightCoords, glintOverlay, color, null, 0);
+            }
         }
 
         this.overflowanimations$glint = List.of();
